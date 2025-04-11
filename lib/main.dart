@@ -1,5 +1,10 @@
+import 'dart:ui' as ui;
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
+import 'utils/i18n.dart';
+import 'views/home_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -12,7 +17,14 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-      title: 'Flutter Demo',
+      debugShowCheckedModeBanner: false,
+      // 多语言文件
+      translations: MultiLanguage(),
+      // 自动设置语言
+      locale: ui.window.locale,
+      // 添加一个回调语言选项，以备上面指定的语言翻译不存在
+      fallbackLocale: Locale('en', 'US'),
+      title: 'Cycle It',
       theme: ThemeData(
         // This is the theme of your application.
         //
@@ -31,7 +43,7 @@ class MyApp extends StatelessWidget {
         // tested with just a hot reload.
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: HomePage(),
     );
   }
 }
@@ -106,10 +118,7 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             const Text('You have pushed the button this many times:'),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
+            Text('$_counter', style: Theme.of(context).textTheme.headlineMedium),
           ],
         ),
       ),
