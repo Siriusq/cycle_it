@@ -1,4 +1,6 @@
+import 'package:cycle_it/models/item_model.dart';
 import 'package:cycle_it/utils/constants.dart';
+import 'package:cycle_it/views/components/item_card.dart';
 import 'package:cycle_it/views/settings_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -22,13 +24,14 @@ class HomePage extends StatelessWidget {
                   children: [
                     // 设置按钮
                     IconButton(
+                      //style: IconButton.styleFrom(padding: EdgeInsets.only(left: 0, right: 10)),
                       onPressed: () {
                         Get.to(() => SettingsPage());
                       },
                       icon: Icon(Icons.settings),
                     ),
                     // 搜索框
-                    if (!GetPlatform.isDesktop) SizedBox(width: 5),
+                    SizedBox(width: 5),
                     Expanded(
                       child: TextField(
                         onChanged: (value) {},
@@ -58,7 +61,7 @@ class HomePage extends StatelessWidget {
                       style: TextButton.styleFrom(
                         foregroundColor: kTitleTextColor,
                         iconSize: 28,
-                        padding: EdgeInsets.only(left: 0, right: 10),
+                        padding: EdgeInsets.only(left: 6, right: 10),
                         //splashFactory: NoSplash.splashFactory,
                         //overlayColor: Colors.transparent,
                       ),
@@ -74,7 +77,13 @@ class HomePage extends StatelessWidget {
                 ),
               ),
               SizedBox(height: kDefaultPadding),
-              //Expanded(child: ListView.builder(itemBuilder: itemBuilder)),
+              Expanded(
+                child: ListView.builder(
+                  itemCount: itemExamples.length,
+                  itemBuilder:
+                      (context, index) => ItemCard(item: itemExamples[index], isActive: index == 0, press: () {}),
+                ),
+              ),
             ],
           ),
         ),
