@@ -1,29 +1,29 @@
-import 'package:cycle_it/views/components/list_of_items.dart';
-import 'package:cycle_it/views/details_page.dart';
 import 'package:flutter/material.dart';
 
 class Responsive extends StatelessWidget {
-  final Widget mobile = ListOfItems();
-  final Widget desktop = Row(
-    children: [Expanded(flex: 6, child: ListOfItems()), Expanded(flex: 9, child: DetailsPage())],
-  );
+  final Widget mobile;
+  final Widget tablet;
+  final Widget desktop;
 
-  Responsive({super.key});
+  const Responsive({super.key, required this.mobile, required this.tablet, required this.desktop});
 
   static bool isMobile(BuildContext context) => MediaQuery.of(context).size.width < 650;
 
-  static bool isDesktop(BuildContext context) => MediaQuery.of(context).size.width >= 650;
+  static bool isTablet(BuildContext context) =>
+      MediaQuery.of(context).size.width < 1100 && MediaQuery.of(context).size.width >= 650;
+
+  static bool isDesktop(BuildContext context) => MediaQuery.of(context).size.width >= 1100;
 
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
       // If our width is more than 650 then we consider it a desktop
       builder: (context, constraints) {
-        if (constraints.maxWidth >= 650) {
+        if (constraints.maxWidth >= 1100) {
           return desktop;
-        }
-        // Or less then that we called it mobile
-        else {
+        } else if (constraints.maxWidth >= 650) {
+          return tablet;
+        } else {
           return mobile;
         }
       },
