@@ -5,11 +5,16 @@ import 'package:cycle_it/views/settings_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../controllers/item_controller.dart';
+import '../../utils/responsive.dart';
+import '../details_page.dart';
+
 class ListOfItems extends StatelessWidget {
   const ListOfItems({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final itemCtrl = Get.find<ItemController>();
     return Scaffold(
       body: Container(
         padding: EdgeInsets.only(top: GetPlatform.isDesktop ? kDefaultPadding : 0),
@@ -80,8 +85,23 @@ class ListOfItems extends StatelessWidget {
               Expanded(
                 child: ListView.builder(
                   itemCount: itemExamples.length,
-                  itemBuilder:
-                      (context, index) => ItemCard(item: itemExamples[index], isActive: index == 0, press: () {}),
+                  itemBuilder: (context, index) {
+                    final item = itemExamples[index];
+                    return Obx(() {
+                      final selected = Get.find<ItemController>().selectedItem.value;
+                      final isActive = selected?.id == item.id;
+                      return ItemCard(
+                        item: item,
+                        isActive: isActive,
+                        press: () {
+                          itemCtrl.selectItem(item);
+                          if (Responsive.isMobile(context)) {
+                            Get.to(() => DetailsPage());
+                          }
+                        },
+                      );
+                    });
+                  },
                 ),
               ),
             ],

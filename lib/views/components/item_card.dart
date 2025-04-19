@@ -2,6 +2,10 @@ import 'package:cycle_it/models/item_model.dart';
 import 'package:cycle_it/utils/constants.dart';
 import 'package:cycle_it/utils/extensions.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+
+import '../../controllers/item_controller.dart';
+import '../../utils/responsive.dart';
 
 class ItemCard extends StatelessWidget {
   const ItemCard({super.key, required this.item, required this.isActive, required this.press});
@@ -12,10 +16,15 @@ class ItemCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final itemCtrl = Get.find<ItemController>();
+
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: kDefaultPadding, vertical: kDefaultPadding / 2),
       child: InkWell(
-        onTap: press,
+        onTap: () {
+          itemCtrl.selectItem(item);
+          if (Responsive.isMobile(context)) Get.toNamed("/Details");
+        },
         child: Stack(
           children: [
             Container(

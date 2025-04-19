@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+
+import '../controllers/item_controller.dart';
 
 class Responsive extends StatelessWidget {
   final Widget mobile;
@@ -16,9 +19,21 @@ class Responsive extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final ctrl = Get.find<ItemController>();
+
+    // 窗口布局切换时进行路由切换
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!isMobile(context) && Get.currentRoute == '/Details') {
+        Get.toNamed("/");
+      } else if (isMobile(context) && ctrl.selectedItem.value != null) {
+        Get.toNamed("/Details");
+      }
+    });
+
     return LayoutBuilder(
       // If our width is more than 650 then we consider it a desktop
       builder: (context, constraints) {
+        //print(Get.routing.current);
         if (constraints.maxWidth >= 1100) {
           return desktop;
         } else if (constraints.maxWidth >= 650) {
