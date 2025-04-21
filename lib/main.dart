@@ -1,18 +1,20 @@
-import 'dart:ui' as ui;
-
 import 'package:cycle_it/bindings/home_binding.dart';
 import 'package:cycle_it/views/details_page.dart';
 import 'package:cycle_it/views/settings_page.dart';
+import 'package:device_preview/device_preview.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import 'utils/i18n.dart';
 import 'views/home_page.dart';
 
-void main() {
-  //Get.put(LayoutController());
-  runApp(const MyApp());
-}
+void main() => runApp(
+  DevicePreview(
+    enabled: !kReleaseMode,
+    builder: (context) => MyApp(), // Wrap your app
+  ),
+);
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -21,12 +23,14 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
+      useInheritedMediaQuery: true,
       debugShowCheckedModeBanner: false,
       initialBinding: HomeBinding(),
       // 多语言文件
       translations: MultiLanguage(),
-      // 自动设置语言
-      locale: ui.window.locale,
+      // DevicePreview
+      locale: DevicePreview.locale(context),
+      builder: DevicePreview.appBuilder,
       // 添加一个回调语言选项，以备上面指定的语言翻译不存在
       fallbackLocale: Locale('en', 'US'),
       initialRoute: '/',
