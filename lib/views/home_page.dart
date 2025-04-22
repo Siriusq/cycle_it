@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import 'components/list_of_items.dart';
+import 'components/side_menu/side_menu.dart';
 import 'details_page.dart';
 
 class HomePage extends StatelessWidget {
@@ -32,7 +33,13 @@ class HomePage extends StatelessWidget {
   }
 
   Widget _buildDesktopLayout() {
-    return Row(children: [SizedBox(width: 440, child: ListOfItems()), Expanded(child: _buildDetailSection())]);
+    return Row(
+      children: [
+        SizedBox(width: 250, child: SideMenu()),
+        SizedBox(width: 440, child: ListOfItems()),
+        Expanded(child: _buildDetailSection()),
+      ],
+    );
   }
 
   Widget _buildDetailSection() {

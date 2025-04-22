@@ -31,9 +31,7 @@ class Responsive extends StatelessWidget {
     });
 
     return LayoutBuilder(
-      // If our width is more than 650 then we consider it a desktop
       builder: (context, constraints) {
-        //print(Get.routing.current);
         if (constraints.maxWidth >= 1100) {
           return desktop;
         } else if (constraints.maxWidth >= 650) {

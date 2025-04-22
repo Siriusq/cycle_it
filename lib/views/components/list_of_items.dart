@@ -1,7 +1,7 @@
 import 'package:cycle_it/models/item_model.dart';
 import 'package:cycle_it/utils/constants.dart';
 import 'package:cycle_it/views/components/item_card.dart';
-import 'package:cycle_it/views/settings_page.dart';
+import 'package:cycle_it/views/components/side_menu/side_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -15,7 +15,10 @@ class ListOfItems extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final itemCtrl = Get.find<ItemController>();
+    final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
     return Scaffold(
+      key: scaffoldKey,
+      drawer: ConstrainedBox(constraints: BoxConstraints(maxWidth: 250), child: SideMenu()),
       body: Container(
         padding: EdgeInsets.only(top: GetPlatform.isDesktop ? kDefaultPadding : 0),
         color: kBgDarkColor,
@@ -27,14 +30,16 @@ class ListOfItems extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: kDefaultPadding),
                 child: Row(
                   children: [
-                    // 设置按钮
-                    IconButton(
-                      //style: IconButton.styleFrom(padding: EdgeInsets.only(left: 0, right: 10)),
-                      onPressed: () {
-                        Get.to(() => SettingsPage());
-                      },
-                      icon: Icon(Icons.settings),
-                    ),
+                    // 非桌面端显示抽屉按钮
+                    if (!Responsive.isDesktop(context))
+                      IconButton(
+                        icon: Icon(Icons.menu),
+                        onPressed: () {
+                          scaffoldKey.currentState?.openDrawer();
+                        },
+                      ),
+                    if (!Responsive.isDesktop(context)) SizedBox(width: 5),
+
                     // 搜索框
                     SizedBox(width: 5),
                     Expanded(
