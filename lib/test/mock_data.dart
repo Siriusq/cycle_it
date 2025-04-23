@@ -5,12 +5,12 @@ import '../models/tag_model.dart';
 import '../models/usage_record_model.dart';
 
 final List<TagModel> allTags = [
-  TagModel(id: 1, name: 'Kitchen'),
-  TagModel(id: 2, name: 'Electronics'),
-  TagModel(id: 3, name: 'Seasonal'),
-  TagModel(id: 4, name: 'Office'),
-  TagModel(id: 5, name: 'Tools'),
-  TagModel(id: 6, name: 'Hobby'),
+  TagModel(id: 1, name: 'Kitchen', color: Color(0xffff8272)),
+  TagModel(id: 2, name: 'Electronics', color: Color(0xffffdc72)),
+  TagModel(id: 3, name: 'Seasonal', color: Colors.greenAccent),
+  TagModel(id: 4, name: 'Office', color: Colors.blueAccent),
+  TagModel(id: 5, name: 'Tools', color: Colors.amberAccent),
+  TagModel(id: 6, name: 'Hobby', color: Colors.deepPurpleAccent),
 ];
 
 final List<ItemModel> sampleItems = [
