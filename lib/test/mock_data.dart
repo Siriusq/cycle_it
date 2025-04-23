@@ -1,0 +1,128 @@
+import 'package:flutter/material.dart';
+
+import '../models/item_model.dart';
+import '../models/tag_model.dart';
+import '../models/usage_record_model.dart';
+
+final List<TagModel> allTags = [
+  TagModel(id: 1, name: 'Kitchen'),
+  TagModel(id: 2, name: 'Electronics'),
+  TagModel(id: 3, name: 'Seasonal'),
+  TagModel(id: 4, name: 'Office'),
+  TagModel(id: 5, name: 'Tools'),
+  TagModel(id: 6, name: 'Hobby'),
+];
+
+final List<ItemModel> sampleItems = [
+  ItemModel(
+    id: 1,
+    name: 'Rice Cooker',
+    iconName: 'rice',
+    iconColor: Colors.orange,
+    firstUsed: DateTime.now().subtract(Duration(days: 90)),
+    usageRecords: [
+      UsageRecordModel(id: 1, itemId: 1, usedAt: DateTime.now().subtract(Duration(days: 80))),
+      UsageRecordModel(id: 2, itemId: 1, usedAt: DateTime.now().subtract(Duration(days: 60))),
+    ],
+    tags: [allTags[0], allTags[1]],
+  ),
+  ItemModel(
+    id: 2,
+    name: 'Winter Jacket',
+    iconName: 'jacket',
+    iconColor: Colors.blueGrey,
+    firstUsed: DateTime.now().subtract(Duration(days: 200)),
+    usageRecords: [
+      UsageRecordModel(id: 3, itemId: 2, usedAt: DateTime.now().subtract(Duration(days: 150))),
+      UsageRecordModel(id: 4, itemId: 2, usedAt: DateTime.now().subtract(Duration(days: 100))),
+    ],
+    tags: [allTags[2]],
+  ),
+  ItemModel(
+    id: 3,
+    name: 'Laptop',
+    iconName: 'laptop',
+    iconColor: Colors.grey,
+    firstUsed: DateTime.now().subtract(Duration(days: 365)),
+    usageRecords: [
+      UsageRecordModel(id: 5, itemId: 3, usedAt: DateTime.now().subtract(Duration(days: 10))),
+      UsageRecordModel(id: 6, itemId: 3, usedAt: DateTime.now().subtract(Duration(days: 5))),
+    ],
+    tags: [allTags[1], allTags[3]],
+  ),
+  ItemModel(
+    id: 4,
+    name: 'Screwdriver',
+    iconName: 'tools',
+    iconColor: Colors.red,
+    firstUsed: DateTime.now().subtract(Duration(days: 50)),
+    usageRecords: [UsageRecordModel(id: 7, itemId: 4, usedAt: DateTime.now().subtract(Duration(days: 48)))],
+    tags: [allTags[4]],
+  ),
+  ItemModel(
+    id: 5,
+    name: 'Camera',
+    iconName: 'camera',
+    iconColor: Colors.black,
+    firstUsed: DateTime.now().subtract(Duration(days: 150)),
+    usageRecords: [
+      UsageRecordModel(id: 8, itemId: 5, usedAt: DateTime.now().subtract(Duration(days: 130))),
+      UsageRecordModel(id: 9, itemId: 5, usedAt: DateTime.now().subtract(Duration(days: 90))),
+    ],
+    tags: [allTags[1], allTags[5]],
+  ),
+  ItemModel(
+    id: 6,
+    name: 'Notebook',
+    iconName: 'notebook',
+    iconColor: Colors.green,
+    firstUsed: DateTime.now().subtract(Duration(days: 30)),
+    usageRecords: [UsageRecordModel(id: 10, itemId: 6, usedAt: DateTime.now().subtract(Duration(days: 20)))],
+    tags: [allTags[3]],
+  ),
+  ItemModel(
+    id: 7,
+    name: 'Electric Fan',
+    iconName: 'fan',
+    iconColor: Colors.lightBlue,
+    firstUsed: DateTime.now().subtract(Duration(days: 300)),
+    usageRecords: [
+      UsageRecordModel(id: 11, itemId: 7, usedAt: DateTime.now().subtract(Duration(days: 200))),
+      UsageRecordModel(id: 12, itemId: 7, usedAt: DateTime.now().subtract(Duration(days: 100))),
+    ],
+    tags: [allTags[1], allTags[2]],
+  ),
+  ItemModel(
+    id: 8,
+    name: 'Sketchbook',
+    iconName: 'brush',
+    iconColor: Colors.purple,
+    firstUsed: DateTime.now().subtract(Duration(days: 120)),
+    usageRecords: [
+      UsageRecordModel(id: 13, itemId: 8, usedAt: DateTime.now().subtract(Duration(days: 110))),
+      UsageRecordModel(id: 14, itemId: 8, usedAt: DateTime.now().subtract(Duration(days: 60))),
+    ],
+    tags: [allTags[5]],
+  ),
+  ItemModel(
+    id: 9,
+    name: 'Thermos Bottle',
+    iconName: 'thermos',
+    iconColor: Colors.teal,
+    firstUsed: DateTime.now().subtract(Duration(days: 200)),
+    usageRecords: [UsageRecordModel(id: 15, itemId: 9, usedAt: DateTime.now().subtract(Duration(days: 180)))],
+    tags: [allTags[0], allTags[2]],
+  ),
+  ItemModel(
+    id: 10,
+    name: 'Wireless Mouse',
+    iconName: 'mouse',
+    iconColor: Colors.brown,
+    firstUsed: DateTime.now().subtract(Duration(days: 70)),
+    usageRecords: [
+      UsageRecordModel(id: 16, itemId: 10, usedAt: DateTime.now().subtract(Duration(days: 60))),
+      UsageRecordModel(id: 17, itemId: 10, usedAt: DateTime.now().subtract(Duration(days: 10))),
+    ],
+    tags: [allTags[1], allTags[3]],
+  ),
+];

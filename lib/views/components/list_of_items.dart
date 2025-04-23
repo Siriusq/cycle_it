@@ -1,4 +1,4 @@
-import 'package:cycle_it/models/item_model.dart';
+import 'package:cycle_it/test/mock_data.dart';
 import 'package:cycle_it/utils/constants.dart';
 import 'package:cycle_it/views/components/item_card.dart';
 import 'package:cycle_it/views/components/side_menu/side_menu.dart';
@@ -89,9 +89,9 @@ class ListOfItems extends StatelessWidget {
               SizedBox(height: kDefaultPadding),
               Expanded(
                 child: ListView.builder(
-                  itemCount: itemExamples.length,
+                  itemCount: sampleItems.length,
                   itemBuilder: (context, index) {
-                    final item = itemExamples[index];
+                    final item = sampleItems[index];
                     return Obx(() {
                       final selected = Get.find<ItemController>().selectedItem.value;
                       final isActive = selected?.id == item.id;
