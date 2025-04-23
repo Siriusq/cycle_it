@@ -1,9 +1,11 @@
 import 'package:get/get.dart';
 
 class ItemListOrderController extends GetxController {
-  var selectedOrderOption = 1.obs;
+  var selectedOrderOption = OrderType.name.obs;
 
-  void changeOrderOption(int option) {
+  void changeOrderOption(OrderType option) {
     selectedOrderOption.value = option;
   }
 }
+
+enum OrderType { name, createTime, lastUsed }

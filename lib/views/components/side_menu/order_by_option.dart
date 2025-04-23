@@ -5,24 +5,24 @@ import 'package:get/get.dart';
 import '../../../controllers/item_list_order_controller.dart';
 
 class OrderByOption extends StatelessWidget {
-  OrderByOption({super.key, required this.index, required this.icon, required this.title});
+  OrderByOption({super.key, required this.orderType, required this.icon, required this.title});
 
-  final int index;
   final IconData icon;
   final String title;
+  final OrderType orderType;
 
   final itemListOrderCtrl = Get.find<ItemListOrderController>();
 
   @override
   Widget build(BuildContext context) {
     return Obx(() {
-      final isActive = itemListOrderCtrl.selectedOrderOption.value == index;
+      final isActive = itemListOrderCtrl.selectedOrderOption.value == orderType;
 
       return Padding(
         padding: EdgeInsets.only(top: kDefaultPadding),
         child: InkWell(
           onTap: () {
-            itemListOrderCtrl.changeOrderOption(index);
+            itemListOrderCtrl.changeOrderOption(orderType);
           },
           child: Row(
             children: [
