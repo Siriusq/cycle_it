@@ -2,9 +2,11 @@ import 'package:cycle_it/controllers/item_list_order_controller.dart';
 import 'package:cycle_it/utils/extensions.dart';
 import 'package:cycle_it/utils/responsive.dart';
 import 'package:cycle_it/views/components/side_menu/order_by_option.dart';
+import 'package:cycle_it/views/components/side_menu/tag_option.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../test/mock_data.dart';
 import '../../../utils/constants.dart';
 import '../../settings_page.dart';
 
@@ -32,6 +34,18 @@ class SideMenu extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  Row(
+                    children: [
+                      //Image.asset("assets/images/AppIcon-20@2x.png", width: 46),
+                      //Spacer(),
+                      // We don't want to show this close button on Desktop mood
+                      Text("Cycle It", style: TextStyle(fontWeight: FontWeight.w600, color: kTitleTextColor)),
+                      Spacer(),
+                      if (!Responsive.isDesktop(context)) CloseButton(),
+                    ],
+                  ),
+                  SizedBox(height: kDefaultPadding),
+                  //宽屏显示添加按钮
                   if (Responsive.isDesktop(context))
                     TextButton.icon(
                       style: TextButton.styleFrom(
@@ -42,14 +56,43 @@ class SideMenu extends StatelessWidget {
                       ),
                       onPressed: () {},
                       icon: Icon(Icons.create_rounded),
-                      label: Text("New message", style: TextStyle(color: kTitleTextColor)),
+                      label: Text("Add Item", style: TextStyle(color: kTitleTextColor)),
                     ).addNeumorphism(topShadowColor: Colors.white, bottomShadowColor: Color(0x6643AF9D)),
-                  SizedBox(height: kDefaultPadding * 2),
-                  Text("Order By", style: TextStyle(fontWeight: FontWeight.w600, color: kTitleTextColor)),
-                  OrderByOption(orderType: OrderType.name, icon: Icons.abc, title: "Names"),
-                  OrderByOption(orderType: OrderType.createTime, icon: Icons.timeline, title: "Add Time"),
-                  OrderByOption(orderType: OrderType.lastUsed, icon: Icons.recent_actors, title: "Last Used"),
-                  SizedBox(height: 50),
+                  //SizedBox(height: kDefaultPadding * 2),
+                  SizedBox(height: 15),
+                  Divider(),
+                  SizedBox(height: 10),
+                  //排序
+                  Row(
+                    children: [
+                      Icon(Icons.sort, color: kGrayColor),
+                      SizedBox(width: 5),
+                      Text("Order By", style: TextStyle(fontWeight: FontWeight.w600, color: kTitleTextColor)),
+                    ],
+                  ),
+                  OrderByOption(orderType: OrderType.name, icon: Icons.sort_by_alpha, title: "Names"),
+                  OrderByOption(orderType: OrderType.lastUsed, icon: Icons.event, title: "Recent Used"),
+                  OrderByOption(orderType: OrderType.frequency, icon: Icons.equalizer, title: "Frequency"),
+                  SizedBox(height: 15),
+                  Divider(),
+                  //SizedBox(height: 5),
+                  //标签
+                  Row(
+                    children: [
+                      Icon(Icons.bookmark_outline, color: kGrayColor),
+                      SizedBox(width: 5),
+                      Text("Tags", style: TextStyle(fontWeight: FontWeight.w600, color: kTitleTextColor)),
+                      Spacer(),
+                      IconButton(onPressed: () {}, icon: Icon(Icons.add, color: kGrayColor)),
+                    ],
+                  ),
+                  Column(
+                    children:
+                        allTags.map((tag) {
+                          return TagOption(tagName: tag.name, color: tag.color);
+                        }).toList(),
+                  ),
+                  SizedBox(height: 15),
                   Divider(),
                 ],
               ),
@@ -74,6 +117,7 @@ class SideMenu extends StatelessWidget {
                         IconButton(onPressed: () {}, icon: Icon(Icons.copyright)),
                       ],
                     ),
+                    SizedBox(height: 10),
                   ],
                 ),
               ),

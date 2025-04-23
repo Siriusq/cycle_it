@@ -8,4 +8,4 @@ class ItemListOrderController extends GetxController {
   }
 }
 
-enum OrderType { name, createTime, lastUsed }
+enum OrderType { name, lastUsed, frequency }

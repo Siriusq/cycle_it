@@ -26,17 +26,16 @@ class OrderByOption extends StatelessWidget {
           },
           child: Row(
             children: [
-              if (isActive) Icon(Icons.arrow_right, size: 15) else SizedBox(width: 15),
+              if (isActive) Icon(Icons.arrow_forward_ios, size: 15) else SizedBox(width: 15),
               SizedBox(width: kDefaultPadding / 4),
               Expanded(
                 child: Container(
-                  //padding: EdgeInsets.only(bottom: 15, right: 5),
-                  decoration:
-                      isActive ? BoxDecoration(border: Border(bottom: BorderSide(color: Color(0xFFDFE2EF)))) : null,
+                  padding: EdgeInsets.only(left: 5),
+                  //decoration: isActive ? BoxDecoration(border: Border(bottom: BorderSide(color: Color(0xFFDFE2EF)))) : null,
                   child: Row(
                     children: [
                       Icon(icon, color: (isActive) ? kPrimaryColor : kGrayColor),
-                      SizedBox(width: kDefaultPadding),
+                      SizedBox(width: kDefaultPadding / 2),
                       Text(title, style: TextStyle(fontWeight: FontWeight.w500, color: kTextColor)),
                     ],
                   ),
