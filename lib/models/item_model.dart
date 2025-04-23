@@ -1,3 +1,4 @@
+import 'package:cycle_it/models/tag_model.dart';
 import 'package:flutter/material.dart';
 
 import 'usage_record_model.dart';
@@ -10,12 +11,14 @@ class ItemModel {
   final DateTime firstUsed;
   final List<UsageRecordModel> usageRecords;
   final bool notifyBeforeNextUse;
+  final List<TagModel> tags;
 
   ItemModel({
     required this.id,
     required this.name,
     required this.firstUsed,
     required this.usageRecords,
+    required this.tags,
     this.iconName,
     this.iconColor,
     this.notifyBeforeNextUse = true,
@@ -50,35 +53,35 @@ class ItemModel {
   }
 }
 
-List<ItemModel> itemExamples = List.generate(
-  demo_data.length,
-  (index) => ItemModel(
-    id: demo_data[index]['id'],
-    name: demo_data[index]['name'],
-    firstUsed: demo_data[index]['firstUsed'],
-    usageRecords: ure[index],
-  ),
-);
-
-List demo_data = [
-  {"id": 1, "name": "iPhone", "firstUsed": DateTime(2025, 2, 3, 12, 20, 1, 0, 0), "usageRecords": usageRecordExample1},
-  {"id": 2, "name": "iPhone7", "firstUsed": DateTime(2025, 2, 3, 12, 20, 1, 0, 0), "usageRecords": usageRecordExample2},
-];
-
-List<List<UsageRecordModel>> ure = [usageRecordExample1, usageRecordExample2];
-
-List<UsageRecordModel> usageRecordExample1 = List.generate(
-  ureDemo.length,
-  (index) => UsageRecordModel(id: ureDemo[index]['id'], usedAt: ureDemo[index]['usedAt'], itemId: 1),
-);
-
-List<UsageRecordModel> usageRecordExample2 = List.generate(
-  ureDemo.length,
-  (index) => UsageRecordModel(id: ureDemo[index]['id'], usedAt: ureDemo[index]['usedAt'], itemId: 2),
-);
-
-List ureDemo = [
-  {"id": 1, "usedAt": DateTime(2025, 2, 3, 12, 20, 1, 0, 0)},
-  {"id": 2, "usedAt": DateTime(2024, 2, 3, 12, 20, 1, 0, 0)},
-  {"id": 3, "usedAt": DateTime(2023, 2, 3, 12, 20, 1, 0, 0)},
-];
+// List<ItemModel> itemExamples = List.generate(
+//   demo_data.length,
+//   (index) => ItemModel(
+//     id: demo_data[index]['id'],
+//     name: demo_data[index]['name'],
+//     firstUsed: demo_data[index]['firstUsed'],
+//     usageRecords: ure[index],
+//   ),
+// );
+//
+// List demo_data = [
+//   {"id": 1, "name": "iPhone", "firstUsed": DateTime(2025, 2, 3, 12, 20, 1, 0, 0), "usageRecords": usageRecordExample1},
+//   {"id": 2, "name": "iPhone7", "firstUsed": DateTime(2025, 2, 3, 12, 20, 1, 0, 0), "usageRecords": usageRecordExample2},
+// ];
+//
+// List<List<UsageRecordModel>> ure = [usageRecordExample1, usageRecordExample2];
+//
+// List<UsageRecordModel> usageRecordExample1 = List.generate(
+//   ureDemo.length,
+//   (index) => UsageRecordModel(id: ureDemo[index]['id'], usedAt: ureDemo[index]['usedAt'], itemId: 1),
+// );
+//
+// List<UsageRecordModel> usageRecordExample2 = List.generate(
+//   ureDemo.length,
+//   (index) => UsageRecordModel(id: ureDemo[index]['id'], usedAt: ureDemo[index]['usedAt'], itemId: 2),
+// );
+//
+// List ureDemo = [
+//   {"id": 1, "usedAt": DateTime(2025, 2, 3, 12, 20, 1, 0, 0)},
+//   {"id": 2, "usedAt": DateTime(2024, 2, 3, 12, 20, 1, 0, 0)},
+//   {"id": 3, "usedAt": DateTime(2023, 2, 3, 12, 20, 1, 0, 0)},
+// ];
