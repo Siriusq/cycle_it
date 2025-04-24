@@ -36,15 +36,22 @@ class SideMenu extends StatelessWidget {
                 children: [
                   Row(
                     children: [
-                      //Image.asset("assets/images/AppIcon-20@2x.png", width: 46),
-                      //Spacer(),
-                      // We don't want to show this close button on Desktop mood
-                      Text("Cycle It", style: TextStyle(fontWeight: FontWeight.w600, color: kTitleTextColor)),
-                      Spacer(),
+                      //App 图标
+                      Image.asset("assets/images/logo_transparent.png", width: 40, height: 40, fit: BoxFit.contain),
+                      const SizedBox(width: 10),
+                      // 中间文字
+                      Expanded(
+                        child: Text(
+                          "Cycle It",
+                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: kTitleTextColor),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                      //关闭按钮
                       if (!Responsive.isDesktop(context)) CloseButton(),
                     ],
                   ),
-                  SizedBox(height: kDefaultPadding),
+                  if (Responsive.isDesktop(context)) SizedBox(height: kDefaultPadding),
                   //宽屏显示添加按钮
                   if (Responsive.isDesktop(context))
                     TextButton.icon(
