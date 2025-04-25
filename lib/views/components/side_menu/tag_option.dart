@@ -1,4 +1,4 @@
-import 'package:cycle_it/controllers/item_list_tag_controller.dart';
+import 'package:cycle_it/controllers/tag_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -7,7 +7,7 @@ import '../../../utils/constants.dart';
 class TagOption extends StatelessWidget {
   final String tagName;
   final Color color;
-  final tagCtrl = Get.find<ItemListTagController>();
+  final tagCtrl = Get.find<TagController>();
 
   TagOption({super.key, required this.tagName, required this.color});
 

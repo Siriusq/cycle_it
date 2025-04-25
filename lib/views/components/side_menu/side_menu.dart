@@ -1,17 +1,19 @@
 import 'package:cycle_it/controllers/item_list_order_controller.dart';
+import 'package:cycle_it/controllers/tag_controller.dart';
 import 'package:cycle_it/utils/extensions.dart';
 import 'package:cycle_it/utils/responsive.dart';
+import 'package:cycle_it/views/components/dialog/add_tag_dialog.dart';
 import 'package:cycle_it/views/components/side_menu/order_by_option.dart';
 import 'package:cycle_it/views/components/side_menu/tag_option.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../../test/mock_data.dart';
 import '../../../utils/constants.dart';
 import '../../settings_page.dart';
 
 class SideMenu extends StatelessWidget {
   final itemListOrderCtrl = Get.find<ItemListOrderController>();
+  final tagCtrl = Get.find<TagController>();
 
   SideMenu({super.key});
 
@@ -90,15 +92,22 @@ class SideMenu extends StatelessWidget {
                       SizedBox(width: 5),
                       Text("Tags", style: TextStyle(fontWeight: FontWeight.w600, color: kTitleTextColor)),
                       Spacer(),
-                      IconButton(onPressed: () {}, icon: Icon(Icons.add, color: kGrayColor)),
+                      IconButton(
+                        onPressed: () {
+                          Get.dialog(AddTagDialog());
+                        },
+                        icon: Icon(Icons.add, color: kGrayColor),
+                      ),
                     ],
                   ),
-                  Column(
-                    children:
-                        allTags.map((tag) {
-                          return TagOption(tagName: tag.name, color: tag.color);
-                        }).toList(),
-                  ),
+                  Obx(() {
+                    return Column(
+                      children:
+                          tagCtrl.allTags.map((tag) {
+                            return TagOption(tagName: tag.name, color: tag.color);
+                          }).toList(),
+                    );
+                  }),
                   SizedBox(height: 15),
                   Divider(),
                 ],
