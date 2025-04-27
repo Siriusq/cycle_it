@@ -1,3 +1,4 @@
+import 'package:cycle_it/utils/constants.dart';
 import 'package:flutter/material.dart';
 
 import '../models/item_model.dart';
@@ -5,12 +6,12 @@ import '../models/tag_model.dart';
 import '../models/usage_record_model.dart';
 
 final List<TagModel> allTagsFromMock = [
-  TagModel(id: 1, name: 'Kitchen', color: Color(0xffff8272)),
-  TagModel(id: 2, name: 'Electronics', color: Color(0xffffdc72)),
-  TagModel(id: 3, name: 'Seasonal', color: Colors.greenAccent),
-  TagModel(id: 4, name: 'Office', color: Colors.blueAccent),
-  TagModel(id: 5, name: 'Tools', color: Colors.amberAccent),
-  TagModel(id: 6, name: 'Hobby', color: Colors.deepPurpleAccent),
+  TagModel(id: 1, name: 'Kitchen', color: kColorPalette[0]),
+  TagModel(id: 2, name: 'Electronics', color: kColorPalette[1]),
+  TagModel(id: 3, name: 'Seasonal', color: kColorPalette[2]),
+  TagModel(id: 4, name: 'Office', color: kColorPalette[3]),
+  TagModel(id: 5, name: 'Tools', color: kColorPalette[4]),
+  TagModel(id: 6, name: 'Hobby', color: kColorPalette[5]),
 ];
 
 final List<ItemModel> sampleItems = [

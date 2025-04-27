@@ -51,6 +51,9 @@ dependencies:
   # Responsive UI Test in one window
   device_preview: ^1.2.0
 
+  # Inset Box Shadow
+  flutter_inset_shadow: ^2.0.3
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

@@ -21,6 +21,7 @@ class SideMenu extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      //padding: EdgeInsets.only(top: GetPlatform.isDesktop ? kDefaultPadding : 0),
       height: double.infinity,
       color: kBgLightColor,
       child: SafeArea(
