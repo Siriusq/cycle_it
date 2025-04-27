@@ -9,6 +9,7 @@ import 'details_page.dart';
 
 class HomePage extends StatelessWidget {
   HomePage({super.key});
+
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
 
   @override
@@ -40,7 +41,12 @@ class HomePage extends StatelessWidget {
         Expanded(flex: 2, child: ListOfItems(scaffoldKey: _scaffoldKey)),
         Expanded(
           flex: 3,
-          child: Obx(() => ctrl.selectedItem.value != null ? DetailsPage() : Center(child: Text("请选择项目"))),
+          child: Obx(
+            () =>
+                ctrl.selectedItem.value != null
+                    ? DetailsPage()
+                    : Container(color: Color(0xFFF4F6FF), child: Center(child: Text("请选择项目"))),
+          ),
         ),
       ],
     );
@@ -51,7 +57,14 @@ class HomePage extends StatelessWidget {
       children: [
         SizedBox(width: 250, child: SideMenu()),
         SizedBox(width: 440, child: ListOfItems(scaffoldKey: _scaffoldKey)),
-        Expanded(child: Obx(() => ctrl.selectedItem.value != null ? DetailsPage() : Center(child: Text("请选择项目")))),
+        Expanded(
+          child: Obx(
+            () =>
+                ctrl.selectedItem.value != null
+                    ? DetailsPage()
+                    : Container(color: Color(0xFFF4F6FF), child: Center(child: Text("请选择项目"))),
+          ),
+        ),
       ],
     );
   }

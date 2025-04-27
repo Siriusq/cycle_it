@@ -20,7 +20,7 @@ class DetailsPage extends StatelessWidget {
       }
 
       return Container(
-        color: kBgLightColor,
+        color: Color(0xFFF4F6FF),
         child: SafeArea(
           child: Column(
             children: [

@@ -12,18 +12,30 @@ class DetailsHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     final itemCtrl = Get.find<ItemController>();
     return Padding(
-      padding: EdgeInsets.all(kDefaultPadding),
+      padding: const EdgeInsets.symmetric(horizontal: kDefaultPadding, vertical: kDefaultPadding / 2),
       child: Row(
         children: [
           if (Responsive.isMobile(context))
             BackButton(
               onPressed: () {
-                if (Get.key.currentState?.canPop() ?? false) {
+                // if (Get.key.currentState!.canPop()) {
+                //   print('Current route: ${Get.routing.current}');
+                //   print('Previous route: ${Get.routing.previous}');
+                //   print('Is back?: ${Get.routing.isBack}');
+                //
+                //   Get.back();
+                // } else {
+                //   Get.toNamed("/");
+                // }
+
+                // itemCtrl.clearSelection();
+                if (Get.currentRoute == '/Details') {
+                  // 只有在真的跳到详情页（/Details）时才执行返回
                   Get.back();
                 } else {
-                  Get.toNamed("/");
+                  // 否则只是清除选中状态，让HomePage回到列表模式
+                  itemCtrl.clearSelection();
                 }
-                itemCtrl.clearSelection();
               },
             ),
           IconButton(onPressed: () {}, icon: Icon(Icons.navigate_before)),
