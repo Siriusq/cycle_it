@@ -8,45 +8,51 @@ import 'components/side_menu/side_menu.dart';
 import 'details_page.dart';
 
 class HomePage extends StatelessWidget {
-  const HomePage({super.key});
+  HomePage({super.key});
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
 
   @override
   Widget build(BuildContext context) {
     final itemCtrl = Get.find<ItemController>();
+
     return Scaffold(
-      body: Obx(() {
-        return Responsive(
-          mobile: _buildMobileLayout(itemCtrl),
-          tablet: _buildTabletLayout(),
-          desktop: _buildDesktopLayout(),
-        );
-      }),
+      key: _scaffoldKey,
+      drawer: ConstrainedBox(constraints: BoxConstraints(maxWidth: 250), child: SideMenu()),
+      body: Responsive(
+        mobile: _buildMobileLayout(itemCtrl),
+        tablet: _buildTabletLayout(itemCtrl),
+        desktop: _buildDesktopLayout(itemCtrl),
+      ),
     );
   }
 
   Widget _buildMobileLayout(ItemController ctrl) {
-    return ctrl.selectedItem.value != null ? DetailsPage() : ListOfItems();
+    return ctrl.selectedItem.value != null
+        ? DetailsPage()
+        : ListOfItems(
+          scaffoldKey: _scaffoldKey, // 传入 key
+        );
   }
 
-  Widget _buildTabletLayout() {
-    return Row(children: [Expanded(flex: 2, child: ListOfItems()), Expanded(flex: 3, child: _buildDetailSection())]);
-  }
-
-  Widget _buildDesktopLayout() {
+  Widget _buildTabletLayout(ItemController ctrl) {
     return Row(
       children: [
-        SizedBox(width: 250, child: SideMenu()),
-        SizedBox(width: 440, child: ListOfItems()),
-        Expanded(child: _buildDetailSection()),
+        Expanded(flex: 2, child: ListOfItems(scaffoldKey: _scaffoldKey)),
+        Expanded(
+          flex: 3,
+          child: Obx(() => ctrl.selectedItem.value != null ? DetailsPage() : Center(child: Text("请选择项目"))),
+        ),
       ],
     );
   }
 
-  Widget _buildDetailSection() {
-    return GetBuilder<ItemController>(
-      builder: (ctrl) {
-        return ctrl.selectedItem.value != null ? DetailsPage() : Center(child: Text("请选择项目"));
-      },
+  Widget _buildDesktopLayout(ItemController ctrl) {
+    return Row(
+      children: [
+        SizedBox(width: 250, child: SideMenu()),
+        SizedBox(width: 440, child: ListOfItems(scaffoldKey: _scaffoldKey)),
+        Expanded(child: Obx(() => ctrl.selectedItem.value != null ? DetailsPage() : Center(child: Text("请选择项目")))),
+      ],
     );
   }
 }

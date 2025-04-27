@@ -101,6 +101,12 @@ class SideMenu extends StatelessWidget {
                       ),
                     ],
                   ),
+                  // Column(
+                  //   children:
+                  //       tagCtrl.allTags.map((tag) {
+                  //         return TagOption(tagName: tag.name, color: tag.color);
+                  //       }).toList(),
+                  // ),
                   Obx(() {
                     return Column(
                       children:
