@@ -67,7 +67,7 @@ class SideMenu extends StatelessWidget {
                       onPressed: () {},
                       icon: Icon(Icons.create_rounded),
                       label: Text("Add Item", style: TextStyle(color: kTitleTextColor)),
-                    ).addNeumorphism(topShadowColor: Colors.white, bottomShadowColor: Color(0x6643AF9D)),
+                    ).addNeumorphism(lightColor: Color(0x66FFFFFF), shadowColor: Color(0x6643AF9D)),
                   //SizedBox(height: kDefaultPadding * 2),
                   SizedBox(height: 15),
                   Divider(),

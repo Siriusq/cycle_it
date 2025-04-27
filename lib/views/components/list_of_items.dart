@@ -1,5 +1,6 @@
 import 'package:cycle_it/test/mock_data.dart';
 import 'package:cycle_it/utils/constants.dart';
+import 'package:cycle_it/utils/extensions.dart';
 import 'package:cycle_it/views/components/item_card.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -41,8 +42,8 @@ class ListOfItems extends StatelessWidget {
                       onChanged: (value) {},
                       decoration: InputDecoration(
                         hintText: "Search",
-                        fillColor: kBgLightColor,
-                        filled: true,
+                        //fillColor: kBgLightColor,
+                        //filled: true,
                         hoverColor: kBgLightColor,
                         suffixIcon: Padding(padding: const EdgeInsets.all(15), child: Icon(Icons.search)),
                         border: OutlineInputBorder(
@@ -50,6 +51,12 @@ class ListOfItems extends StatelessWidget {
                           borderSide: BorderSide.none,
                         ),
                       ),
+                    ).addNeumorphism(
+                      offset: 5,
+                      blurRadius: 5,
+                      lightColor: Colors.white,
+                      shadowColor: Color(0xffa2a3ab),
+                      isInset: true,
                     ),
                   ),
                 ],

@@ -91,9 +91,8 @@ class ItemCard extends StatelessWidget {
             ).addNeumorphism(
               blurRadius: 15,
               borderRadius: 15,
-              offset: Offset(5, 5),
-              topShadowColor: Colors.white60,
-              bottomShadowColor: Color(0x6643AF9D),
+              lightColor: Color(0xE8FFFFFF),
+              shadowColor: Color(0x6643AF9D),
             ),
           ],
         ),
