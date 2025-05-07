@@ -2,6 +2,7 @@ import 'package:cycle_it/models/item_model.dart';
 import 'package:cycle_it/utils/constants.dart';
 import 'package:cycle_it/utils/extensions.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
 import '../../controllers/item_controller.dart';
@@ -30,7 +31,7 @@ class ItemCard extends StatelessWidget {
             Container(
               padding: EdgeInsets.all(kDefaultPadding / 2),
               decoration: BoxDecoration(
-                color: isActive ? kPrimaryColor : kBgDarkColor,
+                color: isActive && !Responsive.isMobile(context) ? kPrimaryColor : kBgDarkColor,
                 borderRadius: BorderRadius.circular(15),
               ),
               child: Column(
@@ -42,15 +43,21 @@ class ItemCard extends StatelessWidget {
                         child: Row(
                           children: [
                             Container(
+                              //padding: EdgeInsets.all(5),
                               width: 50,
                               height: 50,
-                              decoration: BoxDecoration(
-                                shape: BoxShape.rectangle,
-                                border: Border.all(color: Colors.white),
-                                borderRadius: BorderRadius.circular(15),
-                                color: Colors.white,
+                              // decoration: BoxDecoration(
+                              //   shape: BoxShape.rectangle,
+                              //   border: Border.all(color: kSecondaryColor),
+                              //   borderRadius: BorderRadius.circular(5),
+                              //   color: kSecondaryColor,
+                              // ),
+                              child: SvgPicture.asset(
+                                item.iconPath,
+                                //width: 20,
+                                //height: 20,
+                                colorFilter: ColorFilter.mode(item.iconColor, BlendMode.srcIn),
                               ),
-                              child: Icon(Icons.laptop_mac, size: 30),
                             ),
                             SizedBox(width: 10),
                             Expanded(

@@ -18,7 +18,7 @@ final List<ItemModel> sampleItems = [
   ItemModel(
     id: 1,
     name: 'Rice Cooker',
-    iconName: 'rice',
+    iconPath: 'assets/item_icons/appliances/cooking-pot.svg',
     iconColor: Colors.orange,
     firstUsed: DateTime.now().subtract(Duration(days: 90)),
     usageRecords: [
@@ -30,7 +30,7 @@ final List<ItemModel> sampleItems = [
   ItemModel(
     id: 2,
     name: 'Winter Jacket',
-    iconName: 'jacket',
+    iconPath: 'assets/item_icons/others/flower.svg',
     iconColor: Colors.blueGrey,
     firstUsed: DateTime.now().subtract(Duration(days: 200)),
     usageRecords: [
@@ -42,7 +42,7 @@ final List<ItemModel> sampleItems = [
   ItemModel(
     id: 3,
     name: 'Laptop',
-    iconName: 'laptop',
+    iconPath: 'assets/item_icons/electronics/laptop.svg',
     iconColor: Colors.grey,
     firstUsed: DateTime.now().subtract(Duration(days: 365)),
     usageRecords: [
@@ -54,7 +54,7 @@ final List<ItemModel> sampleItems = [
   ItemModel(
     id: 4,
     name: 'Screwdriver',
-    iconName: 'tools',
+    iconPath: 'assets/item_icons/appliances/screwdriver.svg',
     iconColor: Colors.red,
     firstUsed: DateTime.now().subtract(Duration(days: 50)),
     usageRecords: [UsageRecordModel(id: 7, itemId: 4, usedAt: DateTime.now().subtract(Duration(days: 48)))],
@@ -63,7 +63,7 @@ final List<ItemModel> sampleItems = [
   ItemModel(
     id: 5,
     name: 'Camera',
-    iconName: 'camera',
+    iconPath: 'assets/item_icons/entertainment/camera-0.svg',
     iconColor: Colors.black,
     firstUsed: DateTime.now().subtract(Duration(days: 150)),
     usageRecords: [
@@ -75,7 +75,7 @@ final List<ItemModel> sampleItems = [
   ItemModel(
     id: 6,
     name: 'Notebook',
-    iconName: 'notebook',
+    iconPath: 'assets/item_icons/electronics/ipad-1.svg',
     iconColor: Colors.green,
     firstUsed: DateTime.now().subtract(Duration(days: 30)),
     usageRecords: [UsageRecordModel(id: 10, itemId: 6, usedAt: DateTime.now().subtract(Duration(days: 20)))],
@@ -84,7 +84,7 @@ final List<ItemModel> sampleItems = [
   ItemModel(
     id: 7,
     name: 'Electric Fan',
-    iconName: 'fan',
+    iconPath: 'assets/item_icons/others/fan.svg',
     iconColor: Colors.lightBlue,
     firstUsed: DateTime.now().subtract(Duration(days: 300)),
     usageRecords: [
@@ -96,7 +96,7 @@ final List<ItemModel> sampleItems = [
   ItemModel(
     id: 8,
     name: 'Sketchbook',
-    iconName: 'brush',
+    iconPath: 'assets/item_icons/electronics/painted-screen.svg',
     iconColor: Colors.purple,
     firstUsed: DateTime.now().subtract(Duration(days: 120)),
     usageRecords: [
@@ -108,7 +108,7 @@ final List<ItemModel> sampleItems = [
   ItemModel(
     id: 9,
     name: 'Thermos Bottle',
-    iconName: 'thermos',
+    iconPath: 'assets/item_icons/appliances/boiler.svg',
     iconColor: Colors.teal,
     firstUsed: DateTime.now().subtract(Duration(days: 200)),
     usageRecords: [UsageRecordModel(id: 15, itemId: 9, usedAt: DateTime.now().subtract(Duration(days: 180)))],
@@ -117,7 +117,7 @@ final List<ItemModel> sampleItems = [
   ItemModel(
     id: 10,
     name: 'Wireless Mouse',
-    iconName: 'mouse',
+    iconPath: 'assets/item_icons/electronics/mouse-0.svg',
     iconColor: Colors.brown,
     firstUsed: DateTime.now().subtract(Duration(days: 70)),
     usageRecords: [

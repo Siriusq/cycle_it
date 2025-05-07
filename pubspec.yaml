@@ -42,8 +42,8 @@ dependencies:
   drift: ^2.26.0
   drift_flutter: ^0.2.4
 
-  # Icon Picker
-  flutter_iconpicker: ^4.0.1
+  # SVG
+  flutter_svg: ^2.1.0
 
   # Notification
   flutter_local_notifications: ^19.0.0
@@ -85,7 +85,10 @@ flutter:
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
   assets:
-    - assets/images/logo.png
+    - assets/item_icons/appliances/
+    - assets/item_icons/electronics/
+    - assets/item_icons/entertainment/
+    - assets/item_icons/others/
     - assets/images/logo_transparent.png
 
   # An image asset can refer to one or more resolution-specific "variants", see

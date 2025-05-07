@@ -10,6 +10,7 @@ const kBadgeColor = Color(0xFFEE376E);
 const kGrayColor = Color(0xFF8793B2);
 const kTitleTextColor = Color(0xFF30384D);
 const kTextColor = Color(0xFF4D5875);
+const itemIconColor = Color(0xFF57E1CB);
 
 // 标签颜色
 const List<Color> kColorPalette = [
