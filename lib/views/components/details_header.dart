@@ -27,6 +27,8 @@ class DetailsHeader extends StatelessWidget {
                 // } else {
                 //   Get.toNamed("/");
                 // }
+                print("Back");
+                print(Get.previousRoute);
 
                 // itemCtrl.clearSelection();
                 if (Get.currentRoute == '/Details') {
@@ -34,6 +36,7 @@ class DetailsHeader extends StatelessWidget {
                   Get.back();
                 } else {
                   // 否则只是清除选中状态，让HomePage回到列表模式
+                  Get.offAllNamed('/');
                   itemCtrl.clearSelection();
                 }
               },

@@ -7,9 +7,11 @@ import '../controllers/item_controller.dart';
 class HomeBinding implements Bindings {
   @override
   void dependencies() {
-    // 当进入 HomePage 时，才会实例化 ItemController
-    Get.lazyPut<ItemController>(() => ItemController());
-    Get.lazyPut<ItemListOrderController>(() => ItemListOrderController());
-    Get.lazyPut<TagController>(() => TagController());
+    Get.put<ItemController>(ItemController(), permanent: true);
+    Get.put<ItemListOrderController>(ItemListOrderController(), permanent: true);
+    Get.put<TagController>(TagController(), permanent: true);
+    //Get.lazyPut<ItemController>(() => ItemController());
+    //Get.lazyPut<ItemListOrderController>(() => ItemListOrderController());
+    //Get.lazyPut<TagController>(() => TagController());
   }
 }

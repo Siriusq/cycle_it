@@ -7,7 +7,6 @@ import 'package:get/get.dart';
 
 import '../../controllers/item_controller.dart';
 import '../../utils/responsive.dart';
-import '../details_page.dart';
 
 class ListOfItems extends StatelessWidget {
   final GlobalKey<ScaffoldState> scaffoldKey;
@@ -77,7 +76,7 @@ class ListOfItems extends StatelessWidget {
                       press: () {
                         itemCtrl.selectItem(item);
                         if (Responsive.isMobile(context)) {
-                          Get.to(() => DetailsPage());
+                          Get.toNamed("/Details");
                         }
                       },
                     );
