@@ -31,7 +31,7 @@ class ItemCard extends StatelessWidget {
             Container(
               padding: EdgeInsets.all(kDefaultPadding / 2),
               decoration: BoxDecoration(
-                color: isActive && !Responsive.isMobile(context) ? kPrimaryColor : kBgDarkColor,
+                color: isActive && !Responsive.isMobile(context) ? Colors.transparent : kBgDarkColor,
                 borderRadius: BorderRadius.circular(15),
               ),
               child: Column(
@@ -96,10 +96,12 @@ class ItemCard extends StatelessWidget {
                 ],
               ),
             ).addNeumorphism(
-              blurRadius: 15,
+              offset: 5,
+              blurRadius: 8,
               borderRadius: 15,
-              lightColor: Color(0xE8FFFFFF),
-              shadowColor: Color(0x6643AF9D),
+              lightColor: Colors.white,
+              shadowColor: Color(0xffa2a3ab),
+              isInset: isActive && !Responsive.isMobile(context),
             ),
           ],
         ),
