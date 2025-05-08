@@ -24,15 +24,25 @@ class HomePage extends StatelessWidget {
         tablet: _buildTabletLayout(itemCtrl),
         desktop: _buildDesktopLayout(itemCtrl),
       ),
+      floatingActionButton:
+          !Responsive.isDesktop(context) && Get.currentRoute == '/'
+              ? FloatingActionButton(onPressed: () {}, child: Icon(Icons.create_rounded))
+              : null,
     );
   }
 
   Widget _buildMobileLayout(ItemController ctrl) {
-    return ctrl.selectedItem.value != null
-        ? DetailsPage()
-        : ListOfItems(
-          scaffoldKey: _scaffoldKey, // 传入 key
-        );
+    // 移动布局只显示列表或详情路由
+    return Navigator(
+      key: Get.nestedKey(1), // 使用嵌套导航
+      onGenerateRoute: (settings) {
+        if (settings.name == '/details') {
+          return GetPageRoute(page: () => DetailsPage());
+        }
+        return GetPageRoute(page: () => ListOfItems(scaffoldKey: _scaffoldKey));
+      },
+    );
+    //return Get.currentRoute == '/Details' ? DetailsPage() : ListOfItems(scaffoldKey: _scaffoldKey);
   }
 
   Widget _buildTabletLayout(ItemController ctrl) {

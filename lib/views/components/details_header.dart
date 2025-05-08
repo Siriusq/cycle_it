@@ -15,16 +15,14 @@ class DetailsHeader extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: kDefaultPadding, vertical: kDefaultPadding / 2),
       child: Row(
         children: [
-          if (Responsive.isMobile(context))
+          if (itemCtrl.selectedItem.value != null)
             BackButton(
               onPressed: () {
-                if (Get.currentRoute == '/Details') {
-                  // 只有在真的跳到详情页（/Details）时才执行返回
+                itemCtrl.clearSelection();
+                // 确保路由同步
+                if (!Responsive.isMobile(context)) {
                   Get.back();
-                } else {
-                  // 否则清除选中状态，让HomePage回到列表模式
-                  Get.offAllNamed('/');
-                  itemCtrl.clearSelection();
+                  //Get.offAllNamed('/');
                 }
               },
             ),

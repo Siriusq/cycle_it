@@ -75,9 +75,9 @@ class ListOfItems extends StatelessWidget {
                       isActive: isActive,
                       press: () {
                         itemCtrl.selectItem(item);
-                        if (Responsive.isMobile(context)) {
-                          Get.toNamed("/Details");
-                        }
+                        // if (Responsive.isMobile(context)) {
+                        //   Get.toNamed("/Details");
+                        // }
                       },
                     );
                   });
