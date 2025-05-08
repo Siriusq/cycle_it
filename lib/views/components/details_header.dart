@@ -18,24 +18,11 @@ class DetailsHeader extends StatelessWidget {
           if (Responsive.isMobile(context))
             BackButton(
               onPressed: () {
-                // if (Get.key.currentState!.canPop()) {
-                //   print('Current route: ${Get.routing.current}');
-                //   print('Previous route: ${Get.routing.previous}');
-                //   print('Is back?: ${Get.routing.isBack}');
-                //
-                //   Get.back();
-                // } else {
-                //   Get.toNamed("/");
-                // }
-                print("Back");
-                print(Get.previousRoute);
-
-                // itemCtrl.clearSelection();
                 if (Get.currentRoute == '/Details') {
                   // 只有在真的跳到详情页（/Details）时才执行返回
                   Get.back();
                 } else {
-                  // 否则只是清除选中状态，让HomePage回到列表模式
+                  // 否则清除选中状态，让HomePage回到列表模式
                   Get.offAllNamed('/');
                   itemCtrl.clearSelection();
                 }

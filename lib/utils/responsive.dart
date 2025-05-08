@@ -17,27 +17,11 @@ class Responsive extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    //final ctrl = Get.find<ItemController>();
-
     // 窗口布局切换时进行路由切换
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!isMobile(context) && Get.currentRoute == '/Details') {
         Get.offAllNamed('/');
       }
-
-      if (isMobile(context)) {}
-
-      // if (!isMobile(context) && Get.currentRoute == '/Details') {
-      //   Get.toNamed("/");
-      // } else if (isMobile(context) && Get.currentRoute == '/') {
-      //   if (ctrl.selectedItem.value != null) {
-      //     Get.toNamed("/Details");
-      //   } else {
-      //     //ctrl.clearSelection();
-      //     Get.toNamed("/");
-      //   }
-      // }
-      print(Get.currentRoute);
     });
 
     return LayoutBuilder(
