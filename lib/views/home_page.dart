@@ -1,4 +1,5 @@
 import 'package:cycle_it/controllers/item_controller.dart';
+import 'package:cycle_it/utils/constants.dart';
 import 'package:cycle_it/utils/responsive.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -23,10 +24,15 @@ class HomePage extends StatelessWidget {
         mobile: _buildMobileLayout(itemCtrl),
         tablet: _buildTabletLayout(itemCtrl),
         desktop: _buildDesktopLayout(itemCtrl),
+        scaffoldKey: _scaffoldKey,
       ),
       floatingActionButton:
           !Responsive.isDesktop(context) && Get.currentRoute == '/'
-              ? FloatingActionButton(onPressed: () {}, child: Icon(Icons.create_rounded))
+              ? FloatingActionButton(
+                backgroundColor: kPrimaryColor,
+                onPressed: () {},
+                child: Icon(Icons.create_rounded),
+              )
               : null,
     );
   }
@@ -49,6 +55,7 @@ class HomePage extends StatelessWidget {
     return Row(
       children: [
         Expanded(flex: 2, child: ListOfItems(scaffoldKey: _scaffoldKey)),
+        VerticalDivider(thickness: 1, width: 1),
         Expanded(
           flex: 3,
           child: Obx(
@@ -66,7 +73,9 @@ class HomePage extends StatelessWidget {
     return Row(
       children: [
         SizedBox(width: 250, child: SideMenu()),
+        VerticalDivider(thickness: 1, width: 1),
         SizedBox(width: 440, child: ListOfItems(scaffoldKey: _scaffoldKey)),
+        VerticalDivider(thickness: 1, width: 1),
         Expanded(
           child: Obx(
             () =>

@@ -7,8 +7,15 @@ class Responsive extends StatelessWidget {
   final Widget mobile;
   final Widget tablet;
   final Widget desktop;
+  final GlobalKey<ScaffoldState> scaffoldKey;
 
-  const Responsive({super.key, required this.mobile, required this.tablet, required this.desktop});
+  const Responsive({
+    super.key,
+    required this.mobile,
+    required this.tablet,
+    required this.desktop,
+    required this.scaffoldKey,
+  });
 
   static bool isMobile(BuildContext context) => MediaQuery.of(context).size.width < 650;
 
@@ -56,6 +63,16 @@ class Responsive extends StatelessWidget {
             });
           }
         }
+
+        //切换时关闭抽屉
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (constraints.maxWidth >= 1100) {
+            // 关闭可能打开的抽屉
+            if (scaffoldKey.currentState?.isDrawerOpen ?? false) {
+              scaffoldKey.currentState!.closeDrawer();
+            }
+          }
+        });
 
         if (constraints.maxWidth >= 1100) {
           return desktop;
