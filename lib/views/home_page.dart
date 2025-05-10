@@ -1,5 +1,4 @@
 import 'package:cycle_it/controllers/item_controller.dart';
-import 'package:cycle_it/utils/constants.dart';
 import 'package:cycle_it/utils/responsive.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -26,14 +25,6 @@ class HomePage extends StatelessWidget {
         desktop: _buildDesktopLayout(itemCtrl),
         scaffoldKey: _scaffoldKey,
       ),
-      floatingActionButton:
-          !Responsive.isDesktop(context) && Get.currentRoute == '/'
-              ? FloatingActionButton(
-                backgroundColor: kPrimaryColor,
-                onPressed: () {},
-                child: Icon(Icons.create_rounded),
-              )
-              : null,
     );
   }
 

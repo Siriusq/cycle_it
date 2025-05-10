@@ -23,67 +23,82 @@ class ListOfItems extends StatelessWidget {
       color: kBgDarkColor,
       child: SafeArea(
         right: false,
-        child: Column(
+        child: Stack(
           children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: kDefaultPadding),
-              child: Row(
-                children: [
-                  // 非桌面端显示抽屉按钮
-                  if (!Responsive.isDesktop(context))
-                    IconButton(icon: Icon(Icons.menu), onPressed: () => scaffoldKey.currentState?.openDrawer()),
-                  if (!Responsive.isDesktop(context)) SizedBox(width: 5),
+            Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: kDefaultPadding),
+                  child: Row(
+                    children: [
+                      // 非桌面端显示抽屉按钮
+                      if (!Responsive.isDesktop(context))
+                        IconButton(icon: Icon(Icons.menu), onPressed: () => scaffoldKey.currentState?.openDrawer()),
+                      if (!Responsive.isDesktop(context)) SizedBox(width: 5),
 
-                  // 搜索框
-                  SizedBox(width: 5),
-                  Expanded(
-                    child: TextField(
-                      onChanged: (value) {},
-                      decoration: InputDecoration(
-                        hintText: "Search",
-                        //fillColor: kBgLightColor,
-                        //filled: true,
-                        hoverColor: kBgLightColor,
-                        suffixIcon: Padding(padding: const EdgeInsets.all(15), child: Icon(Icons.search)),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(10)),
-                          borderSide: BorderSide.none,
+                      // 搜索框
+                      SizedBox(width: 5),
+                      Expanded(
+                        child: TextField(
+                          onChanged: (value) {},
+                          decoration: InputDecoration(
+                            hintText: "Search",
+                            //fillColor: kBgLightColor,
+                            //filled: true,
+                            hoverColor: kBgLightColor,
+                            suffixIcon: Padding(padding: const EdgeInsets.all(15), child: Icon(Icons.search)),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.all(Radius.circular(10)),
+                              borderSide: BorderSide.none,
+                            ),
+                          ),
+                        ).addNeumorphism(
+                          offset: 5,
+                          blurRadius: 5,
+                          lightColor: Colors.white,
+                          shadowColor: Color(0xffa2a3ab),
+                          isInset: true,
                         ),
                       ),
-                    ).addNeumorphism(
-                      offset: 5,
-                      blurRadius: 5,
-                      lightColor: Colors.white,
-                      shadowColor: Color(0xffa2a3ab),
-                      isInset: true,
-                    ),
+                    ],
                   ),
-                ],
-              ),
+                ),
+                SizedBox(height: kDefaultPadding),
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: sampleItems.length,
+                    itemBuilder: (context, index) {
+                      final item = sampleItems[index];
+                      return Obx(() {
+                        final selected = Get.find<ItemController>().selectedItem.value;
+                        final isActive = selected?.id == item.id;
+                        return ItemCard(
+                          item: item,
+                          isActive: isActive,
+                          press: () {
+                            itemCtrl.selectItem(item);
+                            // if (Responsive.isMobile(context)) {
+                            //   Get.toNamed("/Details");
+                            // }
+                          },
+                        );
+                      });
+                    },
+                  ),
+                ),
+              ],
             ),
-            SizedBox(height: kDefaultPadding),
-            Expanded(
-              child: ListView.builder(
-                itemCount: sampleItems.length,
-                itemBuilder: (context, index) {
-                  final item = sampleItems[index];
-                  return Obx(() {
-                    final selected = Get.find<ItemController>().selectedItem.value;
-                    final isActive = selected?.id == item.id;
-                    return ItemCard(
-                      item: item,
-                      isActive: isActive,
-                      press: () {
-                        itemCtrl.selectItem(item);
-                        // if (Responsive.isMobile(context)) {
-                        //   Get.toNamed("/Details");
-                        // }
-                      },
-                    );
-                  });
-                },
+            // 只在手机端显示悬浮按钮
+            if (!Responsive.isDesktop(context))
+              Positioned(
+                bottom: 16,
+                right: 16,
+                child: FloatingActionButton(
+                  backgroundColor: kPrimaryColor,
+                  onPressed: () {},
+                  child: Icon(Icons.create_rounded),
+                ),
               ),
-            ),
           ],
         ),
       ),
