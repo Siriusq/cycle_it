@@ -1,6 +1,6 @@
+import 'package:cycle_it/controllers/search_bar_controller.dart';
 import 'package:cycle_it/test/mock_data.dart';
 import 'package:cycle_it/utils/constants.dart';
-import 'package:cycle_it/utils/extensions.dart';
 import 'package:cycle_it/views/components/item_card.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -16,11 +16,12 @@ class ListOfItems extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final itemCtrl = Get.find<ItemController>();
+    final searchBarCtrl = Get.find<SearchBarController>();
 
     return Container(
       //drawer: ConstrainedBox(constraints: BoxConstraints(maxWidth: 250), child: SideMenu()),
       //padding: EdgeInsets.only(top: GetPlatform.isDesktop ? kDefaultPadding : 0),
-      color: kBgDarkColor,
+      color: kPrimaryBgColor,
       child: SafeArea(
         right: false,
         child: Stack(
@@ -39,26 +40,41 @@ class ListOfItems extends StatelessWidget {
                       // 搜索框
                       SizedBox(width: 5),
                       Expanded(
-                        child: TextField(
-                          onChanged: (value) {},
-                          decoration: InputDecoration(
-                            hintText: "Search",
-                            //fillColor: kBgLightColor,
-                            //filled: true,
-                            hoverColor: kBgLightColor,
-                            suffixIcon: Padding(padding: const EdgeInsets.all(15), child: Icon(Icons.search)),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.all(Radius.circular(10)),
-                              borderSide: BorderSide.none,
+                        child: Obx(() {
+                          return TextField(
+                            controller: searchBarCtrl.textController,
+                            onChanged: (value) {},
+                            decoration: InputDecoration(
+                              hintText: "Search",
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.all(Radius.circular(10)),
+                                borderSide: BorderSide(color: kSelectedBorderColor, width: 2.0),
+                              ),
+                              suffixIcon: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.all(0),
+                                    child:
+                                        searchBarCtrl.hasText.value
+                                            ? IconButton(
+                                              onPressed: () {
+                                                searchBarCtrl.clearText();
+                                              },
+                                              icon: Icon(Icons.clear),
+                                            )
+                                            : null,
+                                  ),
+                                  Padding(padding: const EdgeInsets.all(15), child: Icon(Icons.search)),
+                                ],
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.all(Radius.circular(10)),
+                                borderSide: BorderSide(color: kBorderColor, width: 2.0),
+                              ),
                             ),
-                          ),
-                        ).addNeumorphism(
-                          offset: 5,
-                          blurRadius: 5,
-                          lightColor: Colors.white,
-                          shadowColor: Color(0xffa2a3ab),
-                          isInset: true,
-                        ),
+                          );
+                        }),
                       ),
                     ],
                   ),
