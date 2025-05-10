@@ -1,6 +1,5 @@
 import 'package:cycle_it/controllers/tag_controller.dart';
 import 'package:cycle_it/utils/constants.dart';
-import 'package:cycle_it/utils/extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -44,7 +43,7 @@ class AddTagDialog extends StatelessWidget {
       focusNode: FocusNode(), // 监听键盘事件
       child: AlertDialog(
         title: Text("Add New Tag", style: TextStyle(color: kTitleTextColor, fontWeight: FontWeight.w500, fontSize: 20)),
-        backgroundColor: kBgDarkColor,
+        backgroundColor: kPrimaryBgColor,
         content: SingleChildScrollView(
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -64,19 +63,17 @@ class AddTagDialog extends StatelessWidget {
                         contentPadding: EdgeInsets.only(left: 12, right: 12),
                         hintText: "Tag",
                         hintStyle: TextStyle(color: kTextColor, fontWeight: FontWeight.w200),
-                        border: OutlineInputBorder(
+                        focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(10)),
-                          borderSide: BorderSide.none,
+                          borderSide: BorderSide(color: kSelectedBorderColor, width: 1.0),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(10)),
+                          borderSide: BorderSide(color: kGrayColor, width: 1.0),
                         ),
                         errorText: null,
                       ),
                       onChanged: (_) => _errorText.value = '',
-                    ).addNeumorphism(
-                      offset: 5,
-                      blurRadius: 5,
-                      lightColor: Colors.white,
-                      shadowColor: Color(0xffa2a3ab),
-                      isInset: true,
                     ),
 
                     if (_errorText.value.isNotEmpty)
@@ -97,6 +94,10 @@ class AddTagDialog extends StatelessWidget {
               Obx(
                 () => SafeArea(
                   child: Container(
+                    decoration: BoxDecoration(
+                      border: Border.all(color: kGrayColor, width: 1),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
                     width: double.infinity,
                     padding: EdgeInsets.all(16),
                     child: Wrap(
@@ -112,24 +113,12 @@ class AddTagDialog extends StatelessWidget {
                                 duration: const Duration(milliseconds: 200),
                                 width: 40,
                                 height: 40,
-                                decoration: BoxDecoration(
-                                  color: color,
-                                  shape: BoxShape.circle,
-                                  boxShadow: [
-                                    BoxShadow(color: Color(0xffa2a3ab), blurRadius: 6, offset: const Offset(2, 2)),
-                                  ],
-                                ),
+                                decoration: BoxDecoration(color: color, shape: BoxShape.circle),
                                 child: isSelected ? const Icon(Icons.check, color: Colors.white, size: 28) : null,
                               ),
                             );
                           }).toList(),
                     ),
-                  ).addNeumorphism(
-                    offset: 5,
-                    blurRadius: 5,
-                    lightColor: Colors.white,
-                    shadowColor: Color(0xffa2a3ab),
-                    isInset: true,
                   ),
                 ),
               ),
@@ -141,25 +130,31 @@ class AddTagDialog extends StatelessWidget {
             style: TextButton.styleFrom(
               minimumSize: Size(60, 0),
               padding: EdgeInsets.all(kDefaultPadding / 2),
-              backgroundColor: kBgDarkColor,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+              backgroundColor: kSecondaryBgColor,
+              shape: RoundedRectangleBorder(
+                side: BorderSide(color: Colors.redAccent, width: 1.0),
+                borderRadius: BorderRadius.circular(10),
+              ),
             ),
             onPressed: () => Get.back(),
-            icon: Icon(Icons.cancel_outlined, color: kTextColor),
-            label: Text("Cancel", style: TextStyle(color: kTextColor)),
-          ).addNeumorphism(offset: 3, blurRadius: 3, shadowColor: Color(0xFFA2A3AB)),
+            icon: Icon(Icons.cancel_outlined, color: Colors.redAccent),
+            label: Text("Cancel", style: TextStyle(color: Colors.redAccent)),
+          ),
 
           TextButton.icon(
             style: TextButton.styleFrom(
               minimumSize: Size(90, 0),
               padding: EdgeInsets.all(kDefaultPadding / 2),
-              backgroundColor: kPrimaryColor,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+              backgroundColor: kSecondaryBgColor,
+              shape: RoundedRectangleBorder(
+                side: BorderSide(color: kPrimaryColor, width: 1.0),
+                borderRadius: BorderRadius.circular(10),
+              ),
             ),
             onPressed: () => _submit(tagCtrl),
-            icon: Icon(Icons.check_circle_outline, color: kTextColor),
-            label: Text("Add", style: TextStyle(color: kTextColor)),
-          ).addNeumorphism(offset: 3, blurRadius: 3, shadowColor: Color(0xFFA2A3AB)),
+            icon: Icon(Icons.check_circle_outline, color: kPrimaryColor),
+            label: Text("Add", style: TextStyle(color: kPrimaryColor)),
+          ),
         ],
       ),
     );

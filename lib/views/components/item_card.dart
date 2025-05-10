@@ -1,6 +1,5 @@
 import 'package:cycle_it/models/item_model.dart';
 import 'package:cycle_it/utils/constants.dart';
-import 'package:cycle_it/utils/extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -31,8 +30,12 @@ class ItemCard extends StatelessWidget {
             Container(
               padding: EdgeInsets.all(kDefaultPadding / 2),
               decoration: BoxDecoration(
-                color: isActive && !Responsive.isMobile(context) ? Colors.transparent : kBgDarkColor,
+                color: isActive && !Responsive.isMobile(context) ? kSecondaryBgColor : Colors.transparent,
                 borderRadius: BorderRadius.circular(15),
+                border: Border.all(
+                  width: 2.0,
+                  color: isActive && !Responsive.isMobile(context) ? kSelectedBorderColor : kBorderColor,
+                ),
               ),
               child: Column(
                 children: [
@@ -95,13 +98,6 @@ class ItemCard extends StatelessWidget {
                   ),
                 ],
               ),
-            ).addNeumorphism(
-              offset: 5,
-              blurRadius: 8,
-              borderRadius: 15,
-              lightColor: Colors.white,
-              shadowColor: Color(0xffa2a3ab),
-              isInset: isActive && !Responsive.isMobile(context),
             ),
           ],
         ),

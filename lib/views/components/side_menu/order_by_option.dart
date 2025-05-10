@@ -36,7 +36,10 @@ class OrderByOption extends StatelessWidget {
                     children: [
                       Icon(icon, color: (isActive) ? kPrimaryColor : kGrayColor),
                       SizedBox(width: kDefaultPadding / 2),
-                      Text(title, style: TextStyle(fontWeight: FontWeight.w500, color: kTextColor)),
+                      Text(
+                        title,
+                        style: TextStyle(fontWeight: FontWeight.w500, color: (isActive) ? kTitleTextColor : kGrayColor),
+                      ),
                     ],
                   ),
                 ),

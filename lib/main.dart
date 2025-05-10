@@ -1,4 +1,5 @@
 import 'package:cycle_it/bindings/home_binding.dart';
+import 'package:cycle_it/utils/constants.dart';
 import 'package:cycle_it/views/details_page.dart';
 import 'package:cycle_it/views/settings_page.dart';
 import 'package:device_preview/device_preview.dart';
@@ -56,7 +57,12 @@ class MyApp extends StatelessWidget {
         //
         // This works for code too, not just values: Most code changes can be
         // tested with just a hot reload.
-        colorScheme: ColorScheme.fromSeed(seedColor: Color(0xFF57E2CC)),
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.white),
+        textSelectionTheme: TextSelectionThemeData(
+          selectionColor: Color(0x33000000), // 选中内容的背景色
+          cursorColor: kTextColor, // 光标颜色
+          selectionHandleColor: kPrimaryColor, // 拖动选中控制柄颜色（移动端）
+        ),
       ),
       //home: HomePage(),
     );

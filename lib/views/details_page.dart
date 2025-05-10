@@ -20,12 +20,12 @@ class DetailsPage extends StatelessWidget {
       }
 
       return Container(
-        color: Color(0xFFF4F6FF),
+        color: kPrimaryBgColor,
         child: SafeArea(
           child: Column(
             children: [
               DetailsHeader(),
-              Divider(thickness: 1),
+              Divider(thickness: 1), //未对齐的分隔线
               Expanded(
                 child: SingleChildScrollView(
                   padding: EdgeInsets.all(kDefaultPadding),

@@ -27,7 +27,10 @@ class TagOption extends StatelessWidget {
               isSelected ? Icon(Icons.bookmark, color: color) : Icon(Icons.bookmark_outline, color: kGrayColor),
               //Icon(isSelected ? Icons.bookmark : Icons.bookmark_outline, color: color, size: 18),
               SizedBox(width: kDefaultPadding / 2),
-              Text(tagName, style: TextStyle(fontWeight: FontWeight.w500, color: kTextColor)),
+              Text(
+                tagName,
+                style: TextStyle(fontWeight: FontWeight.w500, color: isSelected ? kTitleTextColor : kGrayColor),
+              ),
             ],
           ),
         ),
