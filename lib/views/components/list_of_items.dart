@@ -84,7 +84,7 @@ class ListOfItems extends StatelessWidget {
 
                   //添加物品按钮
                   SizedBox(width: 5),
-                  IconButton(onPressed: () {}, icon: Icon(Icons.add)),
+                  IconButton(onPressed: () {}, icon: Icon(Icons.library_add_outlined)),
                 ],
               ),
             ),
