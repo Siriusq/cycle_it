@@ -6,16 +6,38 @@ import 'package:device_preview/device_preview.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:window_manager/window_manager.dart';
 
 import 'utils/i18n.dart';
 import 'views/home_page.dart';
 
-void main() => runApp(
-  DevicePreview(
-    enabled: !kReleaseMode,
-    builder: (context) => MyApp(), // Wrap your app
-  ),
-);
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  if (GetPlatform.isWindows || GetPlatform.isLinux || GetPlatform.isMacOS) {
+    await windowManager.ensureInitialized();
+
+    WindowOptions windowOptions = WindowOptions(
+      size: const Size(800, 600),
+      minimumSize: const Size(300, 300),
+      center: true,
+      title: 'Cycle It',
+    );
+
+    windowManager.waitUntilReadyToShow(windowOptions, () async {
+      await windowManager.show();
+      await windowManager.focus();
+    });
+
+    runApp(DevicePreview(enabled: !kReleaseMode, builder: (context) => MyApp()));
+  }
+}
+
+// void main() => runApp(
+//   DevicePreview(
+//     enabled: !kReleaseMode,
+//     builder: (context) => MyApp(), // Wrap your app
+//   ),
+// );
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});

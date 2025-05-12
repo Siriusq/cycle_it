@@ -51,6 +51,9 @@ dependencies:
   # Responsive UI Test in one window
   device_preview: ^1.2.0
 
+  # Adjust Window Size in Desktop
+  window_manager: ^0.4.3
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
