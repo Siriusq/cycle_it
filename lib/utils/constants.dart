@@ -16,6 +16,7 @@ const kPrimaryBgColor = Color(0xFFFEFEFE);
 const kSecondaryBgColor = Color(0xFFFBFBFB);
 const kSelectedBorderColor = Color(0xFF525252);
 const kBorderColor = Color(0xFFE1E1E1);
+const kIconColor = Color(0xFF3F484A);
 
 // 标签颜色
 const List<Color> kColorPalette = [

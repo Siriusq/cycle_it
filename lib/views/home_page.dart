@@ -4,7 +4,7 @@ import 'package:cycle_it/utils/responsive.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import 'components/list_of_items.dart';
+import 'components/home_page/list_of_items.dart';
 import 'components/side_menu/side_menu.dart';
 import 'details_page.dart';
 

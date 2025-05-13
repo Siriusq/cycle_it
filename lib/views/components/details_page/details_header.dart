@@ -2,8 +2,8 @@ import 'package:cycle_it/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../controllers/item_controller.dart';
-import '../../utils/responsive.dart';
+import '../../../controllers/item_controller.dart';
+import '../../../utils/responsive.dart';
 
 class DetailsHeader extends StatelessWidget {
   const DetailsHeader({super.key});

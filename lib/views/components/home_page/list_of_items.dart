@@ -1,12 +1,11 @@
+import 'package:cycle_it/controllers/item_controller.dart';
 import 'package:cycle_it/controllers/search_bar_controller.dart';
 import 'package:cycle_it/test/mock_data.dart';
 import 'package:cycle_it/utils/constants.dart';
-import 'package:cycle_it/views/components/item_card.dart';
+import 'package:cycle_it/utils/responsive.dart';
+import 'package:cycle_it/views/components/home_page/item_card.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
-import '../../controllers/item_controller.dart';
-import '../../utils/responsive.dart';
 
 class ListOfItems extends StatelessWidget {
   final GlobalKey<ScaffoldState> scaffoldKey;

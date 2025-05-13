@@ -28,7 +28,7 @@ final List<ItemModel> sampleItems =
           UsageRecordModel(id: 1, itemId: 1, usedAt: DateTime.now().subtract(Duration(days: 80))),
           UsageRecordModel(id: 2, itemId: 1, usedAt: DateTime.now().subtract(Duration(days: 60))),
         ],
-        tags: [allTagsFromMock[0], allTagsFromMock[1]],
+        tags: [allTagsFromMock[0], allTagsFromMock[1], allTagsFromMock[2]],
       ),
       ItemModel(
         id: 2,

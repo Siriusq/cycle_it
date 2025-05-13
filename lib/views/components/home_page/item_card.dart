@@ -1,12 +1,11 @@
+import 'package:cycle_it/controllers/item_controller.dart';
 import 'package:cycle_it/models/item_model.dart';
 import 'package:cycle_it/utils/constants.dart';
+import 'package:cycle_it/utils/responsive.dart';
 import 'package:cycle_it/views/components/icon_label.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-
-import '../../controllers/item_controller.dart';
-import '../../utils/responsive.dart';
 
 class ItemCard extends StatelessWidget {
   const ItemCard({super.key, required this.item, required this.isActive, required this.press});
@@ -52,7 +51,7 @@ class ItemCard extends StatelessWidget {
                       height: 25,
                       child: SvgPicture.asset(
                         item.iconPath,
-                        colorFilter: ColorFilter.mode(kTitleTextColor, BlendMode.srcIn),
+                        colorFilter: ColorFilter.mode(kIconColor, BlendMode.srcIn),
                       ),
                     ),
                     SizedBox(width: 12),
