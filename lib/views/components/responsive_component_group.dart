@@ -4,12 +4,14 @@ class ResponsiveComponentGroup extends StatelessWidget {
   final double minComponentWidth;
   final List<Widget> children;
   final double spacing;
+  final double aspectRation;
 
   const ResponsiveComponentGroup({
     super.key,
     required this.minComponentWidth,
     required this.children,
     this.spacing = 8,
+    this.aspectRation = 1.5,
   });
 
   @override
@@ -26,13 +28,15 @@ class ResponsiveComponentGroup extends StatelessWidget {
         final childWidth = (parentWidth - (validCount - 1) * spacing) / validCount;
 
         return GridView.builder(
-          shrinkWrap: true, // 高度自适应内容
-          physics: const NeverScrollableScrollPhysics(), // 禁止滚动
+          shrinkWrap: true,
+          // 高度自适应内容
+          physics: const NeverScrollableScrollPhysics(),
+          // 禁止滚动
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: validCount,
             mainAxisSpacing: spacing,
             crossAxisSpacing: spacing,
-            childAspectRatio: 3 / 2, // 根据实际需求调整宽高比
+            childAspectRatio: aspectRation, // 根据实际需求调整宽高比
           ),
           itemCount: children.length,
           itemBuilder: (context, index) => SizedBox(width: childWidth, child: children[index]),

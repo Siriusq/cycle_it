@@ -1,12 +1,13 @@
 import 'package:cycle_it/controllers/item_controller.dart';
 import 'package:cycle_it/models/item_model.dart';
 import 'package:cycle_it/utils/constants.dart';
-import 'package:cycle_it/views/components/details_page/usage_overview.dart';
+import 'package:cycle_it/views/components/details_page/details_brief_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 import 'components/details_page/details_header.dart';
+import 'components/details_page/usage_overview.dart';
 import 'components/icon_label.dart';
 import 'components/responsive_component_group.dart';
 
@@ -67,7 +68,7 @@ class DetailsPage extends StatelessWidget {
                         //标签
                         Padding(
                           padding: const EdgeInsets.symmetric(vertical: 5),
-                          child: Container(
+                          child: SizedBox(
                             width: double.infinity,
                             child: Wrap(
                               alignment: WrapAlignment.start,
@@ -92,15 +93,64 @@ class DetailsPage extends StatelessWidget {
 
                         //图表
                         Padding(
-                          padding: EdgeInsets.symmetric(horizontal: kDefaultPadding),
+                          padding: EdgeInsets.zero,
                           child: Wrap(
                             children: [
                               ResponsiveComponentGroup(
-                                minComponentWidth: 200, // 组件最小宽度
-                                children: List.generate(4, (i) => _buildComponent('大组件 ${i + 1}')),
+                                minComponentWidth: 150, // 组件最小宽度
+                                aspectRation: 2, //高宽比
+                                children: [
+                                  DetailsBriefCard(
+                                    title: 'Usage Count',
+                                    icon: Icons.pin,
+                                    iconColor: kIconColor,
+                                    data: '${item.usageRecords.length}',
+                                    comment:
+                                        'times since ${item.usageRecords.first.usedAt.toLocal().toString().split(' ')[0]}',
+                                  ),
+                                  DetailsBriefCard(
+                                    title: 'Usage Cycle',
+                                    icon: Icons.loop,
+                                    iconColor: kIconColor,
+                                    data: '${item.usageFrequency}',
+                                    comment: 'days per usage',
+                                  ),
+                                  DetailsBriefCard(
+                                    title: 'Last Used',
+                                    icon: Icons.history,
+                                    iconColor: kIconColor,
+                                    data: '${item.daysBetweenTodayAnd(false).abs()}',
+                                    comment:
+                                        'days ago since ${item.usageRecords.last.usedAt.toLocal().toString().split(' ')[0]}',
+                                  ),
+                                  DetailsBriefCard(
+                                    title: 'EST. Next Use',
+                                    icon: Icons.next_plan_outlined,
+                                    iconColor: kIconColor,
+                                    data: '${item.daysBetweenTodayAnd(true).abs()}',
+                                    comment:
+                                        'days ${item.daysBetweenTodayAnd(true) >= 0 ? 'later' : 'ago'} at ${item.nextExpectedUse?.toLocal().toString().split(' ')[0]}',
+                                  ),
+                                ],
                               ),
+                              //TODO: 1.
                             ],
                           ),
+                        ),
+                        ResponsiveComponentGroup(
+                          minComponentWidth: 200, // 组件最小宽度
+                          aspectRation: 2, //高宽比
+                          children: [
+                            UsageOverview(
+                              topIcon: Icons.numbers,
+                              topTitle: 'Usage Count',
+                              topData: '${item.usageRecords.length}',
+                              bottomIcon: Icons.calendar_month,
+                              bottomTitle: 'Date',
+                              bottomData: '1',
+                              chart: Text('Test'),
+                            ),
+                          ],
                         ),
                       ],
                     ),
@@ -112,12 +162,5 @@ class DetailsPage extends StatelessWidget {
         ),
       );
     });
-  }
-
-  Widget _buildComponent(String text) {
-    return Container(
-      decoration: BoxDecoration(color: Colors.blue, borderRadius: BorderRadius.circular(8)),
-      child: Center(child: Text(text, style: const TextStyle(color: Colors.white))),
-    );
   }
 }

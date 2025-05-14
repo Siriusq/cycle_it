@@ -33,8 +33,8 @@ class DetailsHeader extends StatelessWidget {
                   }
                 },
               ),
-            IconButton(onPressed: () {}, icon: Icon(Icons.navigate_before)),
-            IconButton(onPressed: () {}, icon: Icon(Icons.navigate_next)),
+            // IconButton(onPressed: () {}, icon: Icon(Icons.navigate_before)),
+            // IconButton(onPressed: () {}, icon: Icon(Icons.navigate_next)),
             Spacer(),
             IconButton(onPressed: () {}, icon: Icon(Icons.delete_outline)),
             IconButton(onPressed: () {}, icon: Icon(Icons.edit_outlined)),
