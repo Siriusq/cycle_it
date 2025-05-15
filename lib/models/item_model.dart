@@ -6,9 +6,10 @@ import 'usage_record_model.dart';
 class ItemModel {
   final int id;
   final String name;
+  String? usageComment;
   final String iconPath;
   final Color iconColor;
-  final DateTime firstUsed;
+  DateTime? firstUsed;
   final List<UsageRecordModel> usageRecords;
   final bool notifyBeforeNextUse;
   final List<TagModel> tags;
@@ -16,7 +17,8 @@ class ItemModel {
   ItemModel({
     required this.id,
     required this.name,
-    required this.firstUsed,
+    this.usageComment,
+    this.firstUsed,
     required this.usageRecords,
     required this.tags,
     required this.iconPath,
@@ -27,7 +29,7 @@ class ItemModel {
   // 计算使用频率
   double get usageFrequency {
     if (usageRecords.isEmpty) return 0;
-    final daysSinceFirst = DateTime.now().difference(firstUsed).inDays;
+    final daysSinceFirst = DateTime.now().difference(usageRecords.first.usedAt).inDays;
     if (daysSinceFirst == 0) return usageRecords.length.toDouble();
     return daysSinceFirst / usageRecords.length;
   }

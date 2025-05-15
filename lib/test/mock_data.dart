@@ -21,6 +21,7 @@ final List<ItemModel> sampleItems =
       ItemModel(
         id: 1,
         name: 'A Marvel Rice Cooker with Super Capacity and Endless Power Supply',
+        usageComment: 'Clean Inside',
         iconPath: 'assets/item_icons/appliances/cooking-pot.svg',
         iconColor: Colors.orange,
         firstUsed: DateTime.now().subtract(Duration(days: 90)),
@@ -32,7 +33,8 @@ final List<ItemModel> sampleItems =
       ),
       ItemModel(
         id: 2,
-        name: 'Winter Jacket',
+        name: 'A Marvel Rice Cooker with Super Capacity and Endless Power Supply',
+        usageComment: 'A Marvel Rice Cooker with Super Capacity and Endless Power Supply',
         iconPath: 'assets/item_icons/others/flower.svg',
         iconColor: Colors.blueGrey,
         firstUsed: DateTime.now().subtract(Duration(days: 200)),
@@ -45,6 +47,7 @@ final List<ItemModel> sampleItems =
       ItemModel(
         id: 3,
         name: 'Laptop',
+        usageComment: 'Recharge Battery',
         iconPath: 'assets/item_icons/electronics/laptop.svg',
         iconColor: Colors.grey,
         firstUsed: DateTime.now().subtract(Duration(days: 365)),

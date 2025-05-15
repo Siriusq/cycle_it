@@ -123,8 +123,8 @@ class DetailsPage extends StatelessWidget {
                                     title: 'Usage Cycle',
                                     icon: Icons.loop,
                                     iconColor: kIconColor,
-                                    data: usageCount > 0 ? '$usageFrequency' : '-',
-                                    comment: usageCount > 0 ? 'days per usage' : 'data not enough',
+                                    data: usageCount > 1 ? '$usageFrequency' : '-',
+                                    comment: usageCount > 1 ? 'days per usage' : 'data not enough',
                                   ),
                                   DetailsBriefCard(
                                     title: 'Last Used',
@@ -138,7 +138,7 @@ class DetailsPage extends StatelessWidget {
                                   ),
                                   DetailsBriefCard(
                                     title: 'EST. Next Use',
-                                    icon: Icons.next_plan_outlined,
+                                    icon: Icons.update,
                                     iconColor: kIconColor,
                                     data: usageCount > 1 ? '${daysTillNextUse.abs()}' : '-',
                                     comment:
