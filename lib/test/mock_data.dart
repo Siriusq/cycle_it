@@ -129,4 +129,13 @@ final List<ItemModel> sampleItems =
         ],
         tags: [allTagsFromMock[1], allTagsFromMock[3]],
       ),
+      ItemModel(
+        id: 11,
+        name: 'No Usage Record Test Item',
+        iconPath: 'assets/item_icons/others/box.svg',
+        iconColor: Colors.black,
+        firstUsed: DateTime.now().subtract(Duration(days: 70)),
+        usageRecords: [],
+        tags: [allTagsFromMock[2], allTagsFromMock[3]],
+      ),
     ].obs;

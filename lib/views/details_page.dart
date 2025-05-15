@@ -24,6 +24,14 @@ class DetailsPage extends StatelessWidget {
         return const SizedBox.shrink();
       }
 
+      final int usageCount = item.usageRecords.length;
+      final DateTime? nextExpectedUseDate = item.nextExpectedUse;
+      final DateTime? firstUsedDate = usageCount > 0 ? item.usageRecords.first.usedAt : null;
+      final DateTime? lastUsedDate = usageCount > 0 ? item.usageRecords.last.usedAt : null;
+      final int daysSinceLastUse = item.daysBetweenTodayAnd(false).abs();
+      final int daysTillNextUse = item.daysBetweenTodayAnd(true);
+      final double usageFrequency = item.usageFrequency.toPrecision(2);
+
       return Scaffold(
         body: Container(
           color: kPrimaryBgColor,
@@ -100,36 +108,43 @@ class DetailsPage extends StatelessWidget {
                                 minComponentWidth: 150, // 组件最小宽度
                                 aspectRation: 2, //高宽比
                                 children: [
+                                  // 使用次数，自首次使用记录起
                                   DetailsBriefCard(
                                     title: 'Usage Count',
                                     icon: Icons.pin,
                                     iconColor: kIconColor,
-                                    data: '${item.usageRecords.length}',
+                                    data: '$usageCount',
                                     comment:
-                                        'times since ${item.usageRecords.first.usedAt.toLocal().toString().split(' ')[0]}',
+                                        firstUsedDate != null
+                                            ? 'times since ${firstUsedDate.toLocal().toString().split(' ')[0]}'
+                                            : 'no usage records',
                                   ),
                                   DetailsBriefCard(
                                     title: 'Usage Cycle',
                                     icon: Icons.loop,
                                     iconColor: kIconColor,
-                                    data: '${item.usageFrequency}',
-                                    comment: 'days per usage',
+                                    data: usageCount > 0 ? '$usageFrequency' : '-',
+                                    comment: usageCount > 0 ? 'days per usage' : 'data not enough',
                                   ),
                                   DetailsBriefCard(
                                     title: 'Last Used',
                                     icon: Icons.history,
                                     iconColor: kIconColor,
-                                    data: '${item.daysBetweenTodayAnd(false).abs()}',
+                                    data: usageCount > 0 ? '$daysSinceLastUse' : '-',
                                     comment:
-                                        'days ago since ${item.usageRecords.last.usedAt.toLocal().toString().split(' ')[0]}',
+                                        lastUsedDate != null
+                                            ? 'days ago since ${lastUsedDate.toLocal().toString().split(' ')[0]}'
+                                            : 'data not enough',
                                   ),
                                   DetailsBriefCard(
                                     title: 'EST. Next Use',
                                     icon: Icons.next_plan_outlined,
                                     iconColor: kIconColor,
-                                    data: '${item.daysBetweenTodayAnd(true).abs()}',
+                                    data: usageCount > 1 ? '${daysTillNextUse.abs()}' : '-',
                                     comment:
-                                        'days ${item.daysBetweenTodayAnd(true) >= 0 ? 'later' : 'ago'} at ${item.nextExpectedUse?.toLocal().toString().split(' ')[0]}',
+                                        nextExpectedUseDate != null
+                                            ? 'days ${daysTillNextUse >= 0 ? 'later' : 'ago'} at ${nextExpectedUseDate.toLocal().toString().split(' ')[0]}'
+                                            : 'data not enough',
                                   ),
                                 ],
                               ),

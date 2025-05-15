@@ -69,4 +69,14 @@ class ItemModel {
 
     return target.difference(currentDate).inDays;
   }
+
+  // 计算上次使用与下次使用之间的时间进度
+  double timePercentageBetweenLastAndNext() {
+    final daysSinceLastUsage = daysBetweenTodayAnd(false);
+    final daysTillNextUsage = daysBetweenTodayAnd(true);
+    if (daysSinceLastUsage == 0) return 0;
+    if (daysTillNextUsage <= 0) return 1.0;
+    final totalDuration = daysSinceLastUsage + daysTillNextUsage;
+    return daysSinceLastUsage / totalDuration;
+  }
 }

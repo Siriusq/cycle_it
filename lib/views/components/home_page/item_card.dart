@@ -68,45 +68,45 @@ class ItemCard extends StatelessWidget {
               ),
 
               // 上次使用、预计下次使用、使用频率
-              Padding(
-                padding: const EdgeInsets.only(left: 40, right: 5, bottom: 5),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
-                      children: [
-                        Icon(Icons.update, color: kGrayColor, size: 16),
-                        SizedBox(width: 5),
-                        Expanded(
-                          child: Text(
-                            "Last used date: ${item.usageRecords.last.usedAt.toLocal().toString().split(' ')[0]}",
-                          ),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        Icon(Icons.event_repeat, color: kGrayColor, size: 16),
-                        SizedBox(width: 5),
-                        Expanded(
-                          child: Text(
-                            item.nextExpectedUse == null
-                                ? "Insufficient data"
-                                : "Estimated next use date: ${item.nextExpectedUse?.toLocal().toString().split(' ')[0]}",
-                          ),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        Icon(Icons.equalizer_rounded, color: kGrayColor, size: 16),
-                        SizedBox(width: 5),
-                        Expanded(child: Text("Usage Cycle: ${item.usageFrequency} days")),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
+              // Padding(
+              //   padding: const EdgeInsets.only(left: 40, right: 5, bottom: 5),
+              //   child: Column(
+              //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              //     children: [
+              //       Row(
+              //         children: [
+              //           Icon(Icons.update, color: kGrayColor, size: 16),
+              //           SizedBox(width: 5),
+              //           Expanded(
+              //             child: Text(
+              //               "Last used date: ${item.usageRecords.last.usedAt.toLocal().toString().split(' ')[0]}",
+              //             ),
+              //           ),
+              //         ],
+              //       ),
+              //       Row(
+              //         children: [
+              //           Icon(Icons.event_repeat, color: kGrayColor, size: 16),
+              //           SizedBox(width: 5),
+              //           Expanded(
+              //             child: Text(
+              //               item.nextExpectedUse == null
+              //                   ? "Insufficient data"
+              //                   : "Estimated next use date: ${item.nextExpectedUse?.toLocal().toString().split(' ')[0]}",
+              //             ),
+              //           ),
+              //         ],
+              //       ),
+              //       Row(
+              //         children: [
+              //           Icon(Icons.equalizer_rounded, color: kGrayColor, size: 16),
+              //           SizedBox(width: 5),
+              //           Expanded(child: Text("Usage Cycle: ${item.usageFrequency} days")),
+              //         ],
+              //       ),
+              //     ],
+              //   ),
+              // ),
 
               //标签
               Padding(
