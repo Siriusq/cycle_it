@@ -29,6 +29,8 @@ void main() async {
     });
 
     runApp(DevicePreview(enabled: !kReleaseMode, builder: (context) => MyApp()));
+  } else {
+    runApp(DevicePreview(enabled: false, builder: (context) => MyApp()));
   }
 }
 
