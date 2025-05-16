@@ -1,3 +1,4 @@
+import 'package:cycle_it/utils/responsive_style.dart';
 import 'package:flutter/material.dart';
 
 import '../../utils/constants.dart';
@@ -11,6 +12,8 @@ class IconLabel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final style = context.responsiveStyle().tagStyle;
+
     return Container(
       decoration: BoxDecoration(
         shape: BoxShape.rectangle,
@@ -19,14 +22,14 @@ class IconLabel extends StatelessWidget {
         color: Colors.white,
       ),
       child: Padding(
-        padding: const EdgeInsets.only(right: 4, top: 2, bottom: 2),
+        padding: EdgeInsets.symmetric(horizontal: style.spacing * 2, vertical: style.spacing * 0.5),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Icon(icon, size: 16, color: iconColor),
-            SizedBox(width: 4),
-            Text(label, style: TextStyle(color: kTextColor, fontSize: 12, fontWeight: FontWeight.w400)),
+            Icon(icon, size: style.iconSize, color: iconColor),
+            SizedBox(width: style.spacing * 0.5),
+            Text(label, style: TextStyle(color: kTextColor, fontSize: style.fontSize, fontWeight: FontWeight.w400)),
           ],
         ),
       ),

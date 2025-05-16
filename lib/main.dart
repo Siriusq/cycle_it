@@ -1,6 +1,6 @@
 import 'package:cycle_it/bindings/home_binding.dart';
 import 'package:cycle_it/utils/constants.dart';
-import 'package:cycle_it/views/details_page.dart';
+import 'package:cycle_it/views/components/details_page/details_page.dart';
 import 'package:cycle_it/views/settings_page.dart';
 import 'package:device_preview/device_preview.dart';
 import 'package:flutter/foundation.dart';
@@ -9,7 +9,7 @@ import 'package:get/get.dart';
 import 'package:window_manager/window_manager.dart';
 
 import 'utils/i18n.dart';
-import 'views/home_page.dart';
+import 'views/components/home_page/home_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

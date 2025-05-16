@@ -1,12 +1,12 @@
 import 'package:cycle_it/controllers/item_controller.dart';
 import 'package:cycle_it/utils/constants.dart';
-import 'package:cycle_it/utils/responsive.dart';
+import 'package:cycle_it/utils/responsive_layout.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import 'components/home_page/list_of_items.dart';
-import 'components/side_menu/side_menu.dart';
-import 'details_page.dart';
+import '../details_page/details_page.dart';
+import '../side_menu/side_menu.dart';
+import 'list_of_items.dart';
 
 class HomePage extends StatelessWidget {
   HomePage({super.key});
@@ -20,7 +20,7 @@ class HomePage extends StatelessWidget {
     return Scaffold(
       key: _scaffoldKey,
       drawer: ConstrainedBox(constraints: BoxConstraints(maxWidth: 250), child: SideMenu()),
-      body: Responsive(
+      body: ResponsiveLayout(
         mobile: _buildMobileLayout(itemCtrl),
         tablet: _buildTabletLayout(itemCtrl),
         desktop: _buildDesktopLayout(itemCtrl),

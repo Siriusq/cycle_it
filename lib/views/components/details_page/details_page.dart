@@ -6,10 +6,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
-import 'components/details_page/details_header.dart';
-import 'components/details_page/usage_overview.dart';
-import 'components/icon_label.dart';
-import 'components/responsive_component_group.dart';
+import '../icon_label.dart';
+import '../responsive_component_group.dart';
+import 'details_header.dart';
+import 'usage_overview.dart';
 
 class DetailsPage extends StatelessWidget {
   const DetailsPage({super.key});

@@ -74,8 +74,8 @@ class ItemModel {
 
   // 计算上次使用与下次使用之间的时间进度
   double timePercentageBetweenLastAndNext() {
-    final daysSinceLastUsage = daysBetweenTodayAnd(false);
-    final daysTillNextUsage = daysBetweenTodayAnd(true);
+    final daysSinceLastUsage = daysBetweenTodayAnd(false).abs();
+    final daysTillNextUsage = daysBetweenTodayAnd(true).abs();
     if (daysSinceLastUsage == 0) return 0;
     if (daysTillNextUsage <= 0) return 1.0;
     final totalDuration = daysSinceLastUsage + daysTillNextUsage;

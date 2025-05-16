@@ -2,7 +2,7 @@ import 'package:cycle_it/controllers/item_controller.dart';
 import 'package:cycle_it/controllers/search_bar_controller.dart';
 import 'package:cycle_it/test/mock_data.dart';
 import 'package:cycle_it/utils/constants.dart';
-import 'package:cycle_it/utils/responsive.dart';
+import 'package:cycle_it/utils/responsive_layout.dart';
 import 'package:cycle_it/views/components/home_page/item_card.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -34,9 +34,9 @@ class ListOfItems extends StatelessWidget {
               child: Row(
                 children: [
                   // 非桌面端显示抽屉按钮
-                  if (!Responsive.isDesktop(context))
+                  if (!ResponsiveLayout.isTripleCol(context))
                     IconButton(icon: Icon(Icons.menu), onPressed: () => scaffoldKey.currentState?.openDrawer()),
-                  if (!Responsive.isDesktop(context)) SizedBox(width: 5),
+                  if (!ResponsiveLayout.isTripleCol(context)) SizedBox(width: 5),
 
                   // 搜索框
                   SizedBox(width: 5),

@@ -52,8 +52,9 @@ final List<ItemModel> sampleItems =
         iconColor: Colors.grey,
         firstUsed: DateTime.now().subtract(Duration(days: 365)),
         usageRecords: [
-          UsageRecordModel(id: 5, itemId: 3, usedAt: DateTime.now().subtract(Duration(days: 10))),
-          UsageRecordModel(id: 6, itemId: 3, usedAt: DateTime.now().subtract(Duration(days: 5))),
+          UsageRecordModel(id: 5, itemId: 3, usedAt: DateTime.now().subtract(Duration(days: 200))),
+          UsageRecordModel(id: 5, itemId: 3, usedAt: DateTime.now().subtract(Duration(days: 120))),
+          UsageRecordModel(id: 6, itemId: 3, usedAt: DateTime.now().subtract(Duration(days: 10))),
         ],
         tags: [allTagsFromMock[1], allTagsFromMock[3]],
       ),

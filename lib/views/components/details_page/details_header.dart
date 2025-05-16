@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../controllers/item_controller.dart';
-import '../../../utils/responsive.dart';
+import '../../../utils/responsive_layout.dart';
 
 class DetailsHeader extends StatelessWidget {
   const DetailsHeader({super.key});
@@ -27,7 +27,7 @@ class DetailsHeader extends StatelessWidget {
                 onPressed: () {
                   itemCtrl.clearSelection();
                   // 确保路由同步
-                  if (!Responsive.isMobile(context)) {
+                  if (!ResponsiveLayout.isSingleCol(context)) {
                     Get.back();
                     //Get.offAllNamed('/');
                   }

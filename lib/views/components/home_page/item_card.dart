@@ -1,7 +1,8 @@
 import 'package:cycle_it/controllers/item_controller.dart';
 import 'package:cycle_it/models/item_model.dart';
 import 'package:cycle_it/utils/constants.dart';
-import 'package:cycle_it/utils/responsive.dart';
+import 'package:cycle_it/utils/responsive_layout.dart';
+import 'package:cycle_it/utils/responsive_style.dart';
 import 'package:cycle_it/views/components/icon_label.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -28,22 +29,24 @@ class ItemCard extends StatelessWidget {
     final int daysTillNextUse = item.daysBetweenTodayAnd(true);
     final double usageFrequency = item.usageFrequency.toPrecision(2);
 
+    TextStyle titleTextStyle = context.responsiveStyle().titleLarge;
+
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: kDefaultPadding, vertical: kDefaultPadding / 2),
       child: InkWell(
         onTap: () {
           itemCtrl.selectItem(item);
-          if (Responsive.isMobile(context)) Get.toNamed("/Details");
+          if (ResponsiveLayout.isSingleCol(context)) Get.toNamed("/Details");
         },
         child: Container(
           padding: EdgeInsets.all(kDefaultPadding / 2),
           //动态边框
           decoration: BoxDecoration(
-            color: isActive && !Responsive.isMobile(context) ? kSecondaryBgColor : Colors.transparent,
+            color: isActive && !ResponsiveLayout.isSingleCol(context) ? kSecondaryBgColor : Colors.transparent,
             borderRadius: BorderRadius.circular(15),
             border: Border.all(
               width: 2.0,
-              color: isActive && !Responsive.isMobile(context) ? kSelectedBorderColor : kBorderColor,
+              color: isActive && !ResponsiveLayout.isSingleCol(context) ? kSelectedBorderColor : kBorderColor,
             ),
           ),
           child: Column(
@@ -83,12 +86,7 @@ class ItemCard extends StatelessWidget {
                               Flexible(
                                 child: Text(
                                   item.name,
-                                  style: TextStyle(
-                                    color: kTitleTextColor,
-                                    fontWeight: FontWeight.w600, // 加粗提升可读性
-                                    fontSize: Responsive.isMobile(context) ? 15 : 17,
-                                    height: 1.2, // 行高调整
-                                  ),
+                                  style: titleTextStyle,
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
                                 ),
@@ -104,7 +102,7 @@ class ItemCard extends StatelessWidget {
                               style: TextStyle(
                                 color: kTextColor,
                                 fontWeight: FontWeight.w400,
-                                fontSize: Responsive.isMobile(context) ? 10 : 12,
+                                fontSize: ResponsiveLayout.isSingleCol(context) ? 10 : 12,
                                 height: 1.3, // 更紧凑的行高
                               ),
                               maxLines: 1,
@@ -129,47 +127,49 @@ class ItemCard extends StatelessWidget {
                 ),
               ),
 
-              //使用数据区域
-              Padding(
-                padding: const EdgeInsets.all(5),
-                child: ResponsiveComponentGroup(
-                  minComponentWidth: 80,
-                  aspectRation: 3,
-                  children: [
-                    // 上次使用
-                    _buildUsageStatItem(
-                      icon: Icons.history,
-                      title: "Last Used",
-                      value: lastUsedDate != null ? lastUsedDate.toLocal().toString().split(' ')[0] : 'data not enough',
-                      context: context,
-                    ),
-                    // 使用次数
-                    // _buildUsageStatItem(
-                    //   icon: Icons.pin_outlined,
-                    //   title: "Usage Count",
-                    //   value: "$usageCount times",
-                    //   context: context,
-                    // ),
-                    // 使用周期
-                    _buildUsageStatItem(
-                      icon: Icons.repeat,
-                      title: "Usage Cycle",
-                      value: usageCount > 1 ? '$usageFrequency days' : 'data not enough',
-                      context: context,
-                    ),
-                    // 下次使用预计
-                    _buildUsageStatItem(
-                      icon: Icons.update,
-                      title: "EST. Next Use",
-                      value:
-                          nextExpectedUseDate != null
-                              ? nextExpectedUseDate.toLocal().toString().split(' ')[0]
-                              : 'data not enough',
-                      context: context,
-                    ),
-                  ],
+              if (ResponsiveLayout.isTripleCol(context))
+                //使用数据区域，仅在桌面宽屏显示
+                Padding(
+                  padding: const EdgeInsets.all(5),
+                  child: ResponsiveComponentGroup(
+                    minComponentWidth: 80,
+                    aspectRation: 3,
+                    children: [
+                      // 上次使用
+                      _buildUsageStatItem(
+                        icon: Icons.history,
+                        title: "Last Used",
+                        value:
+                            lastUsedDate != null ? lastUsedDate.toLocal().toString().split(' ')[0] : 'data not enough',
+                        context: context,
+                      ),
+                      // 使用次数
+                      _buildUsageStatItem(
+                        icon: Icons.pin_outlined,
+                        title: "Usage Count",
+                        value: "$usageCount times",
+                        context: context,
+                      ),
+                      // 使用周期
+                      _buildUsageStatItem(
+                        icon: Icons.repeat,
+                        title: "Usage Cycle",
+                        value: usageCount > 1 ? '$usageFrequency days' : 'data not enough',
+                        context: context,
+                      ),
+                      // 下次使用预计
+                      _buildUsageStatItem(
+                        icon: Icons.update,
+                        title: "EST. Next Use",
+                        value:
+                            nextExpectedUseDate != null
+                                ? nextExpectedUseDate.toLocal().toString().split(' ')[0]
+                                : 'data not enough',
+                        context: context,
+                      ),
+                    ],
+                  ),
                 ),
-              ),
 
               // 进度条区域
               _buildDateProgressBar(item.timePercentageBetweenLastAndNext(), context),
@@ -207,7 +207,7 @@ class ItemCard extends StatelessWidget {
   // 日期进度条组件
   Widget _buildDateProgressBar(double progress, BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 5),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -241,14 +241,20 @@ class ItemCard extends StatelessWidget {
               );
             },
           ),
-          Align(
-            alignment: Alignment.centerRight,
-            child: Padding(
-              padding: const EdgeInsets.only(top: 4),
-              child: Text(
-                "EST.: ${item.nextExpectedUse}",
-                style: TextStyle(color: kTextColor, fontSize: Responsive.isMobile(context) ? 10 : 12),
-              ),
+          Padding(
+            padding: const EdgeInsets.only(bottom: 5),
+            child: Row(
+              children: [
+                Text(
+                  "Percentage",
+                  style: TextStyle(color: kTextColor, fontSize: ResponsiveLayout.isSingleCol(context) ? 10 : 12),
+                ),
+                Spacer(),
+                Text(
+                  "${(item.timePercentageBetweenLastAndNext() * 100).toStringAsFixed(2)}%",
+                  style: TextStyle(color: kTextColor, fontSize: ResponsiveLayout.isSingleCol(context) ? 10 : 12),
+                ),
+              ],
             ),
           ),
         ],

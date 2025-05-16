@@ -3,13 +3,13 @@ import 'package:get/get.dart';
 
 import '../controllers/item_controller.dart';
 
-class Responsive extends StatelessWidget {
+class ResponsiveLayout extends StatelessWidget {
   final Widget mobile;
   final Widget tablet;
   final Widget desktop;
   final GlobalKey<ScaffoldState> scaffoldKey;
 
-  const Responsive({
+  const ResponsiveLayout({
     super.key,
     required this.mobile,
     required this.tablet,
@@ -17,31 +17,16 @@ class Responsive extends StatelessWidget {
     required this.scaffoldKey,
   });
 
-  static bool isMobile(BuildContext context) => MediaQuery.of(context).size.width < 650;
+  static bool isSingleCol(BuildContext context) => MediaQuery.of(context).size.width < 650;
 
-  static bool isTablet(BuildContext context) =>
+  static bool isDoubleCol(BuildContext context) =>
       MediaQuery.of(context).size.width < 1100 && MediaQuery.of(context).size.width >= 650;
 
-  static bool isDesktop(BuildContext context) => MediaQuery.of(context).size.width >= 1100;
+  static bool isTripleCol(BuildContext context) => MediaQuery.of(context).size.width >= 1100;
 
   @override
   Widget build(BuildContext context) {
     final itemCtrl = Get.find<ItemController>();
-    // 窗口布局切换时进行路由切换
-    // WidgetsBinding.instance.addPostFrameCallback((_) {
-    //   final currentRoute = Get.currentRoute;
-    //   if (isMobile(context)) {
-    //     if (itemCtrl.selectedItem.value != null && currentRoute != '/Details') {
-    //       Get.toNamed('/Details');
-    //     } else if (itemCtrl.selectedItem.value == null && currentRoute == '/Details') {
-    //       Get.back();
-    //     }
-    //   } else {
-    //     if (currentRoute == '/Details') {
-    //       Get.offAllNamed('/');
-    //     }
-    //   }
-    // });
 
     return LayoutBuilder(
       builder: (context, constraints) {
