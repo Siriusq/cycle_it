@@ -24,20 +24,49 @@ class ResponsiveStyle {
   }
 
   // 文本样式
-  TextStyle get titleLarge => TextStyle(
+  // 超大标题
+  TextStyle get titleTextLG => TextStyle(
     color: kTitleTextColor,
     fontSize: _getValue(mobile: 14, tablet: 16, desktop: 18),
     fontWeight: FontWeight.w600,
   );
 
-  TextStyle get bodyText => TextStyle(fontSize: _getValue(mobile: 14, tablet: 16, desktop: 18), height: 1.4);
+  // 标题
+  TextStyle get titleTextMD => TextStyle(
+    color: kTitleTextColor,
+    fontSize: _getValue(mobile: 12, tablet: 14, desktop: 16),
+    fontWeight: FontWeight.w600,
+  );
+
+  // 文本
+  TextStyle get bodyText => TextStyle(
+    color: kTextColor,
+    fontSize: _getValue(mobile: 10, tablet: 12, desktop: 14),
+    height: _getValue(mobile: 1.2, tablet: 1.3, desktop: 1.4),
+  );
+
+  // 小文本
+  TextStyle get bodyTextSM => TextStyle(
+    color: kTextColor,
+    fontSize: _getValue(mobile: 8, tablet: 10, desktop: 12),
+    height: _getValue(mobile: 1.0, tablet: 1.1, desktop: 1.2),
+  );
 
   // 间距系统
-  double get spacingXS => _getValue(mobile: 4, tablet: 6, desktop: 8);
+  double get spacingXS => _getValue(mobile: 2, tablet: 4, desktop: 6);
 
-  double get spacingSM => _getValue(mobile: 8, tablet: 12, desktop: 16);
+  double get spacingSM => _getValue(mobile: 4, tablet: 6, desktop: 8);
 
-  double get spacingMD => _getValue(mobile: 12, tablet: 16, desktop: 20);
+  double get spacingMD => _getValue(mobile: 6, tablet: 8, desktop: 10);
+
+  double get spacingLG => _getValue(mobile: 8, tablet: 14, desktop: 20);
+
+  // 图标样式
+  double get iconSizeMD => _getValue(mobile: 24, tablet: 26, desktop: 28);
+
+  double get iconSizeSM => _getValue(mobile: 12, tablet: 16, desktop: 20);
+
+  double get iconSizeLG => _getValue(mobile: 32, tablet: 36, desktop: 40);
 
   // 组件样式
   TagStyle get tagStyle => TagStyle(

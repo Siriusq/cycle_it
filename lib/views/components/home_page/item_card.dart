@@ -21,25 +21,17 @@ class ItemCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final itemCtrl = Get.find<ItemController>();
 
-    final int usageCount = item.usageRecords.length;
-    final DateTime? nextExpectedUseDate = item.nextExpectedUse;
-    final DateTime? firstUsedDate = usageCount > 0 ? item.usageRecords.first.usedAt : null;
-    final DateTime? lastUsedDate = usageCount > 0 ? item.usageRecords.last.usedAt : null;
-    final int daysSinceLastUse = item.daysBetweenTodayAnd(false).abs();
-    final int daysTillNextUse = item.daysBetweenTodayAnd(true);
-    final double usageFrequency = item.usageFrequency.toPrecision(2);
-
-    TextStyle titleTextStyle = context.responsiveStyle().titleLarge;
+    final double spacingLG = context.responsiveStyle().spacingLG;
 
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: kDefaultPadding, vertical: kDefaultPadding / 2),
+      padding: EdgeInsets.symmetric(horizontal: spacingLG, vertical: spacingLG * 0.5),
       child: InkWell(
         onTap: () {
           itemCtrl.selectItem(item);
           if (ResponsiveLayout.isSingleCol(context)) Get.toNamed("/Details");
         },
         child: Container(
-          padding: EdgeInsets.all(kDefaultPadding / 2),
+          padding: EdgeInsets.all(spacingLG * 0.5),
           //动态边框
           decoration: BoxDecoration(
             color: isActive && !ResponsiveLayout.isSingleCol(context) ? kSecondaryBgColor : Colors.transparent,
@@ -54,149 +46,16 @@ class ItemCard extends StatelessWidget {
             //mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               // 图标、名称、更多按钮
-              Padding(
-                padding: const EdgeInsets.only(left: 5, bottom: 5),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center, // 顶部对齐
-                  children: [
-                    // 图标部分
-                    Padding(
-                      padding: const EdgeInsets.only(top: 2), // 微调图标垂直对齐
-                      child: SizedBox(
-                        width: 25,
-                        height: 25,
-                        child: SvgPicture.asset(
-                          item.iconPath,
-                          colorFilter: ColorFilter.mode(kIconColor, BlendMode.srcIn),
-                        ),
-                      ),
-                    ),
+              _buildTitle(context),
 
-                    const SizedBox(width: 12),
-
-                    // 文字内容区域
-                    Expanded(
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          // 标题行
-                          Row(
-                            children: [
-                              Flexible(
-                                child: Text(
-                                  item.name,
-                                  style: titleTextStyle,
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              ),
-                            ],
-                          ),
-
-                          // 备注区域（条件渲染）
-                          if (item.usageComment?.isNotEmpty ?? false) ...[
-                            const SizedBox(height: 4), // 增加间距
-                            Text(
-                              item.usageComment!,
-                              style: TextStyle(
-                                color: kTextColor,
-                                fontWeight: FontWeight.w400,
-                                fontSize: ResponsiveLayout.isSingleCol(context) ? 10 : 12,
-                                height: 1.3, // 更紧凑的行高
-                              ),
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ],
-                        ],
-                      ),
-                    ),
-
-                    // 更多按钮
-                    Align(
-                      alignment: Alignment.topCenter,
-                      child: IconButton(
-                        icon: Icon(Icons.more_horiz, size: 28),
-                        padding: EdgeInsets.zero,
-                        constraints: const BoxConstraints(),
-                        onPressed: () {},
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-
-              if (ResponsiveLayout.isTripleCol(context))
-                //使用数据区域，仅在桌面宽屏显示
-                Padding(
-                  padding: const EdgeInsets.all(5),
-                  child: ResponsiveComponentGroup(
-                    minComponentWidth: 80,
-                    aspectRation: 3,
-                    children: [
-                      // 上次使用
-                      _buildUsageStatItem(
-                        icon: Icons.history,
-                        title: "Last Used",
-                        value:
-                            lastUsedDate != null ? lastUsedDate.toLocal().toString().split(' ')[0] : 'data not enough',
-                        context: context,
-                      ),
-                      // 使用次数
-                      _buildUsageStatItem(
-                        icon: Icons.pin_outlined,
-                        title: "Usage Count",
-                        value: "$usageCount times",
-                        context: context,
-                      ),
-                      // 使用周期
-                      _buildUsageStatItem(
-                        icon: Icons.repeat,
-                        title: "Usage Cycle",
-                        value: usageCount > 1 ? '$usageFrequency days' : 'data not enough',
-                        context: context,
-                      ),
-                      // 下次使用预计
-                      _buildUsageStatItem(
-                        icon: Icons.update,
-                        title: "EST. Next Use",
-                        value:
-                            nextExpectedUseDate != null
-                                ? nextExpectedUseDate.toLocal().toString().split(' ')[0]
-                                : 'data not enough',
-                        context: context,
-                      ),
-                    ],
-                  ),
-                ),
+              // 详细使用数据，仅在桌面宽屏显示
+              _buildOverview(context),
 
               // 进度条区域
               _buildDateProgressBar(item.timePercentageBetweenLastAndNext(), context),
 
               //标签
-              Padding(
-                padding: const EdgeInsets.only(left: 5, right: 5),
-                child: Container(
-                  width: double.infinity,
-                  child: Wrap(
-                    alignment: WrapAlignment.start,
-                    spacing: 5,
-                    children:
-                        item.tags.map((tag) {
-                          return Container(
-                            decoration: BoxDecoration(
-                              shape: BoxShape.rectangle,
-                              border: Border.all(color: Colors.white),
-                              borderRadius: BorderRadius.circular(15),
-                              color: Colors.white,
-                            ),
-                            child: IconLabel(icon: Icons.bookmark, label: tag.name, iconColor: tag.color),
-                          );
-                        }).toList(),
-                  ),
-                ),
-              ),
+              _buildTags(context),
             ],
           ),
         ),
@@ -204,8 +63,164 @@ class ItemCard extends StatelessWidget {
     );
   }
 
+  // 图标、名称、更多按钮
+  Widget _buildTitle(BuildContext context) {
+    final TextStyle titleTextStyle = context.responsiveStyle().titleTextMD;
+    final TextStyle smallBodyTextStyle = context.responsiveStyle().bodyTextSM;
+    final double spacingMD = context.responsiveStyle().spacingMD;
+    final double iconSizeMD = context.responsiveStyle().iconSizeMD;
+    final double iconSizeLG = context.responsiveStyle().iconSizeLG;
+
+    return Padding(
+      padding: EdgeInsets.only(left: 5, bottom: ResponsiveLayout.isTripleCol(context) ? 5 : 0),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center, // 顶部对齐
+        children: [
+          // 图标部分
+          Padding(
+            padding: const EdgeInsets.only(top: 2), // 微调图标垂直对齐
+            child: SizedBox(
+              width: 25,
+              height: 25,
+              child: SvgPicture.asset(item.iconPath, colorFilter: ColorFilter.mode(kIconColor, BlendMode.srcIn)),
+            ),
+          ),
+
+          SizedBox(width: spacingMD),
+
+          // 文字内容区域
+          Expanded(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // 标题行
+                Row(
+                  children: [
+                    Flexible(
+                      child: Text(item.name, style: titleTextStyle, maxLines: 1, overflow: TextOverflow.ellipsis),
+                    ),
+                  ],
+                ),
+
+                // 备注区域
+                if (item.usageComment?.isNotEmpty ?? false) ...[
+                  const SizedBox(height: 4), // 增加间距
+                  Text(item.usageComment!, style: smallBodyTextStyle, maxLines: 1, overflow: TextOverflow.ellipsis),
+                ],
+              ],
+            ),
+          ),
+
+          // 更多按钮
+          Align(
+            alignment: Alignment.topCenter,
+            child: SizedBox(
+              width: iconSizeLG,
+              height: iconSizeLG, // 点击区域大小
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  Icon(Icons.more_vert, size: iconSizeMD), // 视觉图标
+                  Positioned.fill(
+                    child: Material(
+                      color: Colors.transparent,
+                      child: InkWell(
+                        onTap: () {
+                          // 点击事件
+                        },
+                        customBorder: const CircleBorder(), // 设置点击区域为圆形
+                        //splashFactory: NoSplash.splashFactory, // 可选：禁用水波纹
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // 详细使用数据，仅在桌面宽屏显示
+  Widget _buildOverview(BuildContext context) {
+    final int usageCount = item.usageRecords.length;
+    final DateTime? nextExpectedUseDate = item.nextExpectedUse;
+    final DateTime? lastUsedDate = usageCount > 0 ? item.usageRecords.last.usedAt : null;
+    final double usageFrequency = item.usageFrequency.toPrecision(2);
+
+    final TextStyle smallBodyTextStyle = context.responsiveStyle().bodyTextSM;
+    final double spacingXS = context.responsiveStyle().spacingXS;
+    final double spacingMD = context.responsiveStyle().spacingMD;
+    final double iconSizeSM = context.responsiveStyle().iconSizeSM;
+
+    if (!ResponsiveLayout.isTripleCol(context)) {
+      return Padding(
+        padding: EdgeInsets.only(left: 5, bottom: spacingMD, top: spacingMD),
+        child: Row(
+          children: [
+            Icon(Icons.repeat, color: kTextColor, size: iconSizeSM),
+            SizedBox(width: spacingXS),
+            Flexible(
+              child: Text(
+                "Usage Cycle: ${usageCount > 1 ? '$usageFrequency days' : 'data not enough'}",
+                style: smallBodyTextStyle,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+          ],
+        ),
+      );
+    } else {
+      return Padding(
+        padding: const EdgeInsets.all(8),
+        child: ResponsiveComponentGroup(
+          minComponentWidth: 160,
+          aspectRation: 5,
+          children: [
+            // 上次使用
+            _buildUsageStatItem(
+              icon: Icons.history,
+              title: "Last Used",
+              value: lastUsedDate != null ? lastUsedDate.toLocal().toString().split(' ')[0] : 'data not enough',
+              context: context,
+            ),
+            // 使用次数
+            _buildUsageStatItem(
+              icon: Icons.pin_outlined,
+              title: "Usage Count",
+              value: "$usageCount times",
+              context: context,
+            ),
+            // 使用周期
+            _buildUsageStatItem(
+              icon: Icons.repeat,
+              title: "Usage Cycle",
+              value: usageCount > 1 ? '$usageFrequency days' : 'data not enough',
+              context: context,
+            ),
+            // 下次使用预计
+            _buildUsageStatItem(
+              icon: Icons.update,
+              title: "EST. Next Use",
+              value:
+                  nextExpectedUseDate != null
+                      ? nextExpectedUseDate.toLocal().toString().split(' ')[0]
+                      : 'data not enough',
+              context: context,
+            ),
+          ],
+        ),
+      );
+    }
+  }
+
   // 日期进度条组件
   Widget _buildDateProgressBar(double progress, BuildContext context) {
+    final TextStyle smallBodyTextStyle = context.responsiveStyle().bodyTextSM;
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 5),
       child: Column(
@@ -231,7 +246,11 @@ class ItemCard extends StatelessWidget {
                           color: kPrimaryColor,
                           borderRadius: BorderRadius.circular(3),
                           boxShadow: [
-                            BoxShadow(color: kPrimaryColor.withOpacity(0.3), blurRadius: 4, offset: const Offset(0, 2)),
+                            BoxShadow(
+                              color: kPrimaryColor.withValues(alpha: 0.3),
+                              blurRadius: 4,
+                              offset: const Offset(0, 2),
+                            ),
                           ],
                         ),
                       ),
@@ -242,17 +261,14 @@ class ItemCard extends StatelessWidget {
             },
           ),
           Padding(
-            padding: const EdgeInsets.only(bottom: 5),
+            padding: EdgeInsets.symmetric(vertical: 4),
             child: Row(
               children: [
-                Text(
-                  "Percentage",
-                  style: TextStyle(color: kTextColor, fontSize: ResponsiveLayout.isSingleCol(context) ? 10 : 12),
-                ),
+                Text("EST. Timer", style: smallBodyTextStyle),
                 Spacer(),
                 Text(
                   "${(item.timePercentageBetweenLastAndNext() * 100).toStringAsFixed(2)}%",
-                  style: TextStyle(color: kTextColor, fontSize: ResponsiveLayout.isSingleCol(context) ? 10 : 12),
+                  style: smallBodyTextStyle,
                 ),
               ],
             ),
@@ -271,29 +287,24 @@ class ItemCard extends StatelessWidget {
   }) {
     return LayoutBuilder(
       builder: (context, constraints) {
-        // 响应式布局判断
-        final isCompactLayout = constraints.maxWidth < 120;
-        final iconSize = isCompactLayout ? 14.0 : 18.0;
-        final spacing = isCompactLayout ? 4.0 : 6.0;
-
         return Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             // 图标部分
-            Icon(icon, size: iconSize, color: kTextColor),
+            Icon(icon, size: 18, color: kTextColor),
 
-            SizedBox(width: spacing),
+            SizedBox(width: 6),
 
             // 文字部分
             Flexible(
               child: Column(
                 mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: isCompactLayout ? CrossAxisAlignment.center : CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   // 标题
                   Text(
                     title,
-                    style: TextStyle(color: kTextColor, fontSize: isCompactLayout ? 10 : 12, height: 1.1),
+                    style: TextStyle(color: kTextColor, fontSize: 12, height: 1.1),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -301,12 +312,7 @@ class ItemCard extends StatelessWidget {
                   // 数值
                   Text(
                     value,
-                    style: TextStyle(
-                      color: kTextColor,
-                      fontWeight: FontWeight.w400,
-                      fontSize: _calculateValueSize(constraints.maxWidth),
-                      letterSpacing: -0.3,
-                    ),
+                    style: TextStyle(color: kTextColor, fontWeight: FontWeight.w400, fontSize: 12, letterSpacing: -0.3),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -319,14 +325,30 @@ class ItemCard extends StatelessWidget {
     );
   }
 
-  // 动态计算数值字体大小
-  double _calculateValueSize(double containerWidth) {
-    return containerWidth < 100
-        ? 10
-        : containerWidth < 150
-        ? 12
-        : containerWidth < 200
-        ? 14
-        : 16;
+  // 底部标签行
+  Widget _buildTags(BuildContext context) {
+    final double spacingXS = context.responsiveStyle().spacingXS;
+    return Padding(
+      padding: EdgeInsets.only(top: spacingXS, left: 2),
+      child: SizedBox(
+        width: double.infinity,
+        child: Wrap(
+          alignment: WrapAlignment.start,
+          spacing: 5,
+          children:
+              item.tags.map((tag) {
+                return Container(
+                  decoration: BoxDecoration(
+                    shape: BoxShape.rectangle,
+                    border: Border.all(color: Colors.white),
+                    borderRadius: BorderRadius.circular(15),
+                    color: Colors.white,
+                  ),
+                  child: IconLabel(icon: Icons.bookmark, label: tag.name, iconColor: tag.color),
+                );
+              }).toList(),
+        ),
+      ),
+    );
   }
 }

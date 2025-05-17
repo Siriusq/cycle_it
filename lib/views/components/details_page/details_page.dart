@@ -1,6 +1,7 @@
 import 'package:cycle_it/controllers/item_controller.dart';
 import 'package:cycle_it/models/item_model.dart';
 import 'package:cycle_it/utils/constants.dart';
+import 'package:cycle_it/utils/responsive_style.dart';
 import 'package:cycle_it/views/components/details_page/details_brief_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -9,7 +10,6 @@ import 'package:get/get.dart';
 import '../icon_label.dart';
 import '../responsive_component_group.dart';
 import 'details_header.dart';
-import 'usage_overview.dart';
 
 class DetailsPage extends StatelessWidget {
   const DetailsPage({super.key});
@@ -31,6 +31,8 @@ class DetailsPage extends StatelessWidget {
       final int daysSinceLastUse = item.daysBetweenTodayAnd(false).abs();
       final int daysTillNextUse = item.daysBetweenTodayAnd(true);
       final double usageFrequency = item.usageFrequency.toPrecision(2);
+
+      final TextStyle largeTitleTextStyle = context.responsiveStyle().titleTextLG;
 
       return Scaffold(
         body: Container(
@@ -62,13 +64,7 @@ class DetailsPage extends StatelessWidget {
                                 ),
                               ),
                               SizedBox(width: 16),
-                              Expanded(
-                                child: Text(
-                                  item.name,
-                                  style: TextStyle(color: kTitleTextColor, fontWeight: FontWeight.w600, fontSize: 20),
-                                  softWrap: true,
-                                ),
-                              ),
+                              Expanded(child: Text(item.name, style: largeTitleTextStyle, softWrap: true)),
                             ],
                           ),
                         ),
@@ -151,21 +147,6 @@ class DetailsPage extends StatelessWidget {
                               //TODO: 1.
                             ],
                           ),
-                        ),
-                        ResponsiveComponentGroup(
-                          minComponentWidth: 200, // 组件最小宽度
-                          aspectRation: 2, //高宽比
-                          children: [
-                            UsageOverview(
-                              topIcon: Icons.numbers,
-                              topTitle: 'Usage Count',
-                              topData: '${item.usageRecords.length}',
-                              bottomIcon: Icons.calendar_month,
-                              bottomTitle: 'Date',
-                              bottomData: '1',
-                              chart: Text('Test'),
-                            ),
-                          ],
                         ),
                       ],
                     ),
