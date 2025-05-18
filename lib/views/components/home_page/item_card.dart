@@ -22,24 +22,22 @@ class ItemCard extends StatelessWidget {
     final itemCtrl = Get.find<ItemController>();
 
     final double spacingLG = context.responsiveStyle().spacingLG;
+    final bool isSingleCol = ResponsiveLayout.isSingleCol(context);
 
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: spacingLG, vertical: spacingLG * 0.5),
       child: InkWell(
         onTap: () {
           itemCtrl.selectItem(item);
-          if (ResponsiveLayout.isSingleCol(context)) Get.toNamed("/Details");
+          if (isSingleCol) Get.toNamed("/Details");
         },
         child: Container(
           padding: EdgeInsets.all(spacingLG * 0.5),
           //动态边框
           decoration: BoxDecoration(
-            color: isActive && !ResponsiveLayout.isSingleCol(context) ? kSecondaryBgColor : Colors.transparent,
+            color: isActive && !isSingleCol ? kSecondaryBgColor : Colors.transparent,
             borderRadius: BorderRadius.circular(15),
-            border: Border.all(
-              width: 2.0,
-              color: isActive && !ResponsiveLayout.isSingleCol(context) ? kSelectedBorderColor : kBorderColor,
-            ),
+            border: Border.all(width: 2.0, color: isActive && !isSingleCol ? kSelectedBorderColor : kBorderColor),
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -70,9 +68,10 @@ class ItemCard extends StatelessWidget {
     final double spacingMD = context.responsiveStyle().spacingMD;
     final double iconSizeMD = context.responsiveStyle().iconSizeMD;
     final double iconSizeLG = context.responsiveStyle().iconSizeLG;
+    final bool isTripleCol = ResponsiveLayout.isTripleCol(context);
 
     return Padding(
-      padding: EdgeInsets.only(left: 5, bottom: ResponsiveLayout.isTripleCol(context) ? 5 : 0),
+      padding: EdgeInsets.only(left: 5, bottom: isTripleCol ? 5 : 0),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center, // 顶部对齐
         children: [
@@ -154,8 +153,9 @@ class ItemCard extends StatelessWidget {
     final double spacingXS = context.responsiveStyle().spacingXS;
     final double spacingMD = context.responsiveStyle().spacingMD;
     final double iconSizeSM = context.responsiveStyle().iconSizeSM;
+    final bool isTripleCol = ResponsiveLayout.isTripleCol(context);
 
-    if (!ResponsiveLayout.isTripleCol(context)) {
+    if (!isTripleCol) {
       return Padding(
         padding: EdgeInsets.only(left: 5, bottom: spacingMD, top: spacingMD),
         child: Row(

@@ -17,12 +17,12 @@ class ResponsiveLayout extends StatelessWidget {
     required this.scaffoldKey,
   });
 
-  static bool isSingleCol(BuildContext context) => MediaQuery.of(context).size.width < 650;
+  static bool isSingleCol(BuildContext context) => MediaQuery.of(context).size.width < 768;
 
   static bool isDoubleCol(BuildContext context) =>
-      MediaQuery.of(context).size.width < 1100 && MediaQuery.of(context).size.width >= 650;
+      MediaQuery.of(context).size.width < 1024 && MediaQuery.of(context).size.width >= 768;
 
-  static bool isTripleCol(BuildContext context) => MediaQuery.of(context).size.width >= 1100;
+  static bool isTripleCol(BuildContext context) => MediaQuery.of(context).size.width >= 1024;
 
   @override
   Widget build(BuildContext context) {

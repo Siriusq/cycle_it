@@ -68,6 +68,9 @@ class ResponsiveStyle {
 
   double get iconSizeLG => _getValue(mobile: 32, tablet: 36, desktop: 40);
 
+  // 顶栏高度
+  double get topBarHeight => _getValue(mobile: 32, tablet: 36, desktop: 48);
+
   // 组件样式
   TagStyle get tagStyle => TagStyle(
     fontSize: _getValue(mobile: 8, tablet: 10, desktop: 12),
