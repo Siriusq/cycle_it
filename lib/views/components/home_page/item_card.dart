@@ -11,7 +11,12 @@ import 'package:get/get.dart';
 import '../responsive_component_group.dart';
 
 class ItemCard extends StatelessWidget {
-  const ItemCard({super.key, required this.item, required this.isActive, required this.press});
+  const ItemCard({
+    super.key,
+    required this.item,
+    required this.isActive,
+    required this.press,
+  });
 
   final ItemModel item;
   final bool isActive;
@@ -25,7 +30,10 @@ class ItemCard extends StatelessWidget {
     final bool isSingleCol = ResponsiveLayout.isSingleCol(context);
 
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: spacingLG, vertical: spacingLG * 0.5),
+      padding: EdgeInsets.symmetric(
+        horizontal: spacingLG,
+        vertical: spacingLG * 0.5,
+      ),
       child: InkWell(
         onTap: () {
           itemCtrl.selectItem(item);
@@ -35,9 +43,18 @@ class ItemCard extends StatelessWidget {
           padding: EdgeInsets.all(spacingLG * 0.5),
           //动态边框
           decoration: BoxDecoration(
-            color: isActive && !isSingleCol ? kSecondaryBgColor : Colors.transparent,
+            color:
+                isActive && !isSingleCol
+                    ? kSecondaryBgColor
+                    : Colors.transparent,
             borderRadius: BorderRadius.circular(15),
-            border: Border.all(width: 2.0, color: isActive && !isSingleCol ? kSelectedBorderColor : kBorderColor),
+            border: Border.all(
+              width: 2.0,
+              color:
+                  isActive && !isSingleCol
+                      ? kSelectedBorderColor
+                      : kBorderColor,
+            ),
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -50,7 +67,10 @@ class ItemCard extends StatelessWidget {
               _buildOverview(context),
 
               // 进度条区域
-              _buildDateProgressBar(item.timePercentageBetweenLastAndNext(), context),
+              _buildDateProgressBar(
+                item.timePercentageBetweenLastAndNext(),
+                context,
+              ),
 
               //标签
               _buildTags(context),
@@ -63,11 +83,12 @@ class ItemCard extends StatelessWidget {
 
   // 图标、名称、更多按钮
   Widget _buildTitle(BuildContext context) {
-    final TextStyle titleTextStyle = context.responsiveStyle().titleTextMD;
-    final TextStyle smallBodyTextStyle = context.responsiveStyle().bodyTextSM;
-    final double spacingMD = context.responsiveStyle().spacingMD;
-    final double iconSizeMD = context.responsiveStyle().iconSizeMD;
-    final double iconSizeLG = context.responsiveStyle().iconSizeLG;
+    final style = context.responsiveStyle();
+    final TextStyle titleTextStyle = style.titleTextMD;
+    final TextStyle smallBodyTextStyle = style.bodyTextSM;
+    final double spacingMD = style.spacingMD;
+    final double iconSizeMD = style.iconSizeMD;
+    final double iconSizeLG = style.iconSizeLG;
     final bool isTripleCol = ResponsiveLayout.isTripleCol(context);
 
     return Padding(
@@ -81,7 +102,13 @@ class ItemCard extends StatelessWidget {
             child: SizedBox(
               width: 25,
               height: 25,
-              child: SvgPicture.asset(item.iconPath, colorFilter: ColorFilter.mode(kIconColor, BlendMode.srcIn)),
+              child: SvgPicture.asset(
+                item.iconPath,
+                colorFilter: ColorFilter.mode(
+                  kIconColor,
+                  BlendMode.srcIn,
+                ),
+              ),
             ),
           ),
 
@@ -97,7 +124,12 @@ class ItemCard extends StatelessWidget {
                 Row(
                   children: [
                     Flexible(
-                      child: Text(item.name, style: titleTextStyle, maxLines: 1, overflow: TextOverflow.ellipsis),
+                      child: Text(
+                        item.name,
+                        style: titleTextStyle,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
                     ),
                   ],
                 ),
@@ -105,7 +137,12 @@ class ItemCard extends StatelessWidget {
                 // 备注区域
                 if (item.usageComment?.isNotEmpty ?? false) ...[
                   const SizedBox(height: 4), // 增加间距
-                  Text(item.usageComment!, style: smallBodyTextStyle, maxLines: 1, overflow: TextOverflow.ellipsis),
+                  Text(
+                    item.usageComment!,
+                    style: smallBodyTextStyle,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
                 ],
               ],
             ),
@@ -128,7 +165,8 @@ class ItemCard extends StatelessWidget {
                         onTap: () {
                           // 点击事件
                         },
-                        customBorder: const CircleBorder(), // 设置点击区域为圆形
+                        customBorder:
+                            const CircleBorder(), // 设置点击区域为圆形
                         //splashFactory: NoSplash.splashFactory, // 可选：禁用水波纹
                       ),
                     ),
@@ -146,18 +184,24 @@ class ItemCard extends StatelessWidget {
   Widget _buildOverview(BuildContext context) {
     final int usageCount = item.usageRecords.length;
     final DateTime? nextExpectedUseDate = item.nextExpectedUse;
-    final DateTime? lastUsedDate = usageCount > 0 ? item.usageRecords.last.usedAt : null;
+    final DateTime? lastUsedDate =
+        usageCount > 0 ? item.usageRecords.last.usedAt : null;
     final double usageFrequency = item.usageFrequency.toPrecision(2);
 
-    final TextStyle smallBodyTextStyle = context.responsiveStyle().bodyTextSM;
-    final double spacingXS = context.responsiveStyle().spacingXS;
-    final double spacingMD = context.responsiveStyle().spacingMD;
-    final double iconSizeSM = context.responsiveStyle().iconSizeSM;
+    final style = context.responsiveStyle();
+    final TextStyle smallBodyTextStyle = style.bodyTextSM;
+    final double spacingXS = style.spacingXS;
+    final double spacingMD = style.spacingMD;
+    final double iconSizeSM = style.iconSizeSM;
     final bool isTripleCol = ResponsiveLayout.isTripleCol(context);
 
     if (!isTripleCol) {
       return Padding(
-        padding: EdgeInsets.only(left: 5, bottom: spacingMD, top: spacingMD),
+        padding: EdgeInsets.only(
+          left: 5,
+          bottom: spacingMD,
+          top: spacingMD,
+        ),
         child: Row(
           children: [
             Icon(Icons.repeat, color: kTextColor, size: iconSizeSM),
@@ -184,7 +228,12 @@ class ItemCard extends StatelessWidget {
             _buildUsageStatItem(
               icon: Icons.history,
               title: "Last Used",
-              value: lastUsedDate != null ? lastUsedDate.toLocal().toString().split(' ')[0] : 'data not enough',
+              value:
+                  lastUsedDate != null
+                      ? lastUsedDate.toLocal().toString().split(
+                        ' ',
+                      )[0]
+                      : 'data not enough',
               context: context,
             ),
             // 使用次数
@@ -198,7 +247,10 @@ class ItemCard extends StatelessWidget {
             _buildUsageStatItem(
               icon: Icons.repeat,
               title: "Usage Cycle",
-              value: usageCount > 1 ? '$usageFrequency days' : 'data not enough',
+              value:
+                  usageCount > 1
+                      ? '$usageFrequency days'
+                      : 'data not enough',
               context: context,
             ),
             // 下次使用预计
@@ -207,7 +259,10 @@ class ItemCard extends StatelessWidget {
               title: "EST. Next Use",
               value:
                   nextExpectedUseDate != null
-                      ? nextExpectedUseDate.toLocal().toString().split(' ')[0]
+                      ? nextExpectedUseDate
+                          .toLocal()
+                          .toString()
+                          .split(' ')[0]
                       : 'data not enough',
               context: context,
             ),
@@ -218,8 +273,12 @@ class ItemCard extends StatelessWidget {
   }
 
   // 日期进度条组件
-  Widget _buildDateProgressBar(double progress, BuildContext context) {
-    final TextStyle smallBodyTextStyle = context.responsiveStyle().bodyTextSM;
+  Widget _buildDateProgressBar(
+    double progress,
+    BuildContext context,
+  ) {
+    final TextStyle smallBodyTextStyle =
+        context.responsiveStyle().bodyTextSM;
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 5),
@@ -228,35 +287,24 @@ class ItemCard extends StatelessWidget {
         children: [
           LayoutBuilder(
             builder: (context, constraints) {
-              return TweenAnimationBuilder(
-                tween: Tween(begin: 0.0, end: progress),
-                duration: const Duration(milliseconds: 800),
-                curve: Curves.easeInOut,
-                builder: (context, value, _) {
-                  return Stack(
-                    children: [
-                      Container(
-                        height: 6,
-                        decoration: BoxDecoration(color: kBorderColor, borderRadius: BorderRadius.circular(3)),
-                      ),
-                      Container(
-                        height: 6,
-                        width: constraints.maxWidth * value,
-                        decoration: BoxDecoration(
-                          color: kPrimaryColor,
-                          borderRadius: BorderRadius.circular(3),
-                          boxShadow: [
-                            BoxShadow(
-                              color: kPrimaryColor.withValues(alpha: 0.3),
-                              blurRadius: 4,
-                              offset: const Offset(0, 2),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  );
-                },
+              return Stack(
+                children: [
+                  Container(
+                    height: 6,
+                    decoration: BoxDecoration(
+                      color: kBorderColor,
+                      borderRadius: BorderRadius.circular(3),
+                    ),
+                  ),
+                  Container(
+                    height: 6,
+                    width: constraints.maxWidth * progress,
+                    decoration: BoxDecoration(
+                      color: kPrimaryColor,
+                      borderRadius: BorderRadius.circular(3),
+                    ),
+                  ),
+                ],
               );
             },
           ),
@@ -304,7 +352,11 @@ class ItemCard extends StatelessWidget {
                   // 标题
                   Text(
                     title,
-                    style: TextStyle(color: kTextColor, fontSize: 12, height: 1.1),
+                    style: TextStyle(
+                      color: kTextColor,
+                      fontSize: 12,
+                      height: 1.1,
+                    ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -312,7 +364,12 @@ class ItemCard extends StatelessWidget {
                   // 数值
                   Text(
                     value,
-                    style: TextStyle(color: kTextColor, fontWeight: FontWeight.w400, fontSize: 12, letterSpacing: -0.3),
+                    style: TextStyle(
+                      color: kTextColor,
+                      fontWeight: FontWeight.w400,
+                      fontSize: 12,
+                      letterSpacing: -0.3,
+                    ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -344,7 +401,11 @@ class ItemCard extends StatelessWidget {
                     borderRadius: BorderRadius.circular(15),
                     color: Colors.white,
                   ),
-                  child: IconLabel(icon: Icons.bookmark, label: tag.name, iconColor: tag.color),
+                  child: IconLabel(
+                    icon: Icons.bookmark,
+                    label: tag.name,
+                    iconColor: tag.color,
+                  ),
                 );
               }).toList(),
         ),

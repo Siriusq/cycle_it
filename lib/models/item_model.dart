@@ -29,7 +29,8 @@ class ItemModel {
   // 计算使用频率
   double get usageFrequency {
     if (usageRecords.isEmpty) return 0;
-    final daysSinceFirst = DateTime.now().difference(usageRecords.first.usedAt).inDays;
+    final daysSinceFirst =
+        DateTime.now().difference(usageRecords.first.usedAt).inDays;
     if (daysSinceFirst == 0) return usageRecords.length.toDouble();
     return daysSinceFirst / usageRecords.length;
   }
@@ -48,7 +49,8 @@ class ItemModel {
     }
     if (intervals.isEmpty) return null;
 
-    final avgInterval = intervals.reduce((a, b) => a + b) ~/ intervals.length;
+    final avgInterval =
+        intervals.reduce((a, b) => a + b) ~/ intervals.length;
     final lastUse = sorted.last;
 
     return lastUse.add(Duration(days: avgInterval));
@@ -67,13 +69,22 @@ class ItemModel {
     // 获取当前日期，去除时分秒，避免计算误差
     final today = DateTime.now();
     final currentDate = DateTime(today.year, today.month, today.day);
-    final target = DateTime(targetDate.year, targetDate.month, targetDate.day);
+    final target = DateTime(
+      targetDate.year,
+      targetDate.month,
+      targetDate.day,
+    );
 
     return target.difference(currentDate).inDays;
   }
 
   // 计算上次使用与下次使用之间的时间进度
+  double? _cachedProgress;
   double timePercentageBetweenLastAndNext() {
+    return _cachedProgress ??= _calculateProgress();
+  }
+
+  double _calculateProgress() {
     final daysSinceLastUsage = daysBetweenTodayAnd(false).abs();
     final daysTillNextUsage = daysBetweenTodayAnd(true).abs();
     if (daysSinceLastUsage == 0) return 0;

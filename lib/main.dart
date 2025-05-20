@@ -5,6 +5,7 @@ import 'package:cycle_it/views/settings_page.dart';
 import 'package:device_preview/device_preview.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
 import 'package:window_manager/window_manager.dart';
 
@@ -12,8 +13,13 @@ import 'utils/i18n.dart';
 import 'views/components/home_page/home_page.dart';
 
 void main() async {
+  debugProfileBuildsEnabled = true; // 跟踪Widget重建
+  debugProfilePaintsEnabled = true; // 跟踪绘制操作
+
   WidgetsFlutterBinding.ensureInitialized();
-  if (GetPlatform.isWindows || GetPlatform.isLinux || GetPlatform.isMacOS) {
+  if (GetPlatform.isWindows ||
+      GetPlatform.isLinux ||
+      GetPlatform.isMacOS) {
     await windowManager.ensureInitialized();
 
     WindowOptions windowOptions = WindowOptions(
@@ -28,9 +34,16 @@ void main() async {
       await windowManager.focus();
     });
 
-    runApp(DevicePreview(enabled: !kReleaseMode, builder: (context) => MyApp()));
+    runApp(
+      DevicePreview(
+        enabled: !kReleaseMode,
+        builder: (context) => MyApp(),
+      ),
+    );
   } else {
-    runApp(DevicePreview(enabled: false, builder: (context) => MyApp()));
+    runApp(
+      DevicePreview(enabled: false, builder: (context) => MyApp()),
+    );
   }
 }
 
