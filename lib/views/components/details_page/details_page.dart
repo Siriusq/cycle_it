@@ -7,9 +7,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
+import '../../../utils/responsive_layout.dart';
 import '../icon_label.dart';
 import '../responsive_component_group.dart';
-import 'details_header.dart';
 
 class DetailsPage extends StatelessWidget {
   const DetailsPage({super.key});
@@ -17,6 +17,16 @@ class DetailsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final itemCtrl = Get.find<ItemController>();
+
+    final style = context.responsiveStyle();
+    final double spacingXS = style.spacingXS;
+    final double spacingLG = style.spacingLG;
+    final bool isMobile = GetPlatform.isIOS || GetPlatform.isAndroid;
+    final double headerSpacing = isMobile ? 4 : 20;
+    final double horizontalSpacing = isMobile ? 4 : spacingLG;
+    final double bottomSpacing = isMobile ? 0 : 10;
+    final double dividerHeight = isMobile ? 0 : 16;
+    final TextStyle largeTitleTextStyle = style.titleTextLG;
 
     return Obx(() {
       final ItemModel? item = itemCtrl.selectedItem.value;
@@ -26,13 +36,16 @@ class DetailsPage extends StatelessWidget {
 
       final int usageCount = item.usageRecords.length;
       final DateTime? nextExpectedUseDate = item.nextExpectedUse;
-      final DateTime? firstUsedDate = usageCount > 0 ? item.usageRecords.first.usedAt : null;
-      final DateTime? lastUsedDate = usageCount > 0 ? item.usageRecords.last.usedAt : null;
-      final int daysSinceLastUse = item.daysBetweenTodayAnd(false).abs();
+      final DateTime? firstUsedDate =
+          usageCount > 0 ? item.usageRecords.first.usedAt : null;
+      final DateTime? lastUsedDate =
+          usageCount > 0 ? item.usageRecords.last.usedAt : null;
+      final int daysSinceLastUse =
+          item.daysBetweenTodayAnd(false).abs();
       final int daysTillNextUse = item.daysBetweenTodayAnd(true);
-      final double usageFrequency = item.usageFrequency.toPrecision(2);
-
-      final TextStyle largeTitleTextStyle = context.responsiveStyle().titleTextLG;
+      final double usageFrequency = item.usageFrequency.toPrecision(
+        2,
+      );
 
       return Scaffold(
         body: Container(
@@ -40,114 +53,29 @@ class DetailsPage extends StatelessWidget {
           child: SafeArea(
             child: Column(
               children: [
-                DetailsHeader(),
-                Divider(thickness: 1),
-                //标题、标签与图标
+                // 顶栏
+                _buildHeader(context, style, isMobile),
+
+                // 分割线
+                SizedBox(height: bottomSpacing),
+                Divider(height: dividerHeight),
+                SizedBox(height: spacingXS),
+
                 Expanded(
                   child: SingleChildScrollView(
-                    padding: EdgeInsets.symmetric(horizontal: kDefaultPadding),
+                    padding: EdgeInsets.symmetric(
+                      horizontal: spacingLG,
+                    ),
                     child: Column(
                       children: [
-                        //标题
-                        Padding(
-                          padding: const EdgeInsets.only(top: 10, bottom: 5),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              SizedBox(
-                                width: 40,
-                                height: 40,
-                                child: SvgPicture.asset(
-                                  item.iconPath,
-                                  colorFilter: ColorFilter.mode(kIconColor, BlendMode.srcIn),
-                                ),
-                              ),
-                              SizedBox(width: 16),
-                              Expanded(child: Text(item.name, style: largeTitleTextStyle, softWrap: true)),
-                            ],
-                          ),
-                        ),
+                        //标题、标签与图标
+                        _buildTitle(context, style, item),
+                        _buildTags(context, style, item),
 
-                        //标签
-                        Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 5),
-                          child: SizedBox(
-                            width: double.infinity,
-                            child: Wrap(
-                              alignment: WrapAlignment.start,
-                              spacing: 5,
-                              children:
-                                  item.tags.map((tag) {
-                                    return Container(
-                                      decoration: BoxDecoration(
-                                        shape: BoxShape.rectangle,
-                                        border: Border.all(color: Colors.white),
-                                        borderRadius: BorderRadius.circular(15),
-                                        color: Colors.white,
-                                      ),
-                                      child: IconLabel(icon: Icons.bookmark, label: tag.name, iconColor: tag.color),
-                                    );
-                                  }).toList(),
-                            ),
-                          ),
-                        ),
-
-                        SizedBox(height: kDefaultPadding),
+                        SizedBox(height: spacingLG),
 
                         //图表
-                        Padding(
-                          padding: EdgeInsets.zero,
-                          child: Wrap(
-                            children: [
-                              ResponsiveComponentGroup(
-                                minComponentWidth: 150, // 组件最小宽度
-                                aspectRation: 2, //高宽比
-                                children: [
-                                  // 使用次数，自首次使用记录起
-                                  DetailsBriefCard(
-                                    title: 'Usage Count',
-                                    icon: Icons.pin,
-                                    iconColor: kIconColor,
-                                    data: '$usageCount',
-                                    comment:
-                                        firstUsedDate != null
-                                            ? 'times since ${firstUsedDate.toLocal().toString().split(' ')[0]}'
-                                            : 'no usage records',
-                                  ),
-                                  DetailsBriefCard(
-                                    title: 'Usage Cycle',
-                                    icon: Icons.loop,
-                                    iconColor: kIconColor,
-                                    data: usageCount > 1 ? '$usageFrequency' : '-',
-                                    comment: usageCount > 1 ? 'days per usage' : 'data not enough',
-                                  ),
-                                  DetailsBriefCard(
-                                    title: 'Last Used',
-                                    icon: Icons.history,
-                                    iconColor: kIconColor,
-                                    data: usageCount > 0 ? '$daysSinceLastUse' : '-',
-                                    comment:
-                                        lastUsedDate != null
-                                            ? 'days ago since ${lastUsedDate.toLocal().toString().split(' ')[0]}'
-                                            : 'data not enough',
-                                  ),
-                                  DetailsBriefCard(
-                                    title: 'EST. Next Use',
-                                    icon: Icons.update,
-                                    iconColor: kIconColor,
-                                    data: usageCount > 1 ? '${daysTillNextUse.abs()}' : '-',
-                                    comment:
-                                        nextExpectedUseDate != null
-                                            ? 'days ${daysTillNextUse >= 0 ? 'later' : 'ago'} at ${nextExpectedUseDate.toLocal().toString().split(' ')[0]}'
-                                            : 'data not enough',
-                                  ),
-                                ],
-                              ),
-                              //TODO: 1.
-                            ],
-                          ),
-                        ),
+                        _buildOverview(context, style, item),
                       ],
                     ),
                   ),
@@ -158,5 +86,236 @@ class DetailsPage extends StatelessWidget {
         ),
       );
     });
+  }
+
+  Widget _buildHeader(
+    BuildContext context,
+    ResponsiveStyle style,
+    bool isMobile,
+  ) {
+    final itemCtrl = Get.find<ItemController>();
+
+    final double spacingLG = style.spacingLG;
+    final double headerSpacing = isMobile ? 4 : 20;
+    final double horizontalSpacing = isMobile ? 4 : spacingLG;
+    final double topBarHeight = isMobile ? 32 : 48;
+
+    return Padding(
+      padding: EdgeInsets.only(
+        left: horizontalSpacing,
+        right: horizontalSpacing,
+        top: headerSpacing,
+      ),
+      child: SizedBox(
+        height: 48,
+        child: Row(
+          children: [
+            if (itemCtrl.selectedItem.value != null)
+              BackButton(
+                onPressed: () {
+                  itemCtrl.clearSelection();
+                  // 确保路由同步
+                  if (!ResponsiveLayout.isSingleCol(context)) {
+                    Get.back();
+                    //Get.offAllNamed('/');
+                  }
+                },
+              ),
+            // IconButton(onPressed: () {}, icon: Icon(Icons.navigate_before)),
+            // IconButton(onPressed: () {}, icon: Icon(Icons.navigate_next)),
+            Spacer(),
+            IconButton(
+              onPressed: () {},
+              icon: Icon(Icons.delete_outline),
+            ),
+            IconButton(
+              onPressed: () {},
+              icon: Icon(Icons.edit_outlined),
+            ),
+            IconButton(onPressed: () {}, icon: Icon(Icons.refresh)),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildTitle(
+    BuildContext context,
+    ResponsiveStyle style,
+    ItemModel item,
+  ) {
+    final TextStyle largeTitleTextStyle = style.titleTextLG;
+    final TextStyle bodyText = style.bodyText;
+    final double spacingMD = style.spacingMD;
+    final double spacingLG = style.spacingLG;
+
+    return Padding(
+      padding: EdgeInsets.symmetric(
+        //horizontal: spacingLG,
+        vertical: spacingLG * 0.5,
+      ),
+      child: Row(
+        //mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(top: 2),
+            child: SizedBox(
+              width: 40,
+              height: 40,
+              child: SvgPicture.asset(
+                item.iconPath,
+                colorFilter: ColorFilter.mode(
+                  kIconColor,
+                  BlendMode.srcIn,
+                ),
+              ),
+            ),
+          ),
+
+          SizedBox(width: spacingLG),
+
+          // 文字内容区域
+          Expanded(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // 标题行
+                Row(
+                  children: [
+                    Flexible(
+                      child: Text(
+                        item.name,
+                        style: largeTitleTextStyle,
+                        softWrap: true,
+                      ),
+                    ),
+                  ],
+                ),
+
+                // 备注区域
+                if (item.usageComment?.isNotEmpty ?? false) ...[
+                  const SizedBox(height: 4), // 增加间距
+                  Text(
+                    item.usageComment!,
+                    style: bodyText,
+                    softWrap: true,
+                  ),
+                ],
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // 底部标签行
+  Widget _buildTags(
+    BuildContext context,
+    ResponsiveStyle style,
+    ItemModel item,
+  ) {
+    final double spacingXS = style.spacingXS;
+
+    return Padding(
+      padding: EdgeInsets.only(top: spacingXS, left: 2),
+      child: SizedBox(
+        width: double.infinity,
+        child: Wrap(
+          alignment: WrapAlignment.start,
+          spacing: 5,
+          children:
+              item.tags.map((tag) {
+                return Container(
+                  decoration: BoxDecoration(
+                    shape: BoxShape.rectangle,
+                    border: Border.all(color: Colors.white),
+                    borderRadius: BorderRadius.circular(15),
+                    color: Colors.white,
+                  ),
+                  child: IconLabel(
+                    icon: Icons.bookmark,
+                    label: tag.name,
+                    iconColor: tag.color,
+                  ),
+                );
+              }).toList(),
+        ),
+      ),
+    );
+  }
+
+  // 详细使用数据，仅在桌面宽屏显示
+  Widget _buildOverview(
+    BuildContext context,
+    ResponsiveStyle style,
+    ItemModel item,
+  ) {
+    final int usageCount = item.usageRecords.length;
+    final DateTime? nextExpectedUseDate = item.nextExpectedUse;
+    final DateTime? firstUsedDate =
+        usageCount > 0 ? item.usageRecords.first.usedAt : null;
+    final DateTime? lastUsedDate =
+        usageCount > 0 ? item.usageRecords.last.usedAt : null;
+    final int daysSinceLastUse =
+        item.daysBetweenTodayAnd(false).abs();
+    final int daysTillNextUse = item.daysBetweenTodayAnd(true);
+    final double usageFrequency = item.usageFrequency.toPrecision(2);
+
+    final double minComponentWidth = style.minComponentWidth;
+
+    return Padding(
+      padding: const EdgeInsets.all(0),
+      child: ResponsiveComponentGroup(
+        minComponentWidth: minComponentWidth,
+        aspectRation: 1.8,
+        children: [
+          // 使用次数，自首次使用记录起
+          DetailsBriefCard(
+            title: 'Usage Count',
+            icon: Icons.pin,
+            iconColor: kIconColor,
+            data: '$usageCount',
+            comment:
+                firstUsedDate != null
+                    ? 'times since ${firstUsedDate.toLocal().toString().split(' ')[0]}'
+                    : 'no usage records',
+          ),
+          // 使用周期
+          DetailsBriefCard(
+            title: 'Usage Cycle',
+            icon: Icons.loop,
+            iconColor: kIconColor,
+            data: usageCount > 1 ? '$usageFrequency' : '-',
+            comment:
+                usageCount > 1 ? 'days per usage' : 'data not enough',
+          ),
+          // 上次使用
+          DetailsBriefCard(
+            title: 'Last Used',
+            icon: Icons.history,
+            iconColor: kIconColor,
+            data: usageCount > 0 ? '$daysSinceLastUse' : '-',
+            comment:
+                lastUsedDate != null
+                    ? 'days ago since ${lastUsedDate.toLocal().toString().split(' ')[0]}'
+                    : 'data not enough',
+          ),
+          // 下次使用预计
+          DetailsBriefCard(
+            title: 'EST. Next Use',
+            icon: Icons.update,
+            iconColor: kIconColor,
+            data: usageCount > 1 ? '${daysTillNextUse.abs()}' : '-',
+            comment:
+                nextExpectedUseDate != null
+                    ? 'days ${daysTillNextUse >= 0 ? 'later' : 'ago'} at ${nextExpectedUseDate.toLocal().toString().split(' ')[0]}'
+                    : 'data not enough',
+          ),
+        ],
+      ),
+    );
   }
 }

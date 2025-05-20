@@ -17,8 +17,9 @@ class ListOfItems extends StatelessWidget {
   Widget build(BuildContext context) {
     final itemCtrl = Get.find<ItemController>();
 
-    final double spacingXS = context.responsiveStyle().spacingXS;
-    final double spacingLG = context.responsiveStyle().spacingLG;
+    final style = context.responsiveStyle();
+    final double spacingXS = style.spacingXS;
+    final double spacingLG = style.spacingLG;
     final bool isMobile = GetPlatform.isIOS || GetPlatform.isAndroid;
     final double headerSpacing = isMobile ? 4 : 20;
     final double horizontalSpacing = isMobile ? 4 : spacingLG;
@@ -53,7 +54,7 @@ class ListOfItems extends StatelessWidget {
                     SizedBox(width: spacingXS),
 
                   // 搜索框
-                  _buildSearchBar(context),
+                  _buildSearchBar(context, isMobile),
 
                   //添加物品按钮
                   SizedBox(width: spacingXS),
@@ -97,10 +98,9 @@ class ListOfItems extends StatelessWidget {
     );
   }
 
-  Widget _buildSearchBar(BuildContext context) {
+  Widget _buildSearchBar(BuildContext context, bool isMobile) {
     final searchBarCtrl = Get.find<SearchBarController>();
 
-    final bool isMobile = GetPlatform.isIOS || GetPlatform.isAndroid;
     final double topBarHeight = isMobile ? 32 : 48;
     final double searchBarIconSize = isMobile ? 16 : 24;
     final double searchBarButtonSize = isMobile ? 26 : 40;
@@ -155,9 +155,7 @@ class ListOfItems extends StatelessWidget {
                             ? IconButton(
                               padding: EdgeInsets.all(0.0),
                               iconSize: searchBarIconSize,
-                              onPressed: () {
-                                print('Search Button Pressed');
-                              },
+                              onPressed: () {},
                               icon: Icon(Icons.search),
                             )
                             : Icon(

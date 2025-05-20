@@ -17,7 +17,10 @@ class ResponsiveStyle {
   ResponsiveStyle._(this.screenWidth);
 
   // 工厂方法
-  factory ResponsiveStyle.of(BuildContext context, [double? containerWidth]) {
+  factory ResponsiveStyle.of(
+    BuildContext context, [
+    double? containerWidth,
+  ]) {
     final mediaQuery = MediaQuery.of(context);
     final width = containerWidth ?? mediaQuery.size.width;
     return ResponsiveStyle._(width);
@@ -57,19 +60,29 @@ class ResponsiveStyle {
 
   double get spacingSM => _getValue(mobile: 4, tablet: 6, desktop: 8);
 
-  double get spacingMD => _getValue(mobile: 6, tablet: 8, desktop: 10);
+  double get spacingMD =>
+      _getValue(mobile: 6, tablet: 8, desktop: 10);
 
-  double get spacingLG => _getValue(mobile: 8, tablet: 14, desktop: 20);
+  double get spacingLG =>
+      _getValue(mobile: 8, tablet: 14, desktop: 20);
 
   // 图标样式
-  double get iconSizeMD => _getValue(mobile: 24, tablet: 26, desktop: 28);
+  double get iconSizeMD =>
+      _getValue(mobile: 24, tablet: 26, desktop: 28);
 
-  double get iconSizeSM => _getValue(mobile: 12, tablet: 16, desktop: 20);
+  double get iconSizeSM =>
+      _getValue(mobile: 12, tablet: 16, desktop: 20);
 
-  double get iconSizeLG => _getValue(mobile: 32, tablet: 36, desktop: 40);
+  double get iconSizeLG =>
+      _getValue(mobile: 32, tablet: 36, desktop: 40);
 
   // 顶栏高度
-  double get topBarHeight => _getValue(mobile: 32, tablet: 36, desktop: 48);
+  double get topBarHeight =>
+      _getValue(mobile: 32, tablet: 36, desktop: 48);
+
+  // 响应卡片最小宽度
+  double get minComponentWidth =>
+      _getValue(mobile: 120, tablet: 140, desktop: 160);
 
   // 组件样式
   TagStyle get tagStyle => TagStyle(
@@ -80,7 +93,11 @@ class ResponsiveStyle {
   );
 
   // 响应式值计算
-  double _getValue({required double mobile, double? tablet, double? desktop}) {
+  double _getValue({
+    required double mobile,
+    double? tablet,
+    double? desktop,
+  }) {
     if (screenWidth >= Breakpoints.desktop) {
       return desktop ?? tablet ?? mobile;
     }
@@ -97,7 +114,11 @@ class TagStyle {
   final double iconSize;
   final double spacing;
 
-  const TagStyle({required this.fontSize, required this.iconSize, required this.spacing});
+  const TagStyle({
+    required this.fontSize,
+    required this.iconSize,
+    required this.spacing,
+  });
 }
 
 // 快捷访问扩展

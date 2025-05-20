@@ -1,3 +1,4 @@
+import 'package:cycle_it/utils/responsive_style.dart';
 import 'package:flutter/material.dart';
 
 import '../../../utils/constants.dart';
@@ -20,10 +21,13 @@ class DetailsBriefCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final style = context.responsiveStyle();
+    final double spacingLG = style.spacingLG;
+
     return LayoutBuilder(
       builder: (context, constraints) {
         return Container(
-          padding: const EdgeInsets.all(kDefaultPadding * 0.5),
+          padding: const EdgeInsets.all(10),
           decoration: BoxDecoration(
             color: kSecondaryBgColor,
             borderRadius: BorderRadius.circular(15),
@@ -46,14 +50,19 @@ class DetailsBriefCard extends StatelessWidget {
                         style: TextStyle(
                           color: kTitleTextColor,
                           fontWeight: FontWeight.w500,
-                          fontSize: constraints.maxWidth * 0.06, // 响应式字体
+                          fontSize:
+                              constraints.maxWidth * 0.06, // 响应式字体
                           height: 1.2,
                         ),
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                       ),
                     ),
-                    Icon(icon, color: iconColor, size: constraints.maxWidth * 0.1),
+                    Icon(
+                      icon,
+                      color: iconColor,
+                      size: constraints.maxWidth * 0.1,
+                    ),
                   ],
                 ),
 
@@ -69,7 +78,8 @@ class DetailsBriefCard extends StatelessWidget {
                         style: TextStyle(
                           color: kTitleTextColor,
                           fontWeight: FontWeight.w500,
-                          fontSize: constraints.maxWidth * 0.18, // 动态字号
+                          fontSize:
+                              constraints.maxWidth * 0.18, // 动态字号
                           letterSpacing: -0.5,
                         ),
                       ),

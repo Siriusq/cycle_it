@@ -26,7 +26,10 @@ class ItemCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final itemCtrl = Get.find<ItemController>();
 
-    final double spacingLG = context.responsiveStyle().spacingLG;
+    final style = context.responsiveStyle();
+    final double spacingLG = style.spacingLG;
+
+    final bool isTripleCol = ResponsiveLayout.isTripleCol(context);
     final bool isSingleCol = ResponsiveLayout.isSingleCol(context);
 
     return Padding(
@@ -61,19 +64,20 @@ class ItemCard extends StatelessWidget {
             //mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               // 图标、名称、更多按钮
-              _buildTitle(context),
+              _buildTitle(context, style, isTripleCol),
 
               // 详细使用数据，仅在桌面宽屏显示
-              _buildOverview(context),
+              _buildOverview(context, style, isTripleCol),
 
               // 进度条区域
               _buildDateProgressBar(
                 item.timePercentageBetweenLastAndNext(),
                 context,
+                style,
               ),
 
               //标签
-              _buildTags(context),
+              _buildTags(context, style),
             ],
           ),
         ),
@@ -82,14 +86,16 @@ class ItemCard extends StatelessWidget {
   }
 
   // 图标、名称、更多按钮
-  Widget _buildTitle(BuildContext context) {
-    final style = context.responsiveStyle();
+  Widget _buildTitle(
+    BuildContext context,
+    ResponsiveStyle style,
+    bool isTripleCol,
+  ) {
     final TextStyle titleTextStyle = style.titleTextMD;
     final TextStyle smallBodyTextStyle = style.bodyTextSM;
     final double spacingMD = style.spacingMD;
     final double iconSizeMD = style.iconSizeMD;
     final double iconSizeLG = style.iconSizeLG;
-    final bool isTripleCol = ResponsiveLayout.isTripleCol(context);
 
     return Padding(
       padding: EdgeInsets.only(left: 5, bottom: isTripleCol ? 5 : 0),
@@ -181,19 +187,21 @@ class ItemCard extends StatelessWidget {
   }
 
   // 详细使用数据，仅在桌面宽屏显示
-  Widget _buildOverview(BuildContext context) {
+  Widget _buildOverview(
+    BuildContext context,
+    ResponsiveStyle style,
+    bool isTripleCol,
+  ) {
     final int usageCount = item.usageRecords.length;
     final DateTime? nextExpectedUseDate = item.nextExpectedUse;
     final DateTime? lastUsedDate =
         usageCount > 0 ? item.usageRecords.last.usedAt : null;
     final double usageFrequency = item.usageFrequency.toPrecision(2);
 
-    final style = context.responsiveStyle();
     final TextStyle smallBodyTextStyle = style.bodyTextSM;
     final double spacingXS = style.spacingXS;
     final double spacingMD = style.spacingMD;
     final double iconSizeSM = style.iconSizeSM;
-    final bool isTripleCol = ResponsiveLayout.isTripleCol(context);
 
     if (!isTripleCol) {
       return Padding(
@@ -276,9 +284,9 @@ class ItemCard extends StatelessWidget {
   Widget _buildDateProgressBar(
     double progress,
     BuildContext context,
+    ResponsiveStyle style,
   ) {
-    final TextStyle smallBodyTextStyle =
-        context.responsiveStyle().bodyTextSM;
+    final TextStyle smallBodyTextStyle = style.bodyTextSM;
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 5),
@@ -383,8 +391,9 @@ class ItemCard extends StatelessWidget {
   }
 
   // 底部标签行
-  Widget _buildTags(BuildContext context) {
-    final double spacingXS = context.responsiveStyle().spacingXS;
+  Widget _buildTags(BuildContext context, ResponsiveStyle style) {
+    final double spacingXS = style.spacingXS;
+
     return Padding(
       padding: EdgeInsets.only(top: spacingXS, left: 2),
       child: SizedBox(
