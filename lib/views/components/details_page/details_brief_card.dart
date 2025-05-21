@@ -1,4 +1,3 @@
-import 'package:cycle_it/utils/responsive_style.dart';
 import 'package:flutter/material.dart';
 
 import '../../../utils/constants.dart';
@@ -21,9 +20,6 @@ class DetailsBriefCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final style = context.responsiveStyle();
-    final double spacingLG = style.spacingLG;
-
     return LayoutBuilder(
       builder: (context, constraints) {
         return Container(

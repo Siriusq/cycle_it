@@ -22,30 +22,16 @@ class DetailsPage extends StatelessWidget {
     final double spacingXS = style.spacingXS;
     final double spacingLG = style.spacingLG;
     final bool isMobile = GetPlatform.isIOS || GetPlatform.isAndroid;
-    final double headerSpacing = isMobile ? 4 : 20;
+    final double verticalSpacing = isMobile ? 0 : spacingLG;
     final double horizontalSpacing = isMobile ? 4 : spacingLG;
     final double bottomSpacing = isMobile ? 0 : 10;
     final double dividerHeight = isMobile ? 0 : 16;
-    final TextStyle largeTitleTextStyle = style.titleTextLG;
 
     return Obx(() {
       final ItemModel? item = itemCtrl.selectedItem.value;
       if (item == null) {
         return const SizedBox.shrink();
       }
-
-      final int usageCount = item.usageRecords.length;
-      final DateTime? nextExpectedUseDate = item.nextExpectedUse;
-      final DateTime? firstUsedDate =
-          usageCount > 0 ? item.usageRecords.first.usedAt : null;
-      final DateTime? lastUsedDate =
-          usageCount > 0 ? item.usageRecords.last.usedAt : null;
-      final int daysSinceLastUse =
-          item.daysBetweenTodayAnd(false).abs();
-      final int daysTillNextUse = item.daysBetweenTodayAnd(true);
-      final double usageFrequency = item.usageFrequency.toPrecision(
-        2,
-      );
 
       return Scaffold(
         body: Container(
@@ -57,9 +43,7 @@ class DetailsPage extends StatelessWidget {
                 _buildHeader(context, style, isMobile),
 
                 // 分割线
-                SizedBox(height: bottomSpacing),
-                Divider(height: dividerHeight),
-                SizedBox(height: spacingXS),
+                Divider(height: 0),
 
                 Expanded(
                   child: SingleChildScrollView(
@@ -96,15 +80,13 @@ class DetailsPage extends StatelessWidget {
     final itemCtrl = Get.find<ItemController>();
 
     final double spacingLG = style.spacingLG;
-    final double headerSpacing = isMobile ? 4 : 20;
     final double horizontalSpacing = isMobile ? 4 : spacingLG;
-    final double topBarHeight = isMobile ? 32 : 48;
+    final double verticalSpacing = isMobile ? 0 : spacingLG;
 
     return Padding(
-      padding: EdgeInsets.only(
-        left: horizontalSpacing,
-        right: horizontalSpacing,
-        top: headerSpacing,
+      padding: EdgeInsets.symmetric(
+        horizontal: horizontalSpacing,
+        vertical: verticalSpacing,
       ),
       child: SizedBox(
         height: 48,
@@ -146,7 +128,6 @@ class DetailsPage extends StatelessWidget {
   ) {
     final TextStyle largeTitleTextStyle = style.titleTextLG;
     final TextStyle bodyText = style.bodyText;
-    final double spacingMD = style.spacingMD;
     final double spacingLG = style.spacingLG;
 
     return Padding(

@@ -33,9 +33,10 @@ class ItemCard extends StatelessWidget {
     final bool isSingleCol = ResponsiveLayout.isSingleCol(context);
 
     return Padding(
-      padding: EdgeInsets.symmetric(
-        horizontal: spacingLG,
-        vertical: spacingLG * 0.5,
+      padding: EdgeInsets.only(
+        left: spacingLG,
+        right: spacingLG,
+        top: spacingLG,
       ),
       child: InkWell(
         onTap: () {

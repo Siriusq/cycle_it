@@ -21,24 +21,19 @@ class ListOfItems extends StatelessWidget {
     final double spacingXS = style.spacingXS;
     final double spacingLG = style.spacingLG;
     final bool isMobile = GetPlatform.isIOS || GetPlatform.isAndroid;
-    final double headerSpacing = isMobile ? 4 : 20;
+    final double verticalSpacing = isMobile ? 0 : spacingLG;
     final double horizontalSpacing = isMobile ? 4 : spacingLG;
-    final double bottomSpacing = isMobile ? 0 : 10;
-    final double dividerHeight = isMobile ? 0 : 16;
 
     return Container(
-      //drawer: ConstrainedBox(constraints: BoxConstraints(maxWidth: 250), child: SideMenu()),
-      //padding: EdgeInsets.only(top: GetPlatform.isDesktop ? kDefaultPadding : 0),
       color: kPrimaryBgColor,
       child: SafeArea(
         right: false,
         child: Column(
           children: [
             Padding(
-              padding: EdgeInsets.only(
-                left: horizontalSpacing,
-                right: horizontalSpacing,
-                top: headerSpacing, // 留出按钮的高度空间，避免内容被遮挡
+              padding: EdgeInsets.symmetric(
+                horizontal: horizontalSpacing,
+                vertical: verticalSpacing,
               ),
               child: Row(
                 children: [
@@ -67,15 +62,27 @@ class ListOfItems extends StatelessWidget {
             ),
 
             // 分割线
-            SizedBox(height: bottomSpacing),
-            Divider(height: dividerHeight),
-            SizedBox(height: spacingXS),
+            Divider(height: 0),
 
             // 物品卡片
             Expanded(
               child: ListView.builder(
-                itemCount: sampleItems.length,
+                itemCount: sampleItems.length + 1, // 加一个“底部标识”项
                 itemBuilder: (context, index) {
+                  if (index == sampleItems.length) {
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 16.0,
+                      ),
+                      child: Center(
+                        child: Text(
+                          '—— 已经到底了 ——',
+                          style: TextStyle(color: Colors.grey),
+                        ),
+                      ),
+                    );
+                  }
+
                   final item = sampleItems[index];
                   return Obx(() {
                     final selected =
@@ -113,7 +120,10 @@ class ListOfItems extends StatelessWidget {
         child: Obx(() {
           return TextField(
             style: searchBarHintStyle,
-            textAlignVertical: TextAlignVertical.bottom,
+            textAlignVertical:
+                isMobile
+                    ? TextAlignVertical.bottom
+                    : TextAlignVertical.center,
             controller: searchBarCtrl.textController,
             onChanged: (value) {},
             decoration: InputDecoration(
