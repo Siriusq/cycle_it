@@ -94,7 +94,7 @@ class ItemCard extends StatelessWidget {
   ) {
     final TextStyle titleTextStyle = style.titleTextMD;
     final TextStyle smallBodyTextStyle = style.bodyTextSM;
-    final double spacingMD = style.spacingMD;
+    final double spacingSM = style.spacingSM;
     final double iconSizeMD = style.iconSizeMD;
     final double iconSizeLG = style.iconSizeLG;
 
@@ -119,7 +119,7 @@ class ItemCard extends StatelessWidget {
             ),
           ),
 
-          SizedBox(width: spacingMD),
+          SizedBox(width: spacingSM),
 
           // 文字内容区域
           Expanded(
@@ -201,15 +201,15 @@ class ItemCard extends StatelessWidget {
 
     final TextStyle smallBodyTextStyle = style.bodyTextSM;
     final double spacingXS = style.spacingXS;
-    final double spacingMD = style.spacingMD;
+    final double spacingSM = style.spacingSM;
     final double iconSizeSM = style.iconSizeSM;
 
     if (!isTripleCol) {
       return Padding(
         padding: EdgeInsets.only(
           left: 5,
-          bottom: spacingMD,
-          top: spacingMD,
+          bottom: spacingSM,
+          top: spacingSM,
         ),
         child: Row(
           children: [

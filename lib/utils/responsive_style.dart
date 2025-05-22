@@ -27,7 +27,14 @@ class ResponsiveStyle {
   }
 
   // 文本样式
-  // 超大标题
+  // 加粗大标题
+  TextStyle get titleTextEX => TextStyle(
+    color: kTitleTextColor,
+    fontSize: _getValue(mobile: 14, tablet: 16, desktop: 18),
+    fontWeight: FontWeight.bold,
+  );
+
+  // 大标题
   TextStyle get titleTextLG => TextStyle(
     color: kTitleTextColor,
     fontSize: _getValue(mobile: 14, tablet: 16, desktop: 18),
@@ -38,8 +45,12 @@ class ResponsiveStyle {
   TextStyle get titleTextMD => TextStyle(
     color: kTitleTextColor,
     fontSize: _getValue(mobile: 12, tablet: 14, desktop: 16),
-    fontWeight: FontWeight.w600,
+    fontWeight: FontWeight.w500,
   );
+
+  // 标题
+  double get titleTextFontMD =>
+      _getValue(mobile: 12, tablet: 14, desktop: 14);
 
   // 文本
   TextStyle get bodyText => TextStyle(
@@ -58,17 +69,18 @@ class ResponsiveStyle {
   // 间距系统
   double get spacingXS => _getValue(mobile: 2, tablet: 4, desktop: 6);
 
-  double get spacingSM => _getValue(mobile: 4, tablet: 6, desktop: 8);
+  double get spacingSM =>
+      _getValue(mobile: 6, tablet: 8, desktop: 10);
 
   double get spacingMD =>
-      _getValue(mobile: 6, tablet: 8, desktop: 10);
+      _getValue(mobile: 8, tablet: 12, desktop: 14);
 
   double get spacingLG =>
       _getValue(mobile: 8, tablet: 14, desktop: 20);
 
   // 图标样式
   double get iconSizeMD =>
-      _getValue(mobile: 24, tablet: 26, desktop: 28);
+      _getValue(mobile: 24, tablet: 26, desktop: 26);
 
   double get iconSizeSM =>
       _getValue(mobile: 12, tablet: 16, desktop: 20);

@@ -1,4 +1,5 @@
 import 'package:cycle_it/controllers/tag_controller.dart';
+import 'package:cycle_it/utils/responsive_style.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -13,23 +14,32 @@ class TagOption extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final style = context.responsiveStyle();
+    final double optionFontSize = style.titleTextFontMD;
+
     return Obx(() {
       final isSelected = tagCtrl.selectedTags.contains(tagName);
       return Padding(
-        padding: EdgeInsets.only(top: kDefaultPadding),
+        padding: EdgeInsets.only(top: 14),
         child: InkWell(
           onTap: () {
             tagCtrl.toggleTag(tagName);
           },
           child: Row(
             children: [
-              SizedBox(width: 25),
-              isSelected ? Icon(Icons.bookmark, color: color) : Icon(Icons.bookmark_outline, color: kGrayColor),
+              const SizedBox(width: 25),
+              isSelected
+                  ? Icon(Icons.bookmark, color: color)
+                  : Icon(Icons.bookmark_outline, color: kGrayColor),
               //Icon(isSelected ? Icons.bookmark : Icons.bookmark_outline, color: color, size: 18),
-              SizedBox(width: kDefaultPadding / 2),
+              const SizedBox(width: 10),
               Text(
                 tagName,
-                style: TextStyle(fontWeight: FontWeight.w500, color: isSelected ? kTitleTextColor : kGrayColor),
+                style: TextStyle(
+                  fontSize: optionFontSize,
+                  fontWeight: FontWeight.normal,
+                  color: isSelected ? kTitleTextColor : kGrayColor,
+                ),
               ),
             ],
           ),

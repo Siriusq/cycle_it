@@ -1,11 +1,17 @@
 import 'package:cycle_it/utils/constants.dart';
+import 'package:cycle_it/utils/responsive_style.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../controllers/item_list_order_controller.dart';
 
 class OrderByOption extends StatelessWidget {
-  OrderByOption({super.key, required this.orderType, required this.icon, required this.title});
+  OrderByOption({
+    super.key,
+    required this.orderType,
+    required this.icon,
+    required this.title,
+  });
 
   final IconData icon;
   final String title;
@@ -15,30 +21,48 @@ class OrderByOption extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final style = context.responsiveStyle();
+    final double optionFontSize = style.titleTextFontMD;
+
     return Obx(() {
-      final isActive = itemListOrderCtrl.selectedOrderOption.value == orderType;
+      final isActive =
+          itemListOrderCtrl.selectedOrderOption.value == orderType;
 
       return Padding(
-        padding: EdgeInsets.only(top: kDefaultPadding),
+        padding: EdgeInsets.only(top: 14),
         child: InkWell(
           onTap: () {
             itemListOrderCtrl.changeOrderOption(orderType);
           },
           child: Row(
             children: [
-              if (isActive) Icon(Icons.arrow_forward_ios, size: 15) else SizedBox(width: 15),
-              SizedBox(width: kDefaultPadding / 4),
+              if (isActive)
+                Icon(Icons.arrow_forward_ios, size: 15)
+              else
+                const SizedBox(width: 15),
+              const SizedBox(width: 5),
               Expanded(
                 child: Container(
                   padding: EdgeInsets.only(left: 5),
                   //decoration: isActive ? BoxDecoration(border: Border(bottom: BorderSide(color: Color(0xFFDFE2EF)))) : null,
                   child: Row(
                     children: [
-                      Icon(icon, color: (isActive) ? kPrimaryColor : kGrayColor),
-                      SizedBox(width: kDefaultPadding / 2),
+                      Icon(
+                        icon,
+                        color:
+                            (isActive) ? kPrimaryColor : kGrayColor,
+                      ),
+                      const SizedBox(width: 10),
                       Text(
                         title,
-                        style: TextStyle(fontWeight: FontWeight.w500, color: (isActive) ? kTitleTextColor : kGrayColor),
+                        style: TextStyle(
+                          fontSize: optionFontSize,
+                          fontWeight: FontWeight.normal,
+                          color:
+                              (isActive)
+                                  ? kTitleTextColor
+                                  : kGrayColor,
+                        ),
                       ),
                     ],
                   ),

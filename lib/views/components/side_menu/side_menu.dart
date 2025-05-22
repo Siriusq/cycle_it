@@ -1,5 +1,6 @@
 import 'package:cycle_it/controllers/item_list_order_controller.dart';
 import 'package:cycle_it/controllers/tag_controller.dart';
+import 'package:cycle_it/utils/responsive_style.dart';
 import 'package:cycle_it/views/components/dialog/add_tag_dialog.dart';
 import 'package:cycle_it/views/components/side_menu/order_by_option.dart';
 import 'package:cycle_it/views/components/side_menu/tag_option.dart';
@@ -18,75 +19,135 @@ class SideMenu extends StatelessWidget {
   @override
   @override
   Widget build(BuildContext context) {
+    final style = context.responsiveStyle();
+    final double spacingMD = style.spacingMD;
+    final double spacingLG = style.spacingLG;
+    final bool isMobile = GetPlatform.isIOS || GetPlatform.isAndroid;
+    final double appIconSize = isMobile ? 32 : 40;
+    final TextStyle titleTextEX = style.titleTextEX;
+    final TextStyle titleTextMD = style.titleTextMD;
+    final double iconSizeMD = style.iconSizeMD;
+    final double iconSizeLG = style.iconSizeLG;
+
     return Container(
-      //padding: EdgeInsets.only(top: GetPlatform.isDesktop ? kDefaultPadding : 0),
       height: double.infinity,
       color: kSecondaryBgColor,
       child: SafeArea(
         child: SingleChildScrollView(
-          //padding: EdgeInsets.only(left: kDefaultPadding, right: kDefaultPadding, top: kDefaultPadding),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              // 顶部标题图标、设置按钮
               Padding(
-                padding: EdgeInsets.only(left: kDefaultPadding, right: kDefaultPadding, top: kDefaultPadding),
+                padding: EdgeInsets.all(spacingLG),
                 child: SizedBox(
                   height: 48,
                   child: Row(
                     children: [
                       //App 图标
-                      Image.asset("assets/images/logo_transparent.png", width: 40, height: 40, fit: BoxFit.contain),
-                      const SizedBox(width: 10),
+                      Image.asset(
+                        "assets/images/logo_transparent.png",
+                        width: appIconSize,
+                        height: appIconSize,
+                        fit: BoxFit.contain,
+                      ),
+                      SizedBox(width: spacingMD),
                       // 中间文字
                       Expanded(
                         child: Text(
                           "Cycle It",
-                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: kTitleTextColor),
+                          style: titleTextEX,
                           overflow: TextOverflow.ellipsis,
                         ),
                       ),
                       //设置按钮
-                      IconButton(
-                        onPressed: () => Get.to(() => SettingsPage()),
-                        icon: Icon(Icons.tune, color: kTitleTextColor),
+                      SizedBox(
+                        height: iconSizeLG,
+                        width: iconSizeLG,
+                        child: IconButton(
+                          iconSize: iconSizeMD,
+                          padding: EdgeInsets.zero,
+                          constraints: const BoxConstraints(),
+                          onPressed:
+                              () => Get.to(() => SettingsPage()),
+                          icon: const Icon(
+                            Icons.tune,
+                            color: kTitleTextColor,
+                          ),
+                        ),
                       ),
                     ],
                   ),
                 ),
               ),
-              SizedBox(height: kDefaultPadding / 2),
-              Divider(),
-              SizedBox(height: kDefaultPadding / 2),
+
+              // 分割线
+              const Divider(height: 0),
+
               //排序
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: kDefaultPadding),
+                padding: EdgeInsets.all(spacingLG),
                 child: Column(
                   children: [
                     Row(
                       children: [
-                        Icon(Icons.sort),
-                        SizedBox(width: 5),
-                        Text("Order By", style: TextStyle(fontWeight: FontWeight.w600, color: kTitleTextColor)),
+                        const Icon(Icons.sort),
+                        const SizedBox(width: 5),
+                        Text("Order By", style: titleTextMD),
                       ],
                     ),
-                    OrderByOption(orderType: OrderType.name, icon: Icons.sort_by_alpha, title: "Names"),
-                    OrderByOption(orderType: OrderType.lastUsed, icon: Icons.event, title: "Recent Used"),
-                    OrderByOption(orderType: OrderType.frequency, icon: Icons.equalizer, title: "Frequency"),
-                    SizedBox(height: 15),
-                    Divider(),
-                    //SizedBox(height: 5),
-                    //标签
+                    //SizedBox(height: spacingMD),
+                    OrderByOption(
+                      orderType: OrderType.name,
+                      icon: Icons.sort_by_alpha,
+                      title: "Names",
+                    ),
+                    OrderByOption(
+                      orderType: OrderType.lastUsed,
+                      icon: Icons.event,
+                      title: "Recent Used",
+                    ),
+                    OrderByOption(
+                      orderType: OrderType.frequency,
+                      icon: Icons.equalizer,
+                      title: "Frequency",
+                    ),
+                  ],
+                ),
+              ),
+
+              // 分割线
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: spacingLG),
+                child: const Divider(height: 0),
+              ),
+
+              //标签
+              Padding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: spacingLG,
+                  vertical: spacingMD,
+                ),
+                child: Column(
+                  children: [
                     Row(
                       children: [
-                        Icon(Icons.bookmark_outline),
-                        SizedBox(width: 5),
-                        Text("Tags", style: TextStyle(fontWeight: FontWeight.w600, color: kTitleTextColor)),
+                        const Icon(Icons.bookmark_outline),
+                        const SizedBox(width: 5),
+                        Text("Tags", style: titleTextMD),
                         Spacer(),
-                        IconButton(
-                          onPressed: () {
-                            Get.dialog(AddTagDialog());
-                          },
-                          icon: Icon(Icons.add),
+                        SizedBox(
+                          height: iconSizeLG,
+                          width: iconSizeLG,
+                          child: IconButton(
+                            iconSize: iconSizeMD,
+                            padding: EdgeInsets.zero,
+                            constraints: const BoxConstraints(),
+                            onPressed: () {
+                              Get.dialog(AddTagDialog());
+                            },
+                            icon: const Icon(Icons.add),
+                          ),
                         ),
                       ],
                     ),
@@ -94,7 +155,10 @@ class SideMenu extends StatelessWidget {
                       return Column(
                         children:
                             tagCtrl.allTags.map((tag) {
-                              return TagOption(tagName: tag.name, color: tag.color);
+                              return TagOption(
+                                tagName: tag.name,
+                                color: tag.color,
+                              );
                             }).toList(),
                       );
                     }),
