@@ -15,7 +15,7 @@ class TagOption extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final style = context.responsiveStyle();
-    final double optionFontSize = style.titleTextFontMD;
+    final double optionFontSize = style.optionFontSize;
 
     return Obx(() {
       final isSelected = tagCtrl.selectedTags.contains(tagName);

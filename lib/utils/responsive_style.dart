@@ -49,8 +49,8 @@ class ResponsiveStyle {
   );
 
   // 标题
-  double get titleTextFontMD =>
-      _getValue(mobile: 12, tablet: 14, desktop: 14);
+  double get optionFontSize =>
+      _getValue(mobile: 11, tablet: 13, desktop: 15);
 
   // 文本
   TextStyle get bodyText => TextStyle(
