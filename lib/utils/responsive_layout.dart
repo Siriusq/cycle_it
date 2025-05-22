@@ -18,7 +18,7 @@ class ResponsiveLayout extends StatelessWidget {
   });
 
   static int mobileBreakPoint = 768;
-  static int desktopBreakPoint = 1200;
+  static int desktopBreakPoint = 1350;
 
   static bool isSingleCol(BuildContext context) =>
       MediaQuery.of(context).size.width < mobileBreakPoint;
