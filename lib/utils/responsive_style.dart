@@ -6,7 +6,7 @@ import 'constants.dart';
 class Breakpoints {
   static const double mobile = 480; // 手机
   static const double tablet = 768; // 平板
-  static const double desktop = 1024; // 桌面
+  static const double desktop = 1200; // 桌面
 }
 
 // 主响应式样式类

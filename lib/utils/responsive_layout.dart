@@ -17,12 +17,18 @@ class ResponsiveLayout extends StatelessWidget {
     required this.scaffoldKey,
   });
 
-  static bool isSingleCol(BuildContext context) => MediaQuery.of(context).size.width < 768;
+  static int mobileBreakPoint = 768;
+  static int desktopBreakPoint = 1200;
+
+  static bool isSingleCol(BuildContext context) =>
+      MediaQuery.of(context).size.width < mobileBreakPoint;
 
   static bool isDoubleCol(BuildContext context) =>
-      MediaQuery.of(context).size.width < 1024 && MediaQuery.of(context).size.width >= 768;
+      MediaQuery.of(context).size.width < desktopBreakPoint &&
+      MediaQuery.of(context).size.width >= mobileBreakPoint;
 
-  static bool isTripleCol(BuildContext context) => MediaQuery.of(context).size.width >= 1024;
+  static bool isTripleCol(BuildContext context) =>
+      MediaQuery.of(context).size.width >= desktopBreakPoint;
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +37,7 @@ class ResponsiveLayout extends StatelessWidget {
     return LayoutBuilder(
       builder: (context, constraints) {
         // 处理布局切换时的状态同步
-        if (constraints.maxWidth >= 650) {
+        if (constraints.maxWidth >= mobileBreakPoint) {
           // 大屏模式强制清除路由栈
           if (Get.currentRoute == '/Details') {
             WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -51,7 +57,7 @@ class ResponsiveLayout extends StatelessWidget {
 
         //切换时关闭抽屉
         WidgetsBinding.instance.addPostFrameCallback((_) {
-          if (constraints.maxWidth >= 1100) {
+          if (constraints.maxWidth > desktopBreakPoint) {
             // 关闭可能打开的抽屉
             if (scaffoldKey.currentState?.isDrawerOpen ?? false) {
               scaffoldKey.currentState!.closeDrawer();
@@ -59,9 +65,9 @@ class ResponsiveLayout extends StatelessWidget {
           }
         });
 
-        if (constraints.maxWidth >= 1100) {
+        if (constraints.maxWidth >= desktopBreakPoint) {
           return desktop;
-        } else if (constraints.maxWidth >= 650) {
+        } else if (constraints.maxWidth >= mobileBreakPoint) {
           return tablet;
         } else {
           return mobile;
