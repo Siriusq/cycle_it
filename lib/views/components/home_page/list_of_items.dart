@@ -24,10 +24,10 @@ class ListOfItems extends StatelessWidget {
     final double verticalSpacing = isMobile ? 0 : spacingLG;
     final double horizontalSpacing = isMobile ? 4 : spacingLG;
 
-    return Container(
-      color: kPrimaryBgColor,
-      child: SafeArea(
-        right: false,
+    return SafeArea(
+      right: false,
+      child: Container(
+        color: kPrimaryBgColor,
         child: Column(
           children: [
             Padding(

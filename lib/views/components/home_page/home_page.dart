@@ -19,7 +19,10 @@ class HomePage extends StatelessWidget {
 
     return Scaffold(
       key: _scaffoldKey,
-      drawer: ConstrainedBox(constraints: BoxConstraints(maxWidth: 250), child: SideMenu()),
+      drawer: ConstrainedBox(
+        constraints: BoxConstraints(maxWidth: 250),
+        child: SideMenu(),
+      ),
       body: ResponsiveLayout(
         mobile: _buildMobileLayout(itemCtrl),
         tablet: _buildTabletLayout(itemCtrl),
@@ -37,7 +40,9 @@ class HomePage extends StatelessWidget {
         if (settings.name == '/details') {
           return GetPageRoute(page: () => DetailsPage());
         }
-        return GetPageRoute(page: () => ListOfItems(scaffoldKey: _scaffoldKey));
+        return GetPageRoute(
+          page: () => ListOfItems(scaffoldKey: _scaffoldKey),
+        );
       },
     );
     //return Get.currentRoute == '/Details' ? DetailsPage() : ListOfItems(scaffoldKey: _scaffoldKey);
@@ -46,7 +51,10 @@ class HomePage extends StatelessWidget {
   Widget _buildTabletLayout(ItemController ctrl) {
     return Row(
       children: [
-        Expanded(flex: 2, child: ListOfItems(scaffoldKey: _scaffoldKey)),
+        Expanded(
+          flex: 2,
+          child: ListOfItems(scaffoldKey: _scaffoldKey),
+        ),
         VerticalDivider(thickness: 1, width: 1),
         Expanded(
           flex: 3,
@@ -54,7 +62,10 @@ class HomePage extends StatelessWidget {
             () =>
                 ctrl.selectedItem.value != null
                     ? DetailsPage()
-                    : Container(color: kPrimaryBgColor, child: Center(child: Text("请选择项目"))),
+                    : Container(
+                      color: kPrimaryBgColor,
+                      child: Center(child: Text("请选择项目")),
+                    ),
           ),
         ),
       ],
@@ -66,14 +77,20 @@ class HomePage extends StatelessWidget {
       children: [
         SizedBox(width: 250, child: SideMenu()),
         VerticalDivider(thickness: 1, width: 1),
-        SizedBox(width: 440, child: ListOfItems(scaffoldKey: _scaffoldKey)),
+        SizedBox(
+          width: 440,
+          child: ListOfItems(scaffoldKey: _scaffoldKey),
+        ),
         VerticalDivider(thickness: 1, width: 1),
         Expanded(
           child: Obx(
             () =>
                 ctrl.selectedItem.value != null
                     ? DetailsPage()
-                    : Container(color: kPrimaryBgColor, child: Center(child: Text("请选择项目"))),
+                    : Container(
+                      color: kPrimaryBgColor,
+                      child: Center(child: Text("请选择项目")),
+                    ),
           ),
         ),
       ],

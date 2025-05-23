@@ -19,57 +19,61 @@ class DetailsPage extends StatelessWidget {
     final itemCtrl = Get.find<ItemController>();
 
     final style = context.responsiveStyle();
-    final double spacingXS = style.spacingXS;
     final double spacingLG = style.spacingLG;
     final bool isMobile = GetPlatform.isIOS || GetPlatform.isAndroid;
-    final double verticalSpacing = isMobile ? 0 : spacingLG;
-    final double horizontalSpacing = isMobile ? 4 : spacingLG;
-    final double bottomSpacing = isMobile ? 0 : 10;
-    final double dividerHeight = isMobile ? 0 : 16;
 
-    return Obx(() {
-      final ItemModel? item = itemCtrl.selectedItem.value;
-      if (item == null) {
-        return const SizedBox.shrink();
-      }
+    return PopScope(
+      canPop: true,
+      onPopInvokedWithResult: (bool didPop, Object? result) async {
+        if (didPop) {
+          Future.microtask(() => itemCtrl.clearSelection());
+          print('Cleared');
+        }
+      },
+      child: Obx(() {
+        final ItemModel? item = itemCtrl.selectedItem.value;
+        if (item == null) {
+          return const SizedBox.shrink();
+        }
 
-      return Scaffold(
-        body: Container(
-          color: kPrimaryBgColor,
-          child: SafeArea(
-            child: Column(
-              children: [
-                // 顶栏
-                _buildHeader(context, style, isMobile),
+        return Scaffold(
+          body: SafeArea(
+            child: Container(
+              color: kPrimaryBgColor,
+              child: Column(
+                children: [
+                  // 顶栏
+                  _buildHeader(context, style, isMobile),
 
-                // 分割线
-                Divider(height: 0),
+                  // 分割线
+                  Divider(height: 0),
 
-                Expanded(
-                  child: SingleChildScrollView(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: spacingLG,
-                    ),
-                    child: Column(
-                      children: [
-                        //标题、标签与图标
-                        _buildTitle(context, style, item),
-                        _buildTags(context, style, item),
+                  Expanded(
+                    child: SingleChildScrollView(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: spacingLG,
+                      ),
+                      child: Column(
+                        children: [
+                          //标题、标签与图标
+                          _buildTitle(context, style, item),
+                          _buildTags(context, style, item),
 
-                        SizedBox(height: spacingLG),
+                          SizedBox(height: spacingLG),
 
-                        //图表
-                        _buildOverview(context, style, item),
-                      ],
+                          //图表
+                          _buildOverview(context, style, item),
+                        ],
+                      ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
-        ),
-      );
-    });
+        );
+      }),
+    );
   }
 
   Widget _buildHeader(
@@ -95,7 +99,7 @@ class DetailsPage extends StatelessWidget {
             if (itemCtrl.selectedItem.value != null)
               BackButton(
                 onPressed: () {
-                  itemCtrl.clearSelection();
+                  Future.microtask(() => itemCtrl.clearSelection());
                   // 确保路由同步
                   if (!ResponsiveLayout.isSingleCol(context)) {
                     Get.back();
