@@ -34,18 +34,19 @@ class HomePage extends StatelessWidget {
 
   Widget _buildMobileLayout(ItemController ctrl) {
     // 移动布局只显示列表或详情路由
-    return Navigator(
-      key: Get.nestedKey(1), // 使用嵌套导航
-      onGenerateRoute: (settings) {
-        if (settings.name == '/details') {
-          return GetPageRoute(page: () => DetailsPage());
-        }
-        return GetPageRoute(
-          page: () => ListOfItems(scaffoldKey: _scaffoldKey),
-        );
-      },
-    );
-    //return Get.currentRoute == '/Details' ? DetailsPage() : ListOfItems(scaffoldKey: _scaffoldKey);
+    // return Navigator(
+    //   key: Get.nestedKey(1), // 使用嵌套导航
+    //   onGenerateRoute: (settings) {
+    //     if (settings.name == '/details') {
+    //       return GetPageRoute(page: () => DetailsPage());
+    //     }
+    //     return GetPageRoute(
+    //       page: () => ListOfItems(scaffoldKey: _scaffoldKey),
+    //     );
+    //   },
+    // );
+
+    return ListOfItems(scaffoldKey: _scaffoldKey);
   }
 
   Widget _buildTabletLayout(ItemController ctrl) {

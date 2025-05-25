@@ -1,3 +1,4 @@
+import 'package:cycle_it/controllers/responsive_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -33,27 +34,38 @@ class ResponsiveLayout extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final itemCtrl = Get.find<ItemController>();
+    final responsiveCtrl = Get.find<ResponsiveController>();
+    print(responsiveCtrl.shouldJumpToDetails.value);
 
     return LayoutBuilder(
       builder: (context, constraints) {
         // 处理布局切换时的状态同步
-        if (constraints.maxWidth >= mobileBreakPoint) {
-          // 大屏模式强制清除路由栈
-          if (Get.currentRoute == '/Details') {
-            WidgetsBinding.instance.addPostFrameCallback((_) {
-              Get.until((route) => route.isFirst);
-            });
-          }
-        } else {
-          // 小屏模式同步选中状态
-          if (itemCtrl.selectedItem.value != null) {
+        // if (constraints.maxWidth >= mobileBreakPoint) {
+        //   // 大屏模式强制清除路由栈
+        //   if (Get.currentRoute == '/Details') {
+        //     WidgetsBinding.instance.addPostFrameCallback((_) {
+        //       Get.until((route) => route.isFirst);
+        //     });
+        //   }
+        // }
+        // else {
+        // 小屏模式同步选中状态
+        if (isSingleCol(context) &&
+            itemCtrl.selectedItem.value != null) {
+          if (responsiveCtrl.shouldJumpToDetails.value == true) {
             WidgetsBinding.instance.addPostFrameCallback((_) {
               if (!Get.isRegistered<PageRoute>(tag: '/Details')) {
                 Get.toNamed('/Details');
               }
             });
+            responsiveCtrl.hadJumped();
           }
         }
+        if (!isSingleCol(context) &&
+            responsiveCtrl.shouldJumpToDetails.value == false) {
+          responsiveCtrl.resetStates();
+        }
+        // }
 
         //切换时关闭抽屉
         WidgetsBinding.instance.addPostFrameCallback((_) {

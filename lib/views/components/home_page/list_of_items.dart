@@ -8,6 +8,8 @@ import 'package:cycle_it/views/components/home_page/item_card.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../details_page/details_page.dart';
+
 class ListOfItems extends StatelessWidget {
   final GlobalKey<ScaffoldState> scaffoldKey;
 
@@ -93,6 +95,9 @@ class ListOfItems extends StatelessWidget {
                       isActive: isActive,
                       press: () {
                         itemCtrl.selectItem(item);
+                        Get.to(() => DetailsPage())!.then((_) {
+                          itemCtrl.clearSelection(); // 返回时清除状态
+                        });
                       },
                     );
                   });

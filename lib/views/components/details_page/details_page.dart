@@ -22,18 +22,27 @@ class DetailsPage extends StatelessWidget {
     final double spacingLG = style.spacingLG;
     final bool isMobile = GetPlatform.isIOS || GetPlatform.isAndroid;
 
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!ResponsiveLayout.isSingleCol(context) &&
+          Get.currentRoute == '/Details') {
+        Get.back(); // 或 Navigator.pop(context)
+      }
+    });
+
     return PopScope(
       canPop: true,
       onPopInvokedWithResult: (bool didPop, Object? result) async {
         if (didPop) {
-          Future.microtask(() => itemCtrl.clearSelection());
-          print('Cleared');
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            //itemCtrl.clearSelection(); // 等待动画完成后再清除选中项
+            print('Cleared');
+          });
         }
       },
       child: Obx(() {
         final ItemModel? item = itemCtrl.selectedItem.value;
         if (item == null) {
-          return const SizedBox.shrink();
+          return const Center(child: Text("请选择项目"));
         }
 
         return Scaffold(
@@ -99,12 +108,18 @@ class DetailsPage extends StatelessWidget {
             if (itemCtrl.selectedItem.value != null)
               BackButton(
                 onPressed: () {
-                  Future.microtask(() => itemCtrl.clearSelection());
-                  // 确保路由同步
-                  if (!ResponsiveLayout.isSingleCol(context)) {
+                  if (Get.currentRoute == '/Details') {
                     Get.back();
-                    //Get.offAllNamed('/');
+                  } else {
+                    itemCtrl.clearSelection();
                   }
+                  //itemCtrl.clearSelection();
+
+                  // 确保路由同步
+                  // if (!ResponsiveLayout.isSingleCol(context)) {
+                  //   Get.back();
+                  //   //Get.offAllNamed('/');
+                  // }
                 },
               ),
             // IconButton(onPressed: () {}, icon: Icon(Icons.navigate_before)),
