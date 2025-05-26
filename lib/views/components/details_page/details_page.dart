@@ -42,7 +42,7 @@ class DetailsPage extends StatelessWidget {
       child: Obx(() {
         final ItemModel? item = itemCtrl.selectedItem.value;
         if (item == null) {
-          return const Center(child: Text("请选择项目"));
+          return Container(color: kPrimaryBgColor);
         }
 
         return Scaffold(

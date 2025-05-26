@@ -63,8 +63,8 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
       useInheritedMediaQuery: true,
       debugShowCheckedModeBanner: false,
-      // 动画主题统一设置为iOS样式
-      defaultTransition: Transition.cupertino,
+      // 动画主题
+      //defaultTransition: Transition.cupertino,
       transitionDuration: Duration(milliseconds: 300),
       initialBinding: HomeBinding(),
       // 多语言文件

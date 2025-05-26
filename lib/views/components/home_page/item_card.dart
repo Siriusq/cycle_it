@@ -44,6 +44,7 @@ class ItemCard extends StatelessWidget {
           if (isSingleCol) Get.toNamed("/Details");
         },
         child: Container(
+          clipBehavior: Clip.antiAlias,
           padding: EdgeInsets.all(spacingLG * 0.5),
           //动态边框
           decoration: BoxDecoration(
@@ -405,6 +406,7 @@ class ItemCard extends StatelessWidget {
           children:
               item.tags.map((tag) {
                 return Container(
+                  clipBehavior: Clip.antiAlias,
                   decoration: BoxDecoration(
                     shape: BoxShape.rectangle,
                     border: Border.all(color: Colors.white),
