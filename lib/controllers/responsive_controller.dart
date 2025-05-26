@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 class ResponsiveController extends GetxController {
   var shouldJumpToDetails = true.obs;
 
-  void resetStates() {
+  void resetShouldJumpStates() {
     shouldJumpToDetails = true.obs;
   }
 

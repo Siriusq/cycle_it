@@ -25,20 +25,20 @@ class DetailsPage extends StatelessWidget {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!ResponsiveLayout.isSingleCol(context) &&
           Get.currentRoute == '/Details') {
-        Get.back(); // 或 Navigator.pop(context)
+        Get.back();
       }
     });
 
     return PopScope(
       canPop: true,
-      onPopInvokedWithResult: (bool didPop, Object? result) async {
-        if (didPop) {
-          WidgetsBinding.instance.addPostFrameCallback((_) {
-            //itemCtrl.clearSelection(); // 等待动画完成后再清除选中项
-            print('Cleared');
-          });
-        }
-      },
+      // onPopInvokedWithResult: (bool didPop, Object? result) async {
+      //   if (didPop) {
+      //     WidgetsBinding.instance.addPostFrameCallback((_) {
+      //       //itemCtrl.clearSelection(); // 等待动画完成后再清除选中项
+      //       print('Cleared');
+      //     });
+      //   }
+      // },
       child: Obx(() {
         final ItemModel? item = itemCtrl.selectedItem.value;
         if (item == null) {
@@ -110,20 +110,19 @@ class DetailsPage extends StatelessWidget {
                 onPressed: () {
                   if (Get.currentRoute == '/Details') {
                     Get.back();
+                    Future.delayed(
+                      const Duration(milliseconds: 300),
+                      () {
+                        itemCtrl
+                            .clearSelection(); // 动画结束后再清空，防止出现页面提前销毁导致的黑屏闪烁
+                      },
+                    );
                   } else {
                     itemCtrl.clearSelection();
                   }
-                  //itemCtrl.clearSelection();
-
-                  // 确保路由同步
-                  // if (!ResponsiveLayout.isSingleCol(context)) {
-                  //   Get.back();
-                  //   //Get.offAllNamed('/');
-                  // }
                 },
               ),
-            // IconButton(onPressed: () {}, icon: Icon(Icons.navigate_before)),
-            // IconButton(onPressed: () {}, icon: Icon(Icons.navigate_next)),
+
             Spacer(),
             IconButton(
               onPressed: () {},
@@ -150,12 +149,8 @@ class DetailsPage extends StatelessWidget {
     final double spacingLG = style.spacingLG;
 
     return Padding(
-      padding: EdgeInsets.symmetric(
-        //horizontal: spacingLG,
-        vertical: spacingLG * 0.5,
-      ),
+      padding: EdgeInsets.symmetric(vertical: spacingLG * 0.5),
       child: Row(
-        //mainAxisAlignment: MainAxisAlignment.spaceBetween,
         mainAxisSize: MainAxisSize.min,
         children: [
           Padding(

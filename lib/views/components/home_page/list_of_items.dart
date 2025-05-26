@@ -94,7 +94,6 @@ class ListOfItems extends StatelessWidget {
                       item: item,
                       isActive: isActive,
                       press: () {
-                        itemCtrl.selectItem(item);
                         Get.to(() => DetailsPage())!.then((_) {
                           itemCtrl.clearSelection(); // 返回时清除状态
                         });

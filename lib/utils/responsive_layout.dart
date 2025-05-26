@@ -35,23 +35,13 @@ class ResponsiveLayout extends StatelessWidget {
   Widget build(BuildContext context) {
     final itemCtrl = Get.find<ItemController>();
     final responsiveCtrl = Get.find<ResponsiveController>();
-    print(responsiveCtrl.shouldJumpToDetails.value);
 
     return LayoutBuilder(
       builder: (context, constraints) {
         // 处理布局切换时的状态同步
-        // if (constraints.maxWidth >= mobileBreakPoint) {
-        //   // 大屏模式强制清除路由栈
-        //   if (Get.currentRoute == '/Details') {
-        //     WidgetsBinding.instance.addPostFrameCallback((_) {
-        //       Get.until((route) => route.isFirst);
-        //     });
-        //   }
-        // }
-        // else {
-        // 小屏模式同步选中状态
-        if (isSingleCol(context) &&
-            itemCtrl.selectedItem.value != null) {
+        bool isSingle = isSingleCol(context);
+        // 大屏转小屏时，如果有选中的物品，则切换到详情页
+        if (isSingle && itemCtrl.selectedItem.value != null) {
           if (responsiveCtrl.shouldJumpToDetails.value == true) {
             WidgetsBinding.instance.addPostFrameCallback((_) {
               if (!Get.isRegistered<PageRoute>(tag: '/Details')) {
@@ -61,11 +51,10 @@ class ResponsiveLayout extends StatelessWidget {
             responsiveCtrl.hadJumped();
           }
         }
-        if (!isSingleCol(context) &&
+        if (!isSingle &&
             responsiveCtrl.shouldJumpToDetails.value == false) {
-          responsiveCtrl.resetStates();
+          responsiveCtrl.resetShouldJumpStates();
         }
-        // }
 
         //切换时关闭抽屉
         WidgetsBinding.instance.addPostFrameCallback((_) {
