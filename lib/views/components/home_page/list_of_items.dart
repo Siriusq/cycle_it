@@ -88,7 +88,7 @@ class ListOfItems extends StatelessWidget {
                   final item = sampleItems[index];
                   return Obx(() {
                     final selected =
-                        Get.find<ItemController>().selectedItem.value;
+                        Get.find<ItemController>().currentItem.value;
                     final isActive = selected?.id == item.id;
                     return ItemCard(
                       item: item,

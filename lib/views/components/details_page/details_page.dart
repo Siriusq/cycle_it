@@ -40,7 +40,7 @@ class DetailsPage extends StatelessWidget {
       //   }
       // },
       child: Obx(() {
-        final ItemModel? item = itemCtrl.selectedItem.value;
+        final ItemModel? item = itemCtrl.currentItem.value;
         if (item == null) {
           return Container(color: kPrimaryBgColor);
         }
@@ -105,7 +105,7 @@ class DetailsPage extends StatelessWidget {
         height: 48,
         child: Row(
           children: [
-            if (itemCtrl.selectedItem.value != null)
+            if (itemCtrl.currentItem.value != null)
               BackButton(
                 onPressed: () {
                   if (Get.currentRoute == '/Details') {
@@ -254,9 +254,8 @@ class DetailsPage extends StatelessWidget {
         usageCount > 0 ? item.usageRecords.first.usedAt : null;
     final DateTime? lastUsedDate =
         usageCount > 0 ? item.usageRecords.last.usedAt : null;
-    final int daysSinceLastUse =
-        item.daysBetweenTodayAnd(false).abs();
-    final int daysTillNextUse = item.daysBetweenTodayAnd(true);
+    final int daysSinceLastUse = item.daysToToday(false).abs();
+    final int daysTillNextUse = item.daysToToday(true);
     final double usageFrequency = item.usageFrequency.toPrecision(2);
 
     final double minComponentWidth = style.minComponentWidth;

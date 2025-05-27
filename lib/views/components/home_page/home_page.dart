@@ -61,7 +61,7 @@ class HomePage extends StatelessWidget {
           flex: 3,
           child: Obx(
             () =>
-                ctrl.selectedItem.value != null
+                ctrl.currentItem.value != null
                     ? DetailsPage()
                     : Container(
                       color: kPrimaryBgColor,
@@ -86,7 +86,7 @@ class HomePage extends StatelessWidget {
         Expanded(
           child: Obx(
             () =>
-                ctrl.selectedItem.value != null
+                ctrl.currentItem.value != null
                     ? DetailsPage()
                     : Container(
                       color: kPrimaryBgColor,

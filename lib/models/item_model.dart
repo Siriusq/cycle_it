@@ -9,55 +9,99 @@ class ItemModel {
   String? usageComment;
   final String iconPath;
   final Color iconColor;
-  DateTime? firstUsed;
-  final List<UsageRecordModel> usageRecords;
+  List<UsageRecordModel> usageRecords; // 列表始终保持时间排序
   final bool notifyBeforeNextUse;
   final List<TagModel> tags;
+
+  // 缓存变量
+  DateTime? _cachedFirstUsedDate;
+  double? _cachedUsageFrequency;
+  DateTime? _cachedNextExpectedUse;
 
   ItemModel({
     required this.id,
     required this.name,
     this.usageComment,
-    this.firstUsed,
     required this.usageRecords,
     required this.tags,
     required this.iconPath,
     required this.iconColor,
     this.notifyBeforeNextUse = true,
-  });
+  }) {
+    // 构造时进行排序
+    usageRecords.sort((a, b) => a.usedAt.compareTo(b.usedAt));
+  }
+
+  // 获取首次使用日期
+  DateTime? get firstUsedDate {
+    if (_cachedFirstUsedDate == null) {
+      if (usageRecords.isEmpty) {
+        _cachedUsageFrequency = null;
+      } else {
+        _cachedFirstUsedDate = usageRecords.first.usedAt;
+      }
+    }
+    return _cachedFirstUsedDate;
+  }
 
   // 计算使用频率
   double get usageFrequency {
-    if (usageRecords.isEmpty) return 0;
-    final daysSinceFirst =
-        DateTime.now().difference(usageRecords.first.usedAt).inDays;
-    if (daysSinceFirst == 0) return usageRecords.length.toDouble();
-    return daysSinceFirst / usageRecords.length;
+    if (_cachedUsageFrequency == null) {
+      if (usageRecords.isEmpty) {
+        _cachedUsageFrequency = 0;
+      } else {
+        final daysSinceFirst =
+            DateTime.now().difference(firstUsedDate!).inDays;
+        if (daysSinceFirst == 0) {
+          _cachedUsageFrequency = usageRecords.length.toDouble();
+        } else {
+          _cachedUsageFrequency =
+              daysSinceFirst / usageRecords.length;
+        }
+      }
+    }
+    return _cachedUsageFrequency!;
   }
 
   // 预计下次使用时间 = 上次使用时间 + 平均使用间隔
   DateTime? get nextExpectedUse {
-    if (usageRecords.length < 2) return null;
-
-    // 按使用时间排序
-    final sorted = usageRecords.map((e) => e.usedAt).toList()..sort();
-
-    List<int> intervals = [];
-    for (int i = 1; i < sorted.length; i++) {
-      final interval = sorted[i].difference(sorted[i - 1]).inDays;
-      intervals.add(interval);
+    if (_cachedNextExpectedUse == null) {
+      if (usageRecords.length < 2) {
+        _cachedNextExpectedUse = null;
+      } else {
+        // 使用已排序的 usageRecords
+        List<int> intervals = [];
+        for (int i = 1; i < usageRecords.length; i++) {
+          final interval =
+              usageRecords[i].usedAt
+                  .difference(usageRecords[i - 1].usedAt)
+                  .inDays;
+          intervals.add(interval);
+        }
+        if (intervals.isEmpty) {
+          _cachedNextExpectedUse = null;
+        } else {
+          final avgInterval =
+              intervals.reduce((a, b) => a + b) ~/ intervals.length;
+          final lastUse = usageRecords.last.usedAt;
+          _cachedNextExpectedUse = lastUse.add(
+            Duration(days: avgInterval),
+          );
+        }
+      }
     }
-    if (intervals.isEmpty) return null;
-
-    final avgInterval =
-        intervals.reduce((a, b) => a + b) ~/ intervals.length;
-    final lastUse = sorted.last;
-
-    return lastUse.add(Duration(days: avgInterval));
+    return _cachedNextExpectedUse;
   }
 
-  // 计算日期差
-  int daysBetweenTodayAnd(bool isNext) {
+  // 在修改 usageRecords 后调用此方法来清除缓存
+  void invalidateCalculatedProperties() {
+    _cachedUsageFrequency = null;
+    _cachedNextExpectedUse = null;
+    _cachedProgress = null; // 你的 _cachedProgress 也需要清空
+  }
+
+  // 计算到今天的日期差
+  int daysToToday(bool isNext) {
     DateTime targetDate;
     if (isNext) {
       if (nextExpectedUse == null) return 0;
@@ -80,13 +124,14 @@ class ItemModel {
 
   // 计算上次使用与下次使用之间的时间进度
   double? _cachedProgress;
+
   double timePercentageBetweenLastAndNext() {
     return _cachedProgress ??= _calculateProgress();
   }
 
   double _calculateProgress() {
-    final daysSinceLastUsage = daysBetweenTodayAnd(false).abs();
-    final daysTillNextUsage = daysBetweenTodayAnd(true).abs();
+    final daysSinceLastUsage = daysToToday(false).abs();
+    final daysTillNextUsage = daysToToday(true).abs();
     if (daysSinceLastUsage == 0) return 0;
     if (daysTillNextUsage <= 0) return 1.0;
     final totalDuration = daysSinceLastUsage + daysTillNextUsage;

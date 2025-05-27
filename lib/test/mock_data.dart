@@ -20,27 +20,58 @@ final List<ItemModel> sampleItems =
     [
       ItemModel(
         id: 1,
-        name: 'A Marvel Rice Cooker with Super Capacity and Endless Power Supply',
+        name:
+            'A Marvel Rice Cooker with Super Capacity and Endless Power Supply',
         usageComment: 'Clean Inside',
         iconPath: 'assets/item_icons/appliances/cooking-pot.svg',
         iconColor: Colors.orange,
-        firstUsed: DateTime.now().subtract(Duration(days: 90)),
         usageRecords: [
-          UsageRecordModel(id: 1, itemId: 1, usedAt: DateTime.now().subtract(Duration(days: 80))),
-          UsageRecordModel(id: 2, itemId: 1, usedAt: DateTime.now().subtract(Duration(days: 60))),
+          UsageRecordModel(
+            id: 0,
+            itemId: 1,
+            usedAt: DateTime.now().subtract(Duration(days: 90)),
+          ),
+          UsageRecordModel(
+            id: 1,
+            itemId: 1,
+            usedAt: DateTime.now().subtract(Duration(days: 80)),
+          ),
+          UsageRecordModel(
+            id: 2,
+            itemId: 1,
+            usedAt: DateTime.now().subtract(Duration(days: 60)),
+          ),
         ],
-        tags: [allTagsFromMock[0], allTagsFromMock[1], allTagsFromMock[2]],
+        tags: [
+          allTagsFromMock[0],
+          allTagsFromMock[1],
+          allTagsFromMock[2],
+        ],
       ),
       ItemModel(
         id: 2,
-        name: 'A Marvel Rice Cooker with Super Capacity and Endless Power Supply',
-        usageComment: 'A Marvel Rice Cooker with Super Capacity and Endless Power Supply',
+        name:
+            'A Marvel Rice Cooker with Super Capacity and Endless Power Supply',
+        usageComment:
+            'A Marvel Rice Cooker with Super Capacity and Endless Power Supply',
         iconPath: 'assets/item_icons/others/flower.svg',
         iconColor: Colors.blueGrey,
-        firstUsed: DateTime.now().subtract(Duration(days: 200)),
         usageRecords: [
-          UsageRecordModel(id: 3, itemId: 2, usedAt: DateTime.now().subtract(Duration(days: 150))),
-          UsageRecordModel(id: 4, itemId: 2, usedAt: DateTime.now().subtract(Duration(days: 100))),
+          UsageRecordModel(
+            id: 3,
+            itemId: 2,
+            usedAt: DateTime.now().subtract(Duration(days: 200)),
+          ),
+          UsageRecordModel(
+            id: 4,
+            itemId: 2,
+            usedAt: DateTime.now().subtract(Duration(days: 150)),
+          ),
+          UsageRecordModel(
+            id: 5,
+            itemId: 2,
+            usedAt: DateTime.now().subtract(Duration(days: 100)),
+          ),
         ],
         tags: [allTagsFromMock[2]],
       ),
@@ -50,11 +81,27 @@ final List<ItemModel> sampleItems =
         usageComment: 'Recharge Battery',
         iconPath: 'assets/item_icons/electronics/laptop.svg',
         iconColor: Colors.grey,
-        firstUsed: DateTime.now().subtract(Duration(days: 365)),
         usageRecords: [
-          UsageRecordModel(id: 5, itemId: 3, usedAt: DateTime.now().subtract(Duration(days: 200))),
-          UsageRecordModel(id: 5, itemId: 3, usedAt: DateTime.now().subtract(Duration(days: 120))),
-          UsageRecordModel(id: 6, itemId: 3, usedAt: DateTime.now().subtract(Duration(days: 10))),
+          UsageRecordModel(
+            id: 6,
+            itemId: 3,
+            usedAt: DateTime.now().subtract(Duration(days: 365)),
+          ),
+          UsageRecordModel(
+            id: 7,
+            itemId: 3,
+            usedAt: DateTime.now().subtract(Duration(days: 200)),
+          ),
+          UsageRecordModel(
+            id: 8,
+            itemId: 3,
+            usedAt: DateTime.now().subtract(Duration(days: 120)),
+          ),
+          UsageRecordModel(
+            id: 9,
+            itemId: 3,
+            usedAt: DateTime.now().subtract(Duration(days: 10)),
+          ),
         ],
         tags: [allTagsFromMock[1], allTagsFromMock[3]],
       ),
@@ -63,8 +110,13 @@ final List<ItemModel> sampleItems =
         name: 'Screwdriver',
         iconPath: 'assets/item_icons/appliances/screwdriver.svg',
         iconColor: Colors.red,
-        firstUsed: DateTime.now().subtract(Duration(days: 50)),
-        usageRecords: [UsageRecordModel(id: 7, itemId: 4, usedAt: DateTime.now().subtract(Duration(days: 48)))],
+        usageRecords: [
+          UsageRecordModel(
+            id: 10,
+            itemId: 4,
+            usedAt: DateTime.now().subtract(Duration(days: 48)),
+          ),
+        ],
         tags: [allTagsFromMock[4]],
       ),
       ItemModel(
@@ -72,10 +124,17 @@ final List<ItemModel> sampleItems =
         name: 'Camera',
         iconPath: 'assets/item_icons/entertainment/camera-0.svg',
         iconColor: Colors.black,
-        firstUsed: DateTime.now().subtract(Duration(days: 150)),
         usageRecords: [
-          UsageRecordModel(id: 8, itemId: 5, usedAt: DateTime.now().subtract(Duration(days: 130))),
-          UsageRecordModel(id: 9, itemId: 5, usedAt: DateTime.now().subtract(Duration(days: 90))),
+          UsageRecordModel(
+            id: 11,
+            itemId: 5,
+            usedAt: DateTime.now().subtract(Duration(days: 130)),
+          ),
+          UsageRecordModel(
+            id: 12,
+            itemId: 5,
+            usedAt: DateTime.now().subtract(Duration(days: 90)),
+          ),
         ],
         tags: [allTagsFromMock[1], allTagsFromMock[5]],
       ),
@@ -84,8 +143,18 @@ final List<ItemModel> sampleItems =
         name: 'Notebook',
         iconPath: 'assets/item_icons/electronics/ipad-1.svg',
         iconColor: Colors.green,
-        firstUsed: DateTime.now().subtract(Duration(days: 30)),
-        usageRecords: [UsageRecordModel(id: 10, itemId: 6, usedAt: DateTime.now().subtract(Duration(days: 20)))],
+        usageRecords: [
+          UsageRecordModel(
+            id: 13,
+            itemId: 6,
+            usedAt: DateTime.now().subtract(Duration(days: 30)),
+          ),
+          UsageRecordModel(
+            id: 14,
+            itemId: 6,
+            usedAt: DateTime.now().subtract(Duration(days: 20)),
+          ),
+        ],
         tags: [allTagsFromMock[3]],
       ),
       ItemModel(
@@ -93,10 +162,22 @@ final List<ItemModel> sampleItems =
         name: 'Electric Fan',
         iconPath: 'assets/item_icons/others/fan.svg',
         iconColor: Colors.lightBlue,
-        firstUsed: DateTime.now().subtract(Duration(days: 300)),
         usageRecords: [
-          UsageRecordModel(id: 11, itemId: 7, usedAt: DateTime.now().subtract(Duration(days: 200))),
-          UsageRecordModel(id: 12, itemId: 7, usedAt: DateTime.now().subtract(Duration(days: 100))),
+          UsageRecordModel(
+            id: 15,
+            itemId: 7,
+            usedAt: DateTime.now().subtract(Duration(days: 300)),
+          ),
+          UsageRecordModel(
+            id: 16,
+            itemId: 7,
+            usedAt: DateTime.now().subtract(Duration(days: 200)),
+          ),
+          UsageRecordModel(
+            id: 17,
+            itemId: 7,
+            usedAt: DateTime.now().subtract(Duration(days: 100)),
+          ),
         ],
         tags: [allTagsFromMock[1], allTagsFromMock[2]],
       ),
@@ -105,10 +186,17 @@ final List<ItemModel> sampleItems =
         name: 'Sketchbook',
         iconPath: 'assets/item_icons/electronics/painted-screen.svg',
         iconColor: Colors.purple,
-        firstUsed: DateTime.now().subtract(Duration(days: 120)),
         usageRecords: [
-          UsageRecordModel(id: 13, itemId: 8, usedAt: DateTime.now().subtract(Duration(days: 110))),
-          UsageRecordModel(id: 14, itemId: 8, usedAt: DateTime.now().subtract(Duration(days: 60))),
+          UsageRecordModel(
+            id: 18,
+            itemId: 8,
+            usedAt: DateTime.now().subtract(Duration(days: 110)),
+          ),
+          UsageRecordModel(
+            id: 19,
+            itemId: 8,
+            usedAt: DateTime.now().subtract(Duration(days: 60)),
+          ),
         ],
         tags: [allTagsFromMock[5]],
       ),
@@ -117,8 +205,13 @@ final List<ItemModel> sampleItems =
         name: 'Thermos Bottle',
         iconPath: 'assets/item_icons/appliances/boiler.svg',
         iconColor: Colors.teal,
-        firstUsed: DateTime.now().subtract(Duration(days: 200)),
-        usageRecords: [UsageRecordModel(id: 15, itemId: 9, usedAt: DateTime.now().subtract(Duration(days: 180)))],
+        usageRecords: [
+          UsageRecordModel(
+            id: 20,
+            itemId: 9,
+            usedAt: DateTime.now().subtract(Duration(days: 180)),
+          ),
+        ],
         tags: [allTagsFromMock[0], allTagsFromMock[2]],
       ),
       ItemModel(
@@ -126,10 +219,22 @@ final List<ItemModel> sampleItems =
         name: 'Wireless Mouse',
         iconPath: 'assets/item_icons/electronics/mouse-0.svg',
         iconColor: Colors.brown,
-        firstUsed: DateTime.now().subtract(Duration(days: 70)),
         usageRecords: [
-          UsageRecordModel(id: 16, itemId: 10, usedAt: DateTime.now().subtract(Duration(days: 60))),
-          UsageRecordModel(id: 17, itemId: 10, usedAt: DateTime.now().subtract(Duration(days: 10))),
+          UsageRecordModel(
+            id: 21,
+            itemId: 10,
+            usedAt: DateTime.now().subtract(Duration(days: 70)),
+          ),
+          UsageRecordModel(
+            id: 22,
+            itemId: 10,
+            usedAt: DateTime.now().subtract(Duration(days: 60)),
+          ),
+          UsageRecordModel(
+            id: 23,
+            itemId: 10,
+            usedAt: DateTime.now().subtract(Duration(days: 10)),
+          ),
         ],
         tags: [allTagsFromMock[1], allTagsFromMock[3]],
       ),
@@ -138,7 +243,6 @@ final List<ItemModel> sampleItems =
         name: 'No Usage Record Test Item',
         iconPath: 'assets/item_icons/others/box.svg',
         iconColor: Colors.black,
-        firstUsed: DateTime.now().subtract(Duration(days: 70)),
         usageRecords: [],
         tags: [allTagsFromMock[2], allTagsFromMock[3]],
       ),

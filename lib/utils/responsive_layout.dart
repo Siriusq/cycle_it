@@ -41,7 +41,7 @@ class ResponsiveLayout extends StatelessWidget {
         // 处理布局切换时的状态同步
         bool isSingle = isSingleCol(context);
         // 大屏转小屏时，如果有选中的物品，则切换到详情页
-        if (isSingle && itemCtrl.selectedItem.value != null) {
+        if (isSingle && itemCtrl.currentItem.value != null) {
           if (responsiveCtrl.shouldJumpToDetails.value == true) {
             WidgetsBinding.instance.addPostFrameCallback((_) {
               if (!Get.isRegistered<PageRoute>(tag: '/Details')) {
