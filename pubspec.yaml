@@ -54,6 +54,9 @@ dependencies:
   # Adjust Window Size in Desktop
   window_manager: ^0.4.3
 
+  # Easy to Use Table Widget
+  data_table_2: ^2.6.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
