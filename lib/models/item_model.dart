@@ -26,7 +26,7 @@ class ItemModel {
     required this.tags,
     required this.iconPath,
     required this.iconColor,
-    this.notifyBeforeNextUse = true,
+    this.notifyBeforeNextUse = false,
   }) {
     // 构造时进行排序
     usageRecords.sort((a, b) => a.usedAt.compareTo(b.usedAt));

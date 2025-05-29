@@ -17,7 +17,4 @@ class UsageRecords extends Table {
 
   IntColumn get intervalSinceLastUse =>
       integer().nullable()(); // 与上次使用的时间间隔（天）
-
-  @override
-  Set<Column> get primaryKey => {id};
 }

@@ -113,7 +113,7 @@ class ItemCard extends StatelessWidget {
               child: SvgPicture.asset(
                 item.iconPath,
                 colorFilter: ColorFilter.mode(
-                  kIconColor,
+                  item.iconColor,
                   BlendMode.srcIn,
                 ),
               ),

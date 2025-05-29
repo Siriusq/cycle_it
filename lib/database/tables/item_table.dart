@@ -16,7 +16,4 @@ class Items extends Table {
 
   BoolColumn get notifyBeforeNextUse =>
       boolean().withDefault(const Constant(false))();
-
-  @override
-  Set<Column> get primaryKey => {id};
 }
