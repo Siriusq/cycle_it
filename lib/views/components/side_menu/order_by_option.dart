@@ -36,10 +36,12 @@ class OrderByOption extends StatelessWidget {
           },
           child: Row(
             children: [
-              if (isActive)
-                Icon(Icons.arrow_forward_ios, size: 15)
+              if (!isActive)
+                const SizedBox(width: 15)
+              else if (itemListOrderCtrl.isAscending.value)
+                Icon(Icons.arrow_upward, size: 15)
               else
-                const SizedBox(width: 15),
+                Icon(Icons.arrow_downward, size: 15),
               const SizedBox(width: 5),
               Expanded(
                 child: Container(
