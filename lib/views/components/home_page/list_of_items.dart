@@ -1,6 +1,5 @@
 import 'package:cycle_it/controllers/item_controller.dart';
 import 'package:cycle_it/controllers/search_bar_controller.dart';
-import 'package:cycle_it/test/mock_data.dart';
 import 'package:cycle_it/utils/constants.dart';
 import 'package:cycle_it/utils/responsive_layout.dart';
 import 'package:cycle_it/utils/responsive_style.dart';
@@ -8,6 +7,8 @@ import 'package:cycle_it/views/components/home_page/item_card.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../controllers/item_list_order_controller.dart';
+import '../../../controllers/tag_controller.dart';
 import '../details_page/details_page.dart';
 
 class ListOfItems extends StatelessWidget {
@@ -17,7 +18,10 @@ class ListOfItems extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final itemCtrl = Get.find<ItemController>();
+    final ItemController itemController = Get.find<ItemController>();
+    final ItemListOrderController orderController =
+        Get.find<ItemListOrderController>();
+    final TagController tagController = Get.find<TagController>();
 
     final style = context.responsiveStyle();
     final double spacingXS = style.spacingXS;
@@ -68,39 +72,11 @@ class ListOfItems extends StatelessWidget {
 
             // 物品卡片
             Expanded(
-              child: ListView.builder(
-                itemCount: sampleItems.length + 1, // 加一个“底部标识”项
-                itemBuilder: (context, index) {
-                  if (index == sampleItems.length) {
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(
-                        vertical: 16.0,
-                      ),
-                      child: Center(
-                        child: Text(
-                          '—— 已经到底了 ——',
-                          style: TextStyle(color: Colors.grey),
-                        ),
-                      ),
-                    );
-                  }
-
-                  final item = sampleItems[index];
-                  return Obx(() {
-                    final selected =
-                        Get.find<ItemController>().currentItem.value;
-                    final isActive = selected?.id == item.id;
-                    return ItemCard(
-                      item: item,
-                      isActive: isActive,
-                      press: () {
-                        Get.to(() => DetailsPage())!.then((_) {
-                          itemCtrl.clearSelection(); // 返回时清除状态
-                        });
-                      },
-                    );
-                  });
-                },
+              child: _buildItemCards(
+                context,
+                isMobile,
+                itemController,
+                style,
               ),
             ),
           ],
@@ -193,5 +169,56 @@ class ListOfItems extends StatelessWidget {
         }),
       ),
     );
+  }
+
+  Widget _buildItemCards(
+    BuildContext context,
+    bool isMobile,
+    ItemController itemController,
+    ResponsiveStyle style,
+  ) {
+    if (itemController.displayedItems.isEmpty &&
+        itemController.allItems.isEmpty) {
+      // 如果还没有加载数据，显示加载指示器
+      return Center(child: CircularProgressIndicator());
+    }
+
+    if (itemController.displayedItems.isEmpty) {
+      return Center(child: Text('没有符合条件的物品', style: style.bodyText));
+    }
+
+    return Obx(() {
+      return ListView.builder(
+        itemCount: itemController.displayedItems.length + 1,
+        itemBuilder: (context, index) {
+          if (index == itemController.displayedItems.length) {
+            return Padding(
+              padding: const EdgeInsets.symmetric(vertical: 16.0),
+              child: Center(
+                child: Text(
+                  '—— 已经到底了 ——',
+                  style: TextStyle(color: Colors.grey),
+                ),
+              ),
+            );
+          }
+
+          final item = itemController.displayedItems[index];
+          return Obx(() {
+            final selected = itemController.currentItem.value;
+            final isActive = selected?.id == item.id;
+            return ItemCard(
+              item: item,
+              isActive: isActive,
+              press: () {
+                Get.to(() => DetailsPage())!.then((_) {
+                  itemController.clearSelection(); // 返回时清除状态
+                });
+              },
+            );
+          });
+        },
+      );
+    });
   }
 }
