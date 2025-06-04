@@ -63,6 +63,30 @@ class MyDatabase extends _$MyDatabase {
   @override
   int get schemaVersion => 1; // 数据库版本号，如果表结构改变需要增加
 
+  // 获取标签数量
+  Future<int> getTagCount() async {
+    final countExpression = countAll(); // 使用全局的 countAll 聚合函数，不带参数
+    // selectOnly 用于只选择聚合结果或其他自定义列
+    final query = selectOnly(tags)..addColumns([countExpression]);
+    // 执行查询，映射结果，然后获取单个结果（即计数）
+    final result =
+        await query
+            .map((row) => row.read(countExpression))
+            .getSingle();
+    return result ?? 0;
+  }
+
+  // 获取物品数量
+  Future<int> getItemCount() async {
+    final countExpression = countAll(); // 使用全局的 countAll 聚合函数，不带参数
+    final query = selectOnly(items)..addColumns([countExpression]);
+    final result =
+        await query
+            .map((row) => row.read(countExpression))
+            .getSingle();
+    return result ?? 0;
+  }
+
   // ---- 查询方法 ----
 
   // 获取所有标签
