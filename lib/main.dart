@@ -1,4 +1,5 @@
 import 'package:cycle_it/bindings/home_binding.dart';
+import 'package:cycle_it/services/item_service.dart';
 import 'package:cycle_it/utils/constants.dart';
 import 'package:cycle_it/views/components/details_page/details_page.dart';
 import 'package:cycle_it/views/settings_page.dart';
@@ -34,6 +35,12 @@ void main() async {
       await windowManager.focus();
     });
 
+    // Manually run HomeBinding to put all permanent dependencies
+    HomeBinding().dependencies();
+    // Retrieve ItemService and call initializeData AFTER it's put by HomeBinding
+    final itemService = Get.find<ItemService>();
+    await itemService.initializeData(); // Call data initialization
+
     runApp(
       DevicePreview(
         enabled: !kReleaseMode,
@@ -66,7 +73,7 @@ class MyApp extends StatelessWidget {
       // 动画主题
       //defaultTransition: Transition.cupertino,
       transitionDuration: Duration(milliseconds: 300),
-      initialBinding: HomeBinding(),
+      //initialBinding: HomeBinding(),
       // 多语言文件
       translations: MultiLanguage(),
       // DevicePreview

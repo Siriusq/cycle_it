@@ -5,11 +5,18 @@ import 'package:get/get.dart';
 
 import '../controllers/item_controller.dart';
 import '../controllers/search_bar_controller.dart';
+import '../database/database.dart';
+import '../services/item_service.dart';
 
 class HomeBinding implements Bindings {
   @override
   void dependencies() {
-    Get.put<ItemController>(ItemController(), permanent: true);
+    Get.put(MyDatabase(), permanent: true); // 绑定 Drift 数据库
+    Get.put(
+      ItemService(Get.find<MyDatabase>()),
+      permanent: true,
+    ); // 绑定服务
+
     Get.put<ItemListOrderController>(
       ItemListOrderController(),
       permanent: true,
@@ -19,10 +26,12 @@ class HomeBinding implements Bindings {
       SearchBarController(),
       permanent: true,
     );
+    Get.put<ItemController>(ItemController(), permanent: true);
     Get.put<ResponsiveController>(
       ResponsiveController(),
       permanent: true,
     );
+
     //Get.lazyPut<responsiveCtrl>(() => ItemController());
     //Get.lazyPut<ItemListOrderController>(() => ItemListOrderController());
     //Get.lazyPut<TagController>(() => TagController());
