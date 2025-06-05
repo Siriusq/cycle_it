@@ -66,7 +66,7 @@ class ItemCard extends StatelessWidget {
             //mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               // 图标、名称、更多按钮
-              _buildTitle(context, style, isTripleCol),
+              _buildTitle(context, style, isTripleCol, itemCtrl),
 
               // 详细使用数据，仅在桌面宽屏显示
               _buildOverview(context, style, isTripleCol),
@@ -92,6 +92,7 @@ class ItemCard extends StatelessWidget {
     BuildContext context,
     ResponsiveStyle style,
     bool isTripleCol,
+    ItemController itemController,
   ) {
     final TextStyle titleTextStyle = style.titleTextMD;
     final TextStyle smallBodyTextStyle = style.bodyTextSM;
@@ -159,32 +160,91 @@ class ItemCard extends StatelessWidget {
           // 更多按钮
           Align(
             alignment: Alignment.topCenter,
-            child: SizedBox(
-              width: iconSizeLG,
-              height: iconSizeLG, // 点击区域大小
-              child: Stack(
-                alignment: Alignment.center,
-                children: [
-                  Icon(Icons.more_vert, size: iconSizeMD), // 视觉图标
-                  Positioned.fill(
-                    child: Material(
-                      color: Colors.transparent,
-                      child: InkWell(
-                        onTap: () {
-                          // 点击事件
-                        },
-                        customBorder:
-                            const CircleBorder(), // 设置点击区域为圆形
-                        //splashFactory: NoSplash.splashFactory, // 可选：禁用水波纹
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
+            child: _buildActionButton(context, style, itemController),
           ),
         ],
       ),
+    );
+  }
+
+  // 卡片下拉菜单，包括编辑和删除物品
+  Widget _buildActionButton(
+    BuildContext context,
+    ResponsiveStyle style,
+    ItemController itemController,
+  ) {
+    final TextStyle titleTextStyle = style.titleTextMD;
+    final TextStyle bodyText = style.bodyText;
+    final double spacingSM = style.spacingSM;
+    final double iconSizeMD = style.iconSizeMD;
+    final double iconSizeLG = style.iconSizeLG;
+
+    return PopupMenuButton<String>(
+      color: kPrimaryBgColor,
+      tooltip: 'More Action',
+      onSelected: (value) {
+        if (value == 'edit') {
+          // todo: 样式调整，增加编辑弹窗，在单独的文件中
+          Get.dialog(
+            AlertDialog(
+              title: const Text('编辑项目'),
+              content: const Text('这里可以放表单或编辑内容'),
+              actions: [
+                TextButton(
+                  onPressed: () => Get.back(), // 关闭对话框
+                  child: const Text('取消'),
+                ),
+                TextButton(
+                  onPressed: () {
+                    // TODO: 保存操作
+                    print('已保存编辑');
+                    Get.back();
+                  },
+                  child: const Text('保存'),
+                ),
+              ],
+            ),
+          );
+        } else if (value == 'delete') {
+          Get.defaultDialog(
+            title: '删除物品',
+            backgroundColor: kPrimaryBgColor,
+            content: Text(
+              '确定要删除物品 ${item.name} 吗？这将删除所有相关记录。',
+              style: bodyText,
+            ),
+            textConfirm: '删除',
+            textCancel: '取消',
+            onConfirm: () {
+              Get.back();
+              itemController.deleteItem(item.id); // 调用删除方法
+            },
+          );
+        }
+      },
+      itemBuilder:
+          (_) => [
+            PopupMenuItem(
+              value: 'edit',
+              child: Row(
+                children: const [
+                  Icon(Icons.edit, color: Colors.black54),
+                  SizedBox(width: 8),
+                  Text('编辑'),
+                ],
+              ),
+            ),
+            PopupMenuItem(
+              value: 'delete',
+              child: Row(
+                children: const [
+                  Icon(Icons.delete, color: Colors.red),
+                  SizedBox(width: 8),
+                  Text('删除'),
+                ],
+              ),
+            ),
+          ],
     );
   }
 
