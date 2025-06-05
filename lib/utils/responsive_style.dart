@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import 'constants.dart';
 
@@ -10,20 +11,37 @@ class Breakpoints {
 }
 
 // 主响应式样式类
-class ResponsiveStyle {
-  final double screenWidth;
+class ResponsiveStyle extends GetxController {
+  // 静态 getter
+  static ResponsiveStyle get to => Get.find<ResponsiveStyle>();
 
-  // 构造器私有化
-  ResponsiveStyle._(this.screenWidth);
+  // 平台判断
+  final bool isMobileDevice =
+      GetPlatform.isIOS || GetPlatform.isAndroid;
 
-  // 工厂方法
-  factory ResponsiveStyle.of(
-    BuildContext context, [
-    double? containerWidth,
-  ]) {
-    final mediaQuery = MediaQuery.of(context);
-    final width = containerWidth ?? mediaQuery.size.width;
-    return ResponsiveStyle._(width);
+  // 当前窗口宽度断点
+  bool get isCurrentWidthMobile => Get.width < Breakpoints.tablet;
+
+  bool get isCurrentWidthTablet =>
+      Get.width >= Breakpoints.tablet &&
+      Get.width < Breakpoints.desktop;
+
+  bool get isCurrentWidthDesktop => Get.width >= Breakpoints.desktop;
+
+  // 响应式值计算，直接使用 Get.width 获取当前宽度，本身就是响应式的
+  double _getValue({
+    required double mobile,
+    double? tablet,
+    double? desktop,
+  }) {
+    final currentWidth = Get.width;
+    if (currentWidth >= Breakpoints.desktop) {
+      return desktop ?? tablet ?? mobile;
+    }
+    if (currentWidth >= Breakpoints.tablet) {
+      return tablet ?? mobile;
+    }
+    return mobile;
   }
 
   // 文本样式
@@ -104,20 +122,8 @@ class ResponsiveStyle {
     // 其他参数...
   );
 
-  // 响应式值计算
-  double _getValue({
-    required double mobile,
-    double? tablet,
-    double? desktop,
-  }) {
-    if (screenWidth >= Breakpoints.desktop) {
-      return desktop ?? tablet ?? mobile;
-    }
-    if (screenWidth >= Breakpoints.tablet) {
-      return tablet ?? mobile;
-    }
-    return mobile;
-  }
+  // 侧边栏应用图标
+  double get appIconSize => isMobileDevice ? 32 : 40; // 静态值，不随窗口拖动改变
 }
 
 // 标签样式子类
@@ -131,11 +137,4 @@ class TagStyle {
     required this.iconSize,
     required this.spacing,
   });
-}
-
-// 快捷访问扩展
-extension ResponsiveStyleExtension on BuildContext {
-  ResponsiveStyle responsiveStyle([double? containerWidth]) {
-    return ResponsiveStyle.of(this, containerWidth);
-  }
 }

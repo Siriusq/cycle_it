@@ -21,7 +21,7 @@ class OrderByOption extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final style = context.responsiveStyle();
+    final style = ResponsiveStyle.to;
     final double optionFontSize = style.optionFontSize;
 
     return Obx(() {

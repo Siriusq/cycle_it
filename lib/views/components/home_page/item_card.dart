@@ -26,7 +26,7 @@ class ItemCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final itemCtrl = Get.find<ItemController>();
 
-    final style = context.responsiveStyle();
+    final style = ResponsiveStyle.to;
     final double spacingLG = style.spacingLG;
 
     final bool isTripleCol = ResponsiveLayout.isTripleCol(context);

@@ -9,6 +9,7 @@ import 'package:get/get.dart';
 
 import '../../../controllers/item_list_order_controller.dart';
 import '../../../controllers/tag_controller.dart';
+import '../../../models/item_model.dart';
 import '../details_page/details_page.dart';
 
 class ListOfItems extends StatelessWidget {
@@ -23,10 +24,10 @@ class ListOfItems extends StatelessWidget {
         Get.find<ItemListOrderController>();
     final TagController tagController = Get.find<TagController>();
 
-    final style = context.responsiveStyle();
+    final style = ResponsiveStyle.to;
     final double spacingXS = style.spacingXS;
     final double spacingLG = style.spacingLG;
-    final bool isMobile = GetPlatform.isIOS || GetPlatform.isAndroid;
+    final bool isMobile = style.isMobileDevice;
     final double verticalSpacing = isMobile ? 0 : spacingLG;
     final double horizontalSpacing = isMobile ? 4 : spacingLG;
 
@@ -60,7 +61,23 @@ class ListOfItems extends StatelessWidget {
                   //添加物品按钮
                   SizedBox(width: spacingXS),
                   IconButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      // TODO: 跳转到添加物品页面或弹出添加物品对话框
+                      print('添加新物品');
+                      // TODO: 添加一个新物品，需要移动到添加页面中
+                      itemController.addNewItem(
+                        ItemModel(
+                          id: 0,
+                          // Drift 会自动生成
+                          name: '新物品 ${DateTime.now().millisecond}',
+                          iconPath:
+                              'assets/item_icons/appliances/electric-kettle.svg',
+                          iconColor: Colors.purple,
+                          usageRecords: [],
+                          tags: [],
+                        ),
+                      );
+                    },
                     icon: Icon(Icons.library_add_outlined),
                   ),
                 ],

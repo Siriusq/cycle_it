@@ -19,11 +19,10 @@ class SideMenu extends StatelessWidget {
   @override
   @override
   Widget build(BuildContext context) {
-    final style = context.responsiveStyle();
+    final style = ResponsiveStyle.to;
     final double spacingMD = style.spacingMD;
     final double spacingLG = style.spacingLG;
-    final bool isMobile = GetPlatform.isIOS || GetPlatform.isAndroid;
-    final double appIconSize = isMobile ? 32 : 40;
+    final double appIconSize = style.appIconSize;
     final TextStyle titleTextEX = style.titleTextEX;
     final TextStyle titleTextMD = style.titleTextMD;
     final double iconSizeMD = style.iconSizeMD;

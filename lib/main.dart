@@ -18,13 +18,14 @@ void main() async {
   debugProfilePaintsEnabled = true; // 跟踪绘制操作
 
   WidgetsFlutterBinding.ensureInitialized();
+
   if (GetPlatform.isWindows ||
       GetPlatform.isLinux ||
       GetPlatform.isMacOS) {
     await windowManager.ensureInitialized();
 
     WindowOptions windowOptions = WindowOptions(
-      size: const Size(800, 600),
+      size: const Size(1280, 800),
       minimumSize: const Size(300, 300),
       center: true,
       title: 'Cycle It',
@@ -34,32 +35,21 @@ void main() async {
       await windowManager.show();
       await windowManager.focus();
     });
-
-    // Manually run HomeBinding to put all permanent dependencies
-    HomeBinding().dependencies();
-    // Retrieve ItemService and call initializeData AFTER it's put by HomeBinding
-    final itemService = Get.find<ItemService>();
-    await itemService.initializeData(); // Call data initialization
-
-    runApp(
-      DevicePreview(
-        enabled: !kReleaseMode,
-        builder: (context) => MyApp(),
-      ),
-    );
-  } else {
-    runApp(
-      DevicePreview(enabled: false, builder: (context) => MyApp()),
-    );
   }
-}
 
-// void main() => runApp(
-//   DevicePreview(
-//     enabled: !kReleaseMode,
-//     builder: (context) => MyApp(), // Wrap your app
-//   ),
-// );
+  // Manually run HomeBinding to put all permanent dependencies
+  HomeBinding().dependencies();
+  // Retrieve ItemService and call initializeData AFTER it's put by HomeBinding
+  final itemService = Get.find<ItemService>();
+  await itemService.initializeData(); // Call data initialization
+
+  runApp(
+    DevicePreview(
+      enabled: !kReleaseMode && GetPlatform.isWindows,
+      builder: (context) => MyApp(),
+    ),
+  );
+}
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});

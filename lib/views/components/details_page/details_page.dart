@@ -18,9 +18,10 @@ class DetailsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final itemCtrl = Get.find<ItemController>();
 
-    final style = context.responsiveStyle();
+    final style = ResponsiveStyle.to;
     final double spacingLG = style.spacingLG;
-    final bool isMobile = GetPlatform.isIOS || GetPlatform.isAndroid;
+    final bool isMobile = style.isMobileDevice;
+    final TextStyle bodyTextStyle = style.bodyText;
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!ResponsiveLayout.isSingleCol(context) &&
@@ -72,6 +73,11 @@ class DetailsPage extends StatelessWidget {
 
                           //图表
                           _buildOverview(context, style, item),
+
+                          // UsageRecordsTable(
+                          //   currentItem: item,
+                          //   textStyleMD: bodyTextStyle,
+                          // ),
                         ],
                       ),
                     ),
