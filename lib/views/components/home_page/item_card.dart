@@ -180,7 +180,7 @@ class ItemCard extends StatelessWidget {
     final double iconSizeLG = style.iconSizeLG;
 
     return PopupMenuButton<String>(
-      color: kPrimaryBgColor,
+      color: kSecondaryBgColor,
       tooltip: 'More Action',
       onSelected: (value) {
         if (value == 'edit') {

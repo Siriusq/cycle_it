@@ -14,6 +14,9 @@ class ItemController extends GetxController {
       Get.find<ItemListOrderController>();
   final TagController _tagController = Get.find<TagController>();
 
+  // 加载状态
+  RxBool isLoading = true.obs; // 初始为 true，表示正在加载
+
   // 主页列表数据
   final RxList<ItemModel> allItems = <ItemModel>[].obs; // 存储所有加载的物品
   final RxList<ItemModel> displayedItems =
@@ -33,7 +36,12 @@ class ItemController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    _loadAllItems(); // 应用启动时加载所有物品
+
+    // Future.delayed(Duration(milliseconds: 100), () {
+    //   // Add a small delay to ensure initial DB writes from main are complete
+    //   _loadAllItems();
+    // });
+    //_loadAllItems(); // 应用启动时加载所有物品
 
     // 监听排序和筛选变化，更新 displayedItems
     ever(
@@ -67,10 +75,26 @@ class ItemController extends GetxController {
     });
   }
 
+  @override
+  void onReady() {
+    super.onReady();
+    // This method is called after the first frame is rendered.
+    // The database should be fully populated by now from main.
+    _loadAllItems(); // Now fetch the items from the database.
+  }
+
   // 从数据库加载所有物品
   Future<void> _loadAllItems() async {
-    final loadedItems = await _itemService.getAllItems();
-    allItems.assignAll(loadedItems);
+    isLoading.value = true; // 开始加载
+    try {
+      final loadedItems = await _itemService.getAllItems();
+      allItems.assignAll(loadedItems);
+    } catch (e) {
+      print('获取物品失败: $e');
+      // 处理错误，例如显示错误消息给用户
+    } finally {
+      isLoading.value = false; // 结束加载
+    }
     // _updateDisplayedItems 会在 _allItems 变化时自动被 ever 触发
   }
 
