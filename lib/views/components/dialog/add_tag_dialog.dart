@@ -1,5 +1,6 @@
 import 'package:cycle_it/controllers/tag_controller.dart';
 import 'package:cycle_it/utils/constants.dart';
+import 'package:cycle_it/utils/responsive_style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -11,7 +12,7 @@ class AddTagDialog extends StatelessWidget {
 
   AddTagDialog({super.key});
 
-  void _submit(TagController tagCtrl) {
+  Future<void> _submit(TagController tagCtrl) async {
     final name = _tagNameCtrl.text.trim();
 
     if (name.isEmpty) {
@@ -19,7 +20,7 @@ class AddTagDialog extends StatelessWidget {
       return;
     }
 
-    if (!tagCtrl.addTag(name, _selectedColor.value)) {
+    if (await tagCtrl.addTag(name, _selectedColor.value) == false) {
       _errorText.value = "Tag name already exists";
       return;
     }
@@ -31,45 +32,67 @@ class AddTagDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     final tagCtrl = Get.find<TagController>();
 
+    final style = ResponsiveStyle.to;
+    final double spacingMD = style.spacingMD;
+    final TextStyle largeTitleTextStyle = style.titleTextEX;
+    final TextStyle titleTextStyle = style.titleTextMD;
+    final TextStyle bodyTextStyle = style.bodyTextLG;
+
     return KeyboardListener(
       autofocus: true,
       onKeyEvent: (KeyEvent event) {
-        if (event is KeyDownEvent && event.logicalKey == LogicalKeyboardKey.enter) {
+        if (event is KeyDownEvent &&
+            event.logicalKey == LogicalKeyboardKey.enter) {
           _submit(tagCtrl);
-        } else if (event is KeyDownEvent && event.logicalKey == LogicalKeyboardKey.escape) {
+        } else if (event is KeyDownEvent &&
+            event.logicalKey == LogicalKeyboardKey.escape) {
           Get.back();
         }
       },
       focusNode: FocusNode(), // 监听键盘事件
       child: AlertDialog(
-        title: Text("Add New Tag", style: TextStyle(color: kTitleTextColor, fontWeight: FontWeight.w500, fontSize: 20)),
+        title: Text("Add New Tag", style: largeTitleTextStyle),
         backgroundColor: kPrimaryBgColor,
         content: SingleChildScrollView(
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              //const SizedBox(height: kDefaultPadding / 2),
-              Text("Tag Name", style: TextStyle(color: kTextColor)),
-              const SizedBox(height: kDefaultPadding / 2),
+              Text("Tag Name", style: titleTextStyle),
+              SizedBox(height: spacingMD),
               Obx(() {
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     TextField(
                       controller: _tagNameCtrl,
-                      style: TextStyle(color: kTextColor),
+                      style: bodyTextStyle,
                       decoration: InputDecoration(
-                        contentPadding: EdgeInsets.only(left: 12, right: 12),
+                        contentPadding: EdgeInsets.symmetric(
+                          horizontal: spacingMD,
+                        ),
                         hintText: "Tag",
-                        hintStyle: TextStyle(color: kTextColor, fontWeight: FontWeight.w200),
+                        hintStyle: TextStyle(
+                          color: kTextColor,
+                          fontWeight: FontWeight.w200,
+                        ),
                         focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(10)),
-                          borderSide: BorderSide(color: kSelectedBorderColor, width: 1.0),
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(10),
+                          ),
+                          borderSide: BorderSide(
+                            color: kSelectedBorderColor,
+                            width: 1.0,
+                          ),
                         ),
                         enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(10)),
-                          borderSide: BorderSide(color: kGrayColor, width: 1.0),
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(10),
+                          ),
+                          borderSide: BorderSide(
+                            color: kGrayColor,
+                            width: 1.0,
+                          ),
                         ),
                         errorText: null,
                       ),
@@ -78,19 +101,24 @@ class AddTagDialog extends StatelessWidget {
 
                     if (_errorText.value.isNotEmpty)
                       Padding(
-                        padding: const EdgeInsets.only(left: 12, top: 4),
+                        padding: EdgeInsets.only(
+                          left: spacingMD,
+                          top: 4,
+                        ),
                         child: Text(
                           _errorText.value,
-                          style: TextStyle(color: Colors.redAccent, fontSize: 12, height: 1.2),
+                          style: bodyTextStyle.copyWith(
+                            color: Colors.redAccent,
+                          ),
                         ),
                       ),
                   ],
                 );
               }),
 
-              const SizedBox(height: kDefaultPadding),
-              Text("Tag Color", style: TextStyle(color: kTextColor)),
-              const SizedBox(height: kDefaultPadding / 2),
+              SizedBox(height: spacingMD * 1.5),
+              Text("Tag Color", style: titleTextStyle),
+              SizedBox(height: spacingMD),
               Obx(
                 () => SafeArea(
                   child: Container(
@@ -99,22 +127,36 @@ class AddTagDialog extends StatelessWidget {
                       borderRadius: BorderRadius.circular(10),
                     ),
                     width: double.infinity,
-                    padding: EdgeInsets.all(16),
+                    padding: EdgeInsets.all(spacingMD),
                     child: Wrap(
-                      spacing: 16, // 水平间距
-                      runSpacing: 16, // 如果换行，垂直间距
+                      spacing: spacingMD, // 水平间距
+                      runSpacing: spacingMD, // 如果换行，垂直间距
                       alignment: WrapAlignment.center,
                       children:
                           kColorPalette.map((color) {
-                            final isSelected = color == _selectedColor.value;
+                            final isSelected =
+                                color == _selectedColor.value;
                             return GestureDetector(
-                              onTap: () => _selectedColor.value = color,
+                              onTap:
+                                  () => _selectedColor.value = color,
                               child: AnimatedContainer(
-                                duration: const Duration(milliseconds: 200),
+                                duration: const Duration(
+                                  milliseconds: 200,
+                                ),
                                 width: 40,
                                 height: 40,
-                                decoration: BoxDecoration(color: color, shape: BoxShape.circle),
-                                child: isSelected ? const Icon(Icons.check, color: Colors.white, size: 28) : null,
+                                decoration: BoxDecoration(
+                                  color: color,
+                                  shape: BoxShape.circle,
+                                ),
+                                child:
+                                    isSelected
+                                        ? const Icon(
+                                          Icons.check,
+                                          color: Colors.white,
+                                          size: 28,
+                                        )
+                                        : null,
                               ),
                             );
                           }).toList(),
@@ -129,7 +171,7 @@ class AddTagDialog extends StatelessWidget {
           TextButton.icon(
             style: TextButton.styleFrom(
               minimumSize: Size(60, 0),
-              padding: EdgeInsets.all(kDefaultPadding / 2),
+              padding: EdgeInsets.all(spacingMD),
               backgroundColor: kSecondaryBgColor,
               shape: RoundedRectangleBorder(
                 side: BorderSide(color: kGrayColor, width: 1.0),
@@ -138,13 +180,13 @@ class AddTagDialog extends StatelessWidget {
             ),
             onPressed: () => Get.back(),
             icon: Icon(Icons.cancel_outlined, color: kTextColor),
-            label: Text("Cancel", style: TextStyle(color: kTextColor)),
+            label: Text("Cancel", style: bodyTextStyle),
           ),
 
           TextButton.icon(
             style: TextButton.styleFrom(
               minimumSize: Size(90, 0),
-              padding: EdgeInsets.all(kDefaultPadding / 2),
+              padding: EdgeInsets.all(spacingMD),
               backgroundColor: kPrimaryColor,
               shape: RoundedRectangleBorder(
                 side: BorderSide(color: kPrimaryColor, width: 1.0),
@@ -153,7 +195,7 @@ class AddTagDialog extends StatelessWidget {
             ),
             onPressed: () => _submit(tagCtrl),
             icon: Icon(Icons.check_circle_outline, color: kTextColor),
-            label: Text("Add", style: TextStyle(color: kTextColor)),
+            label: Text("Add", style: bodyTextStyle),
           ),
         ],
       ),
