@@ -59,6 +59,9 @@ dependencies:
 
   intl:
 
+  # Color Picker
+  flex_color_picker: ^3.7.1
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
