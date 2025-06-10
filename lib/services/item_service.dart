@@ -275,11 +275,15 @@ class ItemService {
     return await _db.getTagByName(name);
   }
 
+  Future<bool> updateTag(TagModel tag) async {
+    return await _db.updateTag(tagModelToData(tag));
+  }
+
   Future<void> deleteTag(int tagId) async {
     await _db.deleteTag(tagId);
   }
 
-  // 新增：初始化数据库数据
+  // 初始化数据库数据
   Future<void> initializeData() async {
     // 检查标签表是否为空，如果为空，则插入 mock 数据
     final tagCount = await _db.getTagCount(); // 需要在 MyDatabase 中添加此方法
@@ -321,7 +325,7 @@ class ItemService {
             .into(_db.items)
             .insert(
               ItemData(
-                id: item.id,
+                id: item.id!,
                 // 使用 mock 的 ID
                 name: item.name,
                 usageComment: item.usageComment,

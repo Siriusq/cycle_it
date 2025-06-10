@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'usage_record_model.dart';
 
 class ItemModel {
-  final int id;
+  final int? id;
   final String name;
   String? usageComment;
   final String iconPath;
@@ -19,7 +19,7 @@ class ItemModel {
   DateTime? _cachedNextExpectedUse;
 
   ItemModel({
-    required this.id,
+    this.id,
     required this.name,
     this.usageComment,
     required this.usageRecords,

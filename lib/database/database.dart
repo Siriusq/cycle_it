@@ -37,7 +37,7 @@ TagModel tagDataToModel(TagData data) {
 // 将 ItemModel 转换为 ItemData
 ItemData itemModelToData(ItemModel model) {
   return ItemData(
-    id: model.id,
+    id: model.id!,
     name: model.name,
     usageComment: model.usageComment,
     iconPath: model.iconPath,
@@ -53,6 +53,25 @@ UsageRecordData usageRecordModelToData(UsageRecordModel model) {
     itemId: model.itemId,
     usedAt: model.usedAt,
     intervalSinceLastUse: model.intervalSinceLastUse,
+  );
+}
+
+// Helper to convert ItemModel to ItemsCompanion
+ItemsCompanion itemModelToCompanion(ItemModel item) {
+  return ItemsCompanion(
+    // If item.id is null (new item), use Value.absent() to let autoIncrement work.
+    // Otherwise, use the provided id for updates.
+    id: item.id != null ? Value(item.id!) : const Value.absent(),
+    name: Value(item.name),
+    usageComment: Value(item.usageComment),
+    iconPath: Value(item.iconPath),
+    iconColorValue: Value(item.iconColor.value), // Store Color as int
+    // Assuming firstUsed is managed elsewhere or can be null.
+    // If you need to explicitly set it based on ItemModel's records, do it here.
+    // For simplicity, I'm assuming it's null unless you explicitly set it during updates.
+    firstUsed:
+        const Value.absent(), // Or Value(null) or Value(item.firstUsedDate) if available
+    notifyBeforeNextUse: Value(item.notifyBeforeNextUse),
   );
 }
 
@@ -106,6 +125,11 @@ class MyDatabase extends _$MyDatabase {
         await (select(tags)
           ..where((t) => t.name.equals(name))).getSingleOrNull();
     return result != null ? tagDataToModel(result) : null;
+  }
+
+  // 更新标签
+  Future<bool> updateTag(TagData tagData) {
+    return update(tags).replace(tagData);
   }
 
   // 删除标签
@@ -170,23 +194,36 @@ class MyDatabase extends _$MyDatabase {
 
   // 插入或更新物品
   Future<int> upsertItem(ItemModel item) async {
-    final id = await into(items).insert(
-      itemModelToData(item).toCompanion(true),
-      onConflict: DoUpdate(
-        (_) => itemModelToData(item).toCompanion(true),
-      ),
-    );
+    // Determine if this is an insert or update operation based on item.id
+    final isInsert = item.id == null;
 
-    // 同步物品和标签关系
+    int itemId;
+
+    if (isInsert) {
+      // For a new item, just insert. Drift will auto-generate the ID.
+      itemId = await into(items).insert(itemModelToCompanion(item));
+    } else {
+      // For an existing item, perform an update.
+      // Use replace instead of insert with onConflict: DoUpdate for clearer intent
+      // when you know it's an update and you have the ID.
+      // Or, you can stick with DoUpdate if you prefer.
+      // Let's use update for clarity if you have the ID.
+      await update(items).replace(itemModelToCompanion(item));
+      itemId = item.id!; // Use the existing ID for further operations
+    }
+
+    // Sync item-tag relationships
+    // If `id` was auto-generated, `itemId` now holds the correct new ID.
+    // If it was an update, `itemId` holds the correct existing ID.
     await (delete(itemTags)
-      ..where((it) => it.itemId.equals(id))).go(); // 先删除旧关系
+      ..where((it) => it.itemId.equals(itemId))).go();
     if (item.tags.isNotEmpty) {
       await batch((batch) {
         for (final tag in item.tags) {
           batch.insert(
             itemTags,
             ItemTagsCompanion(
-              itemId: Value(id),
+              itemId: Value(itemId),
               tagId: Value(tag.id),
             ),
           );
@@ -194,21 +231,32 @@ class MyDatabase extends _$MyDatabase {
       });
     }
 
-    // 同步使用记录 (简化处理：删除旧的，插入新的)
-    // 实际应用中可能需要更精细的更新逻辑
+    // Sync usage records (delete old, insert new)
+    // Ensure the UsageRecordsCompanion uses Value.absent() for its own ID
     await (delete(usageRecords)
-      ..where((ur) => ur.itemId.equals(id))).go();
+      ..where((ur) => ur.itemId.equals(itemId))).go();
     if (item.usageRecords.isNotEmpty) {
       await batch((batch) {
         for (final record in item.usageRecords) {
           batch.insert(
             usageRecords,
-            usageRecordModelToData(record).toCompanion(true),
+            UsageRecordsCompanion(
+              id: const Value.absent(), // Let Drift auto-generate UsageRecord's ID
+              itemId: Value(
+                itemId,
+              ), // Use the item's ID for the foreign key
+              usedAt: Value(record.usedAt),
+              intervalSinceLastUse:
+                  record.intervalSinceLastUse != null
+                      ? Value(record.intervalSinceLastUse!)
+                      : const Value.absent(), // Correct for nullable
+            ),
           );
         }
       });
     }
-    return id;
+
+    return itemId;
   }
 
   // 删除物品

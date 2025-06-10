@@ -71,6 +71,12 @@ class ResponsiveStyle extends GetxController {
       _getValue(mobile: 11, tablet: 13, desktop: 15);
 
   // 文本
+  TextStyle get bodyTextLG => TextStyle(
+    color: kTextColor,
+    fontSize: _getValue(mobile: 12, tablet: 14, desktop: 16),
+    //height: _getValue(mobile: 1.2, tablet: 1.3, desktop: 1.4),
+  );
+
   TextStyle get bodyText => TextStyle(
     color: kTextColor,
     fontSize: _getValue(mobile: 10, tablet: 12, desktop: 14),

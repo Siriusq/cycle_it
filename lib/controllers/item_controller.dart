@@ -60,7 +60,7 @@ class ItemController extends GetxController {
     ever(currentItem, (item) {
       if (item != null) {
         usageRecordDataSource = UsageRecordDataSource(
-          itemId: item.id,
+          itemId: item.id!,
           onEdit: (record) => _showEditDialog(record),
           onDelete: (record) => _confirmDelete(record),
         );
@@ -80,11 +80,11 @@ class ItemController extends GetxController {
     super.onReady();
     // This method is called after the first frame is rendered.
     // The database should be fully populated by now from main.
-    _loadAllItems(); // Now fetch the items from the database.
+    loadAllItems(); // Now fetch the items from the database.
   }
 
   // 从数据库加载所有物品
-  Future<void> _loadAllItems() async {
+  Future<void> loadAllItems() async {
     isLoading.value = true; // 开始加载
     try {
       final loadedItems = await _itemService.getAllItems();
@@ -146,17 +146,17 @@ class ItemController extends GetxController {
   Future<void> addNewItem(ItemModel newItem) async {
     final newId = await _itemService.saveItem(newItem);
     // 重新加载所有物品以更新列表
-    await _loadAllItems();
+    await loadAllItems();
   }
 
   // 编辑物品 (示例)
   Future<void> updateItem(ItemModel updatedItem) async {
     await _itemService.saveItem(updatedItem);
-    await _loadAllItems(); // 重新加载所有物品
+    await loadAllItems(); // 重新加载所有物品
     // 如果当前详情页显示的就是这个物品，也需要更新 currentItem
     if (currentItem.value?.id == updatedItem.id) {
       currentItem.value = await _itemService.getItemWithUsageRecords(
-        updatedItem.id,
+        updatedItem.id!,
       );
       currentItem.value!.invalidateCalculatedProperties();
     }
@@ -165,7 +165,7 @@ class ItemController extends GetxController {
   // 删除物品 (示例)
   Future<void> deleteItem(int itemId) async {
     await _itemService.deleteItem(itemId);
-    await _loadAllItems(); // 重新加载所有物品
+    await loadAllItems(); // 重新加载所有物品
     if (currentItem.value?.id == itemId) {
       currentItem.value = null; // 如果删除的是当前详情页的物品，清空
     }
@@ -190,7 +190,7 @@ class ItemController extends GetxController {
     if (currentItem.value == null) return;
 
     await _itemService.addUsageRecordAndRecalculate(
-      currentItem.value!.id,
+      currentItem.value!.id!,
       usedAt,
     );
 
@@ -198,10 +198,10 @@ class ItemController extends GetxController {
     await usageRecordDataSource.refreshData();
     // 重新加载 ItemModel，更新其内部的 usageRecords 列表和计算属性
     currentItem.value = await _itemService.getItemWithUsageRecords(
-      currentItem.value!.id,
+      currentItem.value!.id!,
     );
     currentItem.value!.invalidateCalculatedProperties();
-    await _loadAllItems(); // 更新主页列表的 ItemModel
+    await loadAllItems(); // 更新主页列表的 ItemModel
   }
 
   // 编辑使用记录的日期
@@ -213,17 +213,17 @@ class ItemController extends GetxController {
 
     await _itemService.editUsageRecordAndRecalculate(
       record.id,
-      currentItem.value!.id,
+      currentItem.value!.id!,
       newUsedAt,
     );
 
     // 刷新数据源以更新表格
     await usageRecordDataSource.refreshData();
     currentItem.value = await _itemService.getItemWithUsageRecords(
-      currentItem.value!.id,
+      currentItem.value!.id!,
     );
     currentItem.value!.invalidateCalculatedProperties();
-    await _loadAllItems(); // 更新主页列表的 ItemModel
+    await loadAllItems(); // 更新主页列表的 ItemModel
   }
 
   // 删除使用记录
@@ -232,16 +232,16 @@ class ItemController extends GetxController {
 
     await _itemService.deleteUsageRecordAndRecalculate(
       record.id,
-      currentItem.value!.id,
+      currentItem.value!.id!,
     );
 
     // 刷新数据源以更新表格
     await usageRecordDataSource.refreshData();
     currentItem.value = await _itemService.getItemWithUsageRecords(
-      currentItem.value!.id,
+      currentItem.value!.id!,
     );
     currentItem.value!.invalidateCalculatedProperties();
-    await _loadAllItems(); // 更新主页列表的 ItemModel
+    await loadAllItems(); // 更新主页列表的 ItemModel
   }
 
   // 翻页回调

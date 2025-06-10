@@ -3,6 +3,7 @@ import 'package:cycle_it/models/item_model.dart';
 import 'package:cycle_it/utils/constants.dart';
 import 'package:cycle_it/utils/responsive_layout.dart';
 import 'package:cycle_it/utils/responsive_style.dart';
+import 'package:cycle_it/views/components/dialog/add_edit_item_dialog.dart';
 import 'package:cycle_it/views/components/icon_label.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -160,7 +161,12 @@ class ItemCard extends StatelessWidget {
           // 更多按钮
           Align(
             alignment: Alignment.topCenter,
-            child: _buildActionButton(context, style, itemController),
+            child: _buildActionButton(
+              context,
+              style,
+              itemController,
+              item,
+            ),
           ),
         ],
       ),
@@ -172,6 +178,7 @@ class ItemCard extends StatelessWidget {
     BuildContext context,
     ResponsiveStyle style,
     ItemController itemController,
+    ItemModel item,
   ) {
     final TextStyle titleTextStyle = style.titleTextMD;
     final TextStyle bodyText = style.bodyText;
@@ -184,27 +191,7 @@ class ItemCard extends StatelessWidget {
       tooltip: 'More Action',
       onSelected: (value) {
         if (value == 'edit') {
-          // todo: 样式调整，增加编辑弹窗，在单独的文件中
-          Get.dialog(
-            AlertDialog(
-              title: const Text('编辑项目'),
-              content: const Text('这里可以放表单或编辑内容'),
-              actions: [
-                TextButton(
-                  onPressed: () => Get.back(), // 关闭对话框
-                  child: const Text('取消'),
-                ),
-                TextButton(
-                  onPressed: () {
-                    // TODO: 保存操作
-                    print('已保存编辑');
-                    Get.back();
-                  },
-                  child: const Text('保存'),
-                ),
-              ],
-            ),
-          );
+          Get.dialog(AddEditItemDialog(itemToEdit: item));
         } else if (value == 'delete') {
           Get.defaultDialog(
             title: '删除物品',
@@ -217,7 +204,7 @@ class ItemCard extends StatelessWidget {
             textCancel: '取消',
             onConfirm: () {
               Get.back();
-              itemController.deleteItem(item.id); // 调用删除方法
+              itemController.deleteItem(item.id!); // 调用删除方法
             },
           );
         }
