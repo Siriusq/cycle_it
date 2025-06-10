@@ -226,7 +226,8 @@ class AddEditItemController extends GetxController {
       if (isEditing) {
         // When editing, use the original ID
         itemToSave = ItemModel(
-          id: _initialItem!.id, // Use the existing ID
+          id: _initialItem!.id,
+          // Use the existing ID
           name: nameController.text.trim(),
           usageComment:
               usageCommentController.text.trim().isEmpty
@@ -234,15 +235,16 @@ class AddEditItemController extends GetxController {
                   : usageCommentController.text.trim(),
           iconPath: selectedIconPath.value,
           iconColor: selectedIconColor.value,
-          usageRecords:
-              _initialItem.usageRecords, // Preserve existing records
+          usageRecords: _initialItem.usageRecords,
+          // Preserve existing records
           notifyBeforeNextUse: notifyBeforeNextUse.value,
           tags: selectedTags.toList(),
         );
       } else {
         // When adding, don't provide an ID, let Drift auto-generate
         itemToSave = ItemModel(
-          id: null, // <--- Key change: Pass null for ID for new items
+          id: null,
+          // <--- Key change: Pass null for ID for new items
           name: nameController.text.trim(),
           usageComment:
               usageCommentController.text.trim().isEmpty
@@ -250,7 +252,8 @@ class AddEditItemController extends GetxController {
                   : usageCommentController.text.trim(),
           iconPath: selectedIconPath.value,
           iconColor: selectedIconColor.value,
-          usageRecords: [], // New item has no records initially
+          usageRecords: [],
+          // New item has no records initially
           notifyBeforeNextUse: notifyBeforeNextUse.value,
           tags: selectedTags.toList(),
         );
@@ -260,22 +263,7 @@ class AddEditItemController extends GetxController {
         itemToSave,
       ); // _itemService.saveItem will now handle the upsert logic
 
-      if (isEditing) {
-        Get.snackbar(
-          '成功',
-          '${itemToSave.name} 更新成功！',
-          snackPosition: SnackPosition.BOTTOM,
-        );
-      } else {
-        Get.snackbar(
-          '成功',
-          '${itemToSave.name} 添加成功！',
-          snackPosition: SnackPosition.BOTTOM,
-        );
-      }
-
       _itemController.loadAllItems();
-      Get.back();
     } catch (e) {
       Get.snackbar(
         '错误',

@@ -189,9 +189,15 @@ class ItemCard extends StatelessWidget {
     return PopupMenuButton<String>(
       color: kSecondaryBgColor,
       tooltip: 'More Action',
-      onSelected: (value) {
+      onSelected: (value) async {
         if (value == 'edit') {
-          Get.dialog(AddEditItemDialog(itemToEdit: item));
+          final result = await Get.dialog(
+            AddEditItemDialog(itemToEdit: item),
+          );
+
+          if (result != null && result['success']) {
+            Get.snackbar('成功', '${result['message']}');
+          }
         } else if (value == 'delete') {
           Get.defaultDialog(
             title: '删除物品',

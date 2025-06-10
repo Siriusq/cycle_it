@@ -339,9 +339,23 @@ class AddEditItemDialog extends StatelessWidget {
                 borderRadius: BorderRadius.circular(10),
               ),
             ),
-            onPressed: () {
-              controller.saveItem();
-              Get.back();
+            onPressed: () async {
+              // 先保存物品，这会更新控制器内部的状态（如 nameController.text）
+              await controller.saveItem(); // 确保 saveItem 完成
+
+              // 获取保存后的物品名称，无论是新增还是编辑，都从 nameController 中取
+              final String savedItemName =
+                  controller.nameController.text.trim();
+              final String actionText =
+                  controller.isEditing ? '更新' : '添加';
+
+              // 返回成功状态和消息
+              Get.back(
+                result: {
+                  'success': true,
+                  'message': '$savedItemName $actionText成功！',
+                },
+              );
             },
             icon: Icon(Icons.check_circle_outline, color: kTextColor),
             label: Text(

@@ -7,7 +7,6 @@ import 'package:cycle_it/views/components/home_page/item_card.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../../controllers/add_edit_item_controller.dart';
 import '../../../controllers/item_list_order_controller.dart';
 import '../../../controllers/tag_controller.dart';
 import '../details_page/details_page.dart';
@@ -62,12 +61,19 @@ class ListOfItems extends StatelessWidget {
                   //添加物品按钮
                   SizedBox(width: spacingXS),
                   IconButton(
-                    onPressed: () {
-                      // 在打开对话框之前，确保清除可能存在的旧 AddEditItemController 实例
-                      if (Get.isRegistered<AddEditItemController>()) {
-                        Get.delete<AddEditItemController>();
+                    onPressed: () async {
+                      final result = await Get.dialog(
+                        AddEditItemDialog(itemToEdit: null),
+                      );
+
+                      // 在显示 Snackbar 前添加一个微小延迟
+                      await Future.delayed(
+                        const Duration(milliseconds: 50),
+                      );
+
+                      if (result != null && result['success']) {
+                        Get.snackbar('成功', '${result['message']}');
                       }
-                      Get.dialog(AddEditItemDialog(itemToEdit: null));
                     },
                     icon: Icon(Icons.library_add_outlined),
                   ),
