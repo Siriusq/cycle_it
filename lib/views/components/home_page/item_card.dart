@@ -183,6 +183,7 @@ class ItemCard extends StatelessWidget {
     final TextStyle titleTextStyle = style.titleTextMD;
     final TextStyle bodyText = style.bodyText;
     final double spacingSM = style.spacingSM;
+    final double spacingMD = style.spacingMD;
     final double iconSizeMD = style.iconSizeMD;
     final double iconSizeLG = style.iconSizeLG;
 
@@ -202,10 +203,10 @@ class ItemCard extends StatelessWidget {
           Get.defaultDialog(
             title: '删除物品',
             backgroundColor: kPrimaryBgColor,
-            content: Text(
-              '确定要删除物品 ${item.name} 吗？这将删除所有相关记录。',
-              style: bodyText,
-            ),
+            buttonColor: kPrimaryColor,
+            cancelTextColor: kTextColor,
+            confirmTextColor: kTextColor,
+            content: Text('确定要删除物品 ${item.name} 吗？这将删除所有相关记录。'),
             textConfirm: '删除',
             textCancel: '取消',
             onConfirm: () {
