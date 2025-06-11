@@ -8,6 +8,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 import '../../../utils/responsive_layout.dart';
+import '../dialog/add_edit_item_dialog.dart';
 import '../icon_label.dart';
 import '../responsive_component_group.dart';
 
@@ -53,7 +54,7 @@ class DetailsPage extends StatelessWidget {
               child: Column(
                 children: [
                   // 顶栏
-                  _buildHeader(context, style, isMobile),
+                  _buildHeader(context, style, isMobile, item),
 
                   // 分割线
                   Divider(height: 0),
@@ -95,6 +96,7 @@ class DetailsPage extends StatelessWidget {
     BuildContext context,
     ResponsiveStyle style,
     bool isMobile,
+    ItemModel item,
   ) {
     final itemCtrl = Get.find<ItemController>();
 
@@ -130,14 +132,60 @@ class DetailsPage extends StatelessWidget {
               ),
 
             Spacer(),
+            // 删除当前物品
             IconButton(
-              onPressed: () {},
+              onPressed: () async {
+                final result = await Get.defaultDialog(
+                  title: '删除物品',
+                  backgroundColor: kPrimaryBgColor,
+                  buttonColor: kPrimaryColor,
+                  cancelTextColor: kTextColor,
+                  confirmTextColor: kTextColor,
+                  content: Text('确定要删除物品 ${item.name} 吗？这将删除所有相关记录。'),
+                  textConfirm: '删除',
+                  textCancel: '取消',
+                  onConfirm: () {
+                    Get.back(
+                      result: {
+                        'confirmed': true,
+                        'message': '${item.name} 已删除！',
+                      },
+                    );
+                  },
+                );
+                if (result != null && result['confirmed']) {
+                  if (Get.currentRoute == '/Details') {
+                    Get.back();
+                    Future.delayed(
+                      const Duration(milliseconds: 300),
+                      () {
+                        itemCtrl.deleteItem(
+                          item.id!,
+                        ); // 动画结束后再删除，防止出现页面提前销毁导致的黑屏闪烁
+                      },
+                    );
+                  } else {
+                    itemCtrl.deleteItem(item.id!); // 调用删除方法
+                  }
+                  Get.snackbar('删除成功', '${result['message']}');
+                }
+              },
               icon: Icon(Icons.delete_outline),
             ),
+            // 编辑当前物品
             IconButton(
-              onPressed: () {},
+              onPressed: () async {
+                final result = await Get.dialog(
+                  AddEditItemDialog(itemToEdit: item),
+                );
+
+                if (result != null && result['success']) {
+                  Get.snackbar('成功', '${result['message']}');
+                }
+              },
               icon: Icon(Icons.edit_outlined),
             ),
+            // 快速添加使用记录，以当前日期为准
             IconButton(onPressed: () {}, icon: Icon(Icons.refresh)),
           ],
         ),
