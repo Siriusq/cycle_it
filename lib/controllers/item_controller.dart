@@ -1,3 +1,4 @@
+import 'package:cycle_it/controllers/search_bar_controller.dart';
 import 'package:cycle_it/controllers/tag_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -13,6 +14,8 @@ class ItemController extends GetxController {
   final ItemListOrderController _orderController =
       Get.find<ItemListOrderController>();
   final TagController _tagController = Get.find<TagController>();
+  final SearchBarController _searchBarController =
+      Get.find<SearchBarController>();
 
   // 加载状态
   RxBool isLoading = true.obs; // 初始为 true，表示正在加载
@@ -55,6 +58,11 @@ class ItemController extends GetxController {
     ever(_tagController.selectedTags, (_) => _updateDisplayedItems());
     // 监听 allItems 变化
     ever(allItems, (_) => _updateDisplayedItems());
+    // 监听搜索查询的变化
+    ever(
+      _searchBarController.searchQuery,
+      (_) => _updateDisplayedItems(),
+    );
 
     // 监听 currentItem 变化，初始化或更新 UsageRecordDataSource
     ever(currentItem, (item) {
@@ -105,7 +113,20 @@ class ItemController extends GetxController {
     // 1. 标签筛选
     itemsToFilter = _tagController.filterItems(itemsToFilter);
 
-    // 2. 排序
+    // 2. 搜索筛选
+    final String query =
+        _searchBarController.searchQuery.value.toLowerCase();
+    if (query.isNotEmpty) {
+      itemsToFilter =
+          itemsToFilter.where((item) {
+            // 你可以根据物品的名称、描述或任何其他字段进行搜索
+            return item.name.toLowerCase().contains(query) ||
+                (item.usageComment != null &&
+                    item.usageComment!.toLowerCase().contains(query));
+          }).toList();
+    }
+
+    // 3. 排序
     itemsToFilter.sort((a, b) {
       int compareResult = 0;
       switch (_orderController.selectedOrderOption.value) {

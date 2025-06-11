@@ -145,6 +145,8 @@ class ListOfItems extends StatelessWidget {
                               iconSize: searchBarIconSize,
                               onPressed: () {
                                 searchBarCtrl.clearText();
+                                // 清除文本后立即执行一次搜索，以清除筛选结果
+                                searchBarCtrl.performSearch();
                               },
                               icon: Icon(Icons.clear),
                             )
@@ -159,7 +161,10 @@ class ListOfItems extends StatelessWidget {
                             ? IconButton(
                               padding: EdgeInsets.all(0.0),
                               iconSize: searchBarIconSize,
-                              onPressed: () {},
+                              onPressed: () {
+                                searchBarCtrl
+                                    .performSearch(); // 点击搜索按钮时执行搜索
+                              },
                               icon: Icon(Icons.search),
                             )
                             : Icon(

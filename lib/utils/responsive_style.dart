@@ -5,9 +5,9 @@ import 'constants.dart';
 
 // 响应式断点定义
 class Breakpoints {
-  static const double mobile = 480; // 手机
-  static const double tablet = 768; // 平板
-  static const double desktop = 1350; // 桌面
+  static const double mobile = 480.0; // 手机
+  static const double tablet = 768.0; // 平板
+  static const double desktop = 1350.0; // 桌面
 }
 
 // 主响应式样式类
