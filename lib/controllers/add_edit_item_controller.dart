@@ -240,6 +240,7 @@ class AddEditItemController extends GetxController {
           notifyBeforeNextUse: notifyBeforeNextUse.value,
           tags: selectedTags.toList(),
         );
+        await _itemController.updateItem(itemToSave);
       } else {
         // When adding, don't provide an ID, let Drift auto-generate
         itemToSave = ItemModel(
@@ -257,13 +258,10 @@ class AddEditItemController extends GetxController {
           notifyBeforeNextUse: notifyBeforeNextUse.value,
           tags: selectedTags.toList(),
         );
+        await _itemController.addNewItem(itemToSave);
       }
 
-      await _itemService.saveItem(
-        itemToSave,
-      ); // _itemService.saveItem will now handle the upsert logic
-
-      _itemController.loadAllItems();
+      //_itemController.loadAllItems();
     } catch (e) {
       Get.snackbar(
         '错误',

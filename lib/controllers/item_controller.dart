@@ -163,14 +163,14 @@ class ItemController extends GetxController {
     displayedItems.assignAll(itemsToFilter);
   }
 
-  // 添加新物品 (示例，你可能需要单独的 AddItemController)
+  // 添加新物品
   Future<void> addNewItem(ItemModel newItem) async {
     final newId = await _itemService.saveItem(newItem);
     // 重新加载所有物品以更新列表
     await loadAllItems();
   }
 
-  // 编辑物品 (示例)
+  // 编辑物品
   Future<void> updateItem(ItemModel updatedItem) async {
     await _itemService.saveItem(updatedItem);
     await loadAllItems(); // 重新加载所有物品
