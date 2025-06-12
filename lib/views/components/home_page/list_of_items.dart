@@ -10,7 +10,6 @@ import 'package:get/get.dart';
 import '../../../controllers/item_list_order_controller.dart';
 import '../../../controllers/tag_controller.dart';
 import '../details_page/details_page.dart';
-import '../dialog/add_edit_item_dialog.dart';
 
 class ListOfItems extends StatelessWidget {
   final GlobalKey<ScaffoldState> scaffoldKey;
@@ -62,8 +61,8 @@ class ListOfItems extends StatelessWidget {
                   SizedBox(width: spacingXS),
                   IconButton(
                     onPressed: () async {
-                      final result = await Get.dialog(
-                        AddEditItemDialog(itemToEdit: null),
+                      final result = await Get.toNamed(
+                        '/AddEditItem',
                       );
 
                       // 在显示 Snackbar 前添加一个微小延迟

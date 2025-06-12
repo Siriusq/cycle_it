@@ -130,6 +130,9 @@ class ResponsiveStyle extends GetxController {
 
   // 侧边栏应用图标
   double get appIconSize => isMobileDevice ? 32 : 40; // 静态值，不随窗口拖动改变
+
+  // 每行的SVG图标个数
+  int get svgIconAxisCount => (Get.width / 90).toInt();
 }
 
 // 标签样式子类

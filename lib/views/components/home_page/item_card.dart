@@ -3,7 +3,6 @@ import 'package:cycle_it/models/item_model.dart';
 import 'package:cycle_it/utils/constants.dart';
 import 'package:cycle_it/utils/responsive_layout.dart';
 import 'package:cycle_it/utils/responsive_style.dart';
-import 'package:cycle_it/views/components/dialog/add_edit_item_dialog.dart';
 import 'package:cycle_it/views/components/icon_label.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -192,8 +191,9 @@ class ItemCard extends StatelessWidget {
       tooltip: 'More Action',
       onSelected: (value) async {
         if (value == 'edit') {
-          final result = await Get.dialog(
-            AddEditItemDialog(itemToEdit: item),
+          final result = await Get.toNamed(
+            '/AddEditItem',
+            arguments: item,
           );
 
           if (result != null && result['success']) {

@@ -1,6 +1,7 @@
 import 'package:cycle_it/bindings/home_binding.dart';
 import 'package:cycle_it/services/item_service.dart';
 import 'package:cycle_it/utils/constants.dart';
+import 'package:cycle_it/views/add_edit_item_page.dart';
 import 'package:cycle_it/views/components/details_page/details_page.dart';
 import 'package:cycle_it/views/settings_page.dart';
 import 'package:device_preview/device_preview.dart';
@@ -76,6 +77,10 @@ class MyApp extends StatelessWidget {
         GetPage(name: '/', page: () => HomePage()),
         GetPage(name: '/Settings', page: () => SettingsPage()),
         GetPage(name: '/Details', page: () => DetailsPage()),
+        GetPage(
+          name: '/AddEditItem',
+          page: () => const AddEditItemPage(),
+        ),
       ],
       title: 'Cycle It',
       theme: ThemeData(

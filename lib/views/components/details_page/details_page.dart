@@ -8,7 +8,6 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 import '../../../utils/responsive_layout.dart';
-import '../dialog/add_edit_item_dialog.dart';
 import '../icon_label.dart';
 import '../responsive_component_group.dart';
 
@@ -175,8 +174,9 @@ class DetailsPage extends StatelessWidget {
             // 编辑当前物品
             IconButton(
               onPressed: () async {
-                final result = await Get.dialog(
-                  AddEditItemDialog(itemToEdit: item),
+                final result = await Get.toNamed(
+                  '/AddEditItem',
+                  arguments: item,
                 );
 
                 if (result != null && result['success']) {
@@ -215,7 +215,7 @@ class DetailsPage extends StatelessWidget {
               child: SvgPicture.asset(
                 item.iconPath,
                 colorFilter: ColorFilter.mode(
-                  kIconColor,
+                  item.iconColor,
                   BlendMode.srcIn,
                 ),
               ),
