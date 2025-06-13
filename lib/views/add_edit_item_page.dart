@@ -1,6 +1,5 @@
 import 'package:flex_color_picker/flex_color_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 import '../../controllers/add_edit_item_controller.dart';
@@ -89,39 +88,65 @@ class AddEditItemPage extends StatelessWidget {
             const SizedBox(height: 24.0),
 
             // --- 2. 图标选择器 ---
+            // todo:将SVG更换为字体，
             Text('选择图标', style: titleTextStyle),
             SizedBox(height: spacingMD),
+            // Display the currently selected icon prominently
             Container(
-              height: 200,
-              // Fixed height for scrollable icon grid
+              decoration: BoxDecoration(
+                border: Border.all(color: kGrayColor),
+                borderRadius: BorderRadius.circular(8.0),
+              ),
+              child: Obx(
+                () => Icon(
+                  controller.selectedIconData.value,
+                  // Display the actively selected IconData
+                  size: 80, // Adjust size as needed
+                  color:
+                      controller
+                          .selectedIconColor
+                          .value, // Reflect the selected color
+                ),
+              ),
+            ),
+            SizedBox(height: spacingMD),
+            Container(
+              height: 200, // Fixed height for scrollable icon grid
               decoration: BoxDecoration(
                 border: Border.all(color: kGrayColor),
                 borderRadius: BorderRadius.circular(8.0),
               ),
               child: LayoutBuilder(
                 builder: (context, constraints) {
-                  int currentSvgIconAxisCount =
-                      style.svgIconAxisCount;
+                  // Use style.svgIconAxisCount for crossAxisCount, as it's already defined
+                  // and likely calculates based on screen width.
+                  int currentIconAxisCount = style.svgIconAxisCount;
+
                   return GridView.builder(
                     gridDelegate:
                         SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: currentSvgIconAxisCount,
-                          // 这里会响应 Get.width 的变化
+                          crossAxisCount: currentIconAxisCount,
                           crossAxisSpacing: spacingSM,
                           mainAxisSpacing: spacingSM,
                         ),
                     padding: EdgeInsets.all(spacingSM),
-                    itemCount: controller.svgIconPaths.length,
+                    // Use the new list of available Icomoon icons from the controller
+                    itemCount:
+                        controller.availableIcomoonIcons.length,
                     itemBuilder: (context, index) {
-                      final iconPath = controller.svgIconPaths[index];
+                      // Get the IconData object directly
+                      final iconData =
+                          controller.availableIcomoonIcons[index];
                       return Obx(() {
+                        // Compare the selected IconData with the current iconData
                         final isSelected =
-                            controller.selectedIconPath.value ==
-                            iconPath;
+                            controller.selectedIconData.value ==
+                            iconData;
                         return GestureDetector(
                           onTap: () {
-                            controller.selectedIconPath.value =
-                                iconPath;
+                            // Update the selectedIconData in the controller
+                            controller.selectedIconData.value =
+                                iconData;
                           },
                           child: Container(
                             decoration: BoxDecoration(
@@ -142,12 +167,15 @@ class AddEditItemPage extends StatelessWidget {
                               ),
                             ),
                             padding: const EdgeInsets.all(8.0),
-                            child: SvgPicture.asset(
-                              iconPath,
-                              colorFilter: ColorFilter.mode(
-                                controller.selectedIconColor.value,
-                                BlendMode.srcIn,
-                              ),
+                            child: Icon(
+                              // <--- Replaced SvgPicture.asset with Icon
+                              iconData, // Use the IconData object
+                              size: style.iconSizeLG,
+                              // Use your responsive icon size
+                              color:
+                                  controller
+                                      .selectedIconColor
+                                      .value, // Apply selected color
                             ),
                           ),
                         );

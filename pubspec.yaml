@@ -99,6 +99,11 @@ flutter:
     - assets/item_icons/others/
     - assets/images/logo_transparent.png
 
+  fonts:
+    - family: icomoon
+      fonts:
+        - asset: assets/fonts/icomoon.ttf
+
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
 

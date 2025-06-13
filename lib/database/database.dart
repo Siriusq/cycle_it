@@ -14,6 +14,8 @@ import '../models/item_model.dart';
 import '../models/tag_model.dart';
 import '../models/usage_record_model.dart';
 
+//import '../utils/icomoon.dart';
+
 part 'database.g.dart'; // Drift 会自动生成这个文件
 
 // 将 TagModel 转换为 TagData
@@ -40,9 +42,30 @@ ItemData itemModelToData(ItemModel model) {
     id: model.id!,
     name: model.name,
     usageComment: model.usageComment,
-    iconPath: model.iconPath,
+    iconCodePoint: model.displayIcon.codePoint,
+    iconFontFamily: model.displayIcon.fontFamily ?? 'MaterialIcons',
+    // 提供默认值或根据icomoon设置
     iconColorValue: model.iconColor.value,
     notifyBeforeNextUse: model.notifyBeforeNextUse,
+    firstUsed: model.firstUsedDate,
+  );
+}
+
+// 将 ItemData 转换为 ItemModel
+ItemModel itemDataToModel(ItemData data) {
+  return ItemModel(
+    id: data.id,
+    name: data.name,
+    usageComment: data.usageComment,
+    displayIcon: IconData(
+      data.iconCodePoint,
+      fontFamily: data.iconFontFamily,
+    ),
+    iconColor: Color(data.iconColorValue),
+    usageRecords: [],
+    // usageRecords 和 tags 需要单独加载，这里先给空列表
+    tags: [],
+    notifyBeforeNextUse: data.notifyBeforeNextUse,
   );
 }
 
@@ -59,18 +82,24 @@ UsageRecordData usageRecordModelToData(UsageRecordModel model) {
 // Helper to convert ItemModel to ItemsCompanion
 ItemsCompanion itemModelToCompanion(ItemModel item) {
   return ItemsCompanion(
-    // If item.id is null (new item), use Value.absent() to let autoIncrement work.
-    // Otherwise, use the provided id for updates.
     id: item.id != null ? Value(item.id!) : const Value.absent(),
     name: Value(item.name),
     usageComment: Value(item.usageComment),
-    iconPath: Value(item.iconPath),
-    iconColorValue: Value(item.iconColor.value), // Store Color as int
-    // Assuming firstUsed is managed elsewhere or can be null.
-    // If you need to explicitly set it based on ItemModel's records, do it here.
-    // For simplicity, I'm assuming it's null unless you explicitly set it during updates.
+    // 移除 iconPath
+    // iconPath: Value(item.iconPath),
+    // 添加 iconCodePoint 和 iconFontFamily
+    iconCodePoint: Value(item.displayIcon.codePoint),
+    iconFontFamily: Value(
+      item.displayIcon.fontFamily ?? 'MaterialIcons',
+    ),
+    // 确保非空
+    iconColorValue: Value(item.iconColor.value),
+    // Store Color as int
+    // firstUsed 应该从 ItemModel 中获取
     firstUsed:
-        const Value.absent(), // Or Value(null) or Value(item.firstUsedDate) if available
+        item.firstUsedDate != null
+            ? Value(item.firstUsedDate!)
+            : const Value.absent(),
     notifyBeforeNextUse: Value(item.notifyBeforeNextUse),
   );
 }
@@ -80,7 +109,7 @@ class MyDatabase extends _$MyDatabase {
   MyDatabase() : super(_openConnection());
 
   @override
-  int get schemaVersion => 1; // 数据库版本号，如果表结构改变需要增加
+  int get schemaVersion => 2; // 数据库版本号，如果表结构改变需要增加
 
   // 获取标签数量
   Future<int> getTagCount() async {
@@ -142,6 +171,9 @@ class MyDatabase extends _$MyDatabase {
     final allItemsData = await select(items).get();
     final List<ItemModel> result = [];
     for (final itemData in allItemsData) {
+      // 这里的 itemModel 已经包含了 IconData
+      final ItemModel itemModel = itemDataToModel(itemData);
+
       // 加载每个物品的标签和使用记录
       final itemTag =
           await (select(itemTags)
@@ -176,16 +208,20 @@ class MyDatabase extends _$MyDatabase {
                     .toList(),
           );
 
+      // 将加载的 tags 和 usageRecords 赋值给 itemModel
       result.add(
         ItemModel(
-          id: itemData.id,
-          name: itemData.name,
-          usageComment: itemData.usageComment,
-          iconPath: itemData.iconPath,
-          iconColor: Color(itemData.iconColorValue),
-          usageRecords: itemUsageRecords,
-          tags: itemTag,
-          notifyBeforeNextUse: itemData.notifyBeforeNextUse,
+          id: itemModel.id, // 使用 itemModel 的 id
+          name: itemModel.name, // 使用 itemModel 的 name
+          usageComment:
+              itemModel.usageComment, // 使用 itemModel 的 usageComment
+          displayIcon: itemModel.displayIcon, // 直接使用 IconData
+          iconColor: itemModel.iconColor, // 使用 itemModel 的 iconColor
+          usageRecords: itemUsageRecords, // 赋值加载的记录
+          tags: itemTag, // 赋值加载的标签
+          notifyBeforeNextUse:
+              itemModel
+                  .notifyBeforeNextUse, // 使用 itemModel 的 notifyBeforeNextUse
         ),
       );
     }
@@ -241,10 +277,10 @@ class MyDatabase extends _$MyDatabase {
           batch.insert(
             usageRecords,
             UsageRecordsCompanion(
-              id: const Value.absent(), // Let Drift auto-generate UsageRecord's ID
-              itemId: Value(
-                itemId,
-              ), // Use the item's ID for the foreign key
+              id: const Value.absent(),
+              // Let Drift auto-generate UsageRecord's ID
+              itemId: Value(itemId),
+              // Use the item's ID for the foreign key
               usedAt: Value(record.usedAt),
               intervalSinceLastUse:
                   record.intervalSinceLastUse != null
@@ -330,4 +366,22 @@ LazyDatabase _openConnection() {
     final file = File(p.join(dbFolder.path, 'db.sqlite'));
     return NativeDatabase(file);
   });
+}
+
+@override
+MigrationStrategy get migration {
+  return MigrationStrategy(
+    onCreate: (Migrator m) async {
+      await m.createAll();
+    },
+    onUpgrade: (Migrator m, int from, int to) async {
+      // 如果你不关心数据，这里可以什么都不做，或者只打印日志
+      // 因为删除文件后，onCreate会被调用。
+      print(
+        'Migrating database from $from to $to. Data will be reset.',
+      );
+      // 或者，如果你想确保新列被创建而旧列被忽略（如果它们仍然存在）
+      // 但通常如果你清除了数据库文件，onCreate会完全重建。
+    },
+  );
 }

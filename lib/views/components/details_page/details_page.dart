@@ -212,13 +212,7 @@ class DetailsPage extends StatelessWidget {
             child: SizedBox(
               width: 40,
               height: 40,
-              child: SvgPicture.asset(
-                item.iconPath,
-                colorFilter: ColorFilter.mode(
-                  item.iconColor,
-                  BlendMode.srcIn,
-                ),
-              ),
+              child: Icon(item.displayIcon, color: item.iconColor),
             ),
           ),
 

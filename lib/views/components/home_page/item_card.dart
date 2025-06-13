@@ -5,7 +5,6 @@ import 'package:cycle_it/utils/responsive_layout.dart';
 import 'package:cycle_it/utils/responsive_style.dart';
 import 'package:cycle_it/views/components/icon_label.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
 import '../responsive_component_group.dart';
@@ -111,13 +110,7 @@ class ItemCard extends StatelessWidget {
             child: SizedBox(
               width: 25,
               height: 25,
-              child: SvgPicture.asset(
-                item.iconPath,
-                colorFilter: ColorFilter.mode(
-                  item.iconColor,
-                  BlendMode.srcIn,
-                ),
-              ),
+              child: Icon(item.displayIcon, color: item.iconColor),
             ),
           ),
 

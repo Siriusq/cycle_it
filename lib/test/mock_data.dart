@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import '../models/item_model.dart';
 import '../models/tag_model.dart';
 import '../models/usage_record_model.dart';
+import '../utils/icomoon.dart';
 
 final List<TagModel> allTagsFromMock =
     [
@@ -23,7 +24,7 @@ final List<ItemModel> sampleItems =
         name:
             'A Marvel Rice Cooker with Super Capacity and Endless Power Supply',
         usageComment: 'Clean Inside',
-        iconPath: 'assets/item_icons/appliances/cooking-pot.svg',
+        displayIcon: Icomoon.microphoneOutline,
         iconColor: Colors.orange,
         usageRecords: [
           UsageRecordModel(
@@ -54,7 +55,7 @@ final List<ItemModel> sampleItems =
             'A Marvel Rice Cooker with Super Capacity and Endless Power Supply',
         usageComment:
             'A Marvel Rice Cooker with Super Capacity and Endless Power Supply',
-        iconPath: 'assets/item_icons/others/flower.svg',
+        displayIcon: Icomoon.notifications,
         iconColor: Colors.blueGrey,
         usageRecords: [
           UsageRecordModel(
@@ -79,7 +80,7 @@ final List<ItemModel> sampleItems =
         id: 3,
         name: 'Laptop',
         usageComment: 'Recharge Battery',
-        iconPath: 'assets/item_icons/electronics/laptop.svg',
+        displayIcon: Icomoon.laptop,
         iconColor: Colors.grey,
         usageRecords: [
           UsageRecordModel(
@@ -108,7 +109,7 @@ final List<ItemModel> sampleItems =
       ItemModel(
         id: 4,
         name: 'Screwdriver',
-        iconPath: 'assets/item_icons/appliances/screwdriver.svg',
+        displayIcon: Icomoon.screwdriver,
         iconColor: Colors.red,
         usageRecords: [
           UsageRecordModel(
@@ -122,7 +123,7 @@ final List<ItemModel> sampleItems =
       ItemModel(
         id: 5,
         name: 'Camera',
-        iconPath: 'assets/item_icons/entertainment/camera-0.svg',
+        displayIcon: Icomoon.camera,
         iconColor: Colors.black,
         usageRecords: [
           UsageRecordModel(
@@ -141,7 +142,7 @@ final List<ItemModel> sampleItems =
       ItemModel(
         id: 6,
         name: 'Notebook',
-        iconPath: 'assets/item_icons/electronics/ipad-1.svg',
+        displayIcon: Icomoon.notesOutline,
         iconColor: Colors.green,
         usageRecords: [
           UsageRecordModel(
@@ -160,7 +161,7 @@ final List<ItemModel> sampleItems =
       ItemModel(
         id: 7,
         name: 'Electric Fan',
-        iconPath: 'assets/item_icons/others/fan.svg',
+        displayIcon: Icomoon.feather,
         iconColor: Colors.lightBlue,
         usageRecords: [
           UsageRecordModel(
@@ -184,7 +185,7 @@ final List<ItemModel> sampleItems =
       ItemModel(
         id: 8,
         name: 'Sketchbook',
-        iconPath: 'assets/item_icons/electronics/painted-screen.svg',
+        displayIcon: Icomoon.saveDisk,
         iconColor: Colors.purple,
         usageRecords: [
           UsageRecordModel(
@@ -203,7 +204,7 @@ final List<ItemModel> sampleItems =
       ItemModel(
         id: 9,
         name: 'Thermos Bottle',
-        iconPath: 'assets/item_icons/appliances/boiler.svg',
+        displayIcon: Icomoon.bomb,
         iconColor: Colors.teal,
         usageRecords: [
           UsageRecordModel(
@@ -217,7 +218,7 @@ final List<ItemModel> sampleItems =
       ItemModel(
         id: 10,
         name: 'Wireless Mouse',
-        iconPath: 'assets/item_icons/electronics/mouse-0.svg',
+        displayIcon: Icomoon.mouse,
         iconColor: Colors.brown,
         usageRecords: [
           UsageRecordModel(
@@ -241,7 +242,7 @@ final List<ItemModel> sampleItems =
       ItemModel(
         id: 11,
         name: 'No Usage Record Test Item',
-        iconPath: 'assets/item_icons/others/box.svg',
+        displayIcon: Icomoon.box,
         iconColor: Colors.black,
         usageRecords: [],
         tags: [allTagsFromMock[2], allTagsFromMock[3]],
