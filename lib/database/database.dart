@@ -14,8 +14,6 @@ import '../models/item_model.dart';
 import '../models/tag_model.dart';
 import '../models/usage_record_model.dart';
 
-//import '../utils/icomoon.dart';
-
 part 'database.g.dart'; // Drift 会自动生成这个文件
 
 // 将 TagModel 转换为 TagData
@@ -42,9 +40,7 @@ ItemData itemModelToData(ItemModel model) {
     id: model.id!,
     name: model.name,
     usageComment: model.usageComment,
-    iconCodePoint: model.displayIcon.codePoint,
-    iconFontFamily: model.displayIcon.fontFamily ?? 'MaterialIcons',
-    // 提供默认值或根据icomoon设置
+    emoji: model.emoji,
     iconColorValue: model.iconColor.value,
     notifyBeforeNextUse: model.notifyBeforeNextUse,
     firstUsed: model.firstUsedDate,
@@ -57,10 +53,7 @@ ItemModel itemDataToModel(ItemData data) {
     id: data.id,
     name: data.name,
     usageComment: data.usageComment,
-    displayIcon: IconData(
-      data.iconCodePoint,
-      fontFamily: data.iconFontFamily,
-    ),
+    emoji: data.emoji,
     iconColor: Color(data.iconColorValue),
     usageRecords: [],
     // usageRecords 和 tags 需要单独加载，这里先给空列表
@@ -85,14 +78,7 @@ ItemsCompanion itemModelToCompanion(ItemModel item) {
     id: item.id != null ? Value(item.id!) : const Value.absent(),
     name: Value(item.name),
     usageComment: Value(item.usageComment),
-    // 移除 iconPath
-    // iconPath: Value(item.iconPath),
-    // 添加 iconCodePoint 和 iconFontFamily
-    iconCodePoint: Value(item.displayIcon.codePoint),
-    iconFontFamily: Value(
-      item.displayIcon.fontFamily ?? 'MaterialIcons',
-    ),
-    // 确保非空
+    emoji: Value(item.emoji),
     iconColorValue: Value(item.iconColor.value),
     // Store Color as int
     // firstUsed 应该从 ItemModel 中获取
@@ -109,7 +95,7 @@ class MyDatabase extends _$MyDatabase {
   MyDatabase() : super(_openConnection());
 
   @override
-  int get schemaVersion => 2; // 数据库版本号，如果表结构改变需要增加
+  int get schemaVersion => 3; // 数据库版本号，如果表结构改变需要增加
 
   // 获取标签数量
   Future<int> getTagCount() async {
@@ -211,14 +197,20 @@ class MyDatabase extends _$MyDatabase {
       // 将加载的 tags 和 usageRecords 赋值给 itemModel
       result.add(
         ItemModel(
-          id: itemModel.id, // 使用 itemModel 的 id
-          name: itemModel.name, // 使用 itemModel 的 name
-          usageComment:
-              itemModel.usageComment, // 使用 itemModel 的 usageComment
-          displayIcon: itemModel.displayIcon, // 直接使用 IconData
-          iconColor: itemModel.iconColor, // 使用 itemModel 的 iconColor
-          usageRecords: itemUsageRecords, // 赋值加载的记录
-          tags: itemTag, // 赋值加载的标签
+          id: itemModel.id,
+          // 使用 itemModel 的 id
+          name: itemModel.name,
+          // 使用 itemModel 的 name
+          usageComment: itemModel.usageComment,
+          // 使用 itemModel 的 usageComment
+          emoji: itemModel.emoji,
+          // 直接使用 emoji
+          iconColor: itemModel.iconColor,
+          // 使用 itemModel 的 iconColor
+          usageRecords: itemUsageRecords,
+          // 赋值加载的记录
+          tags: itemTag,
+          // 赋值加载的标签
           notifyBeforeNextUse:
               itemModel
                   .notifyBeforeNextUse, // 使用 itemModel 的 notifyBeforeNextUse

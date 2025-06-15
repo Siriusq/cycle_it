@@ -212,7 +212,19 @@ class DetailsPage extends StatelessWidget {
             child: SizedBox(
               width: 40,
               height: 40,
-              child: Icon(item.displayIcon, color: item.iconColor),
+              child: Container(
+                decoration: BoxDecoration(
+                  border: Border.all(color: kGrayColor),
+                  borderRadius: BorderRadius.circular(8.0),
+                  color: item.iconColor,
+                ),
+                width: 30,
+                height: 30,
+                child: Text(
+                  item.emoji,
+                  style: TextStyle(fontSize: 24),
+                ),
+              ),
             ),
           ),
 

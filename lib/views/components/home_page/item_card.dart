@@ -106,11 +106,16 @@ class ItemCard extends StatelessWidget {
         children: [
           // 图标部分
           Padding(
-            padding: const EdgeInsets.only(top: 2), // 微调图标垂直对齐
-            child: SizedBox(
-              width: 25,
-              height: 25,
-              child: Icon(item.displayIcon, color: item.iconColor),
+            padding: const EdgeInsets.only(top: 0), // 微调图标垂直对齐
+            child: Container(
+              decoration: BoxDecoration(
+                border: Border.all(color: kGrayColor),
+                borderRadius: BorderRadius.circular(8.0),
+                color: item.iconColor,
+              ),
+              width: 30,
+              height: 30,
+              child: Text(item.emoji, style: TextStyle(fontSize: 24)),
             ),
           ),
 

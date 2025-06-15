@@ -1,4 +1,6 @@
+import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:flex_color_picker/flex_color_picker.dart';
+import 'package:flutter/foundation.dart' hide Category;
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -88,104 +90,106 @@ class AddEditItemPage extends StatelessWidget {
             const SizedBox(height: 24.0),
 
             // --- 2. 图标选择器 ---
-            // todo:将SVG更换为字体，
-            Text('选择图标', style: titleTextStyle),
+            Text('选择表情符号和背景色', style: titleTextStyle),
             SizedBox(height: spacingMD),
-            // Display the currently selected icon prominently
-            Container(
-              decoration: BoxDecoration(
-                border: Border.all(color: kGrayColor),
-                borderRadius: BorderRadius.circular(8.0),
-              ),
-              child: Obx(
-                () => Icon(
-                  controller.selectedIconData.value,
-                  // Display the actively selected IconData
-                  size: 80, // Adjust size as needed
+
+            // 显示当前选中的 Emoji 和背景色
+            Obx(
+              () => Container(
+                width: 80,
+                // 与图标大小一致
+                height: 80,
+                decoration: BoxDecoration(
                   color:
                       controller
                           .selectedIconColor
-                          .value, // Reflect the selected color
+                          .value, // <--- 使用颜色作为背景
+                  borderRadius: BorderRadius.circular(16), // 圆角矩形
+                ),
+                alignment: Alignment.center,
+                child: Text(
+                  controller.selectedEmoji.value,
+                  // <--- 显示选中的 Emoji
+                  style: const TextStyle(
+                    fontSize: 50, // 调整 Emoji 大小以适应 Container
+                  ),
                 ),
               ),
             ),
             SizedBox(height: spacingMD),
-            Container(
-              height: 200, // Fixed height for scrollable icon grid
-              decoration: BoxDecoration(
-                border: Border.all(color: kGrayColor),
-                borderRadius: BorderRadius.circular(8.0),
-              ),
-              child: LayoutBuilder(
-                builder: (context, constraints) {
-                  // Use style.svgIconAxisCount for crossAxisCount, as it's already defined
-                  // and likely calculates based on screen width.
-                  int currentIconAxisCount = style.svgIconAxisCount;
 
-                  return GridView.builder(
-                    gridDelegate:
-                        SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: currentIconAxisCount,
-                          crossAxisSpacing: spacingSM,
-                          mainAxisSpacing: spacingSM,
+            // 打开 Emoji 选择器按钮
+            ElevatedButton(
+              onPressed: () {
+                Get.bottomSheet(
+                  // 使用 Get.bottomSheet 显示 EmojiPicker
+                  SizedBox(
+                    height: Get.height * 0.8, // 占据屏幕高度的 80%
+                    child: EmojiPicker(
+                      onEmojiSelected: (category, emoji) {
+                        controller.chooseEmoji(
+                          emoji.emoji,
+                        ); // 调用控制器的方法更新选中的 emoji
+                        Get.back(); // 关闭底部工作表
+                      },
+                      config: Config(
+                        checkPlatformCompatibility: true,
+                        categoryViewConfig: CategoryViewConfig(
+                          initCategory: Category.RECENT,
+                          // 默认显示最近使用的表情
+                          iconColor: Colors.grey,
+                          // 图标颜色
+                          iconColorSelected:
+                              Theme.of(context).primaryColor,
+                          // 选中图标颜色
+                          tabIndicatorAnimDuration:
+                              kTabScrollDuration,
+                          categoryIcons: const CategoryIcons(),
+                          // 默认分类图标
                         ),
-                    padding: EdgeInsets.all(spacingSM),
-                    // Use the new list of available Icomoon icons from the controller
-                    itemCount:
-                        controller.availableIcomoonIcons.length,
-                    itemBuilder: (context, index) {
-                      // Get the IconData object directly
-                      final iconData =
-                          controller.availableIcomoonIcons[index];
-                      return Obx(() {
-                        // Compare the selected IconData with the current iconData
-                        final isSelected =
-                            controller.selectedIconData.value ==
-                            iconData;
-                        return GestureDetector(
-                          onTap: () {
-                            // Update the selectedIconData in the controller
-                            controller.selectedIconData.value =
-                                iconData;
-                          },
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color:
-                                  isSelected
-                                      ? Get.theme.primaryColor
-                                          .withOpacity(0.2)
-                                      : Colors.transparent,
-                              borderRadius: BorderRadius.circular(
-                                8.0,
-                              ),
-                              border: Border.all(
-                                color:
-                                    isSelected
-                                        ? Get.theme.primaryColor
-                                        : Colors.grey[300]!,
-                                width: isSelected ? 2.0 : 1.0,
-                              ),
-                            ),
-                            padding: const EdgeInsets.all(8.0),
-                            child: Icon(
-                              // <--- Replaced SvgPicture.asset with Icon
-                              iconData, // Use the IconData object
-                              size: style.iconSizeLG,
-                              // Use your responsive icon size
-                              color:
-                                  controller
-                                      .selectedIconColor
-                                      .value, // Apply selected color
+                        skinToneConfig: SkinToneConfig(
+                          indicatorColor:
+                              Theme.of(context).primaryColor,
+                        ),
+                        bottomActionBarConfig:
+                            BottomActionBarConfig(),
+                        searchViewConfig: const SearchViewConfig(),
+                        emojiViewConfig: EmojiViewConfig(
+                          columns: 7,
+                          backgroundColor: kBgDarkColor,
+                          emojiSizeMax:
+                              32.0 *
+                              (defaultTargetPlatform ==
+                                      TargetPlatform.iOS
+                                  ? 1.20
+                                  : 1.0),
+                          verticalSpacing: 0,
+                          horizontalSpacing: 0,
+                          recentsLimit: 28,
+                          // 最近使用数量
+                          noRecents: const Text(
+                            '无最近使用',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: 20,
+                              color: Colors.black26,
                             ),
                           ),
-                        );
-                      });
-                    },
-                  );
-                },
-              ),
+
+                          buttonMode: ButtonMode.MATERIAL, // 按钮样式
+                        ),
+                      ),
+                    ),
+                  ),
+                  isScrollControlled: true, // 允许底部工作表占据更多高度
+                  backgroundColor:
+                      Colors
+                          .transparent, // 背景透明，以便 EmojiPicker 自身的背景生效
+                );
+              },
+              child: const Text('选择表情符号'),
             ),
-            const SizedBox(height: 24.0),
+            SizedBox(height: spacingMD),
 
             // --- 3. 颜色选择器 ---
             Text('选择图标颜色', style: titleTextStyle),

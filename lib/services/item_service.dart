@@ -218,19 +218,13 @@ class ItemService {
             .map((row) => tagDataToModel(row.readTable(_db.tags)))
             .get();
 
-    // Construct the IconData object using the fetched codePoint and fontFamily
-    final IconData displayIcon = IconData(
-      itemData.iconCodePoint,
-      fontFamily: itemData.iconFontFamily,
-    );
-
     return ItemModel(
       id: itemData.id,
       name: itemData.name,
       usageComment: itemData.usageComment,
       usageRecords: usageRecords,
       tags: itemTags,
-      displayIcon: displayIcon,
+      emoji: itemData.emoji,
       iconColor: Color(itemData.iconColorValue),
       notifyBeforeNextUse: itemData.notifyBeforeNextUse,
     );
@@ -334,13 +328,7 @@ class ItemService {
                 // 使用 mock 的 ID
                 name: item.name,
                 usageComment: item.usageComment,
-                iconCodePoint:
-                    item
-                        .displayIcon
-                        .codePoint, // Use displayIcon's codePoint
-                iconFontFamily:
-                    item.displayIcon.fontFamily ??
-                    'icomoon', // Use displayIcon's fontFamily, provide default if null
+                emoji: item.emoji,
                 iconColorValue: item.iconColor.value,
                 notifyBeforeNextUse: item.notifyBeforeNextUse,
               ).toCompanion(true), // 使用 toCompanion(true) 允许指定 ID

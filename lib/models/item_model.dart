@@ -7,7 +7,7 @@ class ItemModel {
   final int? id;
   final String name;
   String? usageComment;
-  final IconData displayIcon; // 直接在模型中存储 IconData 对象
+  final String emoji; // <--- 直接改为 String 类型的 emoji
   final Color iconColor;
   List<UsageRecordModel> usageRecords; // 列表始终保持时间排序
   final bool notifyBeforeNextUse;
@@ -24,7 +24,7 @@ class ItemModel {
     this.usageComment,
     required this.usageRecords,
     required this.tags,
-    required this.displayIcon,
+    required this.emoji,
     required this.iconColor,
     this.notifyBeforeNextUse = false,
   }) {

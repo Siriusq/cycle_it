@@ -9,11 +9,11 @@ class Items extends Table {
 
   TextColumn get usageComment => text().nullable()();
 
-  IntColumn get iconCodePoint => integer()(); //存储字体编码
-  TextColumn get iconFontFamily =>
-      text().withLength(min: 1, max: 255)(); // 存储字体名
+  TextColumn get emoji =>
+      text().withLength(min: 1, max: 10)(); // Emoji 字符串，通常很短
 
   IntColumn get iconColorValue => integer()(); // 存储 Color 的 int 值
+
   DateTimeColumn get firstUsed => dateTime().nullable()();
 
   BoolColumn get notifyBeforeNextUse =>

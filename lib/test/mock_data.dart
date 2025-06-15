@@ -5,7 +5,6 @@ import 'package:get/get.dart';
 import '../models/item_model.dart';
 import '../models/tag_model.dart';
 import '../models/usage_record_model.dart';
-import '../utils/icomoon.dart';
 
 final List<TagModel> allTagsFromMock =
     [
@@ -24,7 +23,7 @@ final List<ItemModel> sampleItems =
         name:
             'A Marvel Rice Cooker with Super Capacity and Endless Power Supply',
         usageComment: 'Clean Inside',
-        displayIcon: Icomoon.microphoneOutline,
+        emoji: '🍯',
         iconColor: Colors.orange,
         usageRecords: [
           UsageRecordModel(
@@ -55,7 +54,7 @@ final List<ItemModel> sampleItems =
             'A Marvel Rice Cooker with Super Capacity and Endless Power Supply',
         usageComment:
             'A Marvel Rice Cooker with Super Capacity and Endless Power Supply',
-        displayIcon: Icomoon.notifications,
+        emoji: '✨',
         iconColor: Colors.blueGrey,
         usageRecords: [
           UsageRecordModel(
@@ -80,7 +79,7 @@ final List<ItemModel> sampleItems =
         id: 3,
         name: 'Laptop',
         usageComment: 'Recharge Battery',
-        displayIcon: Icomoon.laptop,
+        emoji: '🖥',
         iconColor: Colors.grey,
         usageRecords: [
           UsageRecordModel(
@@ -109,7 +108,7 @@ final List<ItemModel> sampleItems =
       ItemModel(
         id: 4,
         name: 'Screwdriver',
-        displayIcon: Icomoon.screwdriver,
+        emoji: '🛠',
         iconColor: Colors.red,
         usageRecords: [
           UsageRecordModel(
@@ -123,7 +122,7 @@ final List<ItemModel> sampleItems =
       ItemModel(
         id: 5,
         name: 'Camera',
-        displayIcon: Icomoon.camera,
+        emoji: '📷',
         iconColor: Colors.black,
         usageRecords: [
           UsageRecordModel(
@@ -142,7 +141,7 @@ final List<ItemModel> sampleItems =
       ItemModel(
         id: 6,
         name: 'Notebook',
-        displayIcon: Icomoon.notesOutline,
+        emoji: '💻',
         iconColor: Colors.green,
         usageRecords: [
           UsageRecordModel(
@@ -161,7 +160,7 @@ final List<ItemModel> sampleItems =
       ItemModel(
         id: 7,
         name: 'Electric Fan',
-        displayIcon: Icomoon.feather,
+        emoji: '🌊',
         iconColor: Colors.lightBlue,
         usageRecords: [
           UsageRecordModel(
@@ -185,7 +184,7 @@ final List<ItemModel> sampleItems =
       ItemModel(
         id: 8,
         name: 'Sketchbook',
-        displayIcon: Icomoon.saveDisk,
+        emoji: '📒',
         iconColor: Colors.purple,
         usageRecords: [
           UsageRecordModel(
@@ -204,7 +203,7 @@ final List<ItemModel> sampleItems =
       ItemModel(
         id: 9,
         name: 'Thermos Bottle',
-        displayIcon: Icomoon.bomb,
+        emoji: '💦',
         iconColor: Colors.teal,
         usageRecords: [
           UsageRecordModel(
@@ -218,7 +217,7 @@ final List<ItemModel> sampleItems =
       ItemModel(
         id: 10,
         name: 'Wireless Mouse',
-        displayIcon: Icomoon.mouse,
+        emoji: '🖱',
         iconColor: Colors.brown,
         usageRecords: [
           UsageRecordModel(
@@ -242,7 +241,7 @@ final List<ItemModel> sampleItems =
       ItemModel(
         id: 11,
         name: 'No Usage Record Test Item',
-        displayIcon: Icomoon.box,
+        emoji: '🍩',
         iconColor: Colors.black,
         usageRecords: [],
         tags: [allTagsFromMock[2], allTagsFromMock[3]],
