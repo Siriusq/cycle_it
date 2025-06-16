@@ -4,10 +4,10 @@ import 'package:cycle_it/utils/constants.dart';
 import 'package:cycle_it/utils/responsive_style.dart';
 import 'package:cycle_it/views/components/details_page/details_brief_card.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 import '../../../utils/responsive_layout.dart';
+import '../dialog/delete_confirm_dialog.dart';
 import '../icon_label.dart';
 import '../responsive_component_group.dart';
 
@@ -21,7 +21,6 @@ class DetailsPage extends StatelessWidget {
     final style = ResponsiveStyle.to;
     final double spacingLG = style.spacingLG;
     final bool isMobile = style.isMobileDevice;
-    final TextStyle bodyTextStyle = style.bodyText;
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!ResponsiveLayout.isSingleCol(context) &&
@@ -134,25 +133,13 @@ class DetailsPage extends StatelessWidget {
             // 删除当前物品
             IconButton(
               onPressed: () async {
-                final result = await Get.defaultDialog(
-                  title: '删除物品',
-                  backgroundColor: kPrimaryBgColor,
-                  buttonColor: kPrimaryColor,
-                  cancelTextColor: kTextColor,
-                  confirmTextColor: kTextColor,
-                  content: Text('确定要删除物品 ${item.name} 吗？这将删除所有相关记录。'),
-                  textConfirm: '删除',
-                  textCancel: '取消',
-                  onConfirm: () {
-                    Get.back(
-                      result: {
-                        'confirmed': true,
-                        'message': '${item.name} 已删除！',
-                      },
-                    );
-                  },
+                final bool? confirmed = await showDeleteConfirmDialog(
+                  context: context,
+                  deleteTargetName: item.name,
                 );
-                if (result != null && result['confirmed']) {
+                final String confirmMessage = '物品 ${item.name} 已删除！';
+
+                if (confirmed == true) {
                   if (Get.currentRoute == '/Details') {
                     Get.back();
                     Future.delayed(
@@ -166,7 +153,7 @@ class DetailsPage extends StatelessWidget {
                   } else {
                     itemCtrl.deleteItem(item.id!); // 调用删除方法
                   }
-                  Get.snackbar('删除成功', '${result['message']}');
+                  Get.snackbar('删除成功', confirmMessage);
                 }
               },
               icon: Icon(Icons.delete_outline),
@@ -206,23 +193,35 @@ class DetailsPage extends StatelessWidget {
       padding: EdgeInsets.symmetric(vertical: spacingLG * 0.5),
       child: Row(
         mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Padding(
-            padding: const EdgeInsets.only(top: 2),
-            child: SizedBox(
-              width: 40,
-              height: 40,
-              child: Container(
-                decoration: BoxDecoration(
-                  border: Border.all(color: kGrayColor),
-                  borderRadius: BorderRadius.circular(8.0),
-                  color: item.iconColor,
-                ),
-                width: 30,
-                height: 30,
-                child: Text(
-                  item.emoji,
-                  style: TextStyle(fontSize: 24),
+            padding: const EdgeInsets.only(top: 4),
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(8.0),
+                color: item.iconColor,
+              ),
+              width: 50,
+              height: 50,
+              child: Center(
+                // Centers the Text widget
+                child: Padding(
+                  padding: const EdgeInsets.all(
+                    4.0,
+                  ), // Padding around the emoji
+                  child: FittedBox(
+                    // Scales the Text to fit within the padding
+                    fit: BoxFit.contain,
+                    // Ensures the emoji is fully visible
+                    child: Text(
+                      item.emoji,
+                      // FontSize can be large as FittedBox will scale it down
+                      style: const TextStyle(
+                        fontSize: 100,
+                      ), // Start with a large size
+                    ),
+                  ),
                 ),
               ),
             ),
@@ -234,6 +233,7 @@ class DetailsPage extends StatelessWidget {
           Expanded(
             child: Column(
               mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // 标题行
@@ -252,10 +252,12 @@ class DetailsPage extends StatelessWidget {
                 // 备注区域
                 if (item.usageComment?.isNotEmpty ?? false) ...[
                   const SizedBox(height: 4), // 增加间距
-                  Text(
-                    item.usageComment!,
-                    style: bodyText,
-                    softWrap: true,
+                  Flexible(
+                    child: Text(
+                      item.usageComment!,
+                      style: bodyText,
+                      softWrap: true,
+                    ),
                   ),
                 ],
               ],
@@ -286,9 +288,9 @@ class DetailsPage extends StatelessWidget {
                 return Container(
                   decoration: BoxDecoration(
                     shape: BoxShape.rectangle,
-                    border: Border.all(color: Colors.white),
+                    border: Border.all(color: Colors.transparent),
                     borderRadius: BorderRadius.circular(15),
-                    color: Colors.white,
+                    color: Colors.transparent,
                   ),
                   child: IconLabel(
                     icon: Icons.bookmark,

@@ -7,6 +7,7 @@ import 'package:cycle_it/views/components/icon_label.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../dialog/delete_confirm_dialog.dart';
 import '../responsive_component_group.dart';
 
 class ItemCard extends StatelessWidget {
@@ -75,6 +76,7 @@ class ItemCard extends StatelessWidget {
                 item.timePercentageBetweenLastAndNext(),
                 context,
                 style,
+                isSingleCol,
               ),
 
               //标签
@@ -96,8 +98,6 @@ class ItemCard extends StatelessWidget {
     final TextStyle titleTextStyle = style.titleTextMD;
     final TextStyle smallBodyTextStyle = style.bodyTextSM;
     final double spacingSM = style.spacingSM;
-    final double iconSizeMD = style.iconSizeMD;
-    final double iconSizeLG = style.iconSizeLG;
 
     return Padding(
       padding: EdgeInsets.only(left: 5, bottom: isTripleCol ? 5 : 0),
@@ -106,16 +106,40 @@ class ItemCard extends StatelessWidget {
         children: [
           // 图标部分
           Padding(
-            padding: const EdgeInsets.only(top: 0), // 微调图标垂直对齐
+            padding: const EdgeInsets.only(top: 4.0),
             child: Container(
+              width: 40,
+              // Fixed width for the container
+              height: 40,
+              // Fixed height for the container
               decoration: BoxDecoration(
-                border: Border.all(color: kGrayColor),
+                //border: Border.all(color: kGrayColor),
                 borderRadius: BorderRadius.circular(8.0),
-                color: item.iconColor,
+                color: item.iconColor, // Emoji background color
               ),
-              width: 30,
-              height: 30,
-              child: Text(item.emoji, style: TextStyle(fontSize: 24)),
+              // Using Center and Padding to ensure emoji fills the space
+              // and has padding around it. FittedBox is not ideal for Text scaling,
+              // better to control fontSize with a wrapper.
+              child: Center(
+                // Centers the Text widget
+                child: Padding(
+                  padding: const EdgeInsets.all(
+                    4.0,
+                  ), // Padding around the emoji
+                  child: FittedBox(
+                    // Scales the Text to fit within the padding
+                    fit: BoxFit.contain,
+                    // Ensures the emoji is fully visible
+                    child: Text(
+                      item.emoji,
+                      // FontSize can be large as FittedBox will scale it down
+                      style: const TextStyle(
+                        fontSize: 100,
+                      ), // Start with a large size
+                    ),
+                  ),
+                ),
+              ),
             ),
           ),
 
@@ -125,6 +149,7 @@ class ItemCard extends StatelessWidget {
           Expanded(
             child: Column(
               mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // 标题行
@@ -144,11 +169,14 @@ class ItemCard extends StatelessWidget {
                 // 备注区域
                 if (item.usageComment?.isNotEmpty ?? false) ...[
                   const SizedBox(height: 4), // 增加间距
-                  Text(
-                    item.usageComment!,
-                    style: smallBodyTextStyle,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
+                  Flexible(
+                    // Use Flexible here too
+                    child: Text(
+                      item.usageComment!,
+                      style: smallBodyTextStyle,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
                   ),
                 ],
               ],
@@ -156,15 +184,7 @@ class ItemCard extends StatelessWidget {
           ),
 
           // 更多按钮
-          Align(
-            alignment: Alignment.topCenter,
-            child: _buildActionButton(
-              context,
-              style,
-              itemController,
-              item,
-            ),
-          ),
+          _buildActionButton(context, style, itemController, item),
         ],
       ),
     );
@@ -177,13 +197,6 @@ class ItemCard extends StatelessWidget {
     ItemController itemController,
     ItemModel item,
   ) {
-    final TextStyle titleTextStyle = style.titleTextMD;
-    final TextStyle bodyText = style.bodyText;
-    final double spacingSM = style.spacingSM;
-    final double spacingMD = style.spacingMD;
-    final double iconSizeMD = style.iconSizeMD;
-    final double iconSizeLG = style.iconSizeLG;
-
     return PopupMenuButton<String>(
       color: kSecondaryBgColor,
       tooltip: 'More Action',
@@ -198,20 +211,16 @@ class ItemCard extends StatelessWidget {
             Get.snackbar('成功', '${result['message']}');
           }
         } else if (value == 'delete') {
-          Get.defaultDialog(
-            title: '删除物品',
-            backgroundColor: kPrimaryBgColor,
-            buttonColor: kPrimaryColor,
-            cancelTextColor: kTextColor,
-            confirmTextColor: kTextColor,
-            content: Text('确定要删除物品 ${item.name} 吗？这将删除所有相关记录。'),
-            textConfirm: '删除',
-            textCancel: '取消',
-            onConfirm: () {
-              Get.back();
-              itemController.deleteItem(item.id!); // 调用删除方法
-            },
+          final bool? confirmed = await showDeleteConfirmDialog(
+            context: context,
+            deleteTargetName: item.name,
           );
+          final String confirmMessage = '物品 ${item.name} 已删除！';
+
+          if (confirmed == true) {
+            itemController.deleteItem(item.id!); // 调用删除方法
+            Get.snackbar('删除成功', confirmMessage);
+          }
         }
       },
       itemBuilder:
@@ -339,6 +348,7 @@ class ItemCard extends StatelessWidget {
     double progress,
     BuildContext context,
     ResponsiveStyle style,
+    bool isSingleCol,
   ) {
     final TextStyle smallBodyTextStyle = style.bodyTextSM;
 
@@ -354,7 +364,10 @@ class ItemCard extends StatelessWidget {
                   Container(
                     height: 6,
                     decoration: BoxDecoration(
-                      color: kBorderColor,
+                      color:
+                          isActive && !isSingleCol
+                              ? kProgressBarColor
+                              : kSecondaryColor,
                       borderRadius: BorderRadius.circular(3),
                     ),
                   ),
@@ -362,7 +375,10 @@ class ItemCard extends StatelessWidget {
                     height: 6,
                     width: constraints.maxWidth * progress,
                     decoration: BoxDecoration(
-                      color: kPrimaryColor,
+                      color:
+                          isActive && !isSingleCol
+                              ? kSelectedBorderColor
+                              : kProgressBarColor,
                       borderRadius: BorderRadius.circular(3),
                     ),
                   ),
@@ -458,12 +474,12 @@ class ItemCard extends StatelessWidget {
           children:
               item.tags.map((tag) {
                 return Container(
-                  clipBehavior: Clip.antiAlias,
+                  //clipBehavior: Clip.antiAlias,
                   decoration: BoxDecoration(
                     shape: BoxShape.rectangle,
-                    border: Border.all(color: Colors.white),
+                    border: Border.all(color: Colors.transparent),
                     borderRadius: BorderRadius.circular(15),
-                    color: Colors.white,
+                    color: Colors.transparent,
                   ),
                   child: IconLabel(
                     icon: Icons.bookmark,

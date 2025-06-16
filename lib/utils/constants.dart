@@ -17,6 +17,7 @@ const kSecondaryBgColor = Color(0xFFFBFBFB);
 const kSelectedBorderColor = Color(0xFF525252);
 const kBorderColor = Color(0xFFE1E1E1);
 const kIconColor = Color(0xFF3F484A);
+const kProgressBarColor = Color(0xFFD7D7D7);
 
 // 标签颜色
 const List<Color> kColorPalette = [
