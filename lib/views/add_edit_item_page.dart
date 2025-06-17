@@ -1,12 +1,11 @@
-import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
-import 'package:flex_color_picker/flex_color_picker.dart';
-import 'package:flutter/foundation.dart' hide Category;
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../controllers/add_edit_item_controller.dart';
 import '../../utils/constants.dart';
 import '../../utils/responsive_style.dart';
+import 'components/dialog/color_picker_dialog.dart';
+import 'components/dialog/emoji_picker_dialog.dart';
 
 class AddEditItemPage extends StatelessWidget {
   const AddEditItemPage({super.key});
@@ -25,23 +24,54 @@ class AddEditItemPage extends StatelessWidget {
     final double spacingSM = style.spacingSM;
     final TextStyle largeTitleTextStyle = style.titleTextEX;
     final TextStyle titleTextStyle = style.titleTextMD;
-    final TextStyle bodyTextLG = style.bodyTextLG;
     final TextStyle bodyTextStyle = style.bodyTextLG;
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          controller.isEditing ? "编辑物品" : "添加物品",
-          style: largeTitleTextStyle.copyWith(
-            color: kTitleTextColor,
-          ), // 确保标题颜色正确
+        title: Center(
+          child: Text(
+            controller.isEditing ? "编辑物品" : "添加物品",
+            style: largeTitleTextStyle.copyWith(
+              color: kTitleTextColor,
+            ), // 确保标题颜色正确
+          ),
         ),
-        backgroundColor: kPrimaryBgColor,
+        // 分割线
+        bottom: PreferredSize(
+          preferredSize: const Size.fromHeight(1.0), // 分割线的高度
+          child: Container(
+            color: Colors.grey, // 分割线的颜色
+            height: 1.0, // 再次指定高度，确保可见
+          ),
+        ),
+        // 返回按钮
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: kTextColor),
           onPressed: () => Get.back(),
         ),
+        // 保存按钮
+        actions: <Widget>[
+          IconButton(
+            icon: const Icon(Icons.save_outlined),
+            onPressed: () async {
+              await controller.saveItem();
+              final String savedItemName =
+                  controller.nameController.text.trim();
+              final String actionText =
+                  controller.isEditing ? '更新' : '添加';
+
+              Get.back(
+                result: {
+                  'success': true,
+                  'message': '$savedItemName $actionText成功！',
+                },
+              );
+            },
+          ),
+          SizedBox(width: spacingSM),
+        ],
       ),
+
       backgroundColor: kPrimaryBgColor,
       body: SingleChildScrollView(
         padding: EdgeInsets.symmetric(
@@ -53,188 +83,13 @@ class AddEditItemPage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(height: spacingMD),
-            // --- 1. 名称和注释输入 ---
-            TextFormField(
-              controller: controller.nameController,
-              decoration: InputDecoration(
-                labelText: '物品名称',
-                labelStyle: bodyTextLG,
-                border: const OutlineInputBorder(),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(10)),
-                  borderSide: BorderSide(
-                    color: kSelectedBorderColor,
-                    width: 2.0,
-                  ),
-                ),
-              ),
-              maxLength: 50,
-            ),
+            // --- 1. 图标与颜色选择器 ---
+            _buildEmojiEdit(controller, style, context),
+            SizedBox(height: spacingMD * 2),
+
+            // --- 2. 名称和注释输入 ---
+            _buildTitleCommentEdit(controller, style),
             SizedBox(height: spacingMD),
-            TextFormField(
-              controller: controller.usageCommentController,
-              decoration: InputDecoration(
-                labelText: '使用注释 (可选)',
-                labelStyle: bodyTextLG,
-                border: const OutlineInputBorder(),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(10)),
-                  borderSide: BorderSide(
-                    color: kSelectedBorderColor,
-                    width: 2.0,
-                  ),
-                ),
-              ),
-              maxLines: 3,
-            ),
-            const SizedBox(height: 24.0),
-
-            // --- 2. 图标选择器 ---
-            Text('选择表情符号和背景色', style: titleTextStyle),
-            SizedBox(height: spacingMD),
-
-            // 显示当前选中的 Emoji 和背景色
-            Obx(
-              () => Container(
-                width: 80,
-                // 与图标大小一致
-                height: 80,
-                decoration: BoxDecoration(
-                  color:
-                      controller
-                          .selectedIconColor
-                          .value, // <--- 使用颜色作为背景
-                  borderRadius: BorderRadius.circular(16), // 圆角矩形
-                ),
-                alignment: Alignment.center,
-                child: Text(
-                  controller.selectedEmoji.value,
-                  // <--- 显示选中的 Emoji
-                  style: const TextStyle(
-                    fontSize: 50, // 调整 Emoji 大小以适应 Container
-                  ),
-                ),
-              ),
-            ),
-            SizedBox(height: spacingMD),
-
-            // 打开 Emoji 选择器按钮
-            ElevatedButton(
-              onPressed: () {
-                Get.bottomSheet(
-                  // 使用 Get.bottomSheet 显示 EmojiPicker
-                  SizedBox(
-                    height: Get.height * 0.8, // 占据屏幕高度的 80%
-                    child: EmojiPicker(
-                      onEmojiSelected: (category, emoji) {
-                        controller.chooseEmoji(
-                          emoji.emoji,
-                        ); // 调用控制器的方法更新选中的 emoji
-                        Get.back(); // 关闭底部工作表
-                      },
-                      config: Config(
-                        checkPlatformCompatibility: true,
-                        categoryViewConfig: CategoryViewConfig(
-                          initCategory: Category.RECENT,
-                          // 默认显示最近使用的表情
-                          iconColor: Colors.grey,
-                          // 图标颜色
-                          iconColorSelected:
-                              Theme.of(context).primaryColor,
-                          // 选中图标颜色
-                          tabIndicatorAnimDuration:
-                              kTabScrollDuration,
-                          categoryIcons: const CategoryIcons(),
-                          // 默认分类图标
-                        ),
-                        skinToneConfig: SkinToneConfig(
-                          indicatorColor:
-                              Theme.of(context).primaryColor,
-                        ),
-                        bottomActionBarConfig:
-                            BottomActionBarConfig(),
-                        searchViewConfig: const SearchViewConfig(),
-                        emojiViewConfig: EmojiViewConfig(
-                          columns: 7,
-                          backgroundColor: kBgDarkColor,
-                          emojiSizeMax:
-                              32.0 *
-                              (defaultTargetPlatform ==
-                                      TargetPlatform.iOS
-                                  ? 1.20
-                                  : 1.0),
-                          verticalSpacing: 0,
-                          horizontalSpacing: 0,
-                          recentsLimit: 28,
-                          // 最近使用数量
-                          noRecents: const Text(
-                            '无最近使用',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontSize: 20,
-                              color: Colors.black26,
-                            ),
-                          ),
-
-                          buttonMode: ButtonMode.MATERIAL, // 按钮样式
-                        ),
-                      ),
-                    ),
-                  ),
-                  isScrollControlled: true, // 允许底部工作表占据更多高度
-                  backgroundColor:
-                      Colors
-                          .transparent, // 背景透明，以便 EmojiPicker 自身的背景生效
-                );
-              },
-              child: const Text('选择表情符号'),
-            ),
-            SizedBox(height: spacingMD),
-
-            // --- 3. 颜色选择器 ---
-            Text('选择图标颜色', style: titleTextStyle),
-            const SizedBox(height: 8.0),
-            Obx(
-              () => ColorPicker(
-                color: controller.selectedIconColor.value,
-                onColorChanged: (color) {
-                  controller.selectedIconColor.value = color;
-                },
-                width: 44,
-                height: 44,
-                borderRadius: 22,
-                heading: Text(
-                  '选择颜色',
-                  style: Theme.of(context).textTheme.titleSmall,
-                ),
-                subheading: Text(
-                  '阴影和色调',
-                  style: Theme.of(context).textTheme.titleSmall,
-                ),
-                wheelSubheading: Text(
-                  '选择颜色',
-                  style: Theme.of(context).textTheme.titleSmall,
-                ),
-                showMaterialName: true,
-                showColorName: true,
-                showColorCode: true,
-                copyPasteBehavior: const ColorPickerCopyPasteBehavior(
-                  copyButton: true,
-                  pasteButton: true,
-                  longPressMenu: true,
-                ),
-                enableShadesSelection: true,
-                enableTonalPalette: true,
-                pickersEnabled: const <ColorPickerType, bool>{
-                  ColorPickerType.both: true,
-                  ColorPickerType.primary: false,
-                  ColorPickerType.accent: false,
-                  ColorPickerType.bw: false,
-                  ColorPickerType.custom: false,
-                },
-              ),
-            ),
-            const SizedBox(height: 24.0),
 
             // --- 4. 是否开启通知功能 ---
             Obx(
@@ -299,14 +154,108 @@ class AddEditItemPage extends StatelessWidget {
           ],
         ),
       ),
-      bottomNavigationBar: Padding(
-        padding: EdgeInsets.all(spacingMD),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.end,
+    );
+  }
+
+  Widget _buildTitleCommentEdit(
+    AddEditItemController controller,
+    ResponsiveStyle style,
+  ) {
+    final double spacingMD = style.spacingMD;
+    final TextStyle bodyTextLG = style.bodyTextLG;
+
+    return Column(
+      children: [
+        TextFormField(
+          controller: controller.nameController,
+          decoration: InputDecoration(
+            labelText: '物品名称',
+            labelStyle: bodyTextLG,
+            border: const OutlineInputBorder(),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(10)),
+              borderSide: BorderSide(
+                color: kSelectedBorderColor,
+                width: 2.0,
+              ),
+            ),
+          ),
+          maxLength: 50,
+        ),
+        SizedBox(height: spacingMD),
+        TextFormField(
+          controller: controller.usageCommentController,
+          decoration: InputDecoration(
+            labelText: '使用注释 (可选)',
+            labelStyle: bodyTextLG,
+            border: const OutlineInputBorder(),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(10)),
+              borderSide: BorderSide(
+                color: kSelectedBorderColor,
+                width: 2.0,
+              ),
+            ),
+          ),
+          maxLines: 1,
+        ),
+      ],
+    );
+  }
+
+  Widget _buildEmojiEdit(
+    AddEditItemController controller,
+    ResponsiveStyle style,
+    BuildContext context,
+  ) {
+    final double spacingMD = style.spacingMD;
+    final double emojiEditIconWidth = style.emojiEditIconWidth;
+    final TextStyle bodyTextStyle = style.bodyTextLG;
+
+    return Row(
+      children: [
+        // 预览
+        Obx(
+          () => Container(
+            width: 120,
+            height: 120,
+            decoration: BoxDecoration(
+              color:
+                  controller.selectedIconColor.value, // <--- 使用颜色作为背景
+              borderRadius: BorderRadius.circular(16), // 圆角矩形
+            ),
+            alignment: Alignment.center,
+            child: Center(
+              child: Padding(
+                padding: const EdgeInsets.all(
+                  4.0,
+                ), // Padding around the emoji
+                child: FittedBox(
+                  fit: BoxFit.contain,
+                  // Ensures the emoji is fully visible
+                  child: Text(
+                    controller.selectedEmoji.value,
+                    style: const TextStyle(
+                      fontSize: 100,
+                    ), // Start with a large size
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+
+        SizedBox(width: spacingMD),
+
+        Column(
           children: [
+            // 选择emoji
             TextButton.icon(
+              onPressed: () {
+                showEmojiPickerDialog();
+              },
               style: TextButton.styleFrom(
-                minimumSize: const Size(60, 0),
+                fixedSize: Size(emojiEditIconWidth, 40),
                 padding: EdgeInsets.all(spacingMD),
                 backgroundColor: kSecondaryBgColor,
                 shape: RoundedRectangleBorder(
@@ -314,59 +263,42 @@ class AddEditItemPage extends StatelessWidget {
                   borderRadius: BorderRadius.circular(10),
                 ),
               ),
-              onPressed: () => Get.back(),
-              icon: Icon(Icons.cancel_outlined, color: kTextColor),
-              label: Text("取消", style: bodyTextStyle),
+              icon: Icon(
+                Icons.emoji_emotions_outlined,
+                color: kTextColor,
+              ),
+              label: Text("选择 emoji", style: bodyTextStyle),
             ),
-            SizedBox(width: spacingMD),
+
+            SizedBox(height: spacingMD),
+            // 选择颜色
             TextButton.icon(
               style: TextButton.styleFrom(
-                minimumSize: const Size(90, 0),
+                fixedSize: Size(emojiEditIconWidth, 40),
                 padding: EdgeInsets.all(spacingMD),
-                backgroundColor: kPrimaryColor,
+                backgroundColor: kSecondaryBgColor,
                 shape: RoundedRectangleBorder(
-                  side: BorderSide(color: kPrimaryColor, width: 1.0),
+                  side: BorderSide(color: kGrayColor, width: 1.0),
                   borderRadius: BorderRadius.circular(10),
                 ),
               ),
               onPressed: () async {
-                await controller.saveItem();
-                final String savedItemName =
-                    controller.nameController.text.trim();
-                final String actionText =
-                    controller.isEditing ? '更新' : '添加';
-
-                Get.back(
-                  result: {
-                    'success': true,
-                    'message': '$savedItemName $actionText成功！',
-                  },
+                final result = await showCustomColorPickerDialog(
+                  controller.selectedIconColor.value,
                 );
+                if (result != null) {
+                  controller.selectedIconColor.value = result;
+                }
               },
               icon: Icon(
-                Icons.check_circle_outline,
+                Icons.color_lens_outlined,
                 color: kTextColor,
               ),
-              label: Text(
-                controller.isEditing ? "保存" : "添加",
-                style: bodyTextStyle,
-              ),
+              label: Text("选择背景色", style: bodyTextStyle),
             ),
           ],
         ),
-      ),
+      ],
     );
-  }
-}
-
-// 定义一个自定义的 ScrollBehavior，用于禁用默认滚动条
-class NoDefaultScrollbarBehavior extends ScrollBehavior {
-  @override
-  Widget buildScrollbar(
-    BuildContext context,
-    Widget child,
-    ScrollableDetails scrollableDetails,
-  ) {
-    return child;
   }
 }

@@ -44,7 +44,8 @@ class ResponsiveLayout extends StatelessWidget {
         if (isSingle && itemCtrl.currentItem.value != null) {
           if (responsiveCtrl.shouldJumpToDetails.value == true) {
             WidgetsBinding.instance.addPostFrameCallback((_) {
-              if (!Get.isRegistered<PageRoute>(tag: '/Details')) {
+              if (!Get.isRegistered<PageRoute>(tag: '/Details') &&
+                  Get.currentRoute == '/') {
                 Get.toNamed('/Details');
               }
             });

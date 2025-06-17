@@ -131,8 +131,20 @@ class ResponsiveStyle extends GetxController {
   // 侧边栏应用图标
   double get appIconSize => isMobileDevice ? 32 : 40; // 静态值，不随窗口拖动改变
 
-  // 每行的SVG图标个数
-  int get svgIconAxisCount => (Get.width / 90).toInt();
+  // 每行的emoji个数
+  int get emojiColCount =>
+      _getValue(
+        mobile: 5,
+        tablet: 10,
+        desktop: (Get.width / 80).toInt() - 1,
+      ).toInt();
+
+  // 编辑emoji按钮的大小
+  double get emojiEditIconWidth =>
+      _getValue(mobile: 140, tablet: 170, desktop: 200);
+
+  double get colorPickerWidth =>
+      _getValue(mobile: Get.width * 0.9, tablet: 600, desktop: 600);
 }
 
 // 标签样式子类

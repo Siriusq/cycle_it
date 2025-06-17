@@ -3,13 +3,11 @@ import 'package:get/get.dart';
 
 import '../models/item_model.dart';
 import '../models/tag_model.dart';
-import '../services/item_service.dart';
 import '../utils/constants.dart';
 import 'item_controller.dart'; // To refresh the main item list
 import 'tag_controller.dart'; // To get available tags
 
 class AddEditItemController extends GetxController {
-  final ItemService _itemService = Get.find<ItemService>();
   final ItemController _itemController = Get.find<ItemController>();
   final TagController _tagController = Get.find<TagController>();
 

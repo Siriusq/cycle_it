@@ -26,7 +26,7 @@ void main() async {
     await windowManager.ensureInitialized();
 
     WindowOptions windowOptions = WindowOptions(
-      size: const Size(1280, 800),
+      size: const Size(800, 600),
       minimumSize: const Size(300, 300),
       center: true,
       title: 'Cycle It',
@@ -100,6 +100,11 @@ class MyApp extends StatelessWidget {
         // This works for code too, not just values: Most code changes can be
         // tested with just a hot reload.
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.white),
+        appBarTheme: const AppBarTheme(
+          backgroundColor: kPrimaryBgColor, // 默认的AppBar背景色
+          surfaceTintColor: Colors.transparent, // 消除滚动时的表面色调
+          shadowColor: Colors.transparent, // 消除滚动时的阴影
+        ),
         textSelectionTheme: TextSelectionThemeData(
           selectionColor: Color(0x33000000), // 选中内容的背景色
           cursorColor: kTextColor, // 光标颜色
