@@ -73,85 +73,87 @@ class AddEditItemPage extends StatelessWidget {
       ),
 
       backgroundColor: kPrimaryBgColor,
-      body: SingleChildScrollView(
-        padding: EdgeInsets.symmetric(
-          horizontal: spacingMD,
-          vertical: spacingSM,
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(height: spacingMD),
-            // --- 1. 图标与颜色选择器 ---
-            _buildEmojiEdit(controller, style, context),
-            SizedBox(height: spacingMD * 2),
+      body: SafeArea(
+        child: SingleChildScrollView(
+          padding: EdgeInsets.symmetric(
+            horizontal: spacingMD,
+            vertical: spacingSM,
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(height: spacingMD),
+              // --- 1. 图标与颜色选择器 ---
+              _buildEmojiEdit(controller, style, context),
+              SizedBox(height: spacingMD * 2),
 
-            // --- 2. 名称和注释输入 ---
-            _buildTitleCommentEdit(controller, style),
-            SizedBox(height: spacingMD),
+              // --- 2. 名称和注释输入 ---
+              _buildTitleCommentEdit(controller, style),
+              SizedBox(height: spacingMD),
 
-            // --- 4. 是否开启通知功能 ---
-            Obx(
-              () => SwitchListTile(
-                title: Text(
-                  '开启下次使用通知',
-                  style: bodyTextStyle, // 应用响应式样式
+              // --- 4. 是否开启通知功能 ---
+              Obx(
+                () => SwitchListTile(
+                  title: Text(
+                    '开启下次使用通知',
+                    style: bodyTextStyle, // 应用响应式样式
+                  ),
+                  value: controller.notifyBeforeNextUse.value,
+                  onChanged: (newValue) {
+                    controller.notifyBeforeNextUse.value = newValue;
+                  },
                 ),
-                value: controller.notifyBeforeNextUse.value,
-                onChanged: (newValue) {
-                  controller.notifyBeforeNextUse.value = newValue;
-                },
               ),
-            ),
-            const SizedBox(height: 24.0),
+              const SizedBox(height: 24.0),
 
-            // --- 5. 标签选择器 ---
-            Text('选择标签', style: titleTextStyle),
-            const SizedBox(height: 8.0),
-            Container(
-              constraints: const BoxConstraints(
-                maxHeight: 150,
-              ), // Max height for scrollable tags
-              decoration: BoxDecoration(
-                border: Border.all(color: Colors.grey),
-                borderRadius: BorderRadius.circular(8.0),
+              // --- 5. 标签选择器 ---
+              Text('选择标签', style: titleTextStyle),
+              const SizedBox(height: 8.0),
+              Container(
+                constraints: const BoxConstraints(
+                  maxHeight: 150,
+                ), // Max height for scrollable tags
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.grey),
+                  borderRadius: BorderRadius.circular(8.0),
+                ),
+                child: Obx(
+                  () =>
+                      controller.allAvailableTags.isEmpty
+                          ? const Center(child: Text('没有可用标签，请先添加标签。'))
+                          : ListView.builder(
+                            itemCount:
+                                controller.allAvailableTags.length,
+                            itemBuilder: (context, index) {
+                              final tag =
+                                  controller.allAvailableTags[index];
+                              return Obx(() {
+                                final isSelected = controller
+                                    .selectedTags
+                                    .contains(tag);
+                                return CheckboxListTile(
+                                  title: Text(
+                                    tag.name,
+                                    style: bodyTextStyle,
+                                  ), // 应用响应式样式
+                                  tileColor:
+                                      isSelected
+                                          ? tag.color.withOpacity(0.1)
+                                          : null,
+                                  value: isSelected,
+                                  onChanged: (bool? value) {
+                                    controller.toggleTag(tag);
+                                  },
+                                );
+                              });
+                            },
+                          ),
+                ),
               ),
-              child: Obx(
-                () =>
-                    controller.allAvailableTags.isEmpty
-                        ? const Center(child: Text('没有可用标签，请先添加标签。'))
-                        : ListView.builder(
-                          itemCount:
-                              controller.allAvailableTags.length,
-                          itemBuilder: (context, index) {
-                            final tag =
-                                controller.allAvailableTags[index];
-                            return Obx(() {
-                              final isSelected = controller
-                                  .selectedTags
-                                  .contains(tag);
-                              return CheckboxListTile(
-                                title: Text(
-                                  tag.name,
-                                  style: bodyTextStyle,
-                                ), // 应用响应式样式
-                                tileColor:
-                                    isSelected
-                                        ? tag.color.withOpacity(0.1)
-                                        : null,
-                                value: isSelected,
-                                onChanged: (bool? value) {
-                                  controller.toggleTag(tag);
-                                },
-                              );
-                            });
-                          },
-                        ),
-              ),
-            ),
-            const SizedBox(height: 24.0),
-          ],
+              const SizedBox(height: 24.0),
+            ],
+          ),
         ),
       ),
     );
