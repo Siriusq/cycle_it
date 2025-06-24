@@ -61,8 +61,12 @@ class AddEditItemController extends GetxController {
   }
 
   void toggleTag(TagModel tag) {
-    if (selectedTags.contains(tag)) {
-      selectedTags.remove(tag);
+    // Find if a tag with the same ID already exists in selectedTags
+    final existingTagIndex = selectedTags.indexWhere(
+      (t) => t.id == tag.id,
+    );
+    if (existingTagIndex != -1) {
+      selectedTags.removeAt(existingTagIndex);
     } else {
       selectedTags.add(tag);
     }

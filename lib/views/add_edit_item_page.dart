@@ -121,7 +121,9 @@ class AddEditItemPage extends StatelessWidget {
                 child: Obx(
                   () =>
                       controller.allAvailableTags.isEmpty
-                          ? const Center(child: Text('没有可用标签，请先添加标签。'))
+                          ? const Center(
+                            child: Text('没有可用标签，请先添加标签。'),
+                          )
                           : ListView.builder(
                             itemCount:
                                 controller.allAvailableTags.length,
@@ -131,7 +133,10 @@ class AddEditItemPage extends StatelessWidget {
                               return Obx(() {
                                 final isSelected = controller
                                     .selectedTags
-                                    .contains(tag);
+                                    .any(
+                                      (selectedTag) =>
+                                          selectedTag.id == tag.id,
+                                    );
                                 return CheckboxListTile(
                                   title: Text(
                                     tag.name,
