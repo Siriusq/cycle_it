@@ -1,3 +1,4 @@
+import 'package:cycle_it/views/components/dialog/item_tag_picker_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -6,6 +7,7 @@ import '../../utils/constants.dart';
 import '../../utils/responsive_style.dart';
 import 'components/dialog/color_picker_dialog.dart';
 import 'components/dialog/emoji_picker_dialog.dart';
+import 'components/icon_label.dart';
 
 class AddEditItemPage extends StatelessWidget {
   const AddEditItemPage({super.key});
@@ -25,6 +27,7 @@ class AddEditItemPage extends StatelessWidget {
     final TextStyle largeTitleTextStyle = style.titleTextEX;
     final TextStyle titleTextStyle = style.titleTextMD;
     final TextStyle bodyTextStyle = style.bodyTextLG;
+    final double maxFormWidth = style.desktopFormMaxWidth;
 
     return Scaffold(
       appBar: AppBar(
@@ -74,92 +77,75 @@ class AddEditItemPage extends StatelessWidget {
 
       backgroundColor: kPrimaryBgColor,
       body: SafeArea(
-        child: SingleChildScrollView(
-          padding: EdgeInsets.symmetric(
-            horizontal: spacingMD,
-            vertical: spacingSM,
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(height: spacingMD),
-              // --- 1. 图标与颜色选择器 ---
-              _buildEmojiEdit(controller, style, context),
-              SizedBox(height: spacingMD * 2),
-
-              // --- 2. 名称和注释输入 ---
-              _buildTitleCommentEdit(controller, style),
-              SizedBox(height: spacingMD),
-
-              // --- 4. 是否开启通知功能 ---
-              Obx(
-                () => SwitchListTile(
-                  title: Text(
-                    '开启下次使用通知',
-                    style: bodyTextStyle, // 应用响应式样式
+        child:
+            style.isMobileDevice
+                ? _buildMainContent(controller, style, context)
+                : Center(
+                  child: ConstrainedBox(
+                    constraints: BoxConstraints(
+                      maxWidth: maxFormWidth,
+                    ),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        shape: BoxShape.rectangle,
+                        border: Border.all(
+                          color: kBorderColor,
+                          width: 1,
+                        ),
+                        borderRadius: BorderRadius.circular(15),
+                        color: Colors.white,
+                      ),
+                      child: _buildMainContent(
+                        controller,
+                        style,
+                        context,
+                      ),
+                    ),
                   ),
-                  value: controller.notifyBeforeNextUse.value,
-                  onChanged: (newValue) {
-                    controller.notifyBeforeNextUse.value = newValue;
-                  },
                 ),
-              ),
-              const SizedBox(height: 24.0),
+      ),
+    );
+  }
 
-              // --- 5. 标签选择器 ---
-              Text('选择标签', style: titleTextStyle),
-              const SizedBox(height: 8.0),
-              Container(
-                constraints: const BoxConstraints(
-                  maxHeight: 150,
-                ), // Max height for scrollable tags
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.grey),
-                  borderRadius: BorderRadius.circular(8.0),
-                ),
-                child: Obx(
-                  () =>
-                      controller.allAvailableTags.isEmpty
-                          ? const Center(
-                            child: Text('没有可用标签，请先添加标签。'),
-                          )
-                          : ListView.builder(
-                            itemCount:
-                                controller.allAvailableTags.length,
-                            itemBuilder: (context, index) {
-                              final tag =
-                                  controller.allAvailableTags[index];
-                              return Obx(() {
-                                final isSelected = controller
-                                    .selectedTags
-                                    .any(
-                                      (selectedTag) =>
-                                          selectedTag.id == tag.id,
-                                    );
-                                return CheckboxListTile(
-                                  title: Text(
-                                    tag.name,
-                                    style: bodyTextStyle,
-                                  ), // 应用响应式样式
-                                  tileColor:
-                                      isSelected
-                                          ? tag.color.withOpacity(0.1)
-                                          : null,
-                                  value: isSelected,
-                                  onChanged: (bool? value) {
-                                    controller.toggleTag(tag);
-                                  },
-                                );
-                              });
-                            },
-                          ),
-                ),
-              ),
-              const SizedBox(height: 24.0),
-            ],
-          ),
-        ),
+  Widget _buildMainContent(
+    AddEditItemController controller,
+    ResponsiveStyle style,
+    BuildContext context,
+  ) {
+    final double spacingMD = style.spacingMD;
+    final double spacingSM = style.spacingSM;
+    final TextStyle bodyTextStyle = style.bodyTextLG;
+
+    return SingleChildScrollView(
+      padding: EdgeInsets.symmetric(
+        horizontal: spacingMD,
+        vertical: spacingSM,
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SizedBox(height: spacingMD),
+          // --- 1. 图标与颜色选择器 ---
+          _buildEmojiEdit(controller, style, context),
+          SizedBox(height: spacingMD * 2),
+
+          // --- 2. 名称和注释输入 ---
+          _buildTitleCommentEdit(controller, style),
+          SizedBox(height: spacingMD),
+
+          // --- 3. 标签 ---
+          _buildTagEdit(controller, style, context),
+          SizedBox(height: spacingMD),
+
+          // --- 4. 是否开启通知功能 ---
+          _buildNotifySwitch(controller, bodyTextStyle, context),
+          SizedBox(height: spacingMD),
+
+          // --- 5. 桌面端显示保存和取消按钮 ---
+          if (!style.isMobileDevice)
+            _buildSaveIcon(controller, style, context),
+        ],
       ),
     );
   }
@@ -304,6 +290,155 @@ class AddEditItemPage extends StatelessWidget {
               label: Text("选择背景色", style: bodyTextStyle),
             ),
           ],
+        ),
+      ],
+    );
+  }
+
+  Widget _buildTagEdit(
+    AddEditItemController controller,
+    ResponsiveStyle style,
+    BuildContext context,
+  ) {
+    final TextStyle titleTextStyle = style.titleTextMD;
+
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text('标签', style: titleTextStyle),
+        Padding(
+          padding: EdgeInsets.only(top: style.spacingXS, left: 2),
+          child: SizedBox(
+            width: double.infinity,
+            child: Obx(() {
+              final List<Widget> tagWidgets =
+                  controller.selectedTags.map((tag) {
+                    return SizedBox(
+                      child: IconLabel(
+                        icon: Icons.bookmark,
+                        label: tag.name,
+                        iconColor: tag.color,
+                        isLarge: true,
+                      ),
+                    );
+                  }).toList();
+
+              // 添加“选择标签”按钮作为最后一个元素
+              tagWidgets.add(
+                SizedBox(
+                  child: InkWell(
+                    onTap: () {
+                      showItemTagPickerDialog();
+                    },
+                    child: IconLabel(
+                      icon: Icons.bookmark_add_outlined,
+                      label: "选择标签",
+                      iconColor: kTextColor,
+                      isLarge: true,
+                    ),
+                  ),
+                ),
+              );
+
+              return Wrap(
+                alignment: WrapAlignment.start,
+                spacing: 5,
+                runSpacing: 5,
+                children: tagWidgets,
+              );
+            }),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildNotifySwitch(
+    AddEditItemController controller,
+    TextStyle bodyTextStyle,
+    BuildContext context,
+  ) {
+    return Obx(
+      () => Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Expanded(
+            child: Text(
+              '开启下次使用通知',
+              style: bodyTextStyle,
+              overflow: TextOverflow.ellipsis,
+              maxLines: 1,
+            ),
+          ),
+
+          Switch.adaptive(
+            value: controller.notifyBeforeNextUse.value,
+            onChanged: (newValue) {
+              controller.notifyBeforeNextUse.value = newValue;
+            },
+            activeColor: itemIconColor,
+            inactiveThumbColor: kSelectedBorderColor,
+            inactiveTrackColor: kBorderColor.withOpacity(0.5),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildSaveIcon(
+    AddEditItemController controller,
+    ResponsiveStyle style,
+    BuildContext context,
+  ) {
+    final double spacingMD = style.spacingMD;
+    final TextStyle bodyTextStyle = style.bodyTextLG;
+
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.end,
+      spacing: spacingMD,
+      children: [
+        // 取消按钮
+        TextButton.icon(
+          style: TextButton.styleFrom(
+            padding: EdgeInsets.all(spacingMD),
+            backgroundColor: kSecondaryBgColor,
+            shape: RoundedRectangleBorder(
+              side: BorderSide(color: kGrayColor, width: 1.0),
+              borderRadius: BorderRadius.circular(10),
+            ),
+          ),
+          onPressed: () => Get.back(),
+          icon: Icon(Icons.cancel_outlined, color: kTextColor),
+          label: Text('cancel'.tr, style: bodyTextStyle),
+        ),
+
+        // 保存按钮
+        TextButton.icon(
+          style: TextButton.styleFrom(
+            padding: EdgeInsets.all(spacingMD),
+            backgroundColor: kSecondaryBgColor,
+            shape: RoundedRectangleBorder(
+              side: BorderSide(color: kGrayColor, width: 1.0),
+              borderRadius: BorderRadius.circular(10),
+            ),
+          ),
+          onPressed: () async {
+            await controller.saveItem();
+            final String savedItemName =
+                controller.nameController.text.trim();
+            final String actionText =
+                controller.isEditing ? '更新' : '添加';
+
+            Get.back(
+              result: {
+                'success': true,
+                'message': '$savedItemName $actionText成功！',
+              },
+            );
+          },
+          icon: Icon(Icons.save_outlined, color: kTextColor),
+          label: Text('confirm'.tr, style: bodyTextStyle),
         ),
       ],
     );
