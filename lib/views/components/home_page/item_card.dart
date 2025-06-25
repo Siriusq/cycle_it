@@ -471,6 +471,7 @@ class ItemCard extends StatelessWidget {
         child: Wrap(
           alignment: WrapAlignment.start,
           spacing: 5,
+          runSpacing: 5,
           children:
               item.tags.map((tag) {
                 return Container(

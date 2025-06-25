@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../utils/constants.dart';
+import 'add_tag_dialog.dart';
 
 void showItemTagPickerDialog() {
   final AddEditItemController controller =
@@ -36,14 +37,43 @@ void showItemTagPickerDialog() {
             border: Border.all(color: Colors.grey),
             borderRadius: BorderRadius.circular(8.0),
           ),
-          child:
-              controller.allAvailableTags.isEmpty
-                  ? const Center(child: Text('没有可用标签，请先添加标签。'))
-                  : ListView.builder(
-                    shrinkWrap: true, // 允许ListView根据内容调整大小
-                    itemCount: controller.allAvailableTags.length,
-                    itemBuilder: (context, index) {
-                      final tag = controller.allAvailableTags[index];
+          child: Obx(() {
+            final bool noAvailableTags =
+                controller.allAvailableTags.isEmpty;
+
+            if (noAvailableTags) {
+              // 当没有可用标签时，只显示“添加标签”按钮，并居中显示
+              return Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: EdgeInsets.all(spacingMD),
+                    child: const Text('没有可用标签，请先添加标签。'),
+                  ),
+                  SizedBox(height: spacingMD), // 间距
+                  _buildAddTagButton(style, controller), // 抽离成方法，方便复用
+                ],
+              );
+            } else {
+              return Material(
+                color: kPrimaryBgColor,
+                borderRadius: BorderRadius.circular(8.0),
+                child: ListView.builder(
+                  // itemCount 增加 1，用于“添加标签”行
+                  itemCount: controller.allAvailableTags.length + 1,
+                  itemBuilder: (context, index) {
+                    if (index == 0) {
+                      // 第一行，用于“添加标签”
+                      return _buildAddTagListTile(
+                        context,
+                        style,
+                        controller,
+                      );
+                    } else {
+                      // 实际的标签项
+                      final tag =
+                          controller.allAvailableTags[index -
+                              1]; // 索引偏移
 
                       return Obx(() {
                         final isSelected = controller.selectedTags
@@ -52,8 +82,12 @@ void showItemTagPickerDialog() {
                                   selectedTag.id == tag.id,
                             );
                         return CheckboxListTile(
-                          checkColor: kIconColor,
-                          activeColor: itemIconColor,
+                          checkColor: tag.color,
+                          activeColor: Colors.transparent,
+                          side: BorderSide(
+                            color: kGrayColor,
+                            width: 1,
+                          ),
                           title: Row(
                             children: [
                               Icon(Icons.bookmark, color: tag.color),
@@ -70,7 +104,7 @@ void showItemTagPickerDialog() {
                           ),
                           tileColor:
                               isSelected
-                                  ? tag.color.withOpacity(0.1)
+                                  ? tag.color.withAlpha(10)
                                   : null,
                           value: isSelected,
                           onChanged: (bool? value) {
@@ -78,15 +112,18 @@ void showItemTagPickerDialog() {
                           },
                         );
                       });
-                    },
-                  ),
+                    }
+                  },
+                ),
+              );
+            }
+          }),
         ),
       ),
 
       actions: [
         TextButton.icon(
           style: TextButton.styleFrom(
-            //fixedSize: Size(emojiEditIconWidth, 40),
             padding: EdgeInsets.all(spacingMD),
             backgroundColor: kSecondaryBgColor,
             shape: RoundedRectangleBorder(
@@ -101,6 +138,61 @@ void showItemTagPickerDialog() {
           label: Text('confirm'.tr, style: bodyTextStyle),
         ),
       ],
+    ),
+  );
+}
+
+// 添加标签的 ListTile
+Widget _buildAddTagListTile(
+  BuildContext context,
+  ResponsiveStyle style,
+  AddEditItemController controller,
+) {
+  final double spacingMD = style.spacingMD;
+  final TextStyle bodyTextStyle = style.bodyText;
+
+  return ListTile(
+    leading: Icon(Icons.bookmark_add, color: kGrayColor),
+    // 添加图标
+    title: Text(
+      '添加新标签',
+      style: bodyTextStyle.copyWith(
+        fontWeight: FontWeight.bold, // 可以加粗
+      ),
+    ),
+    trailing: Icon(
+      Icons.arrow_forward_outlined,
+      color: kTextColor.withValues(alpha: 0.6),
+    ),
+    //    小箭头
+    onTap: () {
+      // 调用打开添加标签 Dialog 的方法
+      Get.dialog(AddTagDialog());
+    },
+    tileColor: kGrayColor.withValues(alpha: 0.1),
+  );
+}
+
+// 添加标签的按钮（用于没有可用标签时的空状态）
+Widget _buildAddTagButton(
+  ResponsiveStyle style,
+  AddEditItemController controller,
+) {
+  final double spacingMD = style.spacingMD;
+  final TextStyle bodyTextStyle = style.bodyTextLG;
+
+  return ElevatedButton.icon(
+    onPressed: () {
+      Get.dialog(AddTagDialog());
+    },
+    icon: Icon(Icons.bookmark_add_outlined, color: kTextColor),
+    label: Text('添加标签', style: bodyTextStyle),
+    style: ElevatedButton.styleFrom(
+      padding: EdgeInsets.all(spacingMD),
+      backgroundColor: itemIconColor,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10),
+      ),
     ),
   );
 }
