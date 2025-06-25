@@ -1,6 +1,6 @@
-import 'package:flutter/material.dart';
-import 'package:flutter/foundation.dart' hide Category;
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
+import 'package:flutter/foundation.dart' hide Category;
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../controllers/add_edit_item_controller.dart';
@@ -24,7 +24,7 @@ void showEmojiPickerDialog() {
       clipBehavior: Clip.antiAlias, // 防止内容超出圆角
       child: SizedBox(
         height: Get.height * 0.7, // 占据屏幕高度的 70% 作为示例
-        width: Get.width * 0.9, // 占据屏幕宽度的 90%
+        width: style.dialogWidth, // 占据屏幕宽度的 90%
         child: EmojiPicker(
           onEmojiSelected: (category, emoji) {
             controller.chooseEmoji(
@@ -34,8 +34,9 @@ void showEmojiPickerDialog() {
           },
           config: Config(
             checkPlatformCompatibility: true,
-            locale: Get.locale ?? const Locale('en'), // 使用 GetX 语言和回退
+            locale: Get.locale ?? const Locale('en'),
 
+            // 使用 GetX 语言和回退
             categoryViewConfig: CategoryViewConfig(
               initCategory: Category.RECENT,
               // 默认显示最近使用的表情
@@ -84,7 +85,8 @@ void showEmojiPickerDialog() {
             ),
 
             emojiViewConfig: EmojiViewConfig(
-              columns: style.emojiColCount, // 使用 ResponsiveStyle 的列数
+              columns: style.emojiColCount,
+              // 使用 ResponsiveStyle 的列数
               backgroundColor: kBgLightColor,
               emojiSizeMax:
                   32.0 *

@@ -141,16 +141,13 @@ class ResponsiveStyle extends GetxController {
 
   // 每行的emoji个数
   int get emojiColCount =>
-      _getValue(
-        mobile: 5,
-        tablet: 10,
-        desktop: (Get.width / 80).toInt() - 1,
-      ).toInt();
+      _getValue(mobile: 5, tablet: 10, desktop: 10).toInt();
 
   // 编辑emoji按钮的大小
   double get emojiEditIconWidth =>
       _getValue(mobile: 140, tablet: 170, desktop: 200);
 
+  // Dialog 最大宽度
   double get dialogWidth =>
       _getValue(mobile: Get.width * 0.9, tablet: 600, desktop: 600);
 }

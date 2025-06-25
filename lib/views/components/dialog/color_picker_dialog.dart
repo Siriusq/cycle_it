@@ -29,7 +29,7 @@ Future<Color?> showCustomColorPickerDialog(Color initColor) async {
       contentPadding: const EdgeInsets.all(16.0),
       content: SizedBox(
         //height: Get.height * 0.7, // 占据屏幕高度的 70% 作为示例
-        width: style.colorPickerWidth, // 占据屏幕宽度的 90%
+        width: style.dialogWidth, // 占据屏幕宽度的 90%
         child: SingleChildScrollView(
           // Use SingleChildScrollView for scrollability if the picker gets too tall
           child: ColorPicker(
