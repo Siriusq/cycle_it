@@ -46,7 +46,7 @@ void main() async {
 
   runApp(
     DevicePreview(
-      enabled: !kReleaseMode && GetPlatform.isWindows,
+      enabled: !kReleaseMode && GetPlatform.isLinux,
       builder: (context) => MyApp(),
     ),
   );

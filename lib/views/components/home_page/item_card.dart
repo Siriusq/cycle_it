@@ -485,6 +485,7 @@ class ItemCard extends StatelessWidget {
                     icon: Icons.bookmark,
                     label: tag.name,
                     iconColor: tag.color,
+                    isLarge: false,
                   ),
                 );
               }).toList(),

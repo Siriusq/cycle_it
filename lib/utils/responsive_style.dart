@@ -28,6 +28,9 @@ class ResponsiveStyle extends GetxController {
 
   bool get isCurrentWidthDesktop => Get.width >= Breakpoints.desktop;
 
+  // 最大表单宽度
+  final double desktopFormMaxWidth = 700.0;
+
   // 响应式值计算，直接使用 Get.width 获取当前宽度，本身就是响应式的
   double _getValue({
     required double mobile,
@@ -125,7 +128,12 @@ class ResponsiveStyle extends GetxController {
     fontSize: _getValue(mobile: 8, tablet: 10, desktop: 12),
     iconSize: _getValue(mobile: 10, tablet: 12, desktop: 16),
     spacing: _getValue(mobile: 1, tablet: 2, desktop: 4),
-    // 其他参数...
+  );
+
+  TagStyle get tagStyleLG => TagStyle(
+    fontSize: _getValue(mobile: 10, tablet: 12, desktop: 14),
+    iconSize: _getValue(mobile: 14, tablet: 16, desktop: 18),
+    spacing: _getValue(mobile: 2, tablet: 4, desktop: 4),
   );
 
   // 侧边栏应用图标
@@ -143,7 +151,7 @@ class ResponsiveStyle extends GetxController {
   double get emojiEditIconWidth =>
       _getValue(mobile: 140, tablet: 170, desktop: 200);
 
-  double get colorPickerWidth =>
+  double get dialogWidth =>
       _getValue(mobile: Get.width * 0.9, tablet: 600, desktop: 600);
 }
 

@@ -7,17 +7,22 @@ class IconLabel extends StatelessWidget {
   final IconData icon;
   final Color iconColor;
   final String label;
+  final bool isLarge;
 
   const IconLabel({
     super.key,
     required this.icon,
     required this.label,
     required this.iconColor,
+    required this.isLarge,
   });
 
   @override
   Widget build(BuildContext context) {
-    final style = ResponsiveStyle.to.tagStyle;
+    final style =
+        isLarge
+            ? ResponsiveStyle.to.tagStyleLG
+            : ResponsiveStyle.to.tagStyle;
 
     return Container(
       decoration: BoxDecoration(

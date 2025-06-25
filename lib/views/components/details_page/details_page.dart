@@ -296,6 +296,7 @@ class DetailsPage extends StatelessWidget {
                     icon: Icons.bookmark,
                     label: tag.name,
                     iconColor: tag.color,
+                    isLarge: true,
                   ),
                 );
               }).toList(),
