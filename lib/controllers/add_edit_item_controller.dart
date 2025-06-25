@@ -77,16 +77,13 @@ class AddEditItemController extends GetxController {
     selectedEmoji.value = emoji;
   }
 
-  Future<void> saveItem() async {
+  Future<String> saveItem() async {
     if (nameController.text.trim().isEmpty) {
-      Get.snackbar('错误', '物品名称不能为空');
-      return;
+      return 'item_name_empty';
     }
 
-    if (selectedEmoji.value.isEmpty ||
-        selectedEmoji.value == '✨' && !isEditing) {
-      Get.snackbar('错误', '请选择一个表情符号');
-      return;
+    if (selectedEmoji.value.isEmpty) {
+      return 'emoji_empty';
     }
 
     try {
@@ -130,16 +127,11 @@ class AddEditItemController extends GetxController {
         );
         await _itemController.addNewItem(itemToSave);
       }
-
-      //_itemController.loadAllItems(); // This should be handled by your itemController after add/update
     } catch (e) {
-      Get.snackbar(
-        '错误',
-        '操作失败: $e',
-        snackPosition: SnackPosition.BOTTOM,
-      );
-      print('Save Item Error: $e');
+      return '操作失败: $e';
     }
+
+    return '';
   }
 
   @override

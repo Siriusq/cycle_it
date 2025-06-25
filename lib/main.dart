@@ -46,7 +46,7 @@ void main() async {
 
   runApp(
     DevicePreview(
-      enabled: !kReleaseMode && GetPlatform.isLinux,
+      enabled: !kReleaseMode && GetPlatform.isWindows,
       builder: (context) => MyApp(),
     ),
   );
@@ -69,6 +69,7 @@ class MyApp extends StatelessWidget {
       translations: MultiLanguage(),
       // DevicePreview
       locale: DevicePreview.locale(context),
+      //locale: Get.locale,
       builder: DevicePreview.appBuilder,
       // 添加一个回调语言选项，以备上面指定的语言翻译不存在
       fallbackLocale: Locale('en', 'US'),

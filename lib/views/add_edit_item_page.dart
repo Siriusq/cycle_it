@@ -22,11 +22,8 @@ class AddEditItemPage extends StatelessWidget {
 
     final ResponsiveStyle style = ResponsiveStyle.to;
 
-    final double spacingMD = style.spacingMD;
     final double spacingSM = style.spacingSM;
     final TextStyle largeTitleTextStyle = style.titleTextEX;
-    final TextStyle titleTextStyle = style.titleTextMD;
-    final TextStyle bodyTextStyle = style.bodyTextLG;
     final double maxFormWidth = style.desktopFormMaxWidth;
 
     return Scaffold(
@@ -113,19 +110,17 @@ class AddEditItemPage extends StatelessWidget {
     BuildContext context,
   ) {
     final double spacingMD = style.spacingMD;
-    final double spacingSM = style.spacingSM;
     final TextStyle bodyTextStyle = style.bodyTextLG;
 
     return SingleChildScrollView(
       padding: EdgeInsets.symmetric(
         horizontal: spacingMD,
-        vertical: spacingSM,
+        vertical: spacingMD,
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SizedBox(height: spacingMD),
           // --- 1. 图标与颜色选择器 ---
           _buildEmojiEdit(controller, style, context),
           SizedBox(height: spacingMD * 2),
@@ -379,7 +374,7 @@ class AddEditItemPage extends StatelessWidget {
             },
             activeColor: itemIconColor,
             inactiveThumbColor: kSelectedBorderColor,
-            inactiveTrackColor: kBorderColor.withOpacity(0.5),
+            inactiveTrackColor: kBorderColor.withValues(alpha: 0.5),
           ),
         ],
       ),
@@ -424,18 +419,26 @@ class AddEditItemPage extends StatelessWidget {
             ),
           ),
           onPressed: () async {
-            await controller.saveItem();
-            final String savedItemName =
-                controller.nameController.text.trim();
-            final String actionText =
-                controller.isEditing ? '更新' : '添加';
+            final msg = await controller.saveItem();
+            if (msg == '') {
+              final String savedItemName =
+                  controller.nameController.text.trim();
+              final String actionText =
+                  controller.isEditing ? '更新' : '添加';
 
-            Get.back(
-              result: {
-                'success': true,
-                'message': '$savedItemName $actionText成功！',
-              },
-            );
+              Get.back(
+                result: {
+                  'success': true,
+                  'message': '$savedItemName $actionText成功！',
+                },
+              );
+            } else if (msg == 'item_name_empty') {
+              Get.snackbar('错误', '物品名称不能为空');
+            } else if (msg == 'emoji_empty') {
+              Get.snackbar('错误', '请选择一个表情符号');
+            } else {
+              Get.snackbar('错误', msg);
+            }
           },
           icon: Icon(Icons.save_outlined, color: kTextColor),
           label: Text('confirm'.tr, style: bodyTextStyle),
