@@ -82,6 +82,10 @@ class AddEditItemController extends GetxController {
       return 'item_name_empty';
     }
 
+    if (nameController.text.trim().length > 50) {
+      return 'item_name_too_long';
+    }
+
     if (selectedEmoji.value.isEmpty) {
       return 'emoji_empty';
     }

@@ -434,6 +434,8 @@ class AddEditItemPage extends StatelessWidget {
               );
             } else if (msg == 'item_name_empty') {
               Get.snackbar('错误', '物品名称不能为空');
+            } else if (msg == 'item_name_too_long') {
+              Get.snackbar('错误', '物品名称过长');
             } else if (msg == 'emoji_empty') {
               Get.snackbar('错误', '请选择一个表情符号');
             } else {
