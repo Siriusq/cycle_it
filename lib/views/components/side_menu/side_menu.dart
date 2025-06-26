@@ -142,8 +142,17 @@ class SideMenu extends StatelessWidget {
                             iconSize: iconSizeMD,
                             padding: EdgeInsets.zero,
                             constraints: const BoxConstraints(),
-                            onPressed: () {
-                              Get.dialog(AddTagDialog());
+                            onPressed: () async {
+                              final result = await Get.dialog(
+                                AddTagDialog(),
+                              );
+                              if (result != null &&
+                                  result['success']) {
+                                Get.snackbar(
+                                  'success'.tr,
+                                  '${result['message']}',
+                                );
+                              }
                             },
                             icon: const Icon(Icons.add),
                           ),

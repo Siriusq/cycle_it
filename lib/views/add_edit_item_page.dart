@@ -412,9 +412,9 @@ class AddEditItemPage extends StatelessWidget {
         TextButton.icon(
           style: TextButton.styleFrom(
             padding: EdgeInsets.all(spacingMD),
-            backgroundColor: kSecondaryBgColor,
+            backgroundColor: kPrimaryColor,
             shape: RoundedRectangleBorder(
-              side: BorderSide(color: kGrayColor, width: 1.0),
+              side: BorderSide(color: kPrimaryColor, width: 1.0),
               borderRadius: BorderRadius.circular(10),
             ),
           ),

@@ -125,9 +125,9 @@ void showItemTagPickerDialog() {
         TextButton.icon(
           style: TextButton.styleFrom(
             padding: EdgeInsets.all(spacingMD),
-            backgroundColor: kSecondaryBgColor,
+            backgroundColor: kPrimaryColor,
             shape: RoundedRectangleBorder(
-              side: BorderSide(color: kGrayColor, width: 1.0),
+              side: BorderSide(color: kPrimaryColor, width: 1.0),
               borderRadius: BorderRadius.circular(10),
             ),
           ),
@@ -148,7 +148,6 @@ Widget _buildAddTagListTile(
   ResponsiveStyle style,
   AddEditItemController controller,
 ) {
-  final double spacingMD = style.spacingMD;
   final TextStyle bodyTextStyle = style.bodyText;
 
   return ListTile(
@@ -189,7 +188,7 @@ Widget _buildAddTagButton(
     label: Text('添加标签', style: bodyTextStyle),
     style: ElevatedButton.styleFrom(
       padding: EdgeInsets.all(spacingMD),
-      backgroundColor: itemIconColor,
+      backgroundColor: kPrimaryColor,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10),
       ),
