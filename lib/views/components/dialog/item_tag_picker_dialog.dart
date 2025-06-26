@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../utils/constants.dart';
-import 'add_tag_dialog.dart';
+import 'add_edit_tag_dialog.dart';
 
 void showItemTagPickerDialog() {
   final AddEditItemController controller =
@@ -48,7 +48,10 @@ void showItemTagPickerDialog() {
                 children: [
                   Padding(
                     padding: EdgeInsets.all(spacingMD),
-                    child: const Text('没有可用标签，请先添加标签。'),
+                    child: Text(
+                      '没有可用标签，请先添加标签。',
+                      style: bodyTextStyle,
+                    ),
                   ),
                   SizedBox(height: spacingMD), // 间距
                   _buildAddTagButton(style, controller), // 抽离成方法，方便复用
@@ -132,6 +135,11 @@ void showItemTagPickerDialog() {
             ),
           ),
           onPressed: () {
+            //todo:修复snackbar造成的UI阻断问题
+            //Get.until((route) => !Get.isSnackbarOpen && !route.isCurrent);
+            if (Get.isSnackbarOpen) {
+              Get.back(); // 这会关闭当前显示的 SnackBar
+            }
             Get.back();
           },
           icon: Icon(Icons.check_circle_outline, color: kTextColor),
@@ -164,9 +172,16 @@ Widget _buildAddTagListTile(
       color: kTextColor.withValues(alpha: 0.6),
     ),
     //    小箭头
-    onTap: () {
+    onTap: () async {
       // 调用打开添加标签 Dialog 的方法
-      Get.dialog(AddTagDialog());
+      final result = await Get.dialog(AddEditTagDialog());
+      if (result != null && result['success']) {
+        Get.snackbar(
+          'success'.tr,
+          '${result['message']}',
+          duration: Duration(seconds: 1),
+        );
+      }
     },
     tileColor: kGrayColor.withValues(alpha: 0.1),
   );
@@ -182,7 +197,7 @@ Widget _buildAddTagButton(
 
   return ElevatedButton.icon(
     onPressed: () {
-      Get.dialog(AddTagDialog());
+      Get.dialog(AddEditTagDialog());
     },
     icon: Icon(Icons.bookmark_add_outlined, color: kTextColor),
     label: Text('添加标签', style: bodyTextStyle),

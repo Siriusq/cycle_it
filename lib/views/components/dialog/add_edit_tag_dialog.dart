@@ -4,11 +4,21 @@ import 'package:cycle_it/utils/responsive_style.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class AddTagDialog extends StatelessWidget {
-  final _tagNameCtrl = TextEditingController();
-  final Rx<Color> _selectedColor = Rx<Color>(kColorPalette.first);
+import '../../../models/tag_model.dart';
 
-  AddTagDialog({super.key});
+class AddEditTagDialog extends StatelessWidget {
+  final TagModel? tagToEdit; // 用于编辑的标签，如果为null则表示添加
+  final _tagNameCtrl = TextEditingController();
+  late final Rx<Color> _selectedColor;
+
+  AddEditTagDialog({super.key, this.tagToEdit}) {
+    if (tagToEdit != null) {
+      _tagNameCtrl.text = tagToEdit!.name;
+      _selectedColor = Rx<Color>(tagToEdit!.color);
+    } else {
+      _selectedColor = Rx<Color>(kColorPalette.first);
+    }
+  }
 
   Future<void> _submit(TagController tagCtrl) async {
     final name = _tagNameCtrl.text.trim();
@@ -23,20 +33,44 @@ class AddTagDialog extends StatelessWidget {
       return;
     }
 
-    if (await tagCtrl.addTag(name, _selectedColor.value) == false) {
-      Get.snackbar('error'.tr, 'tag_name_already_exists'.tr);
-      return;
+    bool success;
+    String message;
+
+    if (tagToEdit != null) {
+      // 编辑模式
+      success = await tagCtrl.updateTag(
+        tagToEdit!,
+        name,
+        _selectedColor.value,
+      );
+      if (success) {
+        message = 'tag_added_successfully: $name';
+      } else {
+        message = 'tag_name_already_exists'.tr;
+      }
+    } else {
+      // 添加模式
+      success = await tagCtrl.addTag(name, _selectedColor.value);
+      if (success) {
+        message = 'tag_added_successfully: $name';
+      } else {
+        message = 'tag_name_already_exists'.tr;
+      }
     }
 
-    // Get.snackbar('success'.tr, 'tag_added_successfully'.tr);
-    Get.back(
-      result: {'success': true, 'message': '标签 $name 添加成功！'},
-    ); // 关闭弹窗
+    if (success) {
+      Get.back(
+        result: {'success': true, 'message': message},
+      ); // 关闭弹窗并返回结果
+    } else {
+      Get.snackbar('error'.tr, message);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     final tagCtrl = Get.find<TagController>();
+    final isEditing = tagToEdit != null;
 
     final style = ResponsiveStyle.to;
     final double spacingMD = style.spacingMD;
@@ -45,7 +79,11 @@ class AddTagDialog extends StatelessWidget {
 
     return AlertDialog(
       backgroundColor: kPrimaryBgColor,
-      title: Text('add_new_tag'.tr, style: titleTextStyleLG),
+      title: Text(
+        isEditing ? 'edit_tag'.tr : 'add_new_tag'.tr,
+        style: titleTextStyleLG,
+      ),
+      // 根据模式显示不同标题
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16.0), // 设置对话框圆角
       ),
@@ -156,7 +194,10 @@ class AddTagDialog extends StatelessWidget {
           ),
           onPressed: () => _submit(tagCtrl),
           icon: Icon(Icons.check_circle_outline, color: kTextColor),
-          label: Text('add'.tr, style: bodyTextLG),
+          label: Text(
+            isEditing ? 'save'.tr : 'add'.tr,
+            style: bodyTextLG,
+          ),
         ),
       ],
     );

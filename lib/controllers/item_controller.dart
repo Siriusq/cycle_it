@@ -64,6 +64,11 @@ class ItemController extends GetxController {
       (_) => _updateDisplayedItems(),
     );
 
+    // 当标签被添加、编辑或删除时，重新加载所有物品以更新其关联的标签信息
+    ever(_tagController.allTags, (_) {
+      loadAllItems();
+    });
+
     // 监听 currentItem 变化，初始化或更新 UsageRecordDataSource
     ever(currentItem, (item) {
       if (item != null) {

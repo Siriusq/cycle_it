@@ -1,7 +1,6 @@
 import 'package:cycle_it/controllers/item_list_order_controller.dart';
 import 'package:cycle_it/controllers/tag_controller.dart';
 import 'package:cycle_it/utils/responsive_style.dart';
-import 'package:cycle_it/views/components/dialog/add_tag_dialog.dart';
 import 'package:cycle_it/views/components/side_menu/order_by_option.dart';
 import 'package:cycle_it/views/components/side_menu/tag_option.dart';
 import 'package:flutter/material.dart';
@@ -142,19 +141,12 @@ class SideMenu extends StatelessWidget {
                             iconSize: iconSizeMD,
                             padding: EdgeInsets.zero,
                             constraints: const BoxConstraints(),
-                            onPressed: () async {
-                              final result = await Get.dialog(
-                                AddTagDialog(),
-                              );
-                              if (result != null &&
-                                  result['success']) {
-                                Get.snackbar(
-                                  'success'.tr,
-                                  '${result['message']}',
-                                );
-                              }
+                            onPressed: () {
+                              Get.toNamed('/ManageTag');
                             },
-                            icon: const Icon(Icons.add),
+                            icon: const Icon(
+                              Icons.bookmark_add_outlined,
+                            ),
                           ),
                         ),
                       ],

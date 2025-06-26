@@ -3,6 +3,7 @@ import 'package:cycle_it/services/item_service.dart';
 import 'package:cycle_it/utils/constants.dart';
 import 'package:cycle_it/views/add_edit_item_page.dart';
 import 'package:cycle_it/views/components/details_page/details_page.dart';
+import 'package:cycle_it/views/components/manage_tag_page.dart';
 import 'package:cycle_it/views/settings_page.dart';
 import 'package:device_preview/device_preview.dart';
 import 'package:flutter/foundation.dart';
@@ -81,6 +82,10 @@ class MyApp extends StatelessWidget {
         GetPage(
           name: '/AddEditItem',
           page: () => const AddEditItemPage(),
+        ),
+        GetPage(
+          name: '/ManageTag',
+          page: () => const ManageTagPage(),
         ),
       ],
       title: 'Cycle It',

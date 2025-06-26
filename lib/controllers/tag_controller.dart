@@ -28,7 +28,10 @@ class TagController extends GetxController {
 
   // 添加新标签
   Future<bool> addTag(String name, Color color) async {
-    if (allTags.any((tag) => tag.name == name)) {
+    // 检查标签名是否已存在，不区分大小写
+    if (allTags.any(
+      (tag) => tag.name.toLowerCase() == name.toLowerCase(),
+    )) {
       return false; // 标签已存在
     }
     final newTagId = await _itemService.saveTag(
@@ -39,15 +42,57 @@ class TagController extends GetxController {
     return true;
   }
 
+  // 更新标签
+  Future<bool> updateTag(
+    TagModel originalTag,
+    String newName,
+    Color newColor,
+  ) async {
+    // 如果名称改变了，检查新名称是否与其他现有标签冲突（除了自身）
+    if (originalTag.name.toLowerCase() != newName.toLowerCase() &&
+        allTags.any(
+          (tag) => tag.name.toLowerCase() == newName.toLowerCase(),
+        )) {
+      return false; // 新标签名已存在
+    }
+
+    final updatedTag = TagModel(
+      id: originalTag.id,
+      name: newName,
+      color: newColor,
+    );
+
+    final success = await _itemService.updateTag(updatedTag);
+    if (success) {
+      final index = allTags.indexWhere(
+        (tag) => tag.id == originalTag.id,
+      );
+      if (index != -1) {
+        allTags[index] = updatedTag; // 更新RxList中的标签
+        // 如果标签名改变了，也需要更新selectedTags中的名称
+        if (originalTag.name != newName &&
+            selectedTags.contains(originalTag.name)) {
+          selectedTags.remove(originalTag.name);
+          selectedTags.add(newName);
+        }
+      }
+      return true;
+    }
+    return false;
+  }
+
   // 移除标签
   Future<void> removeTag(int id) async {
+    final tagToRemove = allTags.firstWhereOrNull(
+      (tag) => tag.id == id,
+    );
+    if (tagToRemove == null) return;
+
     await _itemService.deleteTag(id);
     allTags.removeWhere((tag) => tag.id == id);
     // 如果被删除的标签在 selectedTags 中，也要移除
     selectedTags.removeWhere(
-      (tagName) =>
-          tagName ==
-          allTags.firstWhereOrNull((tag) => tag.id == id)?.name,
+      (tagName) => tagName == tagToRemove.name,
     );
   }
 
