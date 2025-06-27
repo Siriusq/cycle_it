@@ -65,8 +65,14 @@ class ItemController extends GetxController {
     );
 
     // 当标签被添加、编辑或删除时，重新加载所有物品以更新其关联的标签信息
-    ever(_tagController.allTags, (_) {
-      loadAllItems();
+    ever(_tagController.allTags, (_) async {
+      await loadAllItems();
+
+      // If there's an item currently selected in details, refresh its data
+      if (currentItem.value != null &&
+          currentItem.value!.id != null) {
+        await loadItemForDetails(currentItem.value!.id!);
+      }
     });
 
     // 监听 currentItem 变化，初始化或更新 UsageRecordDataSource
