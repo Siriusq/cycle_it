@@ -195,6 +195,9 @@ class ListOfItems extends StatelessWidget {
     ItemController itemController,
     ResponsiveStyle style,
   ) {
+    final TextStyle bodyTextStyle = style.bodyText;
+    final double spacingMD = style.spacingMD;
+
     return Obx(() {
       if (itemController.isLoading.value) {
         // 如果还没有加载数据，显示加载指示器
@@ -226,11 +229,13 @@ class ListOfItems extends StatelessWidget {
             itemBuilder: (context, index) {
               if (index == itemController.displayedItems.length) {
                 return Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 16.0),
+                  padding: EdgeInsets.symmetric(vertical: spacingMD),
                   child: Center(
                     child: Text(
                       '—— 已经到底了 ——',
-                      style: TextStyle(color: Colors.grey),
+                      style: bodyTextStyle.copyWith(
+                        color: Colors.grey,
+                      ),
                     ),
                   ),
                 );

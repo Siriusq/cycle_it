@@ -197,6 +197,9 @@ class ItemCard extends StatelessWidget {
     ItemController itemController,
     ItemModel item,
   ) {
+    final spacingSM = style.spacingSM;
+    final bodyTextStyle = style.bodyText;
+
     return PopupMenuButton<String>(
       color: kSecondaryBgColor,
       tooltip: 'More Action',
@@ -228,20 +231,23 @@ class ItemCard extends StatelessWidget {
             PopupMenuItem(
               value: 'edit',
               child: Row(
-                children: const [
-                  Icon(Icons.edit, color: Colors.black54),
-                  SizedBox(width: 8),
-                  Text('编辑'),
+                children: [
+                  Icon(Icons.edit, color: kTextColor),
+                  SizedBox(width: spacingSM),
+                  Text('编辑', style: bodyTextStyle),
                 ],
               ),
             ),
             PopupMenuItem(
               value: 'delete',
               child: Row(
-                children: const [
+                children: [
                   Icon(Icons.delete, color: Colors.red),
-                  SizedBox(width: 8),
-                  Text('删除'),
+                  SizedBox(width: spacingSM),
+                  Text(
+                    '删除',
+                    style: bodyTextStyle.copyWith(color: Colors.red),
+                  ),
                 ],
               ),
             ),

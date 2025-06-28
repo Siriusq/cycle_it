@@ -23,53 +23,17 @@ class AddEditItemPage extends StatelessWidget {
     final ResponsiveStyle style = ResponsiveStyle.to;
 
     final double spacingSM = style.spacingSM;
+    final double spacingMD = style.spacingMD;
     final TextStyle largeTitleTextStyle = style.titleTextEX;
     final double maxFormWidth = style.desktopFormMaxWidth;
+    final bool isMobileDevice = style.isMobileDevice;
 
+    //todo: 分离组件，并对照标签管理页调整UI
     return Scaffold(
-      appBar: AppBar(
-        title: Center(
-          child: Text(
-            controller.isEditing ? "编辑物品" : "添加物品",
-            style: largeTitleTextStyle.copyWith(
-              color: kTitleTextColor,
-            ), // 确保标题颜色正确
-          ),
-        ),
-        // 分割线
-        bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(1.0), // 分割线的高度
-          child: Container(
-            color: Colors.grey, // 分割线的颜色
-            height: 1.0, // 再次指定高度，确保可见
-          ),
-        ),
-        // 返回按钮
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: kTextColor),
-          onPressed: () => Get.back(),
-        ),
-        // 保存按钮
-        actions: <Widget>[
-          IconButton(
-            icon: const Icon(Icons.save_outlined),
-            onPressed: () async {
-              await controller.saveItem();
-              final String savedItemName =
-                  controller.nameController.text.trim();
-              final String actionText =
-                  controller.isEditing ? '更新' : '添加';
-
-              Get.back(
-                result: {
-                  'success': true,
-                  'message': '$savedItemName $actionText成功！',
-                },
-              );
-            },
-          ),
-          SizedBox(width: spacingSM),
-        ],
+      appBar: _buildAppBar(
+        style: style,
+        isMobileDevice: isMobileDevice,
+        controller: controller,
       ),
 
       backgroundColor: kPrimaryBgColor,
@@ -92,15 +56,133 @@ class AddEditItemPage extends StatelessWidget {
                         borderRadius: BorderRadius.circular(15),
                         color: Colors.white,
                       ),
-                      child: _buildMainContent(
-                        controller,
-                        style,
-                        context,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: spacingSM,
+                              vertical: spacingMD,
+                            ),
+                            child: Row(
+                              children: [
+                                IconButton(
+                                  icon: Icon(
+                                    Icons.arrow_back,
+                                    color: kTextColor,
+                                  ), // 返回按钮
+                                  onPressed: () => Get.back(),
+                                ),
+                                Expanded(
+                                  child: Center(
+                                    child: Text(
+                                      controller.isEditing
+                                          ? "编辑物品"
+                                          : "添加物品",
+                                      style: largeTitleTextStyle,
+                                    ),
+                                  ),
+                                ),
+                                IconButton(
+                                  icon: const Icon(
+                                    Icons.save_outlined,
+                                  ), // 添加按钮
+                                  onPressed: () async {
+                                    await controller.saveItem();
+                                    final String savedItemName =
+                                        controller.nameController.text
+                                            .trim();
+                                    final String actionText =
+                                        controller.isEditing
+                                            ? '更新'
+                                            : '添加';
+
+                                    Get.back(
+                                      result: {
+                                        'success': true,
+                                        'message':
+                                            '$savedItemName $actionText成功！',
+                                      },
+                                    );
+                                  },
+                                ),
+                              ],
+                            ),
+                          ),
+                          // 分割线
+                          Container(
+                            color: kBorderColor, // 分割线的颜色
+                            height: 2.0, // 高度
+                          ),
+                          _buildMainContent(
+                            controller,
+                            style,
+                            context,
+                          ),
+                        ],
                       ),
                     ),
                   ),
                 ),
       ),
+    );
+  }
+
+  AppBar? _buildAppBar({
+    required ResponsiveStyle style,
+    required bool isMobileDevice,
+    required AddEditItemController controller,
+  }) {
+    final TextStyle largeTitleTextStyle = style.titleTextEX;
+    final double spacingSM = style.spacingSM;
+
+    if (!isMobileDevice) {
+      return null; // 在宽屏幕上不显示默认AppBar
+    }
+
+    return AppBar(
+      title: Center(
+        child: Text(
+          controller.isEditing ? "编辑物品" : "添加物品",
+          style: largeTitleTextStyle.copyWith(
+            color: kTitleTextColor,
+          ), // 确保标题颜色正确
+        ),
+      ),
+      // 分割线
+      bottom: PreferredSize(
+        preferredSize: const Size.fromHeight(1.0), // 分割线的高度
+        child: Container(
+          color: Colors.grey, // 分割线的颜色
+          height: 1.0, // 再次指定高度，确保可见
+        ),
+      ),
+      // 返回按钮
+      leading: IconButton(
+        icon: Icon(Icons.arrow_back, color: kTextColor),
+        onPressed: () => Get.back(),
+      ),
+      // 保存按钮
+      actions: <Widget>[
+        IconButton(
+          icon: const Icon(Icons.save_outlined),
+          onPressed: () async {
+            await controller.saveItem();
+            final String savedItemName =
+                controller.nameController.text.trim();
+            final String actionText =
+                controller.isEditing ? '更新' : '添加';
+
+            Get.back(
+              result: {
+                'success': true,
+                'message': '$savedItemName $actionText成功！',
+              },
+            );
+          },
+        ),
+        SizedBox(width: spacingSM),
+      ],
     );
   }
 
@@ -135,11 +217,6 @@ class AddEditItemPage extends StatelessWidget {
 
           // --- 4. 是否开启通知功能 ---
           _buildNotifySwitch(controller, bodyTextStyle, context),
-          SizedBox(height: spacingMD),
-
-          // --- 5. 桌面端显示保存和取消按钮 ---
-          if (!style.isMobileDevice)
-            _buildSaveIcon(controller, style, context),
         ],
       ),
     );
