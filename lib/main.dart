@@ -28,7 +28,7 @@ void main() async {
 
     WindowOptions windowOptions = WindowOptions(
       size: const Size(800, 600),
-      minimumSize: const Size(300, 300),
+      minimumSize: const Size(320, 300),
       center: true,
       title: 'Cycle It',
     );
@@ -79,14 +79,8 @@ class MyApp extends StatelessWidget {
         GetPage(name: '/', page: () => HomePage()),
         GetPage(name: '/Settings', page: () => SettingsPage()),
         GetPage(name: '/Details', page: () => DetailsPage()),
-        GetPage(
-          name: '/AddEditItem',
-          page: () => const AddEditItemPage(),
-        ),
-        GetPage(
-          name: '/ManageTag',
-          page: () => const ManageTagPage(),
-        ),
+        GetPage(name: '/AddEditItem', page: () => AddEditItemPage()),
+        GetPage(name: '/ManageTag', page: () => ManageTagPage()),
       ],
       title: 'Cycle It',
       theme: ThemeData(

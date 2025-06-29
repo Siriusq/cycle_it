@@ -18,101 +18,109 @@ class ManageTagPage extends StatelessWidget {
     final ResponsiveStyle style = ResponsiveStyle.to;
     final TextStyle largeTitleTextStyle = style.titleTextEX;
     final double spacingMD = style.spacingMD;
-    final TextStyle bodyTextStyle = style.bodyText;
     final double spacingSM = style.spacingSM;
     final double maxFormWidth =
         style.desktopFormMaxWidth; // 桌面端最大表单宽度
     final bool isMobileDevice = style.isMobileDevice;
 
-    return Scaffold(
-      appBar: _buildAppBar(
-        style: style,
-        isMobileDevice: isMobileDevice,
-      ),
-      backgroundColor: kPrimaryBgColor, // 背景颜色
-
-      body: Obx(() {
-        // 根据屏幕宽度调整布局
-        if (isMobileDevice) {
-          // 窄屏幕
-          return _buildTagListContent(
-            controller: controller,
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        return Scaffold(
+          appBar: _buildAppBar(
             style: style,
             isMobileDevice: isMobileDevice,
-          );
-        } else {
-          // 宽屏幕
-          return Center(
-            child: ConstrainedBox(
-              constraints: BoxConstraints(
-                maxWidth: maxFormWidth,
-                maxHeight: Get.height * 0.9,
-              ),
-              child: Container(
-                decoration: BoxDecoration(
-                  shape: BoxShape.rectangle,
-                  border: Border.all(color: kBorderColor, width: 2),
-                  borderRadius: BorderRadius.circular(15),
-                  color: Colors.white,
-                ),
-                child: Column(
-                  children: [
-                    // 模拟AppBar
-                    Padding(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: spacingSM,
-                        vertical: spacingMD,
-                      ), // 间距
-                      child: Row(
-                        children: [
-                          IconButton(
-                            icon: Icon(
-                              Icons.arrow_back,
-                              color: kTextColor,
-                            ), // 返回按钮
-                            onPressed: () => Get.back(),
-                          ),
-                          Expanded(
-                            child: Center(
-                              child: Text(
-                                'tag_management'.tr, // 标签管理标题
-                                style: largeTitleTextStyle,
+          ),
+          backgroundColor: kPrimaryBgColor, // 背景颜色
+
+          body: Obx(() {
+            // 根据屏幕宽度调整布局
+            if (isMobileDevice) {
+              // 窄屏幕
+              return _buildTagListContent(
+                controller: controller,
+                style: style,
+                isMobileDevice: isMobileDevice,
+              );
+            } else {
+              // 宽屏幕
+              return Center(
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(
+                    maxWidth: maxFormWidth,
+                    maxHeight: Get.height * 0.9,
+                  ),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      shape: BoxShape.rectangle,
+                      border: Border.all(
+                        color: kBorderColor,
+                        width: 2,
+                      ),
+                      borderRadius: BorderRadius.circular(15),
+                      color: Colors.white,
+                    ),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        // 模拟AppBar
+                        Padding(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: spacingSM,
+                            vertical: spacingMD,
+                          ), // 间距
+                          child: Row(
+                            children: [
+                              IconButton(
+                                icon: Icon(
+                                  Icons.arrow_back,
+                                  color: kTextColor,
+                                ), // 返回按钮
+                                onPressed: () => Get.back(),
                               ),
+                              Expanded(
+                                child: Center(
+                                  child: Text(
+                                    'tag_management'.tr, // 标签管理标题
+                                    style: largeTitleTextStyle,
+                                  ),
+                                ),
+                              ),
+                              IconButton(
+                                icon: const Icon(Icons.add), // 添加按钮
+                                onPressed:
+                                    () => _showAddEditTagDialog(),
+                              ),
+                            ],
+                          ),
+                        ),
+                        // 分割线
+                        Container(
+                          color: kBorderColor, // 分割线的颜色
+                          height: 2.0, // 高度
+                        ),
+
+                        Expanded(
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: spacingMD,
+                            ),
+                            child: _buildTagListContent(
+                              // 调用提取的方法
+                              controller: controller,
+                              style: style,
+                              isMobileDevice: isMobileDevice,
                             ),
                           ),
-                          IconButton(
-                            icon: const Icon(Icons.add), // 添加按钮
-                            onPressed: () => _showAddEditTagDialog(),
-                          ),
-                        ],
-                      ),
-                    ),
-                    // 分割线
-                    Container(
-                      color: kBorderColor, // 分割线的颜色
-                      height: 2.0, // 高度
-                    ),
-
-                    Expanded(
-                      child: Padding(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: spacingMD,
                         ),
-                        child: _buildTagListContent(
-                          // 调用提取的方法
-                          controller: controller,
-                          style: style,
-                          isMobileDevice: isMobileDevice,
-                        ),
-                      ),
+                      ],
                     ),
-                  ],
+                  ),
                 ),
-              ),
-            ),
-          );
-        }
-      }),
+              );
+            }
+          }),
+        );
+      },
     );
   }
 
@@ -120,7 +128,7 @@ class ManageTagPage extends StatelessWidget {
   void _showAddEditTagDialog({TagModel? tag}) {
     Get.dialog(
       AddEditTagDialog(tagToEdit: tag),
-      barrierDismissible: false, // 不允许点击外部关闭
+      //barrierDismissible: false, // 不允许点击外部关闭
     ).then((result) {
       if (result != null && result['success'] == true) {
         Get.snackbar(

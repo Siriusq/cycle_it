@@ -28,103 +28,112 @@ class AddEditItemPage extends StatelessWidget {
     final double maxFormWidth = style.desktopFormMaxWidth;
     final bool isMobileDevice = style.isMobileDevice;
 
-    //todo: 分离组件，并对照标签管理页调整UI
-    return Scaffold(
-      appBar: _buildAppBar(
-        style: style,
-        isMobileDevice: isMobileDevice,
-        controller: controller,
-      ),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        return Scaffold(
+          appBar: _buildAppBar(
+            style: style,
+            isMobileDevice: isMobileDevice,
+            controller: controller,
+          ),
 
-      backgroundColor: kPrimaryBgColor,
-      body: SafeArea(
-        child:
-            style.isMobileDevice
-                ? _buildMainContent(controller, style, context)
-                : Center(
-                  child: ConstrainedBox(
-                    constraints: BoxConstraints(
-                      maxWidth: maxFormWidth,
-                    ),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        shape: BoxShape.rectangle,
-                        border: Border.all(
-                          color: kBorderColor,
-                          width: 1,
-                        ),
-                        borderRadius: BorderRadius.circular(15),
-                        color: Colors.white,
-                      ),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Padding(
-                            padding: EdgeInsets.symmetric(
-                              horizontal: spacingSM,
-                              vertical: spacingMD,
+          backgroundColor: kPrimaryBgColor,
+          body: SafeArea(
+            child:
+                isMobileDevice
+                    ? _buildMainContent(controller, style, context)
+                    : Center(
+                      child: SingleChildScrollView(
+                        // 在这里添加 SingleChildScrollView
+                        child: ConstrainedBox(
+                          constraints: BoxConstraints(
+                            maxWidth: maxFormWidth,
+                          ),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              shape: BoxShape.rectangle,
+                              border: Border.all(
+                                color: kBorderColor,
+                                width: 1,
+                              ),
+                              borderRadius: BorderRadius.circular(15),
+                              color: Colors.white,
                             ),
-                            child: Row(
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
                               children: [
-                                IconButton(
-                                  icon: Icon(
-                                    Icons.arrow_back,
-                                    color: kTextColor,
-                                  ), // 返回按钮
-                                  onPressed: () => Get.back(),
-                                ),
-                                Expanded(
-                                  child: Center(
-                                    child: Text(
-                                      controller.isEditing
-                                          ? "编辑物品"
-                                          : "添加物品",
-                                      style: largeTitleTextStyle,
-                                    ),
+                                Padding(
+                                  padding: EdgeInsets.symmetric(
+                                    horizontal: spacingSM,
+                                    vertical: spacingMD,
+                                  ),
+                                  child: Row(
+                                    children: [
+                                      IconButton(
+                                        icon: Icon(
+                                          Icons.arrow_back,
+                                          color: kTextColor,
+                                        ), // 返回按钮
+                                        onPressed: () => Get.back(),
+                                      ),
+                                      Expanded(
+                                        child: Center(
+                                          child: Text(
+                                            controller.isEditing
+                                                ? "编辑物品"
+                                                : "添加物品",
+                                            style:
+                                                largeTitleTextStyle,
+                                          ),
+                                        ),
+                                      ),
+                                      IconButton(
+                                        icon: const Icon(
+                                          Icons.save_outlined,
+                                        ), // 添加按钮
+                                        onPressed: () async {
+                                          await controller.saveItem();
+                                          final String savedItemName =
+                                              controller
+                                                  .nameController
+                                                  .text
+                                                  .trim();
+                                          final String actionText =
+                                              controller.isEditing
+                                                  ? '更新'
+                                                  : '添加';
+
+                                          Get.back(
+                                            result: {
+                                              'success': true,
+                                              'message':
+                                                  '$savedItemName $actionText成功！',
+                                            },
+                                          );
+                                        },
+                                      ),
+                                    ],
                                   ),
                                 ),
-                                IconButton(
-                                  icon: const Icon(
-                                    Icons.save_outlined,
-                                  ), // 添加按钮
-                                  onPressed: () async {
-                                    await controller.saveItem();
-                                    final String savedItemName =
-                                        controller.nameController.text
-                                            .trim();
-                                    final String actionText =
-                                        controller.isEditing
-                                            ? '更新'
-                                            : '添加';
-
-                                    Get.back(
-                                      result: {
-                                        'success': true,
-                                        'message':
-                                            '$savedItemName $actionText成功！',
-                                      },
-                                    );
-                                  },
+                                // 分割线
+                                Container(
+                                  color: kBorderColor, // 分割线的颜色
+                                  height: 2.0, // 高度
+                                ),
+                                _buildMainContent(
+                                  controller,
+                                  style,
+                                  context,
                                 ),
                               ],
                             ),
                           ),
-                          // 分割线
-                          Container(
-                            color: kBorderColor, // 分割线的颜色
-                            height: 2.0, // 高度
-                          ),
-                          _buildMainContent(
-                            controller,
-                            style,
-                            context,
-                          ),
-                        ],
+                        ),
                       ),
                     ),
-                  ),
-                ),
-      ),
+          ),
+        );
+      },
     );
   }
 
@@ -373,54 +382,54 @@ class AddEditItemPage extends StatelessWidget {
     BuildContext context,
   ) {
     final TextStyle titleTextStyle = style.titleTextMD;
+    final double topSpacing =
+        style.isMobileDevice ? style.spacingMD : style.spacingXS;
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text('标签', style: titleTextStyle),
-        Padding(
-          padding: EdgeInsets.only(top: style.spacingXS, left: 2),
-          child: SizedBox(
-            width: double.infinity,
-            child: Obx(() {
-              final List<Widget> tagWidgets =
-                  controller.selectedTags.map((tag) {
-                    return SizedBox(
-                      child: IconLabel(
-                        icon: Icons.bookmark,
-                        label: tag.name,
-                        iconColor: tag.color,
-                        isLarge: true,
-                      ),
-                    );
-                  }).toList();
-
-              // 添加“选择标签”按钮作为最后一个元素
-              tagWidgets.add(
-                SizedBox(
-                  child: InkWell(
-                    onTap: () {
-                      showItemTagPickerDialog();
-                    },
+        SizedBox(height: topSpacing),
+        SizedBox(
+          width: double.infinity,
+          child: Obx(() {
+            final List<Widget> tagWidgets =
+                controller.selectedTags.map((tag) {
+                  return SizedBox(
                     child: IconLabel(
-                      icon: Icons.bookmark_add_outlined,
-                      label: "选择标签",
-                      iconColor: kTextColor,
+                      icon: Icons.bookmark,
+                      label: tag.name,
+                      iconColor: tag.color,
                       isLarge: true,
                     ),
+                  );
+                }).toList();
+
+            // 添加“选择标签”按钮作为最后一个元素
+            tagWidgets.add(
+              SizedBox(
+                child: InkWell(
+                  onTap: () {
+                    showItemTagPickerDialog();
+                  },
+                  child: IconLabel(
+                    icon: Icons.bookmark_add_outlined,
+                    label: "选择标签",
+                    iconColor: kTextColor,
+                    isLarge: true,
                   ),
                 ),
-              );
+              ),
+            );
 
-              return Wrap(
-                alignment: WrapAlignment.start,
-                spacing: 5,
-                runSpacing: 5,
-                children: tagWidgets,
-              );
-            }),
-          ),
+            return Wrap(
+              alignment: WrapAlignment.start,
+              spacing: 5,
+              runSpacing: 5,
+              children: tagWidgets,
+            );
+          }),
         ),
       ],
     );
