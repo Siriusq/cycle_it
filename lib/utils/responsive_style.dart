@@ -105,6 +105,9 @@ class ResponsiveStyle extends GetxController {
   double get spacingLG =>
       _getValue(mobile: 8, tablet: 14, desktop: 20);
 
+  double get spacingSideMenuOption =>
+      _getValue(mobile: 6, tablet: 8, desktop: 8);
+
   // 图标样式
   double get iconSizeMD =>
       _getValue(mobile: 24, tablet: 26, desktop: 26);

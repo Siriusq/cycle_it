@@ -19,6 +19,7 @@ class SideMenu extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final style = ResponsiveStyle.to;
+    final double spacingXS = style.spacingXS;
     final double spacingMD = style.spacingMD;
     final double spacingLG = style.spacingLG;
     final double appIconSize = style.appIconSize;
@@ -94,7 +95,7 @@ class SideMenu extends StatelessWidget {
                         Text("Order By", style: titleTextMD),
                       ],
                     ),
-                    //SizedBox(height: spacingMD),
+                    SizedBox(height: spacingXS),
                     OrderByOption(
                       orderType: OrderType.name,
                       icon: Icons.sort_by_alpha,
@@ -144,9 +145,7 @@ class SideMenu extends StatelessWidget {
                             onPressed: () {
                               Get.toNamed('/ManageTag');
                             },
-                            icon: const Icon(
-                              Icons.bookmark_add_outlined,
-                            ),
+                            icon: const Icon(Icons.more_horiz),
                           ),
                         ),
                       ],

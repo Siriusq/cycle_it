@@ -16,32 +16,69 @@ class TagOption extends StatelessWidget {
   Widget build(BuildContext context) {
     final style = ResponsiveStyle.to;
     final double optionFontSize = style.optionFontSize;
+    final double spacingSideMenuOption = style.spacingSideMenuOption;
 
     return Obx(() {
       final isSelected = tagCtrl.selectedTags.contains(tagName);
       return Padding(
-        padding: EdgeInsets.only(top: 14),
+        padding: EdgeInsets.symmetric(
+          vertical: 2,
+        ), // Reduced vertical padding for a tighter list
         child: InkWell(
           onTap: () {
             tagCtrl.toggleTag(tagName);
           },
-          child: Row(
-            children: [
-              const SizedBox(width: 25),
-              isSelected
-                  ? Icon(Icons.bookmark, color: color)
-                  : Icon(Icons.bookmark_outline, color: kGrayColor),
-              //Icon(isSelected ? Icons.bookmark : Icons.bookmark_outline, color: color, size: 18),
-              const SizedBox(width: 10),
-              Text(
-                tagName,
-                style: TextStyle(
-                  fontSize: optionFontSize,
-                  fontWeight: FontWeight.normal,
-                  color: isSelected ? kTitleTextColor : kGrayColor,
-                ),
+          child: Container(
+            decoration: BoxDecoration(
+              color:
+                  isSelected
+                      ? color.withAlpha(30)
+                      : Colors
+                          .transparent, // Light background when selected
+              borderRadius: BorderRadius.circular(
+                8.0,
+              ), // Rounded corners for the container
+              border: Border.all(
+                color: Colors.transparent,
+                width: 1.5,
               ),
-            ],
+            ),
+            child: Padding(
+              padding: EdgeInsets.symmetric(
+                horizontal: 16.0,
+                vertical: spacingSideMenuOption,
+              ), // Inner padding
+              child: Row(
+                children: [
+                  Icon(
+                    isSelected
+                        ? Icons.bookmark
+                        : Icons.bookmark_outline,
+                    // Use filled icon when selected
+                    color:
+                        color, // Icon color always uses the tag's color
+                    size:
+                        22, // Slightly increased icon size for better visibility
+                  ),
+                  const SizedBox(width: 12), // Increased spacing
+                  Expanded(
+                    child: Text(
+                      tagName,
+                      style: TextStyle(
+                        fontSize: optionFontSize,
+                        fontWeight: FontWeight.normal,
+                        color:
+                            isSelected
+                                ? kTitleTextColor
+                                : kGrayColor, // Text color remains as per original logic
+                      ),
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ),
         ),
       );
