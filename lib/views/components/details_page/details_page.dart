@@ -3,6 +3,7 @@ import 'package:cycle_it/models/item_model.dart';
 import 'package:cycle_it/utils/constants.dart';
 import 'package:cycle_it/utils/responsive_style.dart';
 import 'package:cycle_it/views/components/details_page/details_brief_card.dart';
+import 'package:cycle_it/views/components/details_page/usage_records_table.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -73,10 +74,7 @@ class DetailsPage extends StatelessWidget {
                           //图表
                           _buildOverview(context, style, item),
 
-                          // UsageRecordsTable(
-                          //   currentItem: item,
-                          //   textStyleMD: bodyTextStyle,
-                          // ),
+                          UsageRecordsTable(currentItem: item),
                         ],
                       ),
                     ),

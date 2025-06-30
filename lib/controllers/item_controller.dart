@@ -30,11 +30,15 @@ class ItemController extends GetxController {
     null,
   ); // 用于详情页的当前物品
 
-  // 表格状态管理 (仅用于物品详情页的 UsageRecordsTable)
-  late UsageRecordDataSource usageRecordDataSource;
-  final RxInt rowsPerPage = 10.obs;
-  final RxInt currentPage = 0.obs;
-  final RxInt currentRowsStartOffset = 0.obs;
+  // 表格状态管理
+  // 使用 Rx<UsageRecordDataSource?> 来允许它在初始化之前为 null
+  Rx<UsageRecordDataSource?> usageRecordDataSource =
+      Rx<UsageRecordDataSource?>(null);
+
+  // 分页状态
+  final RxInt rowsPerPage = 10.obs; // 每页行数，用户可选择
+  final RxInt currentPage = 0.obs; // 当前页码 (从0开始)
+  final RxInt currentRowsStartOffset = 0.obs; // 当前页数据的起始偏移量 (用于计算序号)
 
   @override
   void onInit() {
@@ -75,21 +79,33 @@ class ItemController extends GetxController {
       }
     });
 
-    // 监听 currentItem 变化，初始化或更新 UsageRecordDataSource
+    // --- 关键修改：currentItem 变化时重新创建 UsageRecordDataSource ---
     ever(currentItem, (item) {
-      if (item != null) {
-        usageRecordDataSource = UsageRecordDataSource(
+      if (item != null && item.id != null) {
+        // 获取 context 用于 TextStyle，确保在 UI 线程上获取
+        final TextStyle style =
+            Get.context != null
+                ? Theme.of(
+                  Get.context!,
+                ).textTheme.bodyMedium! // 假设你有一个默认的文本样式
+                : const TextStyle(fontSize: 14); // 备用样式
+
+        // 每次 currentItem 变化，都创建一个新的 UsageRecordDataSource 实例
+        usageRecordDataSource.value = UsageRecordDataSource(
           itemId: item.id!,
           onEdit: (record) => _showEditDialog(record),
           onDelete: (record) => _confirmDelete(record),
+          textStyleMD: style, // 传入 TextStyle
         );
-        // 加载表格数据
-        usageRecordDataSource.loadData(
+        // 立即加载第一页数据
+        usageRecordDataSource.value!.loadData(
           currentPage.value,
           rowsPerPage.value,
         );
         currentRowsStartOffset.value =
             currentPage.value * rowsPerPage.value;
+      } else {
+        usageRecordDataSource.value = null; // 如果没有选中物品，清空数据源
       }
     });
   }
@@ -227,7 +243,7 @@ class ItemController extends GetxController {
     );
 
     // 刷新数据源以更新表格
-    await usageRecordDataSource.refreshData();
+    await usageRecordDataSource.value!.refreshData();
     // 重新加载 ItemModel，更新其内部的 usageRecords 列表和计算属性
     currentItem.value = await _itemService.getItemWithUsageRecords(
       currentItem.value!.id!,
@@ -250,7 +266,7 @@ class ItemController extends GetxController {
     );
 
     // 刷新数据源以更新表格
-    await usageRecordDataSource.refreshData();
+    await usageRecordDataSource.value!.refreshData();
     currentItem.value = await _itemService.getItemWithUsageRecords(
       currentItem.value!.id!,
     );
@@ -268,7 +284,7 @@ class ItemController extends GetxController {
     );
 
     // 刷新数据源以更新表格
-    await usageRecordDataSource.refreshData();
+    await usageRecordDataSource.value!.refreshData();
     currentItem.value = await _itemService.getItemWithUsageRecords(
       currentItem.value!.id!,
     );
@@ -280,16 +296,19 @@ class ItemController extends GetxController {
   void onPageChanged(int pageIndex) {
     currentPage.value = pageIndex;
     currentRowsStartOffset.value = pageIndex * rowsPerPage.value;
-    usageRecordDataSource.loadData(pageIndex, rowsPerPage.value);
+    usageRecordDataSource.value?.loadData(
+      pageIndex,
+      rowsPerPage.value,
+    );
   }
 
   // 每页行数改变回调
   void onRowsPerPageChanged(int? value) {
     if (value != null) {
       rowsPerPage.value = value;
-      currentPage.value = 0;
+      currentPage.value = 0; // 改变每页行数时，重置回第一页
       currentRowsStartOffset.value = 0;
-      usageRecordDataSource.loadData(
+      usageRecordDataSource.value?.loadData(
         currentPage.value,
         rowsPerPage.value,
       );
