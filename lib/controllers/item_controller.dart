@@ -35,11 +35,6 @@ class ItemController extends GetxController {
   Rx<UsageRecordDataSource?> usageRecordDataSource =
       Rx<UsageRecordDataSource?>(null);
 
-  // 分页状态
-  final RxInt rowsPerPage = 10.obs; // 每页行数，用户可选择
-  final RxInt currentPage = 0.obs; // 当前页码 (从0开始)
-  final RxInt currentRowsStartOffset = 0.obs; // 当前页数据的起始偏移量 (用于计算序号)
-
   @override
   void onInit() {
     super.onInit();
@@ -67,11 +62,9 @@ class ItemController extends GetxController {
       _searchBarController.searchQuery,
       (_) => _updateDisplayedItems(),
     );
-
     // 当标签被添加、编辑或删除时，重新加载所有物品以更新其关联的标签信息
     ever(_tagController.allTags, (_) async {
       await loadAllItems();
-
       // If there's an item currently selected in details, refresh its data
       if (currentItem.value != null &&
           currentItem.value!.id != null) {
@@ -79,33 +72,23 @@ class ItemController extends GetxController {
       }
     });
 
-    // --- 关键修改：currentItem 变化时重新创建 UsageRecordDataSource ---
+    // --- currentItem 变化时直接使用 item.usageRecords 初始化数据源 ---
     ever(currentItem, (item) {
       if (item != null && item.id != null) {
-        // 获取 context 用于 TextStyle，确保在 UI 线程上获取
         final TextStyle style =
             Get.context != null
-                ? Theme.of(
-                  Get.context!,
-                ).textTheme.bodyMedium! // 假设你有一个默认的文本样式
-                : const TextStyle(fontSize: 14); // 备用样式
+                ? Theme.of(Get.context!).textTheme.bodyMedium!
+                : const TextStyle(fontSize: 14);
 
-        // 每次 currentItem 变化，都创建一个新的 UsageRecordDataSource 实例
         usageRecordDataSource.value = UsageRecordDataSource(
           itemId: item.id!,
           onEdit: (record) => _showEditDialog(record),
           onDelete: (record) => _confirmDelete(record),
-          textStyleMD: style, // 传入 TextStyle
+          textStyleMD: style,
+          initialRecords: item.usageRecords, //直接传入所有使用记录
         );
-        // 立即加载第一页数据
-        usageRecordDataSource.value!.loadData(
-          currentPage.value,
-          rowsPerPage.value,
-        );
-        currentRowsStartOffset.value =
-            currentPage.value * rowsPerPage.value;
       } else {
-        usageRecordDataSource.value = null; // 如果没有选中物品，清空数据源
+        usageRecordDataSource.value = null;
       }
     });
   }
@@ -227,7 +210,10 @@ class ItemController extends GetxController {
     if (item != null) {
       currentItem.value = item;
       currentItem.value!.invalidateCalculatedProperties(); // 清除缓存
-      // usageRecordDataSource 会在 currentItem 变化时自动初始化和加载数据
+      // 当 currentItem 变化时，如果数据源已存在，更新其记录
+      if (usageRecordDataSource.value != null) {
+        usageRecordDataSource.value!.updateRecords(item.usageRecords);
+      }
     } else {
       currentItem.value = null;
     }
@@ -242,13 +228,8 @@ class ItemController extends GetxController {
       usedAt,
     );
 
-    // 刷新数据源以更新表格
-    await usageRecordDataSource.value!.refreshData();
-    // 重新加载 ItemModel，更新其内部的 usageRecords 列表和计算属性
-    currentItem.value = await _itemService.getItemWithUsageRecords(
-      currentItem.value!.id!,
-    );
-    currentItem.value!.invalidateCalculatedProperties();
+    // 重新加载当前物品的详情，这将自动更新 usageRecordDataSource
+    await loadItemForDetails(currentItem.value!.id!);
     await loadAllItems(); // 更新主页列表的 ItemModel
   }
 
@@ -265,13 +246,9 @@ class ItemController extends GetxController {
       newUsedAt,
     );
 
-    // 刷新数据源以更新表格
-    await usageRecordDataSource.value!.refreshData();
-    currentItem.value = await _itemService.getItemWithUsageRecords(
-      currentItem.value!.id!,
-    );
-    currentItem.value!.invalidateCalculatedProperties();
-    await loadAllItems(); // 更新主页列表的 ItemModel
+    // 重新加载当前物品的详情，这将自动更新 usageRecordDataSource
+    await loadItemForDetails(currentItem.value!.id!);
+    await loadAllItems();
   }
 
   // 删除使用记录
@@ -283,39 +260,13 @@ class ItemController extends GetxController {
       currentItem.value!.id!,
     );
 
-    // 刷新数据源以更新表格
-    await usageRecordDataSource.value!.refreshData();
-    currentItem.value = await _itemService.getItemWithUsageRecords(
-      currentItem.value!.id!,
-    );
-    currentItem.value!.invalidateCalculatedProperties();
-    await loadAllItems(); // 更新主页列表的 ItemModel
+    // 重新加载当前物品的详情，这将自动更新 usageRecordDataSource
+    await loadItemForDetails(currentItem.value!.id!);
+    await loadAllItems();
   }
 
-  // 翻页回调
-  void onPageChanged(int pageIndex) {
-    currentPage.value = pageIndex;
-    currentRowsStartOffset.value = pageIndex * rowsPerPage.value;
-    usageRecordDataSource.value?.loadData(
-      pageIndex,
-      rowsPerPage.value,
-    );
-  }
-
-  // 每页行数改变回调
-  void onRowsPerPageChanged(int? value) {
-    if (value != null) {
-      rowsPerPage.value = value;
-      currentPage.value = 0; // 改变每页行数时，重置回第一页
-      currentRowsStartOffset.value = 0;
-      usageRecordDataSource.value?.loadData(
-        currentPage.value,
-        rowsPerPage.value,
-      );
-    }
-  }
-
-  // 显示编辑对话框 (和之前一样)
+  // todo: 分离下面两个dialog
+  // 显示编辑对话框
   void _showEditDialog(UsageRecordModel record) {
     Get.defaultDialog(
       title: '编辑使用日期',
@@ -343,7 +294,7 @@ class ItemController extends GetxController {
     );
   }
 
-  // 确认删除对话框 (和之前一样)
+  // 确认删除对话框
   void _confirmDelete(UsageRecordModel record) {
     Get.defaultDialog(
       title: '删除确认',

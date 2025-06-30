@@ -292,48 +292,20 @@ class MyDatabase extends _$MyDatabase {
     return (delete(items)..where((t) => t.id.equals(id))).go();
   }
 
-  // 新增：按分页和排序获取使用记录 (已在 ItemService 中定义，这里是数据库层的方法)
-  Future<List<UsageRecordData>> getPaginatedUsageRecordsData({
+  // 获取使用记录
+  Future<List<UsageRecordData>> getUsageRecordsByItemId({
     required int itemId,
-    required int offset,
-    required int limit,
-    required String sortBy,
-    required bool sortAscending,
   }) async {
-    OrderingTerm orderingTerm;
-    switch (sortBy) {
-      case 'usedAt':
-        orderingTerm = OrderingTerm(
-          expression: usageRecords.usedAt,
-          mode: sortAscending ? OrderingMode.asc : OrderingMode.desc,
-        );
-        break;
-      case 'intervalSinceLastUse':
-        orderingTerm = OrderingTerm(
-          expression: usageRecords.intervalSinceLastUse,
-          mode: sortAscending ? OrderingMode.asc : OrderingMode.desc,
-        );
-        break;
-      default: // 默认按 usedAt 排序
-        orderingTerm = OrderingTerm(
-          expression: usageRecords.usedAt,
-          mode: OrderingMode.asc,
-        );
-    }
-
     return await (select(usageRecords)
-          ..where((tbl) => tbl.itemId.equals(itemId))
-          ..orderBy([(tbl) => orderingTerm])
-          ..limit(limit, offset: offset))
-        .get();
+      ..where((tbl) => tbl.itemId.equals(itemId))).get();
   }
 
   // 获取某个物品的使用记录总数
-  Future<int> getUsageRecordCountByItemId(int itemId) {
-    return (select(usageRecords)..where(
-      (tbl) => tbl.itemId.equals(itemId),
-    )).get().then((list) => list.length);
-  }
+  // Future<int> getUsageRecordCountByItemId(int itemId) {
+  //   return (select(usageRecords)..where(
+  //     (tbl) => tbl.itemId.equals(itemId),
+  //   )).get().then((list) => list.length);
+  // }
 
   // 插入或更新 UsageRecord
   Future<int> upsertUsageRecord(UsageRecordModel record) {

@@ -1,7 +1,6 @@
 import 'package:drift/drift.dart';
 import 'package:flutter/material.dart';
 
-import '../data/usage_record_data_source.dart'; // 引入 PaginatedUsageRecordsResult
 import '../database/database.dart';
 import '../models/item_model.dart';
 import '../models/tag_model.dart';
@@ -29,41 +28,6 @@ class ItemService {
   }
 
   // --- UsageRecord 相关操作 ---
-
-  // 获取某个物品的使用记录，支持分页和排序
-  Future<PaginatedUsageRecordsResult> getPaginatedUsageRecords({
-    required int itemId,
-    required int offset,
-    required int limit,
-    required String sortBy,
-    required bool sortAscending,
-  }) async {
-    final recordsData = await _db.getPaginatedUsageRecordsData(
-      itemId: itemId,
-      offset: offset,
-      limit: limit,
-      sortBy: sortBy,
-      sortAscending: sortAscending,
-    );
-    final totalCount = await _db.getUsageRecordCountByItemId(itemId);
-
-    final records =
-        recordsData
-            .map(
-              (data) => UsageRecordModel(
-                id: data.id,
-                itemId: data.itemId,
-                usedAt: data.usedAt,
-                intervalSinceLastUse: data.intervalSinceLastUse,
-              ),
-            )
-            .toList();
-
-    return PaginatedUsageRecordsResult(
-      records: records,
-      totalCount: totalCount,
-    );
-  }
 
   // 添加使用记录并重新计算间隔 (事务处理)
   Future<void> addUsageRecordAndRecalculate(
@@ -183,15 +147,7 @@ class ItemService {
     if (itemData == null) return null;
 
     final usageRecords = await _db
-        .getPaginatedUsageRecordsData(
-          itemId: itemId,
-          offset: 0,
-          // 获取所有，不分页
-          limit: 99999,
-          // 设置一个足够大的限制
-          sortBy: 'usedAt',
-          sortAscending: true,
-        )
+        .getUsageRecordsByItemId(itemId: itemId)
         .then(
           (list) =>
               list
@@ -205,6 +161,8 @@ class ItemService {
                   )
                   .toList(),
         );
+    //在 Service 层对 usageRecords 进行初始排序
+    usageRecords.sort((a, b) => a.usedAt.compareTo(b.usedAt));
 
     final itemTags =
         await (_db.select(_db.itemTags)
@@ -231,29 +189,29 @@ class ItemService {
   }
 
   // 加载某个物品的所有使用记录，并确保按时间排序
-  Future<List<UsageRecordModel>> getUsageRecordsByItemId(
-    int itemId,
-  ) async {
-    final List<UsageRecordData> recordsData =
-        await (_db.select(_db.usageRecords)
-              ..where((tbl) => tbl.itemId.equals(itemId))
-              ..orderBy([
-                (tbl) => OrderingTerm(
-                  expression: tbl.usedAt,
-                  mode: OrderingMode.asc,
-                ), // 按照 usedAt 升序排列
-              ]))
-            .get();
-
-    return recordsData.map((data) {
-      return UsageRecordModel(
-        id: data.id,
-        itemId: data.itemId,
-        usedAt: data.usedAt,
-        intervalSinceLastUse: data.intervalSinceLastUse,
-      );
-    }).toList();
-  }
+  // Future<List<UsageRecordModel>> getUsageRecordsByItemId(
+  //   int itemId,
+  // ) async {
+  //   final List<UsageRecordData> recordsData =
+  //       await (_db.select(_db.usageRecords)
+  //             ..where((tbl) => tbl.itemId.equals(itemId))
+  //             ..orderBy([
+  //               (tbl) => OrderingTerm(
+  //                 expression: tbl.usedAt,
+  //                 mode: OrderingMode.asc,
+  //               ), // 按照 usedAt 升序排列
+  //             ]))
+  //           .get();
+  //
+  //   return recordsData.map((data) {
+  //     return UsageRecordModel(
+  //       id: data.id,
+  //       itemId: data.itemId,
+  //       usedAt: data.usedAt,
+  //       intervalSinceLastUse: data.intervalSinceLastUse,
+  //     );
+  //   }).toList();
+  // }
 
   // --- Tag 相关操作 ---
 
