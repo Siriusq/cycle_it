@@ -21,6 +21,7 @@ class DetailsPage extends StatelessWidget {
 
     final style = ResponsiveStyle.to;
     final double spacingLG = style.spacingLG;
+    final double spacingMD = style.spacingMD;
     final bool isMobile = style.isMobileDevice;
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -75,7 +76,10 @@ class DetailsPage extends StatelessWidget {
                           //图表
                           _buildOverview(context, style, item),
 
+                          SizedBox(height: spacingMD),
+                          // 使用记录
                           UsageRecordsTable(currentItem: item),
+                          SizedBox(height: spacingLG),
                         ],
                       ),
                     ),

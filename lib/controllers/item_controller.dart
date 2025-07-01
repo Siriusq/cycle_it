@@ -7,6 +7,7 @@ import '../data/usage_record_data_source.dart';
 import '../models/item_model.dart';
 import '../models/usage_record_model.dart';
 import '../services/item_service.dart';
+import '../utils/responsive_style.dart';
 import 'item_list_order_controller.dart';
 
 class ItemController extends GetxController {
@@ -16,6 +17,7 @@ class ItemController extends GetxController {
   final TagController _tagController = Get.find<TagController>();
   final SearchBarController _searchBarController =
       Get.find<SearchBarController>();
+  final ResponsiveStyle style = ResponsiveStyle.to;
 
   // 加载状态
   RxBool isLoading = true.obs; // 初始为 true，表示正在加载
@@ -34,6 +36,10 @@ class ItemController extends GetxController {
   // 使用 Rx<UsageRecordDataSource?> 来允许它在初始化之前为 null
   Rx<UsageRecordDataSource?> usageRecordDataSource =
       Rx<UsageRecordDataSource?>(null);
+
+  // 用于管理使用记录表格的排序状态
+  final RxString usageRecordsSortColumn = 'usedAt'.obs; // 默认按使用日期排序
+  final RxBool usageRecordsSortAscending = true.obs; // 默认升序
 
   @override
   void onInit() {
@@ -75,17 +81,14 @@ class ItemController extends GetxController {
     // --- currentItem 变化时直接使用 item.usageRecords 初始化数据源 ---
     ever(currentItem, (item) {
       if (item != null && item.id != null) {
-        final TextStyle style =
-            Get.context != null
-                ? Theme.of(Get.context!).textTheme.bodyMedium!
-                : const TextStyle(fontSize: 14);
-
         usageRecordDataSource.value = UsageRecordDataSource(
           itemId: item.id!,
           onEdit: (record) => _showEditDialog(record),
           onDelete: (record) => _confirmDelete(record),
-          textStyleMD: style,
-          initialRecords: item.usageRecords, //直接传入所有使用记录
+          textStyleMD: style.bodyTextLG,
+          initialRecords: item.usageRecords,
+          initialSortColumn: usageRecordsSortColumn.value,
+          initialSortAscending: usageRecordsSortAscending.value,
         );
       } else {
         usageRecordDataSource.value = null;
@@ -263,6 +266,26 @@ class ItemController extends GetxController {
     // 重新加载当前物品的详情，这将自动更新 usageRecordDataSource
     await loadItemForDetails(currentItem.value!.id!);
     await loadAllItems();
+  }
+
+  // 处理使用记录表格排序的回调方法
+  void onUsageRecordsSort(String columnName) {
+    // 如果点击的是当前排序列，则切换排序方向
+    if (usageRecordsSortColumn.value == columnName) {
+      usageRecordsSortAscending.value =
+          !usageRecordsSortAscending.value;
+    } else {
+      // 如果点击的是新的列，则将排序列更新为新列，并默认升序
+      usageRecordsSortColumn.value = columnName;
+      usageRecordsSortAscending.value = true;
+    }
+
+    // 这一步是关键：我们需要确保数据源被告知排序变化，以便它重新排序内部数据
+    // 然后数据源会调用 notifyListeners() 刷新 UI
+    usageRecordDataSource.value?.sort(
+      usageRecordsSortColumn.value,
+      usageRecordsSortAscending.value,
+    );
   }
 
   // todo: 分离下面两个dialog

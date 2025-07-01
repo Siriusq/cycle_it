@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:cycle_it/utils/responsive_style.dart';
 import 'package:data_table_2/data_table_2.dart';
 import 'package:flutter/material.dart';
@@ -5,6 +7,7 @@ import 'package:get/get.dart';
 
 import '../../../controllers/item_controller.dart';
 import '../../../models/item_model.dart';
+import '../../../utils/constants.dart';
 
 class UsageRecordsTable extends StatelessWidget {
   final ItemModel currentItem;
@@ -24,36 +27,28 @@ class UsageRecordsTable extends StatelessWidget {
         return const Center(child: CircularProgressIndicator());
       }
 
-      // todo：改成添加按钮或者改成无记录
-      if (itemController.usageRecordDataSource.value == null) {
+      final dataSource = itemController.usageRecordDataSource.value;
+      if (dataSource == null) {
         return Center(child: Text('加载使用记录...', style: bodyText));
       }
 
       return LayoutBuilder(
         builder: (context, constraints) {
-          double columnSpacing =
-              constraints.maxWidth > 900 ? 100 : 40;
+          double columnSpacing = style.tableColWidth;
+          double tableHeight = max(Get.height * 0.8, 400);
 
           return SizedBox(
-            height: 600,
+            height: tableHeight,
             child: Container(
               decoration: BoxDecoration(
-                color: Theme.of(context).cardColor, // 使用卡片背景色
-                borderRadius: BorderRadius.circular(12.0), // 圆角边框
-                boxShadow: [
-                  // 阴影效果
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.05),
-                    spreadRadius: 1,
-                    blurRadius: 5,
-                    offset: const Offset(0, 3),
-                  ),
-                ],
+                color: kSecondaryBgColor,
+                border: Border.all(width: 1.5, color: kBorderColor),
+                borderRadius: BorderRadius.circular(15.0),
               ),
               child: Column(
                 children: [
                   Padding(
-                    // 【修改点26】顶部栏
+                    // 顶部栏
                     padding: const EdgeInsets.symmetric(
                       horizontal: 16.0,
                       vertical: 8.0,
@@ -62,10 +57,7 @@ class UsageRecordsTable extends StatelessWidget {
                       mainAxisAlignment:
                           MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(
-                          '使用记录',
-                          style: titleTextMD, // 使用小标题样式
-                        ),
+                        Text('使用记录', style: titleTextMD),
                         IconButton(
                           icon: const Icon(
                             Icons.add_circle_outline,
@@ -82,76 +74,66 @@ class UsageRecordsTable extends StatelessWidget {
                       ],
                     ),
                   ),
-                  const Divider(height: 0, thickness: 1),
+                  //const Divider(height: 0, thickness: 1),
                   Expanded(
-                    child: PaginatedDataTable2(
-                      source:
-                          itemController.usageRecordDataSource.value!,
-                      columns: [
-                        DataColumn2(
-                          label: Text('序号', style: bodyText),
-                          onSort: (columnIndex, ascending) {
+                    child: Obx(() {
+                      return PaginatedDataTable2(
+                        source: dataSource,
+                        columns: [
+                          DataColumn2(
+                            label: Text('序号', style: bodyText),
+                            size: ColumnSize.S,
+                          ),
+                          DataColumn2(
+                            label: Text('使用日期', style: bodyText),
+                            onSort: (columnIndex, ascending) {
+                              itemController.onUsageRecordsSort(
+                                'usedAt',
+                              );
+                            },
+                            size: ColumnSize.L,
+                          ),
+                          DataColumn2(
+                            label: Text('与上次间隔(天)', style: bodyText),
+                            onSort: (columnIndex, ascending) {
+                              itemController.onUsageRecordsSort(
+                                'intervalSinceLastUse',
+                              );
+                            },
+                            size: ColumnSize.L,
+                          ),
+                          DataColumn2(
+                            label: Text('操作', style: bodyText),
+                            //fixedWidth: 100,
+                            size: ColumnSize.S,
+                          ),
+                        ],
+                        autoRowsToHeight: true,
+                        wrapInCard: false,
+                        showCheckboxColumn: false,
+                        empty: Center(
+                          child: Text('暂无使用记录', style: bodyText),
+                        ),
+                        horizontalMargin: 12,
+                        columnSpacing: columnSpacing,
+                        headingRowColor: WidgetStateProperty.all(
+                          Colors.blue.shade50,
+                        ),
+                        dividerThickness: 2,
+                        border: TableBorder.all(
+                          color: Colors.blueGrey.shade200,
+                          width: 1,
+                        ),
+                        scrollController: ScrollController(),
+                        sortColumnIndex: _getSortColumnIndex(
+                          itemController.usageRecordsSortColumn.value,
+                        ),
+                        sortAscending:
                             itemController
-                                .usageRecordDataSource
-                                .value!
-                                .sort('index', ascending);
-                          },
-                          //fixedWidth: 80,
-                          size: ColumnSize.S,
-                        ),
-                        DataColumn2(
-                          label: Text('使用日期', style: bodyText),
-                          onSort: (columnIndex, ascending) {
-                            itemController
-                                .usageRecordDataSource
-                                .value!
-                                .sort('usedAt', ascending);
-                          },
-                          size: ColumnSize.L,
-                        ),
-                        DataColumn2(
-                          label: Text('与上次间隔(天)', style: bodyText),
-                          onSort: (columnIndex, ascending) {
-                            itemController
-                                .usageRecordDataSource
-                                .value!
-                                .sort(
-                                  'intervalSinceLastUse',
-                                  ascending,
-                                );
-                          },
-                          size: ColumnSize.L,
-                        ),
-                        DataColumn2(
-                          label: Text('操作', style: bodyText),
-                          //fixedWidth: 100,
-                          size: ColumnSize.S,
-                        ),
-                      ],
-                      // rowsPerPage: itemController.usageRecordDataSource.value!.rowCount == 0
-                      //     ? 1 // 避免 rowCount 为 0 时崩溃，至少显示一行空内容
-                      //     : itemController.usageRecordDataSource.value!.rowCount,
-                      // 启用 AutoRows 功能
-                      autoRowsToHeight: true,
-
-                      wrapInCard: false,
-                      // 外部已经有 Card/Container 样式，无需再包裹
-                      showCheckboxColumn: false,
-                      empty: Center(
-                        child: Text('暂无使用记录', style: bodyText),
-                      ),
-                      horizontalMargin: 12,
-                      columnSpacing: columnSpacing,
-                      headingRowColor: WidgetStateProperty.all(
-                        Colors.blue.shade50,
-                      ),
-                      dividerThickness: 2,
-                      border: TableBorder.all(
-                        color: Colors.blueGrey.shade200,
-                        width: 1,
-                      ),
-                      scrollController: ScrollController(),
-                    ),
+                                .usageRecordsSortAscending
+                                .value,
+                      );
+                    }),
                   ),
                 ],
               ),
@@ -160,5 +142,17 @@ class UsageRecordsTable extends StatelessWidget {
         },
       );
     });
+  }
+
+  // 将列名映射到索引
+  int? _getSortColumnIndex(String columnName) {
+    switch (columnName) {
+      case 'usedAt':
+        return 1;
+      case 'intervalSinceLastUse':
+        return 2;
+      default:
+        return null;
+    }
   }
 }

@@ -14,19 +14,23 @@ class UsageRecordDataSource extends DataTableSource {
   final TextStyle textStyleMD; // 从外部传入TextStyle
 
   List<UsageRecordModel> _usageRecords = [];
-  String _sortColumn = 'usedAt'; // 默认排序字段
-  bool _sortAscending = true; // 默认升序
+  String _sortColumn; // 默认排序字段
+  bool _sortAscending; // 默认升序
 
   UsageRecordDataSource({
     required this.itemId,
     required this.onEdit,
     required this.onDelete,
     required this.textStyleMD,
-    List<UsageRecordModel>? initialRecords, //接收初始数据
-  }) {
+    List<UsageRecordModel>? initialRecords,
+    // 【新增】接收初始排序状态
+    required String initialSortColumn,
+    required bool initialSortAscending,
+  }) : _sortColumn = initialSortColumn,
+       _sortAscending = initialSortAscending {
     if (initialRecords != null) {
       _usageRecords = initialRecords;
-      _applySort(); // 【修改点5】如果传入了初始数据，进行默认排序
+      _applySort(); // 如果传入了初始数据，进行默认排序
     }
   }
 
@@ -44,7 +48,6 @@ class UsageRecordDataSource extends DataTableSource {
       Comparable bValue;
 
       switch (_sortColumn) {
-        case 'index': // 对于序号排序，实际是按 usedAt 排序
         case 'usedAt':
           aValue = a.usedAt;
           bValue = b.usedAt;

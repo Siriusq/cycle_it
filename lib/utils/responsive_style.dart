@@ -153,6 +153,10 @@ class ResponsiveStyle extends GetxController {
   // Dialog 最大宽度
   double get dialogWidth =>
       _getValue(mobile: Get.width * 0.9, tablet: 600, desktop: 600);
+
+  // 表格列宽
+  double get tableColWidth =>
+      _getValue(mobile: 40, tablet: 80, desktop: 100);
 }
 
 // 标签样式子类
