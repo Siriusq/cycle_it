@@ -48,6 +48,7 @@ class DetailsPage extends StatelessWidget {
 
         return Scaffold(
           body: SafeArea(
+            left: false,
             child: Container(
               color: kPrimaryBgColor,
               child: Column(
