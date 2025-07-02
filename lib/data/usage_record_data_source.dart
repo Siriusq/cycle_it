@@ -1,9 +1,13 @@
+import 'package:cycle_it/utils/responsive_style.dart';
 import 'package:data_table_2/data_table_2.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
 import '../models/usage_record_model.dart';
+import '../utils/constants.dart';
 
+// todo: 简化这里，直接在按钮处调用dialog，根源在控制器那里
 typedef OnEditCallback = void Function(UsageRecordModel record);
 typedef OnDeleteCallback = void Function(UsageRecordModel record);
 
@@ -11,7 +15,6 @@ class UsageRecordDataSource extends DataTableSource {
   final int itemId;
   final OnEditCallback onEdit;
   final OnDeleteCallback onDelete;
-  final TextStyle textStyleMD; // 从外部传入TextStyle
 
   List<UsageRecordModel> _usageRecords = [];
   String _sortColumn; // 默认排序字段
@@ -21,7 +24,6 @@ class UsageRecordDataSource extends DataTableSource {
     required this.itemId,
     required this.onEdit,
     required this.onDelete,
-    required this.textStyleMD,
     List<UsageRecordModel>? initialRecords,
     // 【新增】接收初始排序状态
     required String initialSortColumn,
@@ -41,7 +43,7 @@ class UsageRecordDataSource extends DataTableSource {
     notifyListeners(); // 通知表格数据已更新
   }
 
-  // 【修改点7】辅助排序方法
+  // 辅助排序方法
   void _applySort() {
     _usageRecords.sort((a, b) {
       Comparable aValue;
@@ -86,43 +88,78 @@ class UsageRecordDataSource extends DataTableSource {
     final record = _usageRecords[index];
     // 序号基于内存中已排序列表的索引
     final int displayIndex = index + 1;
+    final style = ResponsiveStyle.to;
+    final bodyTextStyleLG = style.bodyTextLG;
+    final bodyTextStyle = style.bodyText;
+    final spacingSM = style.spacingSM;
 
     return DataRow2(
       cells: [
-        DataCell(Text(displayIndex.toString(), style: textStyleMD)),
         DataCell(
-          Text(
-            DateFormat('yyyy-MM-dd').format(record.usedAt),
-            style: textStyleMD,
+          Center(
+            child: Text(
+              displayIndex.toString(),
+              style: bodyTextStyleLG,
+            ),
           ),
         ),
         DataCell(
-          Text(
-            record.intervalSinceLastUse?.toString() ?? 'N/A',
-            style: textStyleMD,
+          Center(
+            child: Text(
+              DateFormat('yyyy-MM-dd').format(record.usedAt),
+              style: bodyTextStyleLG,
+            ),
           ),
         ),
         DataCell(
-          PopupMenuButton<String>(
-            icon: const Icon(Icons.more_vert),
-            onSelected: (String value) {
-              if (value == 'edit') {
-                onEdit(record);
-              } else if (value == 'delete') {
-                onDelete(record);
-              }
-            },
-            itemBuilder:
-                (BuildContext context) => <PopupMenuEntry<String>>[
-                  const PopupMenuItem<String>(
-                    value: 'edit',
-                    child: Text('编辑'),
-                  ),
-                  const PopupMenuItem<String>(
-                    value: 'delete',
-                    child: Text('删除'),
-                  ),
-                ],
+          Center(
+            child: Text(
+              record.intervalSinceLastUse?.toString() ?? 'N/A',
+              style: bodyTextStyleLG,
+            ),
+          ),
+        ),
+        DataCell(
+          Center(
+            child: PopupMenuButton<String>(
+              color: kSecondaryBgColor,
+              icon: const Icon(Icons.more_vert),
+              onSelected: (String value) {
+                if (value == 'edit') {
+                  onEdit(record);
+                } else if (value == 'delete') {
+                  onDelete(record);
+                }
+              },
+              itemBuilder:
+                  (BuildContext context) => <PopupMenuEntry<String>>[
+                    PopupMenuItem<String>(
+                      value: 'edit',
+                      child: Row(
+                        children: [
+                          Icon(Icons.edit, color: kTextColor),
+                          SizedBox(width: spacingSM),
+                          Text('edit'.tr, style: bodyTextStyle),
+                        ],
+                      ),
+                    ),
+                    PopupMenuItem<String>(
+                      value: 'delete',
+                      child: Row(
+                        children: [
+                          Icon(Icons.delete, color: Colors.red),
+                          SizedBox(width: spacingSM),
+                          Text(
+                            'delete'.tr,
+                            style: bodyTextStyle.copyWith(
+                              color: Colors.red,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+            ),
           ),
         ),
       ],

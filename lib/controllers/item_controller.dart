@@ -85,7 +85,6 @@ class ItemController extends GetxController {
           itemId: item.id!,
           onEdit: (record) => _showEditDialog(record),
           onDelete: (record) => _confirmDelete(record),
-          textStyleMD: style.bodyTextLG,
           initialRecords: item.usageRecords,
           initialSortColumn: usageRecordsSortColumn.value,
           initialSortAscending: usageRecordsSortAscending.value,

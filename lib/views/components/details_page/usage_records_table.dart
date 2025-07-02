@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:cycle_it/utils/responsive_style.dart';
 import 'package:data_table_2/data_table_2.dart';
 import 'package:flutter/material.dart';
@@ -19,7 +17,8 @@ class UsageRecordsTable extends StatelessWidget {
     final ItemController itemController = Get.find<ItemController>();
     final ResponsiveStyle style = ResponsiveStyle.to;
     final TextStyle bodyText = style.bodyText;
-    final TextStyle titleTextMD = style.titleTextMD; // 获取小标题样式
+    final TextStyle titleTextMD = style.titleTextMD;
+    final double tableHeight = style.tableHeight;
 
     return Obx(() {
       if (itemController.currentItem.value == null ||
@@ -34,9 +33,6 @@ class UsageRecordsTable extends StatelessWidget {
 
       return LayoutBuilder(
         builder: (context, constraints) {
-          double columnSpacing = style.tableColWidth;
-          double tableHeight = max(Get.height * 0.8, 400);
-
           return SizedBox(
             height: tableHeight,
             child: Container(
@@ -64,8 +60,7 @@ class UsageRecordsTable extends StatelessWidget {
                             size: 24,
                           ), // 添加按钮
                           onPressed: () {
-                            // TODO: Implement add record functionality
-                            // 可以打开一个添加使用记录的对话框
+                            // TODO: 添加使用记录的对话框
                             itemController.addUsageRecord(
                               DateTime.now(),
                             ); // 示例：快速添加一条当前日期的记录
@@ -83,6 +78,8 @@ class UsageRecordsTable extends StatelessWidget {
                           DataColumn2(
                             label: Text('序号', style: bodyText),
                             size: ColumnSize.S,
+                            headingRowAlignment:
+                                MainAxisAlignment.center,
                           ),
                           DataColumn2(
                             label: Text('使用日期', style: bodyText),
@@ -92,6 +89,8 @@ class UsageRecordsTable extends StatelessWidget {
                               );
                             },
                             size: ColumnSize.L,
+                            headingRowAlignment:
+                                MainAxisAlignment.center,
                           ),
                           DataColumn2(
                             label: Text('与上次间隔(天)', style: bodyText),
@@ -101,10 +100,13 @@ class UsageRecordsTable extends StatelessWidget {
                               );
                             },
                             size: ColumnSize.L,
+                            headingRowAlignment:
+                                MainAxisAlignment.center,
                           ),
                           DataColumn2(
                             label: Text('操作', style: bodyText),
-                            //fixedWidth: 100,
+                            headingRowAlignment:
+                                MainAxisAlignment.center,
                             size: ColumnSize.S,
                           ),
                         ],
@@ -114,17 +116,28 @@ class UsageRecordsTable extends StatelessWidget {
                         empty: Center(
                           child: Text('暂无使用记录', style: bodyText),
                         ),
-                        horizontalMargin: 12,
-                        columnSpacing: columnSpacing,
+                        horizontalMargin: 0,
+                        columnSpacing: 0,
                         headingRowColor: WidgetStateProperty.all(
-                          Colors.blue.shade50,
+                          kSecondaryBgColor,
                         ),
-                        dividerThickness: 2,
-                        border: TableBorder.all(
-                          color: Colors.blueGrey.shade200,
-                          width: 1,
+                        //dividerThickness: 1,
+                        border: TableBorder(
+                          top: const BorderSide(color: kBorderColor),
+                          bottom: const BorderSide(
+                            color: kBorderColor,
+                          ),
+                          //left: BorderSide(color: Colors.grey[300]!),
+                          //right: BorderSide(color: Colors.grey[300]!),
+                          verticalInside: const BorderSide(
+                            color: kBorderColor,
+                          ),
+                          horizontalInside: const BorderSide(
+                            color: kBorderColor,
+                          ),
                         ),
                         scrollController: ScrollController(),
+                        sortArrowIcon: Icons.north,
                         sortColumnIndex: _getSortColumnIndex(
                           itemController.usageRecordsSortColumn.value,
                         ),

@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -154,9 +156,8 @@ class ResponsiveStyle extends GetxController {
   double get dialogWidth =>
       _getValue(mobile: Get.width * 0.9, tablet: 600, desktop: 600);
 
-  // 表格列宽
-  double get tableColWidth =>
-      _getValue(mobile: 40, tablet: 80, desktop: 100);
+  // 表格高度
+  double get tableHeight => max(Get.height * 0.8, 400);
 }
 
 // 标签样式子类

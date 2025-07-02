@@ -234,7 +234,7 @@ class ItemCard extends StatelessWidget {
                 children: [
                   Icon(Icons.edit, color: kTextColor),
                   SizedBox(width: spacingSM),
-                  Text('编辑', style: bodyTextStyle),
+                  Text('edit'.tr, style: bodyTextStyle),
                 ],
               ),
             ),
@@ -245,7 +245,7 @@ class ItemCard extends StatelessWidget {
                   Icon(Icons.delete, color: Colors.red),
                   SizedBox(width: spacingSM),
                   Text(
-                    '删除',
+                    'delete'.tr,
                     style: bodyTextStyle.copyWith(color: Colors.red),
                   ),
                 ],
