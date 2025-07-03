@@ -4,17 +4,15 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
+import '../controllers/item_controller.dart';
 import '../models/usage_record_model.dart';
 import '../utils/constants.dart';
-
-// todo: 简化这里，直接在按钮处调用dialog，根源在控制器那里
-typedef OnEditCallback = void Function(UsageRecordModel record);
-typedef OnDeleteCallback = void Function(UsageRecordModel record);
+import '../views/components/dialog/date_picker_helper.dart';
+import '../views/components/dialog/delete_confirm_dialog.dart';
 
 class UsageRecordDataSource extends DataTableSource {
   final int itemId;
-  final OnEditCallback onEdit;
-  final OnDeleteCallback onDelete;
+  final itemController = Get.find<ItemController>();
 
   List<UsageRecordModel> _usageRecords = [];
   String _sortColumn; // 默认排序字段
@@ -22,8 +20,6 @@ class UsageRecordDataSource extends DataTableSource {
 
   UsageRecordDataSource({
     required this.itemId,
-    required this.onEdit,
-    required this.onDelete,
     List<UsageRecordModel>? initialRecords,
     // 【新增】接收初始排序状态
     required String initialSortColumn,
@@ -124,11 +120,33 @@ class UsageRecordDataSource extends DataTableSource {
             child: PopupMenuButton<String>(
               color: kSecondaryBgColor,
               icon: const Icon(Icons.more_vert),
-              onSelected: (String value) {
+              onSelected: (String value) async {
                 if (value == 'edit') {
-                  onEdit(record);
+                  final DateTime? pickedDate =
+                      await promptForUsageDate(record.usedAt);
+                  if (pickedDate != null) {
+                    Get.back();
+                    itemController.editUsageRecord(
+                      record,
+                      pickedDate,
+                    );
+                  }
                 } else if (value == 'delete') {
-                  onDelete(record);
+                  final bool? confirmed =
+                      await showDeleteConfirmDialog(
+                        deleteTargetName: DateFormat(
+                          'yyyy-MM-dd',
+                        ).format(record.usedAt),
+                      );
+                  final String confirmMessage =
+                      '使用记录 ${DateFormat('yyyy-MM-dd').format(record.usedAt)} 已删除！';
+
+                  if (confirmed == true) {
+                    itemController.deleteUsageRecord(
+                      record,
+                    ); // 调用删除方法
+                    Get.snackbar('删除成功', confirmMessage);
+                  }
                 }
               },
               itemBuilder:

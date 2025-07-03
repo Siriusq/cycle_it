@@ -1,6 +1,5 @@
 import 'package:cycle_it/controllers/search_bar_controller.dart';
 import 'package:cycle_it/controllers/tag_controller.dart';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../data/usage_record_data_source.dart';
@@ -83,8 +82,6 @@ class ItemController extends GetxController {
       if (item != null && item.id != null) {
         usageRecordDataSource.value = UsageRecordDataSource(
           itemId: item.id!,
-          onEdit: (record) => _showEditDialog(record),
-          onDelete: (record) => _confirmDelete(record),
           initialRecords: item.usageRecords,
           initialSortColumn: usageRecordsSortColumn.value,
           initialSortAscending: usageRecordsSortAscending.value,
@@ -110,8 +107,7 @@ class ItemController extends GetxController {
       final loadedItems = await _itemService.getAllItems();
       allItems.assignAll(loadedItems);
     } catch (e) {
-      print('获取物品失败: $e');
-      // 处理错误，例如显示错误消息给用户
+      Get.snackbar('error'.tr, '$e');
     } finally {
       isLoading.value = false; // 结束加载
     }
@@ -236,7 +232,7 @@ class ItemController extends GetxController {
   }
 
   // 编辑使用记录的日期
-  Future<void> _editUsageRecord(
+  Future<void> editUsageRecord(
     UsageRecordModel record,
     DateTime newUsedAt,
   ) async {
@@ -254,7 +250,7 @@ class ItemController extends GetxController {
   }
 
   // 删除使用记录
-  Future<void> _deleteUsageRecord(UsageRecordModel record) async {
+  Future<void> deleteUsageRecord(UsageRecordModel record) async {
     if (currentItem.value == null) return;
 
     await _itemService.deleteUsageRecordAndRecalculate(
@@ -284,50 +280,6 @@ class ItemController extends GetxController {
     usageRecordDataSource.value?.sort(
       usageRecordsSortColumn.value,
       usageRecordsSortAscending.value,
-    );
-  }
-
-  // todo: 分离下面两个dialog
-  // 显示编辑对话框
-  void _showEditDialog(UsageRecordModel record) {
-    Get.defaultDialog(
-      title: '编辑使用日期',
-      content: Column(
-        children: [
-          ElevatedButton(
-            onPressed: () async {
-              final DateTime? pickedDate = await showDatePicker(
-                context: Get.context!,
-                initialDate: record.usedAt,
-                firstDate: DateTime(2000),
-                lastDate: DateTime.now(),
-              );
-              if (pickedDate != null) {
-                Get.back();
-                _editUsageRecord(record, pickedDate);
-              }
-            },
-            child: Text('选择日期'),
-          ),
-        ],
-      ),
-      textConfirm: '取消',
-      onConfirm: () => Get.back(),
-    );
-  }
-
-  // 确认删除对话框
-  void _confirmDelete(UsageRecordModel record) {
-    Get.defaultDialog(
-      title: '删除确认',
-      content: Text('确定要删除这条使用记录吗？'),
-      textConfirm: '删除',
-      textCancel: '取消',
-      onConfirm: () {
-        Get.back();
-        _deleteUsageRecord(record);
-      },
-      onCancel: () {},
     );
   }
 

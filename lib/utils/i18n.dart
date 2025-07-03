@@ -28,6 +28,11 @@ class MultiLanguage extends Translations {
       'tag_name_already_exists': '标签名称已存在',
       'tag_added_successfully': '已成功添加标签',
       'tag_management': '标签管理',
+      'date_format_error': '日期格式错误',
+      'date_invalid_error': '日期不可用',
+      'date_input_hint': '日日/月月/年年年年',
+      'date_input_label': '输入日期',
+      'date_help': '选择日期',
     },
     'en_US': {
       'languageSettingsText': 'Language Settings',
@@ -51,6 +56,11 @@ class MultiLanguage extends Translations {
       'tag_name_already_exists': 'Tag name already exists',
       'tag_added_successfully': 'Tag Added Successfully',
       'tag_management': 'Tag Management',
+      'date_format_error': 'Invalid format',
+      'date_invalid_error': 'Invalid date',
+      'date_input_hint': 'mm/dd/yyyy',
+      'date_input_label': 'Enter date',
+      'date_help': 'Select date',
     },
   };
 }

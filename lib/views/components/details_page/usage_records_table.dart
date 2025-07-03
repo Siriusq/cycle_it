@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import '../../../controllers/item_controller.dart';
 import '../../../models/item_model.dart';
 import '../../../utils/constants.dart';
+import '../dialog/date_picker_helper.dart';
 
 class UsageRecordsTable extends StatelessWidget {
   final ItemModel currentItem;
@@ -59,11 +60,17 @@ class UsageRecordsTable extends StatelessWidget {
                             Icons.add_circle_outline,
                             size: 24,
                           ), // 添加按钮
-                          onPressed: () {
-                            // TODO: 添加使用记录的对话框
-                            itemController.addUsageRecord(
-                              DateTime.now(),
-                            ); // 示例：快速添加一条当前日期的记录
+                          onPressed: () async {
+                            final DateTime? pickedDate =
+                                await promptForUsageDate(
+                                  DateTime.now(),
+                                );
+                            if (pickedDate != null) {
+                              Get.back();
+                              itemController.addUsageRecord(
+                                pickedDate,
+                              );
+                            }
                           },
                         ),
                       ],
