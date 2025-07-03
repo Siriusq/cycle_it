@@ -137,7 +137,6 @@ class DetailsPage extends StatelessWidget {
             IconButton(
               onPressed: () async {
                 final bool? confirmed = await showDeleteConfirmDialog(
-                  context: context,
                   deleteTargetName: item.name,
                 );
                 final String confirmMessage = '物品 ${item.name} 已删除！';

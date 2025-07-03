@@ -263,7 +263,6 @@ class ManageTagPage extends StatelessWidget {
                 } else if (value == 'delete') {
                   final bool? confirmed =
                       await showDeleteConfirmDialog(
-                        context: context,
                         deleteTargetName: tag.name, // 删除目标名称
                       );
                   final String confirmMessage =
