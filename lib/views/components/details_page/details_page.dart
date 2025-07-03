@@ -6,6 +6,7 @@ import 'package:cycle_it/views/components/details_page/details_brief_card.dart';
 import 'package:cycle_it/views/components/details_page/usage_records_table.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 import '../../../utils/responsive_layout.dart';
 import '../dialog/delete_confirm_dialog.dart';
@@ -340,7 +341,7 @@ class DetailsPage extends StatelessWidget {
             data: '$usageCount',
             comment:
                 firstUsedDate != null
-                    ? 'times since ${firstUsedDate.toLocal().toString().split(' ')[0]}'
+                    ? 'times since ${DateFormat('yyyy-MM-dd').format(firstUsedDate)}'
                     : 'no usage records',
           ),
           // 使用周期
@@ -360,7 +361,7 @@ class DetailsPage extends StatelessWidget {
             data: usageCount > 0 ? '$daysSinceLastUse' : '-',
             comment:
                 lastUsedDate != null
-                    ? 'days ago since ${lastUsedDate.toLocal().toString().split(' ')[0]}'
+                    ? 'days ago since ${DateFormat('yyyy-MM-dd').format(lastUsedDate)}'
                     : 'data not enough',
           ),
           // 下次使用预计
@@ -371,7 +372,7 @@ class DetailsPage extends StatelessWidget {
             data: usageCount > 1 ? '${daysTillNextUse.abs()}' : '-',
             comment:
                 nextExpectedUseDate != null
-                    ? 'days ${daysTillNextUse >= 0 ? 'later' : 'ago'} at ${nextExpectedUseDate.toLocal().toString().split(' ')[0]}'
+                    ? 'days ${daysTillNextUse >= 0 ? 'later' : 'ago'} at ${DateFormat('yyyy-MM-dd').format(nextExpectedUseDate)}'
                     : 'data not enough',
           ),
         ],

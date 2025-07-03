@@ -6,6 +6,7 @@ import 'package:cycle_it/utils/responsive_style.dart';
 import 'package:cycle_it/views/components/icon_label.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 import '../dialog/delete_confirm_dialog.dart';
 import '../responsive_component_group.dart';
@@ -306,9 +307,7 @@ class ItemCard extends StatelessWidget {
               title: "Last Used",
               value:
                   lastUsedDate != null
-                      ? lastUsedDate.toLocal().toString().split(
-                        ' ',
-                      )[0]
+                      ? DateFormat('yyyy-MM-dd').format(lastUsedDate)
                       : 'data not enough',
               context: context,
             ),
@@ -335,10 +334,9 @@ class ItemCard extends StatelessWidget {
               title: "EST. Next Use",
               value:
                   nextExpectedUseDate != null
-                      ? nextExpectedUseDate
-                          .toLocal()
-                          .toString()
-                          .split(' ')[0]
+                      ? DateFormat(
+                        'yyyy-MM-dd',
+                      ).format(nextExpectedUseDate)
                       : 'data not enough',
               context: context,
             ),
