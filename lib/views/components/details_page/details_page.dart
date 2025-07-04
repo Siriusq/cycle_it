@@ -175,8 +175,6 @@ class DetailsPage extends StatelessWidget {
               },
               icon: Icon(Icons.edit_outlined),
             ),
-            // 快速添加使用记录，以当前日期为准
-            IconButton(onPressed: () {}, icon: Icon(Icons.refresh)),
           ],
         ),
       ),

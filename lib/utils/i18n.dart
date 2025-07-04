@@ -4,6 +4,7 @@ class MultiLanguage extends Translations {
   @override
   Map<String, Map<String, String>> get keys => {
     'zh_CN': {
+      'cycle': '循',
       'languageSettingsText': '语言设置',
       'themeSettingsText': '主题设置',
       'databaseSettingsText': '数据设置',
@@ -35,6 +36,7 @@ class MultiLanguage extends Translations {
       'date_help': '选择日期',
     },
     'en_US': {
+      'cycle': 'Cycle It',
       'languageSettingsText': 'Language Settings',
       'select_color': 'Select Color',
       'shades_and_tones': 'Shades and Tones',

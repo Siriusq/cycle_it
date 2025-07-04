@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
+import '../dialog/date_picker_helper.dart';
 import '../dialog/delete_confirm_dialog.dart';
 import '../responsive_component_group.dart';
 
@@ -205,12 +206,23 @@ class ItemCard extends StatelessWidget {
       color: kSecondaryBgColor,
       tooltip: 'More Action',
       onSelected: (value) async {
-        if (value == 'edit') {
+        if (value == 'cycle') {
+          final DateTime? pickedDate = await promptForUsageDate(
+            DateTime.now(),
+          );
+          if (pickedDate != null) {
+            Get.back();
+            itemController.addUsageRecord(pickedDate);
+            Get.snackbar(
+              '添加成功',
+              '添加使用记录 ${DateFormat('yyyy-MM-dd').format(pickedDate)} 到物品 ${item.name}',
+            );
+          }
+        } else if (value == 'edit') {
           final result = await Get.toNamed(
             '/AddEditItem',
             arguments: item,
           );
-
           if (result != null && result['success']) {
             Get.snackbar('成功', '${result['message']}');
           }
@@ -219,7 +231,6 @@ class ItemCard extends StatelessWidget {
             deleteTargetName: item.name,
           );
           final String confirmMessage = '物品 ${item.name} 已删除！';
-
           if (confirmed == true) {
             itemController.deleteItem(item.id!); // 调用删除方法
             Get.snackbar('删除成功', confirmMessage);
@@ -228,6 +239,21 @@ class ItemCard extends StatelessWidget {
       },
       itemBuilder:
           (_) => [
+            PopupMenuItem(
+              value: 'cycle',
+              child: Row(
+                children: [
+                  Icon(Icons.refresh, color: itemIconColor),
+                  SizedBox(width: spacingSM),
+                  Text(
+                    'cycle'.tr,
+                    style: bodyTextStyle.copyWith(
+                      color: itemIconColor,
+                    ),
+                  ),
+                ],
+              ),
+            ),
             PopupMenuItem(
               value: 'edit',
               child: Row(
