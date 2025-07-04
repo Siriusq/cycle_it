@@ -140,8 +140,15 @@ class ResponsiveStyle extends GetxController {
       _getValue(mobile: 32, tablet: 36, desktop: 48);
 
   // 响应卡片最小宽度
-  double get minComponentWidth =>
+  double get minComponentWidthSM =>
       _getValue(mobile: 120, tablet: 140, desktop: 160);
+
+  double get minComponentWidthMD =>
+      _getValue(mobile: 240, tablet: 280, desktop: 320);
+
+  // 响应卡片动态比例
+  double get aspectRation =>
+      _getValue(mobile: 0.7, tablet: 0.8, desktop: 0.8);
 
   // 组件样式
   TagStyle get tagStyle => TagStyle(

@@ -3,6 +3,7 @@ import 'package:cycle_it/models/item_model.dart';
 import 'package:cycle_it/utils/constants.dart';
 import 'package:cycle_it/utils/responsive_style.dart';
 import 'package:cycle_it/views/components/details_page/details_brief_card.dart';
+import 'package:cycle_it/views/components/details_page/usage_heatmap_calendar.dart';
 import 'package:cycle_it/views/components/details_page/usage_records_table.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -79,7 +80,19 @@ class DetailsPage extends StatelessWidget {
 
                           SizedBox(height: spacingMD),
                           // 使用记录
+                          //todo:调整响应UI，窄屏堆叠上下显示，宽屏左右显示
                           UsageRecordsTable(currentItem: item),
+                          UsageHeatmapCalendar(),
+                          // ResponsiveComponentGroup(
+                          //   minComponentWidth:
+                          //       style.minComponentWidthMD,
+                          //   aspectRation: style.aspectRation,
+                          //   children: [
+                          //     UsageRecordsTable(currentItem: item),
+                          //     UsageHeatmapCalendar(),
+                          //   ],
+                          // ),
+                          //UsageRecordsTable(currentItem: item),
                           SizedBox(height: spacingLG),
                         ],
                       ),
@@ -316,7 +329,7 @@ class DetailsPage extends StatelessWidget {
     final int daysTillNextUse = item.daysToToday(true);
     final double usageFrequency = item.usageFrequency.toPrecision(2);
 
-    final double minComponentWidth = style.minComponentWidth;
+    final double minComponentWidth = style.minComponentWidthSM;
 
     return Padding(
       padding: const EdgeInsets.all(0),
