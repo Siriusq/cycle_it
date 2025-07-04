@@ -95,6 +95,21 @@ class ResponsiveStyle extends GetxController {
     height: _getValue(mobile: 1.0, tablet: 1.1, desktop: 1.2),
   );
 
+  // 详情页标题
+  TextStyle get detailsTitleText => TextStyle(
+    color: kTitleTextColor,
+    fontSize: _getValue(
+      mobile: 14,
+      tablet: 16,
+      desktop: max(18, Get.width * 0.014),
+    ),
+    fontWeight: FontWeight.w600,
+  );
+
+  // 详情页动态图标
+  double get detailsIconSize =>
+      _getValue(mobile: 50, tablet: 60, desktop: 70);
+
   // 间距系统
   double get spacingXS => _getValue(mobile: 2, tablet: 4, desktop: 6);
 

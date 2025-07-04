@@ -186,9 +186,10 @@ class DetailsPage extends StatelessWidget {
     ResponsiveStyle style,
     ItemModel item,
   ) {
-    final TextStyle largeTitleTextStyle = style.titleTextLG;
+    final TextStyle detailsTitleText = style.detailsTitleText;
     final TextStyle bodyText = style.bodyText;
     final double spacingLG = style.spacingLG;
+    final double detailsIconSize = style.detailsIconSize;
 
     return Padding(
       padding: EdgeInsets.symmetric(vertical: spacingLG * 0.5),
@@ -203,24 +204,16 @@ class DetailsPage extends StatelessWidget {
                 borderRadius: BorderRadius.circular(8.0),
                 color: item.iconColor,
               ),
-              width: 50,
-              height: 50,
+              width: detailsIconSize,
+              height: detailsIconSize,
               child: Center(
-                // Centers the Text widget
                 child: Padding(
-                  padding: const EdgeInsets.all(
-                    4.0,
-                  ), // Padding around the emoji
+                  padding: const EdgeInsets.all(4.0),
                   child: FittedBox(
-                    // Scales the Text to fit within the padding
                     fit: BoxFit.contain,
-                    // Ensures the emoji is fully visible
                     child: Text(
                       item.emoji,
-                      // FontSize can be large as FittedBox will scale it down
-                      style: const TextStyle(
-                        fontSize: 100,
-                      ), // Start with a large size
+                      style: const TextStyle(fontSize: 100),
                     ),
                   ),
                 ),
@@ -243,7 +236,7 @@ class DetailsPage extends StatelessWidget {
                     Flexible(
                       child: Text(
                         item.name,
-                        style: largeTitleTextStyle,
+                        style: detailsTitleText,
                         softWrap: true,
                       ),
                     ),
