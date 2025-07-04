@@ -5,8 +5,6 @@ import 'package:cycle_it/views/add_edit_item_page.dart';
 import 'package:cycle_it/views/components/details_page/details_page.dart';
 import 'package:cycle_it/views/components/manage_tag_page.dart';
 import 'package:cycle_it/views/settings_page.dart';
-import 'package:device_preview/device_preview.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
@@ -45,12 +43,7 @@ void main() async {
   final itemService = Get.find<ItemService>();
   await itemService.initializeData(); // Call data initialization
 
-  runApp(
-    DevicePreview(
-      enabled: !kReleaseMode && GetPlatform.isWindows,
-      builder: (context) => MyApp(),
-    ),
-  );
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -68,10 +61,7 @@ class MyApp extends StatelessWidget {
       //initialBinding: HomeBinding(),
       // 多语言文件
       translations: MultiLanguage(),
-      // DevicePreview
-      locale: DevicePreview.locale(context),
-      //locale: Get.locale,
-      builder: DevicePreview.appBuilder,
+      locale: Get.deviceLocale,
       // 添加一个回调语言选项，以备上面指定的语言翻译不存在
       fallbackLocale: Locale('en', 'US'),
       initialRoute: '/',
