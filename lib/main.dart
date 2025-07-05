@@ -1,6 +1,7 @@
 import 'package:cycle_it/bindings/home_binding.dart';
 import 'package:cycle_it/services/item_service.dart';
 import 'package:cycle_it/utils/constants.dart';
+import 'package:cycle_it/utils/custom_scroll_behavior.dart';
 import 'package:cycle_it/views/add_edit_item_page.dart';
 import 'package:cycle_it/views/components/details_page/details_page.dart';
 import 'package:cycle_it/views/components/manage_tag_page.dart';
@@ -58,6 +59,8 @@ class MyApp extends StatelessWidget {
       // 动画主题
       //defaultTransition: Transition.cupertino,
       transitionDuration: Duration(milliseconds: 300),
+      // 应用自定义的滚动行为
+      scrollBehavior: CustomScrollBehavior(),
       //initialBinding: HomeBinding(),
       // 多语言文件
       translations: MultiLanguage(),
