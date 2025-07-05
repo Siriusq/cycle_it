@@ -80,18 +80,15 @@ class DetailsPage extends StatelessWidget {
 
                           SizedBox(height: spacingMD),
                           // 使用记录
-                          //todo:调整响应UI，窄屏堆叠上下显示，宽屏左右显示
-                          UsageRecordsTable(currentItem: item),
-                          UsageHeatmapCalendar(),
-                          // ResponsiveComponentGroup(
-                          //   minComponentWidth:
-                          //       style.minComponentWidthMD,
-                          //   aspectRation: style.aspectRation,
-                          //   children: [
-                          //     UsageRecordsTable(currentItem: item),
-                          //     UsageHeatmapCalendar(),
-                          //   ],
-                          // ),
+                          ResponsiveComponentGroup(
+                            minComponentWidth:
+                                style.minComponentWidthMD,
+                            aspectRation: style.aspectRation,
+                            children: [
+                              UsageRecordsTable(currentItem: item),
+                              UsageHeatmapCalendar(),
+                            ],
+                          ),
                           //UsageRecordsTable(currentItem: item),
                           SizedBox(height: spacingLG),
                         ],

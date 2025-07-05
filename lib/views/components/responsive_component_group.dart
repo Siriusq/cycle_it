@@ -21,11 +21,14 @@ class ResponsiveComponentGroup extends StatelessWidget {
         final parentWidth = constraints.maxWidth;
 
         // 计算每行最多显示多少个组件（考虑间距）
-        final crossAxisCount = ((parentWidth + spacing) / (minComponentWidth + spacing)).floor();
+        final crossAxisCount =
+            ((parentWidth + spacing) / (minComponentWidth + spacing))
+                .floor();
         final validCount = crossAxisCount.clamp(1, children.length);
 
         // 计算实际子项宽度
-        final childWidth = (parentWidth - (validCount - 1) * spacing) / validCount;
+        final childWidth =
+            (parentWidth - (validCount - 1) * spacing) / validCount;
 
         return GridView.builder(
           shrinkWrap: true,
@@ -39,7 +42,9 @@ class ResponsiveComponentGroup extends StatelessWidget {
             childAspectRatio: aspectRation, // 根据实际需求调整宽高比
           ),
           itemCount: children.length,
-          itemBuilder: (context, index) => SizedBox(width: childWidth, child: children[index]),
+          itemBuilder:
+              (context, index) =>
+                  SizedBox(width: childWidth, child: children[index]),
         );
       },
     );

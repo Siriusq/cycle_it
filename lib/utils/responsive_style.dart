@@ -148,7 +148,7 @@ class ResponsiveStyle extends GetxController {
 
   // 响应卡片动态比例
   double get aspectRation =>
-      _getValue(mobile: 0.7, tablet: 0.8, desktop: 0.8);
+      _getValue(mobile: 0.6, tablet: 0.7, desktop: 0.8);
 
   // 组件样式
   TagStyle get tagStyle => TagStyle(
