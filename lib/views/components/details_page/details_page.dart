@@ -3,6 +3,7 @@ import 'package:cycle_it/models/item_model.dart';
 import 'package:cycle_it/utils/constants.dart';
 import 'package:cycle_it/utils/responsive_style.dart';
 import 'package:cycle_it/views/components/details_page/details_brief_card.dart';
+import 'package:cycle_it/views/components/details_page/monthly_usage_bar_chart.dart';
 import 'package:cycle_it/views/components/details_page/usage_heatmap_calendar.dart';
 import 'package:cycle_it/views/components/details_page/usage_records_table.dart';
 import 'package:flutter/material.dart';
@@ -89,7 +90,8 @@ class DetailsPage extends StatelessWidget {
                               UsageHeatmapCalendar(),
                             ],
                           ),
-                          //UsageRecordsTable(currentItem: item),
+                          SizedBox(height: spacingMD),
+                          MonthlyUsageBarChart(),
                           SizedBox(height: spacingLG),
                         ],
                       ),
