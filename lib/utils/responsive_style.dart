@@ -148,7 +148,7 @@ class ResponsiveStyle extends GetxController {
 
   // 响应卡片动态比例
   double get aspectRation =>
-      _getValue(mobile: 0.6, tablet: 0.7, desktop: 0.8);
+      _getValue(mobile: 0.6, tablet: 0.7, desktop: 0.6);
 
   // 组件样式
   TagStyle get tagStyle => TagStyle(
@@ -180,6 +180,18 @@ class ResponsiveStyle extends GetxController {
 
   // 表格高度
   double get tableHeight => max(Get.height * 0.8, 400);
+
+  // 热点日历格子大小
+  double get heatmapCellSize =>
+      _getValue(mobile: 16, tablet: 18, desktop: 18);
+
+  // 热点日历参照指示格子大小
+  double get heatmapTipCellSize =>
+      _getValue(mobile: 12, tablet: 14, desktop: 14);
+
+  // 热点日历参照指示格子大小
+  double get heatmapCellSpaceBetween =>
+      _getValue(mobile: 2, tablet: 4, desktop: 4);
 }
 
 // 标签样式子类

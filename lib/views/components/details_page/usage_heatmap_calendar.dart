@@ -15,8 +15,11 @@ class UsageHeatmapCalendar extends StatelessWidget {
     final ItemController itemController = Get.find<ItemController>();
     final ResponsiveStyle style = ResponsiveStyle.to;
     final TextStyle titleTextMD = style.titleTextMD;
-    final TextStyle bodyTextLG = style.bodyTextLG;
     final TextStyle bodyText = style.bodyText;
+    final double heatmapCellSize = style.heatmapCellSize;
+    final double heatmapTipCellSize = style.heatmapTipCellSize;
+    final double heatmapCellSpaceBetween =
+        style.heatmapCellSpaceBetween;
 
     return Obx(() {
       final List<UsageRecordModel> records =
@@ -67,22 +70,35 @@ class UsageHeatmapCalendar extends StatelessWidget {
                       startDate: DateTime(DateTime.now().year - 1),
                       endedDate: DateTime.now(),
                       colorMap: {
-                        1: kPrimaryColor.withValues(alpha: 0.2),
-                        2: kPrimaryColor.withValues(alpha: 0.4),
-                        3: kPrimaryColor.withValues(alpha: 0.6),
-                        4: kPrimaryColor.withValues(alpha: 0.8),
+                        1: kPrimaryColor.withValues(alpha: 0.4),
+                        2: kPrimaryColor.withValues(alpha: 0.55),
+                        3: kPrimaryColor.withValues(alpha: 0.7),
+                        4: kPrimaryColor.withValues(alpha: 0.85),
                         5: kPrimaryColor,
                       },
                       selectedMap: heatMapData,
-                      cellSize: const Size.square(16.0),
-                      colorTipCellSize: const Size.square(12.0),
-                      style: const HeatmapCalendarStyle.defaults(
-                        cellValueFontSize: 6.0,
-                        cellRadius: BorderRadius.all(
+                      cellSize: Size.square(heatmapCellSize),
+                      colorTipCellSize: Size.square(
+                        heatmapTipCellSize,
+                      ),
+                      cellSpaceBetween: heatmapCellSpaceBetween,
+                      style: HeatmapCalendarStyle.defaults(
+                        //cellValueFontSize: 6.0,
+                        cellRadius: const BorderRadius.all(
                           Radius.circular(4.0),
                         ),
-                        weekLabelValueFontSize: 12.0,
-                        monthLabelFontSize: 12.0,
+                        weekLabelValueFontSize: bodyText.fontSize!,
+                        weekLabelColor: bodyText.color,
+                        monthLabelFontSize: bodyText.fontSize!,
+                        monthLabelColor: bodyText.color,
+                      ),
+                      colorTipLeftHelper: Text(
+                        'Less',
+                        style: bodyText,
+                      ),
+                      colorTipRightHelper: Text(
+                        'More',
+                        style: bodyText,
                       ),
                       layoutParameters:
                           const HeatmapLayoutParameters.defaults(
@@ -94,61 +110,6 @@ class UsageHeatmapCalendar extends StatelessWidget {
                                 CalendarColorTipPosition.bottom,
                           ),
                     ),
-                    // child: HeatMap(
-                    //   datasets: heatMapData,
-                    //   colorsets: {1: kPrimaryColor},
-                    //   defaultColor: kGrayColor.withValues(alpha: 0.2),
-                    //   textColor: kTextColor,
-                    //   colorMode: ColorMode.opacity,
-                    //   fontSize: bodyText.fontSize,
-                    //   scrollable: true,
-                    //   //showText: true,
-                    //   showColorTip: true,
-                    //   colorTipHelper: [
-                    //     Padding(
-                    //       padding: const EdgeInsets.only(right: 4),
-                    //       child: Text('Less', style: bodyText),
-                    //     ),
-                    //     Padding(
-                    //       padding: const EdgeInsets.only(left: 4),
-                    //       child: Text('More', style: bodyText),
-                    //     ),
-                    //   ],
-                    //   colorTipSize: 20,
-                    // ),
-
-                    // child: HeatMapCalendar(
-                    //   initDate: DateTime.now(),
-                    //   datasets: heatMapData,
-                    //   colorMode: ColorMode.opacity,
-                    //   colorsets: {
-                    //     1: kPrimaryColor.withValues(alpha: 0.2),
-                    //     2: kPrimaryColor.withValues(alpha: 0.4),
-                    //     3: kPrimaryColor.withValues(alpha: 0.6),
-                    //     4: kPrimaryColor.withValues(alpha: 0.8),
-                    //     5: kPrimaryColor,
-                    //   },
-                    //   defaultColor: kGrayColor.withValues(alpha: 0.2),
-                    //   monthFontSize: bodyTextLG.fontSize,
-                    //   weekFontSize: bodyText.fontSize,
-                    //   weekTextColor: kTextColor,
-                    //   textColor: kTextColor,
-                    //   borderRadius: 4,
-                    //   flexible: true,
-                    //   showColorTip: true,
-                    //   colorTipSize: 20,
-                    //   colorTipCount: 5,
-                    //   colorTipHelper: [
-                    //     Padding(
-                    //       padding: const EdgeInsets.only(right: 4),
-                    //       child: Text('Less', style: bodyText),
-                    //     ),
-                    //     Padding(
-                    //       padding: const EdgeInsets.only(left: 4),
-                    //       child: Text('More', style: bodyText),
-                    //     ),
-                    //   ],
-                    // ),
                   ),
                 ),
               ],
