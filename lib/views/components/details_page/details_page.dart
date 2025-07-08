@@ -69,29 +69,36 @@ class DetailsPage extends StatelessWidget {
                         horizontal: spacingLG,
                       ),
                       child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           //标题、标签与图标
                           _buildTitle(context, style, item),
                           _buildTags(context, style, item),
-
                           SizedBox(height: spacingLG),
 
                           //图表
                           _buildOverview(context, style, item),
-
                           SizedBox(height: spacingMD),
+
                           // 使用记录
                           ResponsiveComponentGroup(
                             minComponentWidth:
                                 style.minComponentWidthMD,
-                            aspectRation: style.aspectRation,
+                            aspectRation: 0.55,
                             children: [
                               UsageRecordsTable(currentItem: item),
-                              UsageHeatmapCalendar(),
+                              Wrap(
+                                children: [
+                                  UsageHeatmapCalendar(),
+                                  SizedBox(
+                                    height: spacingMD,
+                                    width: spacingMD,
+                                  ),
+                                  MonthlyUsageBarChart(),
+                                ],
+                              ),
                             ],
                           ),
-                          SizedBox(height: spacingMD),
-                          MonthlyUsageBarChart(),
                           SizedBox(height: spacingLG),
                         ],
                       ),

@@ -1,4 +1,3 @@
-// lib/views/components/charts/monthly_usage_bar_chart.dart
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:material_charts/material_charts.dart';
@@ -16,7 +15,6 @@ class MonthlyUsageBarChart extends StatelessWidget {
     final ItemController itemController = Get.find<ItemController>();
     final ResponsiveStyle style = ResponsiveStyle.to;
     final TextStyle titleTextMD = style.titleTextMD;
-    final TextStyle bodyTextLG = style.bodyTextLG;
     final TextStyle bodyText = style.bodyText;
 
     return Obx(() {
@@ -63,8 +61,7 @@ class MonthlyUsageBarChart extends StatelessWidget {
 
       return LayoutBuilder(
         builder: (context, constraints) {
-          //todo: 微调响应宽度和高度
-          final chartWidth = constraints.maxWidth - 32;
+          final chartWidth = constraints.maxWidth;
           final chartHeight = chartWidth * 0.5;
           return Container(
             padding: const EdgeInsets.symmetric(vertical: 10),
@@ -81,7 +78,17 @@ class MonthlyUsageBarChart extends StatelessWidget {
                     horizontal: 16.0,
                     vertical: 8.0,
                   ),
-                  child: Text('每月使用次数', style: titleTextMD),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text('每月使用次数', style: titleTextMD),
+                      Icon(
+                        Icons.bar_chart,
+                        size: 24,
+                        color: kIconColor,
+                      ),
+                    ],
+                  ),
                 ),
                 Divider(color: kBorderColor, thickness: 1.5),
                 Center(
@@ -116,8 +123,8 @@ class MonthlyUsageBarChart extends StatelessWidget {
                               padding: EdgeInsets.zero,
                             )
                             : SizedBox(
-                              height: 450,
-                              width: 300,
+                              height: 200,
+                              //width: chartHeight,
                               child: Center(
                                 child: Text(
                                   'No usage record in the past year.',

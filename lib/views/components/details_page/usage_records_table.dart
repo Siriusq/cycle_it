@@ -19,7 +19,7 @@ class UsageRecordsTable extends StatelessWidget {
     final ResponsiveStyle style = ResponsiveStyle.to;
     final TextStyle bodyText = style.bodyText;
     final TextStyle titleTextMD = style.titleTextMD;
-    final double tableHeight = style.tableHeight;
+    //final double tableHeight = style.tableHeight;
 
     return Obx(() {
       if (itemController.currentItem.value == null ||
@@ -35,7 +35,7 @@ class UsageRecordsTable extends StatelessWidget {
       return LayoutBuilder(
         builder: (context, constraints) {
           return SizedBox(
-            height: tableHeight,
+            //height: tableHeight, //实际上没啥用，组件被包在有限制的组件中了，这里只是个保证
             child: Container(
               decoration: BoxDecoration(
                 color: kSecondaryBgColor,
@@ -100,7 +100,7 @@ class UsageRecordsTable extends StatelessWidget {
                                 MainAxisAlignment.center,
                           ),
                           DataColumn2(
-                            label: Text('与上次间隔(天)', style: bodyText),
+                            label: Text('间隔天数', style: bodyText),
                             onSort: (columnIndex, ascending) {
                               itemController.onUsageRecordsSort(
                                 'intervalSinceLastUse',

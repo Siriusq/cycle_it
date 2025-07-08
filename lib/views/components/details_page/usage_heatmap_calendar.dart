@@ -44,7 +44,7 @@ class UsageHeatmapCalendar extends StatelessWidget {
       return LayoutBuilder(
         builder: (context, constraints) {
           return Container(
-            padding: const EdgeInsets.symmetric(vertical: 10),
+            padding: const EdgeInsets.symmetric(vertical: 8),
             decoration: BoxDecoration(
               color: kSecondaryBgColor,
               borderRadius: BorderRadius.circular(15),
@@ -58,7 +58,17 @@ class UsageHeatmapCalendar extends StatelessWidget {
                     horizontal: 16.0,
                     vertical: 8.0,
                   ),
-                  child: Text('使用记录热点图', style: titleTextMD),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text('使用记录热点图', style: titleTextMD),
+                      Icon(
+                        Icons.calendar_month,
+                        size: 24,
+                        color: kIconColor,
+                      ),
+                    ],
+                  ),
                 ),
                 Divider(color: kBorderColor, thickness: 1.5),
                 Center(
