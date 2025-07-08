@@ -79,6 +79,8 @@ class ItemCard extends StatelessWidget {
                 context,
                 style,
                 isSingleCol,
+                isTripleCol,
+                item,
               ),
 
               //标签
@@ -305,17 +307,44 @@ class ItemCard extends StatelessWidget {
           bottom: spacingSM,
           top: spacingSM,
         ),
-        child: Row(
+        child: Column(
           children: [
-            Icon(Icons.repeat, color: kTextColor, size: iconSizeSM),
-            SizedBox(width: spacingXS),
-            Flexible(
-              child: Text(
-                "Usage Cycle: ${usageCount > 1 ? '$usageFrequency days' : 'data not enough'}",
-                style: smallBodyTextStyle,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-              ),
+            Row(
+              children: [
+                Icon(
+                  Icons.repeat,
+                  color: kTextColor,
+                  size: iconSizeSM,
+                ),
+                SizedBox(width: spacingXS),
+                Flexible(
+                  child: Text(
+                    "Usage Cycle: ${usageCount > 1 ? '$usageFrequency days' : 'data not enough'}",
+                    style: smallBodyTextStyle,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(height: spacingSM),
+            Row(
+              children: [
+                Icon(
+                  Icons.history,
+                  color: kTextColor,
+                  size: iconSizeSM,
+                ),
+                SizedBox(width: spacingXS),
+                Flexible(
+                  child: Text(
+                    "Last Used: ${lastUsedDate != null ? DateFormat('yyyy-MM-dd').format(lastUsedDate) : 'data not enough'}",
+                    style: smallBodyTextStyle,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+              ],
             ),
           ],
         ),
@@ -378,8 +407,13 @@ class ItemCard extends StatelessWidget {
     BuildContext context,
     ResponsiveStyle style,
     bool isSingleCol,
+    bool isTripleCol,
+    ItemModel item,
   ) {
+    final double spacingXS = style.spacingXS;
+    final double iconSizeSM = style.iconSizeSM;
     final TextStyle smallBodyTextStyle = style.bodyTextSM;
+    final DateTime? nextExpectedUseDate = item.nextExpectedUse;
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 5),
@@ -417,16 +451,37 @@ class ItemCard extends StatelessWidget {
           ),
           Padding(
             padding: EdgeInsets.symmetric(vertical: 4),
-            child: Row(
-              children: [
-                Text("EST. Timer", style: smallBodyTextStyle),
-                Spacer(),
-                Text(
-                  "${(item.timePercentageBetweenLastAndNext() * 100).toStringAsFixed(2)}%",
-                  style: smallBodyTextStyle,
-                ),
-              ],
-            ),
+            child:
+                isTripleCol
+                    ? Row(
+                      children: [
+                        Text("EST. Timer", style: smallBodyTextStyle),
+                        Spacer(),
+                        Text(
+                          "${(item.timePercentageBetweenLastAndNext() * 100).toStringAsFixed(2)}%",
+                          style: smallBodyTextStyle,
+                        ),
+                      ],
+                    )
+                    : Row(
+                      children: [
+                        Icon(
+                          Icons.update,
+                          color: kTextColor,
+                          size: iconSizeSM,
+                        ),
+                        SizedBox(width: spacingXS),
+                        Text(
+                          "EST. Next Use: ${nextExpectedUseDate != null ? DateFormat('yyyy-MM-dd').format(nextExpectedUseDate) : 'data not enough'}",
+                          style: smallBodyTextStyle,
+                        ),
+                        Spacer(),
+                        Text(
+                          "${(item.timePercentageBetweenLastAndNext() * 100).toStringAsFixed(2)}%",
+                          style: smallBodyTextStyle,
+                        ),
+                      ],
+                    ),
           ),
         ],
       ),
