@@ -1,18 +1,19 @@
+import 'package:cycle_it/bindings/add_edit_item_binding.dart';
 import 'package:cycle_it/bindings/home_binding.dart';
 import 'package:cycle_it/services/item_service.dart';
 import 'package:cycle_it/utils/constants.dart';
 import 'package:cycle_it/utils/custom_scroll_behavior.dart';
-import 'package:cycle_it/views/add_edit_item_page.dart';
-import 'package:cycle_it/views/components/details_page/details_page.dart';
-import 'package:cycle_it/views/components/manage_tag_page.dart';
-import 'package:cycle_it/views/settings_page.dart';
+import 'package:cycle_it/views/add_edit_item_page/add_edit_item_page.dart';
+import 'package:cycle_it/views/details_page/details_page.dart';
+import 'package:cycle_it/views/manage_tag_page/manage_tag_page.dart';
+import 'package:cycle_it/views/settings_page/settings_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
 import 'package:window_manager/window_manager.dart';
 
 import 'utils/i18n.dart';
-import 'views/components/home_page/home_page.dart';
+import 'views/home_page/home_page.dart';
 
 void main() async {
   debugProfileBuildsEnabled = true; // 跟踪Widget重建
@@ -72,7 +73,11 @@ class MyApp extends StatelessWidget {
         GetPage(name: '/', page: () => HomePage()),
         GetPage(name: '/Settings', page: () => SettingsPage()),
         GetPage(name: '/Details', page: () => DetailsPage()),
-        GetPage(name: '/AddEditItem', page: () => AddEditItemPage()),
+        GetPage(
+          name: '/AddEditItem',
+          page: () => AddEditItemPage(),
+          binding: AddEditItemBinding(),
+        ),
         GetPage(name: '/ManageTag', page: () => ManageTagPage()),
       ],
       title: 'Cycle It',

@@ -7,8 +7,8 @@ import 'package:intl/intl.dart';
 import '../controllers/item_controller.dart';
 import '../models/usage_record_model.dart';
 import '../utils/constants.dart';
-import '../views/components/dialog/date_picker_helper.dart';
-import '../views/components/dialog/delete_confirm_dialog.dart';
+import '../views/shared_widgets/date_picker_helper.dart';
+import '../views/shared_widgets/delete_confirm_dialog.dart';
 
 class UsageRecordDataSource extends DataTableSource {
   final int itemId;

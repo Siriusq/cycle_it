@@ -1,0 +1,71 @@
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+
+import '../../../controllers/add_edit_item_controller.dart';
+import '../../../utils/constants.dart';
+import '../../../utils/responsive_style.dart';
+import '../../shared_widgets/icon_label.dart';
+import 'item_tag_picker_dialog.dart';
+
+class TagSection extends StatelessWidget {
+  const TagSection({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final AddEditItemController controller =
+        Get.find<AddEditItemController>();
+    final ResponsiveStyle style = ResponsiveStyle.to;
+
+    final TextStyle titleTextStyle = style.titleTextMD;
+    final double topSpacing =
+        style.isMobileDevice ? style.spacingMD : style.spacingXS;
+
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text('标签', style: titleTextStyle),
+        SizedBox(height: topSpacing),
+        SizedBox(
+          width: double.infinity,
+          child: Obx(() {
+            final List<Widget> tagWidgets =
+                controller.selectedTags.map((tag) {
+                  return SizedBox(
+                    child: IconLabel(
+                      icon: Icons.bookmark,
+                      label: tag.name,
+                      iconColor: tag.color,
+                      isLarge: true,
+                    ),
+                  );
+                }).toList();
+
+            tagWidgets.add(
+              SizedBox(
+                child: InkWell(
+                  onTap: () {
+                    showItemTagPickerDialog();
+                  },
+                  child: IconLabel(
+                    icon: Icons.bookmark_add_outlined,
+                    label: "选择标签",
+                    iconColor: kTextColor,
+                    isLarge: true,
+                  ),
+                ),
+              ),
+            );
+
+            return Wrap(
+              alignment: WrapAlignment.start,
+              spacing: 5,
+              runSpacing: 5,
+              children: tagWidgets,
+            );
+          }),
+        ),
+      ],
+    );
+  }
+}

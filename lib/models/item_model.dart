@@ -53,7 +53,7 @@ class ItemModel {
         final daysSinceFirst =
             DateTime.now().difference(firstUsedDate!).inDays;
         if (daysSinceFirst == 0) {
-          _cachedUsageFrequency = usageRecords.length.toDouble();
+          _cachedUsageFrequency = 1 / usageRecords.length.toDouble();
         } else {
           _cachedUsageFrequency =
               daysSinceFirst / usageRecords.length;

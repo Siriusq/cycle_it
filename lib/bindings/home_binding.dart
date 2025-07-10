@@ -38,9 +38,5 @@ class HomeBinding implements Bindings {
       ResponsiveController(),
       permanent: true,
     );
-
-    //Get.lazyPut<responsiveCtrl>(() => ItemController());
-    //Get.lazyPut<ItemListOrderController>(() => ItemListOrderController());
-    //Get.lazyPut<TagController>(() => TagController());
   }
 }

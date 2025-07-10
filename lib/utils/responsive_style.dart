@@ -166,6 +166,15 @@ class ResponsiveStyle extends GetxController {
   // 侧边栏应用图标
   double get appIconSize => isMobileDevice ? 32 : 40; // 静态值，不随窗口拖动改变
 
+  // 搜索栏样式
+  double get searchBarHeight => isMobileDevice ? 32 : 48;
+  double get searchBarIconSize => isMobileDevice ? 16 : 24;
+  double get searchBarButtonSize => isMobileDevice ? 26 : 40;
+  TextStyle get searchBarHintStyle =>
+      isMobileDevice
+          ? const TextStyle(fontSize: 12)
+          : const TextStyle(fontSize: 16);
+
   // 每行的emoji个数
   int get emojiColCount =>
       _getValue(mobile: 5, tablet: 10, desktop: 10).toInt();
