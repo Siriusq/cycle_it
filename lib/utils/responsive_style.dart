@@ -3,8 +3,6 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import 'constants.dart';
-
 // 响应式断点定义
 class Breakpoints {
   static const double mobile = 480.0; // 手机
@@ -52,21 +50,18 @@ class ResponsiveStyle extends GetxController {
   // 文本样式
   // 加粗大标题
   TextStyle get titleTextEX => TextStyle(
-    color: kTitleTextColor,
     fontSize: _getValue(mobile: 14, tablet: 16, desktop: 18),
     fontWeight: FontWeight.bold,
   );
 
   // 大标题
   TextStyle get titleTextLG => TextStyle(
-    color: kTitleTextColor,
     fontSize: _getValue(mobile: 14, tablet: 16, desktop: 18),
     fontWeight: FontWeight.w600,
   );
 
   // 标题
   TextStyle get titleTextMD => TextStyle(
-    color: kTitleTextColor,
     fontSize: _getValue(mobile: 12, tablet: 14, desktop: 16),
     fontWeight: FontWeight.w500,
   );
@@ -77,27 +72,23 @@ class ResponsiveStyle extends GetxController {
 
   // 文本
   TextStyle get bodyTextLG => TextStyle(
-    color: kTextColor,
     fontSize: _getValue(mobile: 12, tablet: 14, desktop: 16),
     //height: _getValue(mobile: 1.2, tablet: 1.3, desktop: 1.4),
   );
 
   TextStyle get bodyText => TextStyle(
-    color: kTextColor,
     fontSize: _getValue(mobile: 10, tablet: 12, desktop: 14),
     height: _getValue(mobile: 1.2, tablet: 1.3, desktop: 1.4),
   );
 
   // 小文本
   TextStyle get bodyTextSM => TextStyle(
-    color: kTextColor,
     fontSize: _getValue(mobile: 8, tablet: 10, desktop: 12),
     height: _getValue(mobile: 1.0, tablet: 1.1, desktop: 1.2),
   );
 
   // 详情页标题
   TextStyle get detailsTitleText => TextStyle(
-    color: kTitleTextColor,
     fontSize: _getValue(
       mobile: 14,
       tablet: 16,
@@ -168,8 +159,11 @@ class ResponsiveStyle extends GetxController {
 
   // 搜索栏样式
   double get searchBarHeight => isMobileDevice ? 32 : 48;
+
   double get searchBarIconSize => isMobileDevice ? 16 : 24;
+
   double get searchBarButtonSize => isMobileDevice ? 26 : 40;
+
   TextStyle get searchBarHintStyle =>
       isMobileDevice
           ? const TextStyle(fontSize: 12)

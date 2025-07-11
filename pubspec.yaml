@@ -68,6 +68,12 @@ dependencies:
   # material charts
   material_charts: ^0.0.27
 
+  # setting storage
+  shared_preferences: ^2.5.3
+
+  # theme json
+  json_theme: ^7.0.0+3
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -100,6 +106,9 @@ flutter:
   #   - images/a_dot_ham.jpeg
   assets:
     - assets/images/logo_transparent.png
+    - assets/themes/
+    - assets/themes/light_theme.json
+    - assets/themes/dark_theme.json
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

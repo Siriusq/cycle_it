@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 
 import '../controllers/item_controller.dart';
 import '../controllers/search_bar_controller.dart';
+import '../controllers/theme_controller.dart';
 import '../database/database.dart';
 import '../services/item_service.dart';
 import '../utils/responsive_style.dart';
@@ -14,6 +15,9 @@ class HomeBinding implements Bindings {
   void dependencies() {
     // 绑定 Drift 数据库
     Get.put(MyDatabase(), permanent: true);
+
+    // 绑定主题
+    Get.put<ThemeController>(ThemeController(), permanent: true);
 
     // 绑定服务
     Get.put(ItemService(Get.find<MyDatabase>()), permanent: true);
