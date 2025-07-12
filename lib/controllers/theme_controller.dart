@@ -84,32 +84,33 @@ class ThemeController extends GetxController {
   // 根据选定的主题模式应用实际的 ThemeData
   Future<void> _applyThemeData(ThemeModeOption option) async {
     ThemeData newThemeData;
-    switch (option) {
-      case ThemeModeOption.light:
-        newThemeData = await _loadJsonTheme(
-          'assets/themes/light_theme.json',
-        );
-        break;
-      case ThemeModeOption.dark:
+
+    if (option == ThemeModeOption.light) {
+      newThemeData = await _loadJsonTheme(
+        'assets/themes/light_theme.json',
+      );
+    } else if (option == ThemeModeOption.dark) {
+      newThemeData = await _loadJsonTheme(
+        'assets/themes/dark_theme.json',
+      );
+    } else {
+      // option == ThemeModeOption.system
+      // **尝试在最早阶段通过 WidgetsBinding.instance.window.platformBrightness 获取系统亮度**
+      final Brightness initialSystemBrightness =
+          WidgetsBinding.instance.window.platformBrightness;
+
+      if (initialSystemBrightness == Brightness.dark) {
         newThemeData = await _loadJsonTheme(
           'assets/themes/dark_theme.json',
         );
-        break;
-      case ThemeModeOption.system:
-        final Brightness systemBrightness =
-            Get.mediaQuery.platformBrightness;
-        if (systemBrightness == Brightness.dark) {
-          newThemeData = await _loadJsonTheme(
-            'assets/themes/dark_theme.json',
-          );
-        } else {
-          newThemeData = await _loadJsonTheme(
-            'assets/themes/light_theme.json',
-          );
-        }
-        break;
+      } else {
+        newThemeData = await _loadJsonTheme(
+          'assets/themes/light_theme.json',
+        );
+      }
     }
-    _currentThemeData.value = newThemeData;
+
+    _currentThemeData.value = newThemeData; // 设置当前的主题
   }
 
   // 从 JSON 文件加载 ThemeData
@@ -126,7 +127,6 @@ class ThemeController extends GetxController {
       );
       return theme ?? ThemeData.light(); // 如果解码失败，返回默认亮色主题
     } catch (e) {
-      print('加载主题文件失败: $e');
       return ThemeData.light(); // 发生错误时返回默认亮色主题
     }
   }

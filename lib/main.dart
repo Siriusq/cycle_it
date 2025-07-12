@@ -41,12 +41,13 @@ void main() async {
 
   // 同步绑定所有永久性依赖
   HomeBinding().dependencies();
-  // 确保 ItemService 数据初始化完成
-  final itemService = Get.find<ItemService>();
-  await itemService.initializeData();
   // 确保 ThemeController 完成了异步主题加载
   final themeController = Get.find<ThemeController>();
   await themeController.themeInitializationFuture;
+
+  // 确保 ItemService 数据初始化完成
+  final itemService = Get.find<ItemService>();
+  await itemService.initializeData();
 
   runApp(const MyApp());
 }
@@ -61,7 +62,7 @@ class MyApp extends StatelessWidget {
       final ThemeController themeController = Get.find();
 
       return GetMaterialApp(
-        useInheritedMediaQuery: true,
+        //useInheritedMediaQuery: true,
         debugShowCheckedModeBanner: false,
         // 动画主题
         //defaultTransition: Transition.cupertino,
