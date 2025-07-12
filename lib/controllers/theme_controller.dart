@@ -1,9 +1,11 @@
+import 'dart:async';
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart' show rootBundle;
 import 'package:get/get.dart';
 import 'package:json_theme/json_theme.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'dart:convert';
-import 'package:flutter/services.dart' show rootBundle;
 
 // 定义主题模式枚举
 enum ThemeModeOption { light, dark, system }
@@ -13,20 +15,39 @@ class ThemeController extends GetxController {
   // 当前选定的主题模式，可观察
   final Rx<ThemeModeOption> _currentThemeModeOption =
       ThemeModeOption.system.obs;
+
   // 当前应用的主题数据，可观察
   final Rx<ThemeData> _currentThemeData = ThemeData.light().obs;
 
   ThemeModeOption get currentThemeModeOption =>
       _currentThemeModeOption.value;
+
   ThemeData get currentThemeData => _currentThemeData.value;
 
   // SharedPreferences 实例
   late SharedPreferences _prefs;
 
+  // 添加 Completer 来表示 ThemeController 的异步初始化是否完成
+  final Completer<void> _themeInitCompleter = Completer<void>();
+
+  Future<void> get themeInitializationFuture =>
+      _themeInitCompleter.future; // 暴露一个 Future 让外部等待
+
   @override
   void onInit() {
     super.onInit();
-    _initSharedPreferences();
+    // 调用异步初始化，并在其完成后标记 Completer 完成
+    _initSharedPreferences()
+        .then((_) {
+          if (!_themeInitCompleter.isCompleted) {
+            _themeInitCompleter.complete();
+          }
+        })
+        .catchError((error) {
+          if (!_themeInitCompleter.isCompleted) {
+            _themeInitCompleter.completeError(error);
+          }
+        });
   }
 
   // 初始化 SharedPreferences 并加载保存的主题设置
@@ -47,9 +68,9 @@ class ThemeController extends GetxController {
                 e.toString() == 'ThemeModeOption.$themeOptionString',
             orElse: () => ThemeModeOption.system,
           );
-      setTheme(savedOption); // 应用保存的主题
+      await setTheme(savedOption); // 应用保存的主题
     } else {
-      setTheme(ThemeModeOption.system); // 如果没有保存，则应用系统主题
+      await setTheme(ThemeModeOption.system); // 如果没有保存，则应用系统主题
     }
   }
 

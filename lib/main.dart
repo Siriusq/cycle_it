@@ -39,11 +39,14 @@ void main() async {
     });
   }
 
-  // Manually run HomeBinding to put all permanent dependencies
+  // 同步绑定所有永久性依赖
   HomeBinding().dependencies();
-  // Retrieve ItemService and call initializeData AFTER it's put by HomeBinding
+  // 确保 ItemService 数据初始化完成
   final itemService = Get.find<ItemService>();
-  await itemService.initializeData(); // Call data initialization
+  await itemService.initializeData();
+  // 确保 ThemeController 完成了异步主题加载
+  final themeController = Get.find<ThemeController>();
+  await themeController.themeInitializationFuture;
 
   runApp(const MyApp());
 }
