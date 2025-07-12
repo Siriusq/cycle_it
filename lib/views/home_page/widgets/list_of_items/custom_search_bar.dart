@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../../controllers/search_bar_controller.dart';
-import '../../../../utils/constants.dart';
+import '../../../../controllers/theme_controller.dart';
 import '../../../../utils/responsive_style.dart';
 
 class CustomSearchBar extends StatelessWidget {
@@ -10,6 +10,8 @@ class CustomSearchBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final ThemeController themeController =
+        Get.find<ThemeController>();
     final SearchBarController searchBarCtrl =
         Get.find<SearchBarController>();
     final ResponsiveStyle style = ResponsiveStyle.to;
@@ -24,6 +26,9 @@ class CustomSearchBar extends StatelessWidget {
       child: SizedBox(
         height: searchBarHeight,
         child: Obx(() {
+          final ThemeData currentTheme =
+              themeController.currentThemeData;
+
           return TextField(
             style: searchBarHintStyle,
             textAlignVertical:
@@ -35,10 +40,12 @@ class CustomSearchBar extends StatelessWidget {
             decoration: InputDecoration(
               hintText: "Search",
               hintStyle: searchBarHintStyle,
-              focusedBorder: const OutlineInputBorder(
-                borderRadius: BorderRadius.all(Radius.circular(10)),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: const BorderRadius.all(
+                  Radius.circular(10),
+                ),
                 borderSide: BorderSide(
-                  color: kSelectedBorderColor,
+                  color: currentTheme.colorScheme.outline,
                   width: 2.0,
                 ),
               ),
@@ -88,10 +95,12 @@ class CustomSearchBar extends StatelessWidget {
                   const SizedBox(width: 6),
                 ],
               ),
-              enabledBorder: const OutlineInputBorder(
-                borderRadius: BorderRadius.all(Radius.circular(10)),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: const BorderRadius.all(
+                  Radius.circular(10),
+                ),
                 borderSide: BorderSide(
-                  color: kBorderColor,
+                  color: currentTheme.colorScheme.outlineVariant,
                   width: 2.0,
                 ),
               ),

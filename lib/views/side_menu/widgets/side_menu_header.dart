@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../../utils/constants.dart';
 import '../../../utils/responsive_style.dart';
 import '../../settings_page/settings_page.dart';
 
@@ -49,7 +48,7 @@ class SideMenuHeader extends StatelessWidget {
                 padding: EdgeInsets.zero,
                 constraints: const BoxConstraints(),
                 onPressed: () => Get.to(() => const SettingsPage()),
-                icon: const Icon(Icons.tune, color: kTitleTextColor),
+                icon: const Icon(Icons.tune),
               ),
             ),
           ],

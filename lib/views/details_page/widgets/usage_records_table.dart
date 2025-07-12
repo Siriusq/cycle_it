@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../controllers/item_controller.dart';
+import '../../../controllers/theme_controller.dart';
 import '../../../models/item_model.dart';
-import '../../../utils/constants.dart';
 import '../../shared_widgets/date_picker_helper.dart';
 
 class UsageRecordsTable extends StatelessWidget {
@@ -15,6 +15,8 @@ class UsageRecordsTable extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final ThemeController themeController =
+        Get.find<ThemeController>();
     final ItemController itemController = Get.find<ItemController>();
     final ResponsiveStyle style = ResponsiveStyle.to;
     final TextStyle bodyText = style.bodyText;
@@ -27,6 +29,8 @@ class UsageRecordsTable extends StatelessWidget {
         return const Center(child: CircularProgressIndicator());
       }
 
+      final ThemeData currentTheme = themeController.currentThemeData;
+
       final dataSource = itemController.usageRecordDataSource.value;
       if (dataSource == null) {
         return Center(child: Text('加载使用记录...', style: bodyText));
@@ -38,9 +42,12 @@ class UsageRecordsTable extends StatelessWidget {
             //height: tableHeight, //实际上没啥用，组件被包在有限制的组件中了，这里只是个保证
             child: Container(
               decoration: BoxDecoration(
-                color: kSecondaryBgColor,
-                border: Border.all(width: 1.5, color: kBorderColor),
-                borderRadius: BorderRadius.circular(15.0),
+                color: currentTheme.colorScheme.surfaceContainerLow,
+                borderRadius: BorderRadius.circular(15),
+                border: Border.all(
+                  width: 1.5,
+                  color: currentTheme.colorScheme.outlineVariant,
+                ),
               ),
               child: Column(
                 children: [
@@ -126,21 +133,24 @@ class UsageRecordsTable extends StatelessWidget {
                         horizontalMargin: 0,
                         columnSpacing: 0,
                         headingRowColor: WidgetStateProperty.all(
-                          kSecondaryBgColor,
+                          currentTheme.colorScheme.surfaceContainer,
                         ),
                         //dividerThickness: 1,
                         border: TableBorder(
-                          top: const BorderSide(color: kBorderColor),
-                          bottom: const BorderSide(
-                            color: kBorderColor,
+                          top: BorderSide(
+                            color:
+                                currentTheme
+                                    .colorScheme
+                                    .outlineVariant,
                           ),
-                          //left: BorderSide(color: Colors.grey[300]!),
-                          //right: BorderSide(color: Colors.grey[300]!),
-                          verticalInside: const BorderSide(
-                            color: kBorderColor,
+                          bottom: BorderSide(
+                            color: currentTheme.dividerColor,
                           ),
-                          horizontalInside: const BorderSide(
-                            color: kBorderColor,
+                          verticalInside: BorderSide(
+                            color: currentTheme.dividerColor,
+                          ),
+                          horizontalInside: BorderSide(
+                            color: currentTheme.dividerColor,
                           ),
                         ),
                         scrollController: ScrollController(),

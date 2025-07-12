@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../models/item_model.dart';
-import '../../../../utils/constants.dart';
 import '../../../../utils/responsive_layout.dart';
 import '../../../../utils/responsive_style.dart';
 import '../../../shared_widgets/responsive_component_group.dart';
@@ -43,11 +42,7 @@ class ItemCardOverview extends StatelessWidget {
             // 使用周期
             Row(
               children: [
-                Icon(
-                  Icons.repeat,
-                  color: kTextColor,
-                  size: iconSizeSM,
-                ),
+                Icon(Icons.repeat, size: iconSizeSM),
                 SizedBox(width: spacingXS),
                 Flexible(
                   child: Text(
@@ -63,11 +58,7 @@ class ItemCardOverview extends StatelessWidget {
             // 上次使用
             Row(
               children: [
-                Icon(
-                  Icons.history,
-                  color: kTextColor,
-                  size: iconSizeSM,
-                ),
+                Icon(Icons.history, size: iconSizeSM),
                 SizedBox(width: spacingXS),
                 Flexible(
                   child: Text(

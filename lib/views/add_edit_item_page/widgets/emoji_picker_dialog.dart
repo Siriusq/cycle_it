@@ -4,10 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../controllers/add_edit_item_controller.dart';
-import '../../../utils/constants.dart';
+import '../../../controllers/theme_controller.dart';
 import '../../../utils/responsive_style.dart';
 
 void showEmojiPickerDialog() {
+  final ThemeController themeController = Get.find<ThemeController>();
   final AddEditItemController controller =
       Get.find<AddEditItemController>();
   final ResponsiveStyle style = ResponsiveStyle.to;
@@ -25,84 +26,80 @@ void showEmojiPickerDialog() {
       child: SizedBox(
         height: Get.height * 0.7, // 占据屏幕高度的 70%
         width: style.dialogWidth, // 占据屏幕宽度的 90%
-        child: EmojiPicker(
-          onEmojiSelected: (category, emoji) {
-            controller.chooseEmoji(emoji.emoji); // 更新选中的 emoji
-            Get.back(); // 关闭对话框
-          },
-          config: Config(
-            checkPlatformCompatibility: true,
-            locale: Get.locale ?? const Locale('en'),
+        child: Obx(() {
+          final ThemeData currentTheme =
+              themeController.currentThemeData;
 
-            categoryViewConfig: CategoryViewConfig(
-              initCategory: Category.RECENT, // 默认显示最近使用的表情
-              iconColor: kGrayColor,
-              iconColorSelected: kPrimaryColor,
-              indicatorColor: kPrimaryColor,
-              tabIndicatorAnimDuration: kTabScrollDuration,
-              categoryIcons: const CategoryIcons(),
-              backgroundColor: kBgDarkColor,
-              extraTab: CategoryExtraTab.SEARCH, // 启用搜索标签
-            ),
+          return EmojiPicker(
+            onEmojiSelected: (category, emoji) {
+              controller.chooseEmoji(emoji.emoji); // 更新选中的 emoji
+              Get.back(); // 关闭对话框
+            },
+            config: Config(
+              checkPlatformCompatibility: true,
+              locale: Get.locale ?? const Locale('en'),
 
-            skinToneConfig: SkinToneConfig(
-              dialogBackgroundColor: kBgLightColor,
-              indicatorColor: kGrayColor,
-            ),
-
-            // 移除底部动作栏
-            bottomActionBarConfig: BottomActionBarConfig(
-              enabled: false,
-            ),
-
-            searchViewConfig: SearchViewConfig(
-              hintText:
-                  Get.locale?.languageCode == 'zh'
-                      ? '搜索表情...'
-                      : 'Search emoji...',
-              backgroundColor: Colors.white,
-              buttonIconColor: kPrimaryColor,
-              // 添加更详细的搜索框样式
-              // searchBoxDecoration: InputDecoration(
-              //   contentPadding: const EdgeInsets.symmetric(horizontal: 16.0),
-              //   border: OutlineInputBorder(
-              //     borderRadius: BorderRadius.circular(10.0),
-              //     borderSide: BorderSide.none,
-              //   ),
-              //   filled: true,
-              //   fillColor: Colors.grey.shade200,
-              //   hintText: Get.locale?.languageCode == 'zh' ? '搜索...' : 'Search...',
-              //   prefixIcon: const Icon(Icons.search, color: Colors.grey),
-              //   suffixIcon: const Icon(Icons.clear, color: Colors.grey),
-              // ),
-            ),
-
-            emojiViewConfig: EmojiViewConfig(
-              columns: style.emojiColCount, // 使用 ResponsiveStyle 的列数
-              backgroundColor: kBgLightColor,
-              emojiSizeMax:
-                  32.0 *
-                  (defaultTargetPlatform == TargetPlatform.iOS
-                      ? 1.20
-                      : 1.0),
-              verticalSpacing: 0,
-              horizontalSpacing: 0,
-              recentsLimit: 28,
-              noRecents: Text(
-                Get.locale?.languageCode == 'zh'
-                    ? '无最近使用'
-                    : 'No Recents',
-                textAlign: TextAlign.center,
-                style: const TextStyle(
-                  fontSize: 20,
-                  color: Colors.black26,
-                ),
+              categoryViewConfig: CategoryViewConfig(
+                initCategory: Category.RECENT,
+                // 默认显示最近使用的表情
+                iconColor: currentTheme.colorScheme.onSurfaceVariant,
+                iconColorSelected: currentTheme.colorScheme.primary,
+                indicatorColor: currentTheme.colorScheme.primaryFixed,
+                tabIndicatorAnimDuration: kTabScrollDuration,
+                categoryIcons: const CategoryIcons(),
+                backgroundColor:
+                    currentTheme.colorScheme.surfaceContainerHigh,
+                extraTab: CategoryExtraTab.SEARCH, // 启用搜索标签
               ),
-              replaceEmojiOnLimitExceed: true,
-              buttonMode: ButtonMode.MATERIAL,
+
+              skinToneConfig: SkinToneConfig(
+                dialogBackgroundColor:
+                    currentTheme.colorScheme.surfaceContainerHigh,
+                indicatorColor:
+                    currentTheme.colorScheme.onSurfaceVariant,
+              ),
+
+              // 移除底部动作栏
+              bottomActionBarConfig: BottomActionBarConfig(
+                enabled: false,
+              ),
+
+              searchViewConfig: SearchViewConfig(
+                hintText:
+                    Get.locale?.languageCode == 'zh'
+                        ? '搜索表情...'
+                        : 'Search emoji...',
+                backgroundColor:
+                    currentTheme.colorScheme.surfaceContainer,
+                buttonIconColor: currentTheme.colorScheme.onSurface,
+              ),
+
+              emojiViewConfig: EmojiViewConfig(
+                columns: style.emojiColCount,
+                // 使用 ResponsiveStyle 的列数
+                backgroundColor:
+                    currentTheme.colorScheme.surfaceContainer,
+                emojiSizeMax:
+                    32.0 *
+                    (defaultTargetPlatform == TargetPlatform.iOS
+                        ? 1.20
+                        : 1.0),
+                verticalSpacing: 0,
+                horizontalSpacing: 0,
+                recentsLimit: 28,
+                noRecents: Text(
+                  Get.locale?.languageCode == 'zh'
+                      ? '无最近使用'
+                      : 'No Recents',
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(fontSize: 20),
+                ),
+                replaceEmojiOnLimitExceed: true,
+                buttonMode: ButtonMode.MATERIAL,
+              ),
             ),
-          ),
-        ),
+          );
+        }),
       ),
     ),
   );

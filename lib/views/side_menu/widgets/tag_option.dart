@@ -3,7 +3,7 @@ import 'package:cycle_it/utils/responsive_style.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../../utils/constants.dart';
+import '../../../controllers/theme_controller.dart';
 
 class TagOption extends StatelessWidget {
   final String tagName;
@@ -14,12 +14,17 @@ class TagOption extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final ThemeController themeController =
+        Get.find<ThemeController>();
+
     final style = ResponsiveStyle.to;
     final double optionFontSize = style.optionFontSize;
     final double spacingSideMenuOption = style.spacingSideMenuOption;
 
     return Obx(() {
       final isSelected = tagCtrl.selectedTags.contains(tagName);
+      final ThemeData currentTheme = themeController.currentThemeData;
+
       return Padding(
         padding: EdgeInsets.symmetric(vertical: 2),
         child: InkWell(
@@ -30,7 +35,7 @@ class TagOption extends StatelessWidget {
             decoration: BoxDecoration(
               color:
                   isSelected
-                      ? color.withAlpha(30)
+                      ? color.withAlpha(50)
                       : Colors.transparent,
               borderRadius: BorderRadius.circular(8.0),
               border: Border.all(
@@ -60,7 +65,11 @@ class TagOption extends StatelessWidget {
                         fontSize: optionFontSize,
                         fontWeight: FontWeight.normal,
                         color:
-                            isSelected ? kTitleTextColor : kGrayColor,
+                            isSelected
+                                ? currentTheme
+                                    .colorScheme
+                                    .onSecondaryContainer
+                                : currentTheme.colorScheme.secondary,
                       ),
                       overflow: TextOverflow.ellipsis,
                       maxLines: 1,

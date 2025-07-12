@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../controllers/add_edit_item_controller.dart';
-import '../../../utils/constants.dart';
+import '../../../controllers/theme_controller.dart';
 import '../../../utils/responsive_style.dart';
 import 'color_picker_dialog.dart';
 import 'emoji_picker_dialog.dart';
@@ -12,6 +12,8 @@ class EmojiColorSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final ThemeController themeController =
+        Get.find<ThemeController>();
     final AddEditItemController controller =
         Get.find<AddEditItemController>();
     final ResponsiveStyle style = ResponsiveStyle.to;
@@ -55,6 +57,7 @@ class EmojiColorSection extends StatelessWidget {
               emojiEditIconWidth: emojiEditIconWidth,
               spacingMD: spacingMD,
               bodyTextStyle: bodyTextStyle,
+              themeController: themeController,
             ),
             SizedBox(height: spacingMD),
             _buildColorButton(
@@ -63,6 +66,7 @@ class EmojiColorSection extends StatelessWidget {
               emojiEditIconWidth: emojiEditIconWidth,
               spacingMD: spacingMD,
               bodyTextStyle: bodyTextStyle,
+              themeController: themeController,
             ),
           ],
         ),
@@ -75,23 +79,32 @@ class EmojiColorSection extends StatelessWidget {
     required double emojiEditIconWidth,
     required double spacingMD,
     required TextStyle bodyTextStyle,
+    required ThemeController themeController,
   }) {
-    return TextButton.icon(
-      onPressed: () {
-        showEmojiPickerDialog();
-      },
-      style: TextButton.styleFrom(
-        fixedSize: Size(emojiEditIconWidth, 40),
-        padding: EdgeInsets.all(spacingMD),
-        backgroundColor: kSecondaryBgColor,
-        shape: RoundedRectangleBorder(
-          side: BorderSide(color: kGrayColor, width: 1.0),
-          borderRadius: BorderRadius.circular(10),
+    return Obx(() {
+      final ThemeData currentTheme = themeController.currentThemeData;
+
+      return TextButton.icon(
+        onPressed: () {
+          showEmojiPickerDialog();
+        },
+        style: TextButton.styleFrom(
+          fixedSize: Size(emojiEditIconWidth, 40),
+          padding: EdgeInsets.all(spacingMD),
+          backgroundColor:
+              currentTheme.colorScheme.surfaceContainerLow,
+          shape: RoundedRectangleBorder(
+            side: BorderSide(
+              color: currentTheme.colorScheme.outline,
+              width: 1.0,
+            ),
+            borderRadius: BorderRadius.circular(10),
+          ),
         ),
-      ),
-      icon: Icon(Icons.emoji_emotions_outlined, color: kTextColor),
-      label: Text("选择 emoji", style: bodyTextStyle),
-    );
+        icon: Icon(Icons.emoji_emotions_outlined),
+        label: Text("选择 emoji", style: bodyTextStyle),
+      );
+    });
   }
 
   Widget _buildColorButton({
@@ -100,27 +113,36 @@ class EmojiColorSection extends StatelessWidget {
     required double emojiEditIconWidth,
     required double spacingMD,
     required TextStyle bodyTextStyle,
+    required ThemeController themeController,
   }) {
-    return TextButton.icon(
-      style: TextButton.styleFrom(
-        fixedSize: Size(emojiEditIconWidth, 40),
-        padding: EdgeInsets.all(spacingMD),
-        backgroundColor: kSecondaryBgColor,
-        shape: RoundedRectangleBorder(
-          side: BorderSide(color: kGrayColor, width: 1.0),
-          borderRadius: BorderRadius.circular(10),
+    return Obx(() {
+      final ThemeData currentTheme = themeController.currentThemeData;
+
+      return TextButton.icon(
+        style: TextButton.styleFrom(
+          fixedSize: Size(emojiEditIconWidth, 40),
+          padding: EdgeInsets.all(spacingMD),
+          backgroundColor:
+              currentTheme.colorScheme.surfaceContainerLow,
+          shape: RoundedRectangleBorder(
+            side: BorderSide(
+              color: currentTheme.colorScheme.outline,
+              width: 1.0,
+            ),
+            borderRadius: BorderRadius.circular(10),
+          ),
         ),
-      ),
-      onPressed: () async {
-        final result = await showCustomColorPickerDialog(
-          controller.selectedIconColor.value,
-        );
-        if (result != null) {
-          controller.selectedIconColor.value = result;
-        }
-      },
-      icon: Icon(Icons.color_lens_outlined, color: kTextColor),
-      label: Text("选择背景色", style: bodyTextStyle),
-    );
+        onPressed: () async {
+          final result = await showCustomColorPickerDialog(
+            controller.selectedIconColor.value,
+          );
+          if (result != null) {
+            controller.selectedIconColor.value = result;
+          }
+        },
+        icon: Icon(Icons.color_lens_outlined),
+        label: Text("选择背景色", style: bodyTextStyle),
+      );
+    });
   }
 }

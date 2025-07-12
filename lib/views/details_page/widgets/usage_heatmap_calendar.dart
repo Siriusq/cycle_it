@@ -3,8 +3,8 @@ import 'package:get/get.dart';
 import 'package:simple_heatmap_calendar/simple_heatmap_calendar.dart';
 
 import '../../../controllers/item_controller.dart';
+import '../../../controllers/theme_controller.dart';
 import '../../../models/usage_record_model.dart';
-import '../../../utils/constants.dart';
 import '../../../utils/responsive_style.dart';
 
 class UsageHeatmapCalendar extends StatelessWidget {
@@ -12,6 +12,8 @@ class UsageHeatmapCalendar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final ThemeController themeController =
+        Get.find<ThemeController>();
     final ItemController itemController = Get.find<ItemController>();
     final ResponsiveStyle style = ResponsiveStyle.to;
     final TextStyle titleTextMD = style.titleTextMD;
@@ -22,6 +24,8 @@ class UsageHeatmapCalendar extends StatelessWidget {
         style.heatmapCellSpaceBetween;
 
     return Obx(() {
+      final ThemeData currentTheme = themeController.currentThemeData;
+
       final List<UsageRecordModel> records =
           itemController.currentItem.value?.usageRecords ?? [];
 
@@ -43,12 +47,17 @@ class UsageHeatmapCalendar extends StatelessWidget {
 
       return LayoutBuilder(
         builder: (context, constraints) {
+          final Color primaryColor = currentTheme.colorScheme.primary;
+
           return Container(
             padding: const EdgeInsets.symmetric(vertical: 8),
             decoration: BoxDecoration(
-              color: kSecondaryBgColor,
+              color: currentTheme.colorScheme.surfaceContainerLow,
               borderRadius: BorderRadius.circular(15),
-              border: Border.all(width: 1.5, color: kBorderColor),
+              border: Border.all(
+                width: 1.5,
+                color: currentTheme.colorScheme.outlineVariant,
+              ),
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -62,15 +71,11 @@ class UsageHeatmapCalendar extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text('使用记录热点图', style: titleTextMD),
-                      Icon(
-                        Icons.calendar_month,
-                        size: 24,
-                        color: kIconColor,
-                      ),
+                      Icon(Icons.calendar_month, size: 24),
                     ],
                   ),
                 ),
-                Divider(color: kBorderColor, thickness: 1.5),
+                Divider(thickness: 1.5),
                 Center(
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
@@ -80,11 +85,11 @@ class UsageHeatmapCalendar extends StatelessWidget {
                       startDate: DateTime(DateTime.now().year - 1),
                       endedDate: DateTime.now(),
                       colorMap: {
-                        1: kPrimaryColor.withValues(alpha: 0.4),
-                        2: kPrimaryColor.withValues(alpha: 0.55),
-                        3: kPrimaryColor.withValues(alpha: 0.7),
-                        4: kPrimaryColor.withValues(alpha: 0.85),
-                        5: kPrimaryColor,
+                        1: primaryColor.withValues(alpha: 0.4),
+                        2: primaryColor.withValues(alpha: 0.55),
+                        3: primaryColor.withValues(alpha: 0.7),
+                        4: primaryColor.withValues(alpha: 0.85),
+                        5: primaryColor,
                       },
                       selectedMap: heatMapData,
                       cellSize: Size.square(heatmapCellSize),
@@ -98,17 +103,21 @@ class UsageHeatmapCalendar extends StatelessWidget {
                           Radius.circular(4.0),
                         ),
                         weekLabelValueFontSize: bodyText.fontSize!,
-                        weekLabelColor: bodyText.color,
+                        weekLabelColor: currentTheme.hintColor,
                         monthLabelFontSize: bodyText.fontSize!,
-                        monthLabelColor: bodyText.color,
+                        monthLabelColor: currentTheme.hintColor,
                       ),
                       colorTipLeftHelper: Text(
                         'Less',
-                        style: bodyText,
+                        style: bodyText.copyWith(
+                          color: currentTheme.hintColor,
+                        ),
                       ),
                       colorTipRightHelper: Text(
                         'More',
-                        style: bodyText,
+                        style: bodyText.copyWith(
+                          color: currentTheme.hintColor,
+                        ),
                       ),
                       layoutParameters:
                           const HeatmapLayoutParameters.defaults(

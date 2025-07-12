@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../controllers/add_edit_item_controller.dart';
-import '../../../utils/constants.dart';
 import '../../../utils/responsive_style.dart';
 
 class NameCommentSection extends StatelessWidget {
@@ -25,13 +24,6 @@ class NameCommentSection extends StatelessWidget {
             labelText: '物品名称',
             labelStyle: bodyTextLG,
             border: const OutlineInputBorder(),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.all(Radius.circular(10)),
-              borderSide: BorderSide(
-                color: kSelectedBorderColor,
-                width: 2.0,
-              ),
-            ),
           ),
           maxLength: 50,
         ),
@@ -42,13 +34,6 @@ class NameCommentSection extends StatelessWidget {
             labelText: '使用注释 (可选)',
             labelStyle: bodyTextLG,
             border: const OutlineInputBorder(),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.all(Radius.circular(10)),
-              borderSide: BorderSide(
-                color: kSelectedBorderColor,
-                width: 2.0,
-              ),
-            ),
           ),
           maxLines: 1,
         ),

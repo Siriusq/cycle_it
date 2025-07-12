@@ -4,13 +4,13 @@ import 'package:intl/intl.dart';
 
 import '../../../../controllers/item_controller.dart';
 import '../../../../models/item_model.dart';
-import '../../../../utils/constants.dart';
 import '../../../../utils/responsive_style.dart';
 import '../../../shared_widgets/date_picker_helper.dart';
 import '../../../shared_widgets/delete_confirm_dialog.dart';
 
 class ItemCardActionButton extends StatelessWidget {
   final ItemModel item;
+
   const ItemCardActionButton({super.key, required this.item});
 
   @override
@@ -22,7 +22,6 @@ class ItemCardActionButton extends StatelessWidget {
     final TextStyle bodyTextStyle = style.bodyText;
 
     return PopupMenuButton<String>(
-      color: kSecondaryBgColor,
       tooltip: 'More Action',
       onSelected:
           (value) => _handleAction(context, value, itemCtrl, item),
@@ -32,14 +31,9 @@ class ItemCardActionButton extends StatelessWidget {
               value: 'cycle',
               child: Row(
                 children: [
-                  Icon(Icons.refresh, color: itemIconColor),
+                  Icon(Icons.refresh),
                   SizedBox(width: spacingSM),
-                  Text(
-                    'cycle'.tr,
-                    style: bodyTextStyle.copyWith(
-                      color: itemIconColor,
-                    ),
-                  ),
+                  Text('cycle'.tr, style: bodyTextStyle),
                 ],
               ),
             ),
@@ -47,7 +41,7 @@ class ItemCardActionButton extends StatelessWidget {
               value: 'edit',
               child: Row(
                 children: [
-                  Icon(Icons.edit, color: kTextColor),
+                  Icon(Icons.edit),
                   SizedBox(width: spacingSM),
                   Text('edit'.tr, style: bodyTextStyle),
                 ],

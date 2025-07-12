@@ -30,5 +30,3 @@ const List<Color> kColorPalette = [
   Color(0xFFA29BFE),
   Color(0xFF838383),
 ];
-
-const kDefaultPadding = 20.0;

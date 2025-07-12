@@ -2,7 +2,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../utils/constants.dart';
 import '../../utils/responsive_style.dart';
 
 Future<DateTime?> promptForUsageDate(DateTime initialDate) async {
@@ -24,20 +23,9 @@ Future<DateTime?> promptForUsageDate(DateTime initialDate) async {
     builder: (BuildContext context, Widget? child) {
       return Theme(
         data: Get.theme.copyWith(
-          colorScheme: ColorScheme.light(
-            primary: kPrimaryColor,
-            onPrimary: kTitleTextColor,
-            onSurface: kTextColor,
-          ),
           textButtonTheme: TextButtonThemeData(
             style: TextButton.styleFrom(
-              foregroundColor: kTextColor,
               padding: EdgeInsets.all(spacingMD),
-              backgroundColor: kSecondaryBgColor,
-              shape: RoundedRectangleBorder(
-                side: BorderSide(color: kGrayColor, width: 1.0),
-                borderRadius: BorderRadius.circular(10),
-              ),
             ),
           ),
         ),

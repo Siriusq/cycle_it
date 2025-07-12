@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../models/tag_model.dart';
-import '../../utils/constants.dart';
 import '../../utils/responsive_style.dart';
 import 'widgets/add_edit_tag_dialog.dart';
 
@@ -20,7 +19,6 @@ class ManageTagPage extends StatelessWidget {
     return LayoutBuilder(
       builder: (context, constraints) {
         return Scaffold(
-          backgroundColor: kPrimaryBgColor,
           // 在宽屏幕上不显示默认AppBar
           appBar:
               isMobileDevice

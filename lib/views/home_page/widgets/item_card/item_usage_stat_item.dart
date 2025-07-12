@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../../../../utils/constants.dart'; // 确保路径正确
-
 class ItemUsageStatItem extends StatelessWidget {
   final IconData icon;
   final String title;
@@ -22,7 +20,7 @@ class ItemUsageStatItem extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             // 图标部分
-            Icon(icon, size: 18, color: kTextColor),
+            Icon(icon, size: 18),
             const SizedBox(width: 6),
 
             // 文字部分
@@ -34,11 +32,7 @@ class ItemUsageStatItem extends StatelessWidget {
                   // 标题
                   Text(
                     title,
-                    style: const TextStyle(
-                      color: kTextColor,
-                      fontSize: 12,
-                      height: 1.1,
-                    ),
+                    style: const TextStyle(fontSize: 12, height: 1.1),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -47,7 +41,6 @@ class ItemUsageStatItem extends StatelessWidget {
                   Text(
                     value,
                     style: const TextStyle(
-                      color: kTextColor,
                       fontWeight: FontWeight.w400,
                       fontSize: 12,
                       letterSpacing: -0.3,

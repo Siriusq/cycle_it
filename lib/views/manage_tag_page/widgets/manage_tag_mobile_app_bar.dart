@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../../utils/constants.dart';
 import '../../../utils/responsive_style.dart';
 
 class ManageTagMobileAppBar extends StatelessWidget
@@ -18,17 +17,17 @@ class ManageTagMobileAppBar extends StatelessWidget
       title: Center(
         child: Text(
           'tag_management'.tr, // 标签管理标题
-          style: style.titleTextEX.copyWith(color: kTitleTextColor),
+          style: style.titleTextEX,
         ),
       ),
       // AppBar底部的分割线
       bottom: PreferredSize(
         preferredSize: const Size.fromHeight(1.0),
-        child: Container(color: Colors.grey, height: 1.0),
+        child: Divider(),
       ),
       // 返回按钮
       leading: IconButton(
-        icon: Icon(Icons.arrow_back, color: kTextColor),
+        icon: Icon(Icons.arrow_back),
         onPressed: () => Get.back(),
       ),
       // 添加按钮

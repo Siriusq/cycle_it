@@ -4,6 +4,7 @@ import 'package:cycle_it/utils/responsive_style.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../controllers/theme_controller.dart';
 import '../../../models/tag_model.dart';
 
 class AddEditTagDialog extends StatelessWidget {
@@ -69,6 +70,8 @@ class AddEditTagDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final ThemeController themeController =
+        Get.find<ThemeController>();
     final tagCtrl = Get.find<TagController>();
     final isEditing = tagToEdit != null;
 
@@ -78,7 +81,6 @@ class AddEditTagDialog extends StatelessWidget {
     final TextStyle bodyTextLG = style.bodyTextLG;
 
     return AlertDialog(
-      backgroundColor: kPrimaryBgColor,
       title: Text(
         isEditing ? 'edit_tag'.tr : 'add_new_tag'.tr,
         style: titleTextStyleLG,
@@ -98,29 +100,49 @@ class AddEditTagDialog extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // 标签名称
-            TextFormField(
-              controller: _tagNameCtrl,
-              decoration: InputDecoration(
-                labelText: 'tag_name'.tr,
-                labelStyle: bodyTextLG,
-                border: const OutlineInputBorder(),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(10)),
-                  borderSide: BorderSide(
-                    color: kSelectedBorderColor,
-                    width: 2.0,
+            Obx(() {
+              final ThemeData currentTheme =
+                  themeController.currentThemeData;
+
+              return TextFormField(
+                controller: _tagNameCtrl,
+                decoration: InputDecoration(
+                  labelText: 'tag_name'.tr,
+                  labelStyle: bodyTextLG,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(10),
+                    ),
+                    borderSide: BorderSide(
+                      color: currentTheme.colorScheme.outlineVariant,
+                      width: 2.0,
+                    ),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(10),
+                    ),
+                    borderSide: BorderSide(
+                      color: currentTheme.colorScheme.outline,
+                      width: 2.0,
+                    ),
                   ),
                 ),
-              ),
-              maxLength: 30,
-            ),
+                maxLength: 30,
+              );
+            }),
 
             SizedBox(height: spacingMD),
-            Obx(
-              () => SafeArea(
+            Obx(() {
+              final ThemeData currentTheme =
+                  themeController.currentThemeData;
+              return SafeArea(
                 child: Container(
                   decoration: BoxDecoration(
-                    border: Border.all(color: kGrayColor, width: 1),
+                    border: Border.all(
+                      color: currentTheme.colorScheme.outline,
+                      width: 1,
+                    ),
                     borderRadius: BorderRadius.circular(10),
                   ),
                   width: double.infinity,
@@ -158,39 +180,21 @@ class AddEditTagDialog extends StatelessWidget {
                         }).toList(),
                   ),
                 ),
-              ),
-            ),
+              );
+            }),
           ],
         ),
       ),
       actions: [
         TextButton.icon(
-          style: TextButton.styleFrom(
-            minimumSize: Size(60, 0),
-            padding: EdgeInsets.all(spacingMD),
-            backgroundColor: kSecondaryBgColor,
-            shape: RoundedRectangleBorder(
-              side: BorderSide(color: kGrayColor, width: 1.0),
-              borderRadius: BorderRadius.circular(10),
-            ),
-          ),
           onPressed: () => Get.back(),
-          icon: Icon(Icons.cancel_outlined, color: kTextColor),
+          icon: Icon(Icons.cancel),
           label: Text('cancel'.tr, style: bodyTextLG),
         ),
 
         TextButton.icon(
-          style: TextButton.styleFrom(
-            minimumSize: Size(90, 0),
-            padding: EdgeInsets.all(spacingMD),
-            backgroundColor: kPrimaryColor,
-            shape: RoundedRectangleBorder(
-              side: BorderSide(color: kPrimaryColor, width: 1.0),
-              borderRadius: BorderRadius.circular(10),
-            ),
-          ),
           onPressed: () => _submit(tagCtrl),
-          icon: Icon(Icons.check_circle_outline, color: kTextColor),
+          icon: Icon(Icons.check),
           label: Text(
             isEditing ? 'save'.tr : 'add'.tr,
             style: bodyTextLG,

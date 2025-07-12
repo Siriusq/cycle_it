@@ -1,6 +1,5 @@
 import 'package:cycle_it/controllers/item_controller.dart';
 import 'package:cycle_it/models/item_model.dart';
-import 'package:cycle_it/utils/constants.dart';
 import 'package:cycle_it/utils/responsive_style.dart';
 import 'package:cycle_it/views/details_page/widgets/details_charts_group.dart';
 import 'package:cycle_it/views/details_page/widgets/details_header.dart';
@@ -37,56 +36,53 @@ class DetailsPage extends StatelessWidget {
       child: Obx(() {
         final ItemModel? item = itemCtrl.currentItem.value;
         if (item == null) {
-          return Container(color: kPrimaryBgColor);
+          return Container();
         }
 
         return Scaffold(
           body: SafeArea(
             left: false,
-            child: Container(
-              color: kPrimaryBgColor,
-              child: Column(
-                children: [
-                  // 顶栏
-                  DetailsHeader(),
+            child: Column(
+              children: [
+                // 顶栏
+                DetailsHeader(),
 
-                  // 分割线
-                  const Divider(height: 0),
+                // 分割线
+                const Divider(height: 0),
 
-                  Expanded(
-                    child: SingleChildScrollView(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: spacingLG,
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          //标题、标签与图标
-                          DetailsItemTitle(item: item),
-                          DetailsItemTags(item: item),
-                          SizedBox(height: spacingLG),
+                Expanded(
+                  child: SingleChildScrollView(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: spacingLG,
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        //标题、标签与图标
+                        DetailsItemTitle(item: item),
+                        DetailsItemTags(item: item),
+                        SizedBox(height: spacingLG),
 
-                          //图表
-                          DetailsOverview(item: item),
-                          SizedBox(height: spacingMD),
+                        //图表
+                        DetailsOverview(item: item),
+                        SizedBox(height: spacingMD),
 
-                          // 使用记录
-                          ResponsiveComponentGroup(
-                            minComponentWidth:
-                                style.minComponentWidthMD,
-                            aspectRation: 0.55,
-                            children: [
-                              UsageRecordsTable(currentItem: item),
-                              const DetailsChartsGroup(),
-                            ],
-                          ),
-                          SizedBox(height: spacingLG),
-                        ],
-                      ),
+                        // 使用记录
+                        ResponsiveComponentGroup(
+                          minComponentWidth:
+                              style.minComponentWidthMD,
+                          aspectRation: 0.55,
+                          children: [
+                            UsageRecordsTable(currentItem: item),
+                            const DetailsChartsGroup(),
+                          ],
+                        ),
+                        SizedBox(height: spacingLG),
+                      ],
                     ),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         );

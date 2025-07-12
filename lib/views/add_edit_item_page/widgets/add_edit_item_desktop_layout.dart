@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../controllers/add_edit_item_controller.dart';
-import '../../../utils/constants.dart';
+import '../../../controllers/theme_controller.dart';
 import '../../../utils/responsive_style.dart';
 
 class AddEditItemDesktopLayout extends StatelessWidget {
@@ -15,6 +15,8 @@ class AddEditItemDesktopLayout extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final ThemeController themeController =
+        Get.find<ThemeController>();
     final ResponsiveStyle style = ResponsiveStyle.to;
     final AddEditItemController controller =
         Get.find<AddEditItemController>();
@@ -28,51 +30,56 @@ class AddEditItemDesktopLayout extends StatelessWidget {
       child: SingleChildScrollView(
         child: ConstrainedBox(
           constraints: BoxConstraints(maxWidth: maxFormWidth),
-          child: Container(
-            decoration: BoxDecoration(
-              shape: BoxShape.rectangle,
-              border: Border.all(color: kBorderColor, width: 1),
-              borderRadius: BorderRadius.circular(15),
-              color: Colors.white,
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Padding(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: spacingSM,
-                    vertical: spacingMD,
-                  ),
-                  child: Row(
-                    children: [
-                      IconButton(
-                        icon: Icon(
-                          Icons.arrow_back,
-                          color: kTextColor,
+          child: Obx(() {
+            final ThemeData currentTheme =
+                themeController.currentThemeData;
+
+            return Container(
+              decoration: BoxDecoration(
+                shape: BoxShape.rectangle,
+                border: Border.all(
+                  width: 2,
+                  color: currentTheme.colorScheme.outlineVariant,
+                ),
+                borderRadius: BorderRadius.circular(15),
+                color: currentTheme.colorScheme.surfaceContainerLow,
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Padding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: spacingSM,
+                      vertical: spacingMD,
+                    ),
+                    child: Row(
+                      children: [
+                        IconButton(
+                          icon: Icon(Icons.arrow_back),
+                          onPressed: () => Get.back(),
                         ),
-                        onPressed: () => Get.back(),
-                      ),
-                      Expanded(
-                        child: Center(
-                          child: Text(
-                            controller.isEditing ? "编辑物品" : "添加物品",
-                            style: largeTitleTextStyle,
+                        Expanded(
+                          child: Center(
+                            child: Text(
+                              controller.isEditing ? "编辑物品" : "添加物品",
+                              style: largeTitleTextStyle,
+                            ),
                           ),
                         ),
-                      ),
-                      IconButton(
-                        icon: const Icon(Icons.save_outlined),
-                        onPressed:
-                            () => _saveAndGoBack(controller), // 保存
-                      ),
-                    ],
+                        IconButton(
+                          icon: const Icon(Icons.save_outlined),
+                          onPressed:
+                              () => _saveAndGoBack(controller), // 保存
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-                Container(color: kBorderColor, height: 2.0),
-                mainContent, // 主要内容 Widget
-              ],
-            ),
-          ),
+                  Divider(height: 0),
+                  mainContent, // 主要内容 Widget
+                ],
+              ),
+            );
+          }),
         ),
       ),
     );

@@ -3,10 +3,11 @@ import 'package:cycle_it/utils/responsive_style.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../../utils/constants.dart';
+import '../../../controllers/theme_controller.dart';
 import '../../manage_tag_page/widgets/add_edit_tag_dialog.dart';
 
 void showItemTagPickerDialog() {
+  final ThemeController themeController = Get.find<ThemeController>();
   final AddEditItemController controller =
       Get.find<AddEditItemController>();
   final ResponsiveStyle style = ResponsiveStyle.to;
@@ -16,7 +17,6 @@ void showItemTagPickerDialog() {
 
   Get.dialog(
     AlertDialog(
-      backgroundColor: kPrimaryBgColor,
       title: Text('选择标签', style: titleTextStyleLG),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16.0),
@@ -32,10 +32,11 @@ void showItemTagPickerDialog() {
         width: style.dialogWidth, // 占据屏幕宽度的 90%
         child: Container(
           decoration: BoxDecoration(
-            border: Border.all(color: Colors.grey),
             borderRadius: BorderRadius.circular(8.0),
           ),
           child: Obx(() {
+            final ThemeData currentTheme =
+                themeController.currentThemeData;
             final bool noAvailableTags =
                 controller.allAvailableTags.isEmpty;
 
@@ -57,7 +58,7 @@ void showItemTagPickerDialog() {
               );
             } else {
               return Material(
-                color: kPrimaryBgColor,
+                color: currentTheme.colorScheme.surfaceContainer,
                 borderRadius: BorderRadius.circular(8.0),
                 child: ListView.builder(
                   // itemCount 增加 1，用于“添加标签”行
@@ -69,6 +70,7 @@ void showItemTagPickerDialog() {
                         context,
                         style,
                         controller,
+                        themeController,
                       );
                     } else {
                       // 实际的标签项
@@ -86,7 +88,10 @@ void showItemTagPickerDialog() {
                           checkColor: tag.color,
                           activeColor: Colors.transparent,
                           side: BorderSide(
-                            color: kGrayColor,
+                            color:
+                                currentTheme
+                                    .colorScheme
+                                    .onSurfaceVariant,
                             width: 1,
                           ),
                           title: Row(
@@ -124,21 +129,13 @@ void showItemTagPickerDialog() {
 
       actions: [
         TextButton.icon(
-          style: TextButton.styleFrom(
-            padding: EdgeInsets.all(spacingMD),
-            backgroundColor: kPrimaryColor,
-            shape: RoundedRectangleBorder(
-              side: BorderSide(color: kPrimaryColor, width: 1.0),
-              borderRadius: BorderRadius.circular(10),
-            ),
-          ),
           onPressed: () {
             if (Get.isSnackbarOpen) {
               Get.back(); // 关闭当前显示的 SnackBar
             }
             Get.back();
           },
-          icon: Icon(Icons.check_circle_outline, color: kTextColor),
+          icon: Icon(Icons.check_circle_outline),
           label: Text('confirm'.tr, style: bodyTextStyle),
         ),
       ],
@@ -151,36 +148,40 @@ Widget _buildAddTagListTile(
   BuildContext context,
   ResponsiveStyle style,
   AddEditItemController controller,
+  ThemeController themeController,
 ) {
   final TextStyle bodyTextStyle = style.bodyText;
 
-  return ListTile(
-    leading: Icon(Icons.bookmark_add, color: kGrayColor),
-    // 添加图标
-    title: Text(
-      '添加新标签',
-      style: bodyTextStyle.copyWith(
-        fontWeight: FontWeight.bold, // 可以加粗
+  return Obx(() {
+    final ThemeData currentTheme = themeController.currentThemeData;
+
+    return ListTile(
+      leading: Icon(
+        Icons.bookmark_add,
+        color: currentTheme.colorScheme.primary,
       ),
-    ),
-    trailing: Icon(
-      Icons.arrow_forward_outlined,
-      color: kTextColor.withValues(alpha: 0.6),
-    ),
-    //    小箭头
-    onTap: () async {
-      // 调用打开添加标签 Dialog 的方法
-      final result = await Get.dialog(AddEditTagDialog());
-      if (result != null && result['success']) {
-        Get.snackbar(
-          'success'.tr,
-          '${result['message']}',
-          duration: Duration(seconds: 1),
-        );
-      }
-    },
-    tileColor: kGrayColor.withValues(alpha: 0.1),
-  );
+      // 添加图标
+      title: Text(
+        '添加新标签',
+        style: bodyTextStyle.copyWith(
+          fontWeight: FontWeight.bold, // 可以加粗
+        ),
+      ),
+      trailing: Icon(Icons.arrow_forward_outlined),
+      //    小箭头
+      onTap: () async {
+        // 调用打开添加标签 Dialog 的方法
+        final result = await Get.dialog(AddEditTagDialog());
+        if (result != null && result['success']) {
+          Get.snackbar(
+            'success'.tr,
+            '${result['message']}',
+            duration: Duration(seconds: 1),
+          );
+        }
+      },
+    );
+  });
 }
 
 // 添加标签的按钮（用于没有可用标签时的空状态）
@@ -195,11 +196,10 @@ Widget _buildAddTagButton(
     onPressed: () {
       Get.dialog(AddEditTagDialog());
     },
-    icon: Icon(Icons.bookmark_add_outlined, color: kTextColor),
+    icon: Icon(Icons.bookmark_add_outlined),
     label: Text('添加标签', style: bodyTextStyle),
     style: ElevatedButton.styleFrom(
       padding: EdgeInsets.all(spacingMD),
-      backgroundColor: kPrimaryColor,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10),
       ),

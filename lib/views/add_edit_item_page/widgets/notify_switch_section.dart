@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../controllers/add_edit_item_controller.dart';
-import '../../../utils/constants.dart';
+import '../../../controllers/theme_controller.dart';
 import '../../../utils/responsive_style.dart';
 
 class NotifySwitchSection extends StatelessWidget {
@@ -10,13 +10,17 @@ class NotifySwitchSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final ThemeController themeController =
+        Get.find<ThemeController>();
     final AddEditItemController controller =
         Get.find<AddEditItemController>();
     final ResponsiveStyle style = ResponsiveStyle.to;
     final TextStyle bodyTextStyle = style.bodyTextLG;
 
-    return Obx(
-      () => Row(
+    return Obx(() {
+      final ThemeData currentTheme = themeController.currentThemeData;
+
+      return Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Expanded(
@@ -32,14 +36,10 @@ class NotifySwitchSection extends StatelessWidget {
             onChanged: (newValue) {
               controller.notifyBeforeNextUse.value = newValue;
             },
-            activeColor: itemIconColor,
-            inactiveThumbColor: kSelectedBorderColor,
-            inactiveTrackColor: kBorderColor.withValues(
-              alpha: 0.5,
-            ), // 使用 withOpacity
+            activeColor: currentTheme.colorScheme.primary,
           ),
         ],
-      ),
-    );
+      );
+    });
   }
 }

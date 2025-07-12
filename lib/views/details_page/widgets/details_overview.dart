@@ -1,16 +1,16 @@
+import 'package:cycle_it/controllers/item_controller.dart';
+import 'package:cycle_it/models/item_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:cycle_it/models/item_model.dart';
-import 'package:cycle_it/controllers/item_controller.dart';
 
-import '../../../utils/constants.dart';
 import '../../../utils/responsive_style.dart';
 import '../../shared_widgets/responsive_component_group.dart';
 import 'details_brief_card.dart';
 
 class DetailsOverview extends StatelessWidget {
   final ItemModel item;
+
   const DetailsOverview({super.key, required this.item});
 
   @override
@@ -53,7 +53,6 @@ class DetailsOverview extends StatelessWidget {
             DetailsBriefCard(
               title: 'Usage Count',
               icon: Icons.pin,
-              iconColor: kIconColor,
               data: '$usageCount',
               comment:
                   firstUsedDate != null
@@ -64,7 +63,6 @@ class DetailsOverview extends StatelessWidget {
             DetailsBriefCard(
               title: 'Usage Cycle',
               icon: Icons.loop,
-              iconColor: kIconColor,
               data: usageCount > 1 ? '$usageFrequency' : '-',
               comment:
                   usageCount > 1
@@ -75,7 +73,6 @@ class DetailsOverview extends StatelessWidget {
             DetailsBriefCard(
               title: 'Last Used',
               icon: Icons.history,
-              iconColor: kIconColor,
               data: usageCount > 0 ? '$daysSinceLastUse' : '-',
               comment:
                   lastUsedDate != null
@@ -86,7 +83,6 @@ class DetailsOverview extends StatelessWidget {
             DetailsBriefCard(
               title: 'EST. Next Use',
               icon: Icons.update,
-              iconColor: kIconColor,
               data: usageCount > 1 ? '${daysTillNextUse.abs()}' : '-',
               comment:
                   nextExpectedUseDate != null

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../../utils/constants.dart';
 import '../../../utils/responsive_style.dart';
 
 class ManageTagDesktopHeader extends StatelessWidget {
@@ -34,7 +33,7 @@ class ManageTagDesktopHeader extends StatelessWidget {
           child: Row(
             children: [
               IconButton(
-                icon: Icon(Icons.arrow_back, color: kTextColor),
+                icon: Icon(Icons.arrow_back),
                 onPressed: () => Get.back(),
               ),
               Expanded(
@@ -52,7 +51,7 @@ class ManageTagDesktopHeader extends StatelessWidget {
             ],
           ),
         ),
-        Container(color: kBorderColor, height: 2.0),
+        Divider(height: 0),
       ],
     );
   }

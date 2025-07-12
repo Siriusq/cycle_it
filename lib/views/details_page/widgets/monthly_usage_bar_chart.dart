@@ -3,8 +3,8 @@ import 'package:get/get.dart';
 import 'package:material_charts/material_charts.dart';
 
 import '../../../controllers/item_controller.dart';
+import '../../../controllers/theme_controller.dart';
 import '../../../models/usage_record_model.dart';
-import '../../../utils/constants.dart';
 import '../../../utils/responsive_style.dart';
 
 class MonthlyUsageBarChart extends StatelessWidget {
@@ -12,12 +12,15 @@ class MonthlyUsageBarChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final ThemeController themeController =
+        Get.find<ThemeController>();
     final ItemController itemController = Get.find<ItemController>();
     final ResponsiveStyle style = ResponsiveStyle.to;
     final TextStyle titleTextMD = style.titleTextMD;
     final TextStyle bodyText = style.bodyText;
 
     return Obx(() {
+      final ThemeData currentTheme = themeController.currentThemeData;
       final List<UsageRecordModel> records =
           itemController.currentItem.value?.usageRecords ?? [];
 
@@ -66,9 +69,12 @@ class MonthlyUsageBarChart extends StatelessWidget {
           return Container(
             padding: const EdgeInsets.symmetric(vertical: 10),
             decoration: BoxDecoration(
-              color: kSecondaryBgColor,
+              color: currentTheme.colorScheme.surfaceContainerLow,
               borderRadius: BorderRadius.circular(15),
-              border: Border.all(width: 1.5, color: kBorderColor),
+              border: Border.all(
+                width: 1.5,
+                color: currentTheme.colorScheme.outlineVariant,
+              ),
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -82,15 +88,11 @@ class MonthlyUsageBarChart extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text('每月使用次数', style: titleTextMD),
-                      Icon(
-                        Icons.bar_chart,
-                        size: 24,
-                        color: kIconColor,
-                      ),
+                      Icon(Icons.bar_chart, size: 24),
                     ],
                   ),
                 ),
-                Divider(color: kBorderColor, thickness: 1.5),
+                Divider(thickness: 1.5),
                 Center(
                   child: Padding(
                     padding: EdgeInsets.symmetric(
@@ -104,9 +106,9 @@ class MonthlyUsageBarChart extends StatelessWidget {
                               width: chartWidth,
                               height: chartHeight,
                               style: BarChartStyle(
-                                barColor: kPrimaryColor,
+                                barColor:
+                                    currentTheme.colorScheme.primary,
                                 backgroundColor: Colors.transparent,
-                                gridColor: kBorderColor,
                                 barSpacing: 0.30,
                                 cornerRadius: 8.0,
                                 gradientEffect: false,

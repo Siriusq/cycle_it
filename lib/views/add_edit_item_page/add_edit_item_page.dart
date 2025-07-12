@@ -6,7 +6,6 @@ import 'package:cycle_it/views/add_edit_item_page/widgets/notify_switch_section.
 import 'package:cycle_it/views/add_edit_item_page/widgets/tag_section.dart';
 import 'package:flutter/material.dart';
 
-import '../../../utils/constants.dart';
 import '../../../utils/responsive_style.dart';
 
 class AddEditItemPage extends StatelessWidget {
@@ -25,7 +24,6 @@ class AddEditItemPage extends StatelessWidget {
                   ? AddEditItemAppBar()
                   : null, // 桌面端不显示 AppBar
 
-          backgroundColor: kPrimaryBgColor,
           body: SafeArea(
             child:
                 isMobileDevice

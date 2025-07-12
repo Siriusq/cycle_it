@@ -1,5 +1,4 @@
 import 'package:cycle_it/controllers/item_controller.dart';
-import 'package:cycle_it/utils/constants.dart';
 import 'package:cycle_it/utils/responsive_layout.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -50,10 +49,7 @@ class HomePage extends StatelessWidget {
             () =>
                 ctrl.currentItem.value != null
                     ? DetailsPage()
-                    : Container(
-                      color: kPrimaryBgColor,
-                      child: Center(child: Text("请选择项目")),
-                    ),
+                    : Center(child: Text("请选择物品")),
           ),
         ),
       ],
@@ -75,10 +71,7 @@ class HomePage extends StatelessWidget {
             () =>
                 ctrl.currentItem.value != null
                     ? DetailsPage()
-                    : Container(
-                      color: kPrimaryBgColor,
-                      child: Center(child: Text("请选择项目")),
-                    ),
+                    : Center(child: Text("请选择物品")),
           ),
         ),
       ],

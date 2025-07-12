@@ -39,10 +39,7 @@ class TagListView extends StatelessWidget {
             return Padding(
               padding: EdgeInsets.symmetric(vertical: spacingMD),
               child: Center(
-                child: Text(
-                  '—— 已经到底了 ——',
-                  style: bodyTextStyle.copyWith(color: Colors.grey),
-                ),
+                child: Text('—— 已经到底了 ——', style: bodyTextStyle),
               ),
             );
           }

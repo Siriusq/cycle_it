@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../controllers/add_edit_item_controller.dart';
-import '../../../utils/constants.dart';
 import '../../../utils/responsive_style.dart';
 
 class AddEditItemAppBar extends StatelessWidget
@@ -22,15 +21,15 @@ class AddEditItemAppBar extends StatelessWidget
       title: Center(
         child: Text(
           controller.isEditing ? "编辑物品" : "添加物品",
-          style: largeTitleTextStyle.copyWith(color: kTitleTextColor),
+          style: largeTitleTextStyle,
         ),
       ),
       bottom: PreferredSize(
         preferredSize: const Size.fromHeight(1.0),
-        child: Container(color: Colors.grey, height: 1.0),
+        child: Divider(height: 0),
       ),
       leading: IconButton(
-        icon: Icon(Icons.arrow_back, color: kTextColor),
+        icon: Icon(Icons.arrow_back),
         onPressed: () => Get.back(),
       ),
       actions: <Widget>[

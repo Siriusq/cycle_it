@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 
 import '../../../controllers/tag_controller.dart';
 import '../../../models/tag_model.dart';
-import '../../../utils/constants.dart';
 import '../../../utils/responsive_style.dart';
 import '../../shared_widgets/delete_confirm_dialog.dart';
 import 'add_edit_tag_dialog.dart';
@@ -35,13 +34,8 @@ class TagActionButton extends StatelessWidget {
     final TextStyle bodyTextStyle = style.bodyText;
 
     return PopupMenuButton<String>(
-      color: kSecondaryBgColor,
       tooltip: 'More Action',
-      icon: Icon(
-        Icons.more_vert,
-        color: kTextColor,
-        size: iconSizeMD,
-      ),
+      icon: Icon(Icons.more_vert, size: iconSizeMD),
       onSelected: (value) async {
         if (value == 'edit') {
           _showAddEditTagDialog(tag: tag); // 编辑标签
@@ -63,7 +57,7 @@ class TagActionButton extends StatelessWidget {
               value: 'edit',
               child: Row(
                 children: [
-                  Icon(Icons.edit, color: kTextColor),
+                  Icon(Icons.edit),
                   SizedBox(width: spacingSM),
                   Text('编辑', style: bodyTextStyle),
                 ],

@@ -2,21 +2,17 @@ import 'package:flex_color_picker/flex_color_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../../utils/constants.dart';
 import '../../../utils/responsive_style.dart';
 
 Future<Color?> showCustomColorPickerDialog(Color initColor) async {
   Color selectedColor = initColor;
   final ResponsiveStyle style = ResponsiveStyle.to;
-  final TextStyle titleTextStyleLG = style.titleTextLG;
   final TextStyle titleTextStyle = style.titleTextMD;
   final double spacingSM = style.spacingSM;
-  final double spacingMD = style.spacingMD;
   final TextStyle bodyTextStyle = style.bodyText;
 
   return await Get.dialog<Color>(
     AlertDialog(
-      backgroundColor: kPrimaryBgColor,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16.0), // 设置对话框圆角
       ),
@@ -41,7 +37,7 @@ Future<Color?> showCustomColorPickerDialog(Color initColor) async {
             spacing: spacingSM,
             runSpacing: spacingSM,
             wheelDiameter: 250,
-            title: Text('select_color'.tr, style: titleTextStyleLG),
+            title: Text('select_color'.tr),
             subheading: Text(
               'shades_and_tones'.tr,
               style: titleTextStyle,
@@ -75,35 +71,17 @@ Future<Color?> showCustomColorPickerDialog(Color initColor) async {
       ),
       actions: [
         TextButton.icon(
-          style: TextButton.styleFrom(
-            //fixedSize: Size(emojiEditIconWidth, 40),
-            padding: EdgeInsets.all(spacingMD),
-            backgroundColor: kSecondaryBgColor,
-            shape: RoundedRectangleBorder(
-              side: BorderSide(color: kGrayColor, width: 1.0),
-              borderRadius: BorderRadius.circular(10),
-            ),
-          ),
           onPressed: () {
             Get.back();
           },
-          icon: Icon(Icons.cancel_outlined, color: kTextColor),
+          icon: Icon(Icons.cancel_outlined),
           label: Text('cancel'.tr, style: bodyTextStyle),
         ),
         TextButton.icon(
-          style: TextButton.styleFrom(
-            //fixedSize: Size(emojiEditIconWidth, 40),
-            padding: EdgeInsets.all(spacingMD),
-            backgroundColor: kSecondaryBgColor,
-            shape: RoundedRectangleBorder(
-              side: BorderSide(color: kGrayColor, width: 1.0),
-              borderRadius: BorderRadius.circular(10),
-            ),
-          ),
           onPressed: () {
             Get.back(result: selectedColor);
           },
-          icon: Icon(Icons.check_circle_outline, color: kTextColor),
+          icon: Icon(Icons.check_circle_outline),
           label: Text('confirm'.tr, style: bodyTextStyle),
         ),
       ],

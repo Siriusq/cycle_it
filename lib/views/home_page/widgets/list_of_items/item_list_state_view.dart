@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../../controllers/item_controller.dart';
-import '../../../../utils/constants.dart';
 import '../../../../utils/responsive_style.dart';
 import '../../../details_page/details_page.dart';
 import '../item_card/item_card.dart';
@@ -21,9 +20,7 @@ class ItemListStateView extends StatelessWidget {
     return Obx(() {
       if (itemController.isLoading.value) {
         // 状态1: 如果还没有加载数据，显示加载指示器
-        return const Center(
-          child: CircularProgressIndicator(color: kPrimaryColor),
-        );
+        return const Center(child: CircularProgressIndicator());
       } else {
         // 数据加载完成，检查数据状态
         if (itemController.allItems.isEmpty) {
@@ -45,12 +42,7 @@ class ItemListStateView extends StatelessWidget {
                 return Padding(
                   padding: EdgeInsets.symmetric(vertical: spacingMD),
                   child: Center(
-                    child: Text(
-                      '—— 已经到底了 ——',
-                      style: bodyTextStyle.copyWith(
-                        color: Colors.grey,
-                      ),
-                    ),
+                    child: Text('—— 已经到底了 ——', style: bodyTextStyle),
                   ),
                 );
               }

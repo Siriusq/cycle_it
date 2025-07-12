@@ -22,6 +22,7 @@ class DetailsItemTitle extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
+          // 图标
           Padding(
             padding: const EdgeInsets.only(top: 4),
             child: Container(
