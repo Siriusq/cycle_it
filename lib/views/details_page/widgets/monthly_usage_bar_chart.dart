@@ -112,8 +112,12 @@ class MonthlyUsageBarChart extends StatelessWidget {
                                 barSpacing: 0.30,
                                 cornerRadius: 8.0,
                                 gradientEffect: false,
-                                labelStyle: bodyText,
-                                valueStyle: bodyText,
+                                labelStyle: bodyText.copyWith(
+                                  color: currentTheme.hintColor,
+                                ),
+                                valueStyle: bodyText.copyWith(
+                                  color: currentTheme.hintColor,
+                                ),
                                 animationDuration: Duration(
                                   milliseconds: 300,
                                 ),

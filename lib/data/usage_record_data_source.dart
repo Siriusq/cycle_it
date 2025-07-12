@@ -6,7 +6,6 @@ import 'package:intl/intl.dart';
 
 import '../controllers/item_controller.dart';
 import '../models/usage_record_model.dart';
-import '../utils/constants.dart';
 import '../views/shared_widgets/date_picker_helper.dart';
 import '../views/shared_widgets/delete_confirm_dialog.dart';
 
@@ -118,7 +117,6 @@ class UsageRecordDataSource extends DataTableSource {
         DataCell(
           Center(
             child: PopupMenuButton<String>(
-              color: kSecondaryBgColor,
               icon: const Icon(Icons.more_vert),
               onSelected: (String value) async {
                 if (value == 'edit') {
@@ -155,7 +153,7 @@ class UsageRecordDataSource extends DataTableSource {
                       value: 'edit',
                       child: Row(
                         children: [
-                          Icon(Icons.edit, color: kTextColor),
+                          Icon(Icons.edit),
                           SizedBox(width: spacingSM),
                           Text('edit'.tr, style: bodyTextStyle),
                         ],

@@ -4,7 +4,6 @@ import 'package:intl/intl.dart';
 
 import '../../../../controllers/theme_controller.dart';
 import '../../../../models/item_model.dart';
-import '../../../../utils/constants.dart';
 import '../../../../utils/responsive_layout.dart';
 import '../../../../utils/responsive_style.dart';
 
@@ -100,11 +99,7 @@ class ItemCardProgressBar extends StatelessWidget {
                     )
                     : Row(
                       children: [
-                        Icon(
-                          Icons.update,
-                          color: kTextColor,
-                          size: iconSizeSM,
-                        ),
+                        Icon(Icons.update, size: iconSizeSM),
                         SizedBox(width: spacingXS),
                         Text(
                           "EST. Next Use: ${nextExpectedUseDate != null ? DateFormat('yyyy-MM-dd').format(nextExpectedUseDate) : 'data not enough'}",

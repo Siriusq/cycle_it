@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 
 import '../models/item_model.dart';
 import '../models/tag_model.dart';
-import '../utils/constants.dart';
 import 'item_controller.dart'; // To refresh the main item list
 import 'tag_controller.dart'; // To get available tags
 
@@ -37,10 +36,11 @@ class AddEditItemController extends GetxController {
 
   AddEditItemController({ItemModel? initialItem})
     : _initialItem = initialItem,
-      selectedEmoji = RxString(initialItem?.emoji ?? '✨'),
+      selectedEmoji = RxString(initialItem?.emoji ?? '📦'),
       // 默认给一个Emoji
       selectedIconColor = Rx<Color>(
-        initialItem?.iconColor ?? kBgDarkColor,
+        initialItem?.iconColor ??
+            Get.theme.colorScheme.surfaceContainerHighest,
       );
 
   @override
@@ -55,8 +55,9 @@ class AddEditItemController extends GetxController {
       notifyBeforeNextUse.value = _initialItem.notifyBeforeNextUse;
       selectedTags.assignAll(_initialItem.tags);
     } else {
-      selectedEmoji.value = '✨';
-      selectedIconColor.value = kBgDarkColor;
+      selectedEmoji.value = '📦';
+      selectedIconColor.value =
+          Get.theme.colorScheme.surfaceContainerHighest;
     }
   }
 
