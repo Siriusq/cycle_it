@@ -26,6 +26,9 @@ class ListOfItemsAppBar extends StatelessWidget
       automaticallyImplyLeading: false,
       toolbarHeight: searchBarHeight,
       titleSpacing: 0,
+      backgroundColor:
+          Theme.of(context).appBarTheme.backgroundColor ??
+          Theme.of(context).colorScheme.surface,
       scrolledUnderElevation: 0,
       // 非桌面端显示抽屉按钮
       leading:
