@@ -160,7 +160,7 @@ class ResponsiveStyle extends GetxController {
   // 搜索栏样式
   double get searchBarHeight => isMobileDevice ? 40 : 48;
 
-  double get searchBarIconSize => isMobileDevice ? 16 : 24;
+  double get searchBarIconSize => isMobileDevice ? 20 : 24;
 
   double get searchBarButtonSize => isMobileDevice ? 26 : 40;
 

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'item_list_state_view.dart';
-import 'list_of_items_header.dart';
+import 'list_of_items_app_bar.dart';
 
 class ListOfItems extends StatelessWidget {
   final GlobalKey<ScaffoldState> scaffoldKey;
@@ -12,17 +12,11 @@ class ListOfItems extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       right: false,
-      child: Column(
-        children: [
-          // 顶部导航栏
-          ListOfItemsHeader(scaffoldKey: scaffoldKey),
-
-          // 分割线
-          Divider(height: 0),
-
-          // 物品卡片列表状态视图
-          const Expanded(child: ItemListStateView()),
-        ],
+      child: Scaffold(
+        appBar: ListOfItemsAppBar(scaffoldKey: scaffoldKey),
+        body: const Column(
+          children: [Expanded(child: ItemListStateView())],
+        ),
       ),
     );
   }
