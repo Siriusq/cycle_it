@@ -15,9 +15,10 @@ class ListOfItemsHeader extends StatelessWidget {
     final ResponsiveStyle style = ResponsiveStyle.to;
 
     final double spacingXS = style.spacingXS;
+    final double spacingSM = style.spacingSM;
     final double spacingLG = style.spacingLG;
     final bool isMobile = style.isMobileDevice;
-    final double verticalSpacing = isMobile ? 0 : spacingLG;
+    final double verticalSpacing = isMobile ? spacingSM : spacingLG;
     final double horizontalSpacing = isMobile ? 4 : spacingLG;
 
     return Padding(

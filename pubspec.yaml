@@ -72,7 +72,7 @@ dependencies:
   shared_preferences: ^2.5.3
 
   # theme json
-  json_theme: ^7.0.0+3
+  json_theme: ^9.0.1+2
 
 dev_dependencies:
   flutter_test:

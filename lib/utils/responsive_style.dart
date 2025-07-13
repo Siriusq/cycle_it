@@ -158,7 +158,7 @@ class ResponsiveStyle extends GetxController {
   double get appIconSize => isMobileDevice ? 32 : 40; // 静态值，不随窗口拖动改变
 
   // 搜索栏样式
-  double get searchBarHeight => isMobileDevice ? 32 : 48;
+  double get searchBarHeight => isMobileDevice ? 40 : 48;
 
   double get searchBarIconSize => isMobileDevice ? 16 : 24;
 

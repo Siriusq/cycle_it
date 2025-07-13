@@ -33,7 +33,7 @@ class CustomSearchBar extends StatelessWidget {
             style: searchBarHintStyle,
             textAlignVertical:
                 isMobile
-                    ? TextAlignVertical.bottom
+                    ? TextAlignVertical.center
                     : TextAlignVertical.center,
             controller: searchBarCtrl.textController,
             onChanged: (value) {},
