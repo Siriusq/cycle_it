@@ -1,7 +1,7 @@
 import 'package:cycle_it/controllers/item_list_order_controller.dart';
 import 'package:cycle_it/controllers/tag_controller.dart';
 import 'package:cycle_it/utils/responsive_style.dart';
-import 'package:cycle_it/views/side_menu/widgets/side_menu_header.dart';
+import 'package:cycle_it/views/side_menu/widgets/side_menu_app_bar.dart';
 import 'package:cycle_it/views/side_menu/widgets/side_menu_ordering_section.dart';
 import 'package:cycle_it/views/side_menu/widgets/side_menu_tag_section.dart';
 import 'package:flutter/material.dart';
@@ -21,23 +21,16 @@ class SideMenu extends StatelessWidget {
   Widget build(BuildContext context) {
     final style = ResponsiveStyle.to;
 
-    return Obx(() {
-      final ThemeData currentTheme = themeController.currentThemeData;
-
-      return Container(
-        height: double.infinity,
-        color: currentTheme.colorScheme.surfaceContainerLow,
-        child: SafeArea(
+    return SafeArea(
+      child: Scaffold(
+        appBar: SideMenuAppBar(),
+        body: Container(
+          height: double.infinity,
+          color: Theme.of(context).colorScheme.surfaceContainerLow,
           child: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // 顶部标题图标、设置按钮
-                SideMenuHeader(),
-
-                // 分割线
-                const Divider(height: 0),
-
                 //排序
                 SideMenuOrderingSection(),
 
@@ -55,7 +48,7 @@ class SideMenu extends StatelessWidget {
             ),
           ),
         ),
-      );
-    });
+      ),
+    );
   }
 }

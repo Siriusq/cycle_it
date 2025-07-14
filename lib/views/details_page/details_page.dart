@@ -42,7 +42,7 @@ class DetailsPage extends StatelessWidget {
         return SafeArea(
           left: false,
           child: Scaffold(
-            appBar: const DetailsAppBar(),
+            appBar: DetailsAppBar(),
             body: Column(
               children: [
                 Expanded(

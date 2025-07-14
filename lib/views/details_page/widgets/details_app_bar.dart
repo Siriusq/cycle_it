@@ -82,12 +82,12 @@ class DetailsAppBar extends StatelessWidget
     final double spacingSM = style.spacingSM;
     final double spacingLG = style.spacingLG;
     final bool isMobile = style.isMobileDevice;
-    final double searchBarHeight =
+    final double appBarHeight =
         style.searchBarHeight +
         (isMobile ? spacingSM : spacingLG) * 2;
 
     // AppBar 高度设置
-    return Size.fromHeight(searchBarHeight + 1);
+    return Size.fromHeight(appBarHeight + 1);
   }
 
   void _handleBack(ItemController itemCtrl) {
