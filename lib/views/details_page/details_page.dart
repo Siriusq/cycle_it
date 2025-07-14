@@ -1,8 +1,8 @@
 import 'package:cycle_it/controllers/item_controller.dart';
 import 'package:cycle_it/models/item_model.dart';
 import 'package:cycle_it/utils/responsive_style.dart';
+import 'package:cycle_it/views/details_page/widgets/details_app_bar.dart';
 import 'package:cycle_it/views/details_page/widgets/details_charts_group.dart';
-import 'package:cycle_it/views/details_page/widgets/details_header.dart';
 import 'package:cycle_it/views/details_page/widgets/details_item_tags.dart';
 import 'package:cycle_it/views/details_page/widgets/details_item_title.dart';
 import 'package:cycle_it/views/details_page/widgets/details_overview.dart';
@@ -39,17 +39,12 @@ class DetailsPage extends StatelessWidget {
           return Container();
         }
 
-        return Scaffold(
-          body: SafeArea(
-            left: false,
-            child: Column(
+        return SafeArea(
+          left: false,
+          child: Scaffold(
+            appBar: const DetailsAppBar(),
+            body: Column(
               children: [
-                // 顶栏
-                DetailsHeader(),
-
-                // 分割线
-                const Divider(height: 0),
-
                 Expanded(
                   child: SingleChildScrollView(
                     padding: EdgeInsets.symmetric(
