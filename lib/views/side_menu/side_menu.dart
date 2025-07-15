@@ -22,6 +22,7 @@ class SideMenu extends StatelessWidget {
     final style = ResponsiveStyle.to;
 
     return SafeArea(
+      top: false,
       child: Scaffold(
         appBar: SideMenuAppBar(),
         body: Container(
