@@ -1,6 +1,7 @@
 import 'package:cycle_it/views/settings_page/widgets/settings_desktop_body.dart';
 import 'package:cycle_it/views/settings_page/widgets/settings_options_layout.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import '../../utils/responsive_style.dart';
 
@@ -18,7 +19,7 @@ class SettingsPage extends StatelessWidget {
           // 在宽屏幕上不显示默认AppBar
           appBar:
               isMobileDevice
-                  ? AppBar(title: const Text('主题切换'))
+                  ? AppBar(title: Text('settings'.tr))
                   : null,
           body:
               isMobileDevice

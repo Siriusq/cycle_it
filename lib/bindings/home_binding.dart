@@ -4,6 +4,7 @@ import 'package:cycle_it/controllers/tag_controller.dart';
 import 'package:get/get.dart';
 
 import '../controllers/item_controller.dart';
+import '../controllers/language_controller.dart';
 import '../controllers/search_bar_controller.dart';
 import '../controllers/theme_controller.dart';
 import '../database/database.dart';
@@ -18,6 +19,12 @@ class HomeBinding implements Bindings {
 
     // 绑定主题
     Get.put<ThemeController>(ThemeController(), permanent: true);
+
+    // 绑定语言
+    Get.put<LanguageController>(
+      LanguageController(),
+      permanent: true,
+    );
 
     // 绑定服务
     Get.put(ItemService(Get.find<MyDatabase>()), permanent: true);

@@ -49,7 +49,7 @@ class HomePage extends StatelessWidget {
             () =>
                 ctrl.currentItem.value != null
                     ? DetailsPage()
-                    : Center(child: Text("请选择物品")),
+                    : Center(child: Text('please_select_an_item'.tr)),
           ),
         ),
       ],

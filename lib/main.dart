@@ -11,6 +11,7 @@ import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
 import 'package:window_manager/window_manager.dart';
 
+import 'controllers/language_controller.dart';
 import 'controllers/theme_controller.dart';
 import 'utils/i18n.dart';
 import 'views/home_page/home_page.dart';
@@ -58,6 +59,9 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    final LanguageController languageController =
+        Get.find<LanguageController>();
+
     return Obx(() {
       final ThemeController themeController = Get.find();
 
@@ -69,10 +73,9 @@ class MyApp extends StatelessWidget {
         transitionDuration: Duration(milliseconds: 300),
         // 应用自定义的滚动行为
         scrollBehavior: CustomScrollBehavior(),
-        //initialBinding: HomeBinding(),
         // 多语言文件
         translations: MultiLanguage(),
-        locale: Get.deviceLocale,
+        locale: languageController.currentLocale ?? Get.deviceLocale,
         // 添加一个回调语言选项，以备上面指定的语言翻译不存在
         fallbackLocale: Locale('en', 'US'),
         initialRoute: '/',

@@ -1,3 +1,4 @@
+import 'package:cycle_it/views/settings_page/widgets/language_switch_section.dart';
 import 'package:cycle_it/views/settings_page/widgets/theme_switch_section.dart';
 import 'package:flutter/material.dart';
 
@@ -19,7 +20,11 @@ class SettingsOptionsLayout extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: [const ThemeSwitchSection(), SizedBox()],
+        children: [
+          const ThemeSwitchSection(),
+          SizedBox(),
+          const LanguageSwitchSection(),
+        ],
       ),
     );
   }

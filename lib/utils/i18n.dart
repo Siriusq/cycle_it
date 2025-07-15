@@ -1,10 +1,20 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class MultiLanguage extends Translations {
+  // 定义所有支持的语言环境
+  static final List<Locale> supportedLocales = [
+    const Locale('en', 'US'), // English
+    const Locale('zh', 'CN'), // Simplified Chinese
+    const Locale('zh', 'TW'), // Traditional Chinese
+  ];
+
   @override
   Map<String, Map<String, String>> get keys => {
     'zh_CN': {
       'cycle': '循',
+      // 详情页
+      'please_select_an_item': '请选择物品',
       'languageSettingsText': '语言设置',
       'themeSettingsText': '主题设置',
       'databaseSettingsText': '数据设置',
@@ -34,9 +44,22 @@ class MultiLanguage extends Translations {
       'date_input_hint': '日日/月月/年年年年',
       'date_input_label': '输入日期',
       'date_help': '选择日期',
+      //设置
+      'settings': '设置',
+      'language': '语言',
+      'simplified_chinese': '简体中文',
+      'traditional_chinese': '繁體中文',
+      'english': 'English',
+      'follow_system': '系统',
+      'theme': '主题',
+      'light_theme': '亮色',
+      'dark_theme': '暗色',
+      'system_theme': '系统',
     },
     'en_US': {
       'cycle': 'Cycle It',
+      // 详情页
+      'please_select_an_item': 'Please select an item',
       'languageSettingsText': 'Language Settings',
       'select_color': 'Select Color',
       'shades_and_tones': 'Shades and Tones',
@@ -63,6 +86,33 @@ class MultiLanguage extends Translations {
       'date_input_hint': 'mm/dd/yyyy',
       'date_input_label': 'Enter date',
       'date_help': 'Select date',
+      //设置
+      'settings': 'Settings',
+      'language': 'Language',
+      'simplified_chinese': '简体中文',
+      'traditional_chinese': '繁体中文',
+      'english': 'English',
+      'follow_system': 'System',
+      'theme': 'Theme',
+      'light_theme': 'Light',
+      'dark_theme': 'Dark',
+      'system_theme': 'System',
+    },
+    'zh_TW': {
+      // 详情页
+      'please_select_an_item': '請選擇物品',
+      // 设置
+      'settings': '設定',
+      'language': '語言',
+      'simplified_chinese': '简体中文',
+      'traditional_chinese': '繁體中文',
+      'english': 'English',
+      'follow_system': '系統',
+      'theme': '主題',
+      'light_theme': '亮色',
+      'dark_theme': '暗色',
+      'system_theme': '系統',
+      // ... 其他繁体中文翻译
     },
   };
 }

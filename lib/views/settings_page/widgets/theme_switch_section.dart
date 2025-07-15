@@ -34,7 +34,7 @@ class ThemeSwitchSection extends StatelessWidget {
         children: [
           Row(
             mainAxisSize: MainAxisSize.min,
-            children: [Text('主题设置', style: titleTextStyle)],
+            children: [Text('theme'.tr, style: titleTextStyle)],
           ),
           SizedBox(height: spacingMD),
           Row(
@@ -96,11 +96,11 @@ class ThemeSwitchSection extends StatelessWidget {
   String _getOptionText(ThemeModeOption option) {
     switch (option) {
       case ThemeModeOption.light:
-        return '亮色';
+        return 'light_theme'.tr;
       case ThemeModeOption.dark:
-        return '暗色';
+        return 'dark_theme'.tr;
       case ThemeModeOption.system:
-        return '跟随系统';
+        return 'system_theme'.tr;
     }
   }
 }
