@@ -135,11 +135,13 @@ class ThemeController extends GetxController {
   @override
   void onReady() {
     super.onReady();
-    // 监听系统亮度变化，仅当主题模式为“跟随系统”时才更新
-    ever(Get.mediaQuery.obs, (_) {
-      if (_currentThemeModeOption.value == ThemeModeOption.system) {
-        _applyThemeData(ThemeModeOption.system);
-      }
+    // 使用 addPostFrameCallback 确保在 GetMaterialApp 及其 MediaQuery 准备好之后再监听
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ever(Get.mediaQuery.obs, (_) {
+        if (_currentThemeModeOption.value == ThemeModeOption.system) {
+          _applyThemeData(ThemeModeOption.system);
+        }
+      });
     });
   }
 }
