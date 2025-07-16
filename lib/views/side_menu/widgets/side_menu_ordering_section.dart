@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import '../../../controllers/item_list_order_controller.dart';
 import '../../../utils/responsive_style.dart';
@@ -24,24 +25,24 @@ class SideMenuOrderingSection extends StatelessWidget {
             children: [
               const Icon(Icons.sort),
               const SizedBox(width: 5),
-              Text("Order By", style: titleTextMD),
+              Text('order_by'.tr, style: titleTextMD),
             ],
           ),
           SizedBox(height: spacingXS),
           OrderByOption(
             orderType: OrderType.name,
             icon: Icons.sort_by_alpha,
-            title: "Names",
+            title: 'order_by_names'.tr,
           ),
           OrderByOption(
             orderType: OrderType.lastUsed,
             icon: Icons.event,
-            title: "Recent Used",
+            title: 'order_by_recent_used_time'.tr,
           ),
           OrderByOption(
             orderType: OrderType.frequency,
             icon: Icons.equalizer,
-            title: "Frequency",
+            title: 'order_by_frequency'.tr,
           ),
         ],
       ),

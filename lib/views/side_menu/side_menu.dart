@@ -7,10 +7,7 @@ import 'package:cycle_it/views/side_menu/widgets/side_menu_tag_section.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../controllers/theme_controller.dart';
-
 class SideMenu extends StatelessWidget {
-  final ThemeController themeController = Get.find<ThemeController>();
   final itemListOrderCtrl = Get.find<ItemListOrderController>();
   final tagCtrl = Get.find<TagController>();
 

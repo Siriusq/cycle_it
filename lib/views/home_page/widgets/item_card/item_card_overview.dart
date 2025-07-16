@@ -20,6 +20,8 @@ class ItemCardOverview extends StatelessWidget {
 
     final int usageCount = item.usageRecords.length;
     final DateTime? nextExpectedUseDate = item.nextExpectedUse;
+    final DateTime? firstUsedDate =
+        usageCount > 0 ? item.usageRecords.first.usedAt : null;
     final DateTime? lastUsedDate =
         usageCount > 0 ? item.usageRecords.last.usedAt : null;
     final double usageFrequency = item.usageFrequency.toPrecision(2);
@@ -46,7 +48,11 @@ class ItemCardOverview extends StatelessWidget {
                 SizedBox(width: spacingXS),
                 Flexible(
                   child: Text(
-                    "Usage Cycle: ${usageCount > 1 ? '$usageFrequency days' : 'data not enough'}",
+                    usageCount > 1
+                        ? 'usage_cycle_brief'.trParams({
+                          'freq': '$usageFrequency',
+                        })
+                        : 'usage_cycle_brief_data_not_enough'.tr,
                     style: smallBodyTextStyle,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
@@ -62,7 +68,13 @@ class ItemCardOverview extends StatelessWidget {
                 SizedBox(width: spacingXS),
                 Flexible(
                   child: Text(
-                    "Last Used: ${lastUsedDate != null ? DateFormat('yyyy-MM-dd').format(lastUsedDate) : 'data not enough'}",
+                    lastUsedDate != null
+                        ? 'last_used_at_brief'.trParams({
+                          'date': DateFormat(
+                            'yyyy-MM-dd',
+                          ).format(lastUsedDate),
+                        })
+                        : 'last_used_at_brief_data_not_enough'.tr,
                     style: smallBodyTextStyle,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
@@ -84,37 +96,50 @@ class ItemCardOverview extends StatelessWidget {
             // 上次使用
             ItemUsageStatItem(
               icon: Icons.history,
-              title: "Last Used",
+              title: 'last_used_at'.tr,
               value:
                   lastUsedDate != null
-                      ? DateFormat('yyyy-MM-dd').format(lastUsedDate)
-                      : 'data not enough',
+                      ? 'last_used_at_brief_data'.trParams({
+                        'date': DateFormat(
+                          'yyyy-MM-dd',
+                        ).format(lastUsedDate),
+                      })
+                      : 'data_not_enough'.tr,
             ),
             // 使用次数
             ItemUsageStatItem(
               icon: Icons.pin_outlined,
-              title: "Usage Count",
-              value: "$usageCount times",
+              title: 'usage_count'.tr,
+              value:
+                  firstUsedDate != null
+                      ? 'usage_count_brief_data'.trParams({
+                        'count': '$usageCount',
+                      })
+                      : 'no_usage_records'.tr,
             ),
             // 使用周期
             ItemUsageStatItem(
               icon: Icons.repeat,
-              title: "Usage Cycle",
+              title: 'usage_cycle'.tr,
               value:
                   usageCount > 1
-                      ? '$usageFrequency days'
-                      : 'data not enough',
+                      ? 'usage_cycle_brief_data'.trParams({
+                        'freq': '$usageFrequency',
+                      })
+                      : 'data_not_enough'.tr,
             ),
             // 下次使用预计
             ItemUsageStatItem(
               icon: Icons.update,
-              title: "EST. Next Use",
+              title: 'est_next_use_date'.tr,
               value:
                   nextExpectedUseDate != null
-                      ? DateFormat(
-                        'yyyy-MM-dd',
-                      ).format(nextExpectedUseDate)
-                      : 'data not enough',
+                      ? 'est_next_use_date_data'.trParams({
+                        'date': DateFormat(
+                          'yyyy-MM-dd',
+                        ).format(nextExpectedUseDate),
+                      })
+                      : 'data_not_enough'.tr,
             ),
           ],
         ),

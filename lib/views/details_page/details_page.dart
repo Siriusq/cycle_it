@@ -39,6 +39,8 @@ class DetailsPage extends StatelessWidget {
           return Container();
         }
 
+        // todo 添加等待动画，优化加载速度
+
         return SafeArea(
           left: false,
           child: Scaffold(

@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:simple_heatmap_calendar/simple_heatmap_calendar.dart';
 
 import '../../../controllers/item_controller.dart';
-import '../../../controllers/theme_controller.dart';
+import '../../../controllers/language_controller.dart';
 import '../../../models/usage_record_model.dart';
 import '../../../utils/responsive_style.dart';
 
@@ -12,8 +12,6 @@ class UsageHeatmapCalendar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ThemeController themeController =
-        Get.find<ThemeController>();
     final ItemController itemController = Get.find<ItemController>();
     final ResponsiveStyle style = ResponsiveStyle.to;
     final TextStyle titleTextMD = style.titleTextMD;
@@ -24,10 +22,10 @@ class UsageHeatmapCalendar extends StatelessWidget {
         style.heatmapCellSpaceBetween;
 
     return Obx(() {
-      final ThemeData currentTheme = themeController.currentThemeData;
-
       final List<UsageRecordModel> records =
           itemController.currentItem.value?.usageRecords ?? [];
+      final LanguageController languageController =
+          Get.find<LanguageController>();
 
       // Process data, generate data points required by the heatmap
       Map<DateTime, int> heatMapData = {};
@@ -47,16 +45,18 @@ class UsageHeatmapCalendar extends StatelessWidget {
 
       return LayoutBuilder(
         builder: (context, constraints) {
-          final Color primaryColor = currentTheme.colorScheme.primary;
+          final Color primaryColor =
+              Theme.of(context).colorScheme.primary;
 
           return Container(
             padding: const EdgeInsets.symmetric(vertical: 8),
             decoration: BoxDecoration(
-              color: currentTheme.colorScheme.surfaceContainerLow,
+              color:
+                  Theme.of(context).colorScheme.surfaceContainerLow,
               borderRadius: BorderRadius.circular(15),
               border: Border.all(
                 width: 1.5,
-                color: currentTheme.colorScheme.outlineVariant,
+                color: Theme.of(context).colorScheme.outlineVariant,
               ),
             ),
             child: Column(
@@ -70,7 +70,10 @@ class UsageHeatmapCalendar extends StatelessWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text('使用记录热点图', style: titleTextMD),
+                      Text(
+                        'usage_record_hot_map'.tr,
+                        style: titleTextMD,
+                      ),
                       Icon(Icons.calendar_month, size: 24),
                     ],
                   ),
@@ -103,20 +106,20 @@ class UsageHeatmapCalendar extends StatelessWidget {
                           Radius.circular(4.0),
                         ),
                         weekLabelValueFontSize: bodyText.fontSize!,
-                        weekLabelColor: currentTheme.hintColor,
+                        weekLabelColor: Theme.of(context).hintColor,
                         monthLabelFontSize: bodyText.fontSize!,
-                        monthLabelColor: currentTheme.hintColor,
+                        monthLabelColor: Theme.of(context).hintColor,
                       ),
                       colorTipLeftHelper: Text(
-                        'Less',
+                        'less'.tr,
                         style: bodyText.copyWith(
-                          color: currentTheme.hintColor,
+                          color: Theme.of(context).hintColor,
                         ),
                       ),
                       colorTipRightHelper: Text(
-                        'More',
+                        'more'.tr,
                         style: bodyText.copyWith(
-                          color: currentTheme.hintColor,
+                          color: Theme.of(context).hintColor,
                         ),
                       ),
                       layoutParameters:
@@ -128,6 +131,9 @@ class UsageHeatmapCalendar extends StatelessWidget {
                             colorTipPosition:
                                 CalendarColorTipPosition.bottom,
                           ),
+                      locale:
+                          languageController.currentLocale ??
+                          Get.deviceLocale,
                     ),
                   ),
                 ),

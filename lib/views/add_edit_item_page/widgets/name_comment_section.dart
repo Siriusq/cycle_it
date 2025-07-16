@@ -18,20 +18,32 @@ class NameCommentSection extends StatelessWidget {
 
     return Column(
       children: [
-        TextFormField(
-          controller: controller.nameController,
-          decoration: InputDecoration(
-            labelText: '物品名称',
-            labelStyle: bodyTextLG,
-            border: const OutlineInputBorder(),
-          ),
-          maxLength: 50,
-        ),
+        // 需要修改的文本输入框
+        Obx(() {
+          return TextFormField(
+            controller: controller.nameController,
+            decoration: InputDecoration(
+              labelText: 'item_name'.tr,
+              labelStyle: bodyTextLG,
+              border: const OutlineInputBorder(),
+              errorText:
+                  controller.nameErrorText.value.isEmpty
+                      ? null
+                      : controller.nameErrorText.value,
+            ),
+            maxLength: 50,
+            onChanged: (_) {
+              if (controller.nameErrorText.value.isNotEmpty) {
+                controller.nameErrorText.value = '';
+              }
+            },
+          );
+        }),
         SizedBox(height: spacingMD),
         TextFormField(
           controller: controller.usageCommentController,
           decoration: InputDecoration(
-            labelText: '使用注释 (可选)',
+            labelText: 'item_comment'.tr,
             labelStyle: bodyTextLG,
             border: const OutlineInputBorder(),
           ),

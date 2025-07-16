@@ -36,7 +36,10 @@ class SettingsDesktopHeader extends StatelessWidget {
               ),
               Expanded(
                 child: Center(
-                  child: Text('设置', style: largeTitleTextStyle),
+                  child: Text(
+                    'settings'.tr,
+                    style: largeTitleTextStyle,
+                  ),
                 ),
               ),
               SizedBox(width: 40), //补偿返回按钮宽度，保证标题居中

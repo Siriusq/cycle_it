@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
-import '../../../../controllers/theme_controller.dart';
 import '../../../../models/item_model.dart';
 import '../../../../utils/responsive_layout.dart';
 import '../../../../utils/responsive_style.dart';
@@ -19,9 +18,6 @@ class ItemCardProgressBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ThemeController themeController =
-        Get.find<ThemeController>();
-
     final ResponsiveStyle style = ResponsiveStyle.to;
     final bool isSingleCol = ResponsiveLayout.isSingleCol(context);
     final bool isTripleCol = ResponsiveLayout.isTripleCol(context);
@@ -42,43 +38,36 @@ class ItemCardProgressBar extends StatelessWidget {
               return Stack(
                 children: [
                   // 进度条背景色
-                  Obx(() {
-                    final ThemeData currentTheme =
-                        themeController.currentThemeData;
-
-                    return Container(
-                      height: 6,
-                      decoration: BoxDecoration(
-                        color:
-                            isActive && !isSingleCol
-                                ? currentTheme
-                                    .colorScheme
-                                    .secondaryContainer
-                                : currentTheme
-                                    .colorScheme
-                                    .surfaceContainer,
-                        borderRadius: BorderRadius.circular(3),
-                      ),
-                    );
-                  }),
+                  Container(
+                    height: 6,
+                    decoration: BoxDecoration(
+                      color:
+                          isActive && !isSingleCol
+                              ? Theme.of(
+                                context,
+                              ).colorScheme.secondaryContainer
+                              : Theme.of(
+                                context,
+                              ).colorScheme.surfaceContainer,
+                      borderRadius: BorderRadius.circular(3),
+                    ),
+                  ),
                   // 进度条颜色
-                  Obx(() {
-                    final ThemeData currentTheme =
-                        themeController.currentThemeData;
-                    return Container(
-                      height: 6,
-                      width: constraints.maxWidth * progress,
-                      decoration: BoxDecoration(
-                        color:
-                            isActive && !isSingleCol
-                                ? currentTheme.colorScheme.secondary
-                                : currentTheme
-                                    .colorScheme
-                                    .outlineVariant,
-                        borderRadius: BorderRadius.circular(3),
-                      ),
-                    );
-                  }),
+                  Container(
+                    height: 6,
+                    width: constraints.maxWidth * progress,
+                    decoration: BoxDecoration(
+                      color:
+                          isActive && !isSingleCol
+                              ? Theme.of(
+                                context,
+                              ).colorScheme.secondary
+                              : Theme.of(
+                                context,
+                              ).colorScheme.outlineVariant,
+                      borderRadius: BorderRadius.circular(3),
+                    ),
+                  ),
                 ],
               );
             },
@@ -89,7 +78,10 @@ class ItemCardProgressBar extends StatelessWidget {
                 isTripleCol
                     ? Row(
                       children: [
-                        Text("EST. Timer", style: smallBodyTextStyle),
+                        Text(
+                          'est_timer'.tr,
+                          style: smallBodyTextStyle,
+                        ),
                         const Spacer(),
                         Text(
                           "${(progress * 100).toStringAsFixed(2)}%",
@@ -102,12 +94,20 @@ class ItemCardProgressBar extends StatelessWidget {
                         Icon(Icons.update, size: iconSizeSM),
                         SizedBox(width: spacingXS),
                         Text(
-                          "EST. Next Use: ${nextExpectedUseDate != null ? DateFormat('yyyy-MM-dd').format(nextExpectedUseDate) : 'data not enough'}",
+                          nextExpectedUseDate != null
+                              ? 'est_timer_brief'.trParams({
+                                'date': DateFormat(
+                                  'yyyy-MM-dd',
+                                ).format(nextExpectedUseDate),
+                              })
+                              : 'data_not_enough'.tr,
                           style: smallBodyTextStyle,
                         ),
                         const Spacer(),
                         Text(
-                          "${(progress * 100).toStringAsFixed(2)}%",
+                          nextExpectedUseDate != null
+                              ? "${(progress * 100).toStringAsFixed(2)}%"
+                              : 'N/A',
                           style: smallBodyTextStyle,
                         ),
                       ],

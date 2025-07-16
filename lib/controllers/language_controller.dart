@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:shared_preferences/shared_preferences.dart'; // 导入 shared_preferences
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:intl/date_symbol_data_local.dart'; // 导入这个包，用于日期格式化数据
 import '../utils/i18n.dart'; // 导入 MultiLanguage 类
 
 class LanguageController extends GetxController {
@@ -19,23 +20,25 @@ class LanguageController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+    // 异步初始化 SharedPreferences
     _initSharedPreferences();
   }
 
   // 初始化 SharedPreferences 并加载已保存的语言设置
   Future<void> _initSharedPreferences() async {
     _prefs = await SharedPreferences.getInstance();
-    _loadSavedLanguage();
+    await _loadSavedLanguage(); // 等待语言加载完成
   }
 
   // 加载已保存的语言设置
-  void _loadSavedLanguage() {
+  Future<void> _loadSavedLanguage() async {
     final bool followSystem =
         _prefs.getBool(_followSystemKey) ?? true;
 
     if (followSystem) {
       _currentLocale.value = null; // 设置为null表示跟随系统
-      _updateGetXLocale(Get.deviceLocale); // 立即应用系统语言
+      // 立即应用系统语言，并等待日期格式化数据初始化
+      await _updateGetXLocale(Get.deviceLocale);
     } else {
       final String? languageCode = _prefs.getString(_languageKey);
       final String? countryCode = _prefs.getString(_countryKey);
@@ -43,17 +46,22 @@ class LanguageController extends GetxController {
       if (languageCode != null) {
         final savedLocale = Locale(languageCode, countryCode);
         _currentLocale.value = savedLocale;
-        _updateGetXLocale(savedLocale);
+        // 应用保存的语言，并等待日期格式化数据初始化
+        await _updateGetXLocale(savedLocale);
       } else {
         // 如果没有保存的语言，默认跟随系统语言
         _currentLocale.value = null;
-        _updateGetXLocale(Get.deviceLocale);
+        // 立即应用系统语言，并等待日期格式化数据初始化
+        await _updateGetXLocale(Get.deviceLocale);
       }
     }
   }
 
   // 切换语言
-  void changeLanguage(String languageCode, {String? countryCode}) {
+  Future<void> changeLanguage(
+    String languageCode, {
+    String? countryCode,
+  }) async {
     final newLocale = Locale(languageCode, countryCode);
     _currentLocale.value = newLocale;
     _prefs.setString(_languageKey, languageCode);
@@ -63,16 +71,18 @@ class LanguageController extends GetxController {
       _prefs.remove(_countryKey);
     }
     _prefs.setBool(_followSystemKey, false); // 不再跟随系统
-    _updateGetXLocale(newLocale);
+    // 应用新选择的语言，并等待日期格式化数据初始化
+    await _updateGetXLocale(newLocale);
   }
 
   // 设置为跟随系统语言
-  void setFollowSystemLanguage() {
+  Future<void> setFollowSystemLanguage() async {
     _currentLocale.value = null; // 设置为null表示跟随系统
     _prefs.remove(_languageKey);
     _prefs.remove(_countryKey);
     _prefs.setBool(_followSystemKey, true); // 标记为跟随系统
-    _updateGetXLocale(Get.deviceLocale); // 立即应用系统语言
+    // 立即应用系统语言，并等待日期格式化数据初始化
+    await _updateGetXLocale(Get.deviceLocale);
   }
 
   // 获取当前是否跟随系统语言
@@ -81,18 +91,28 @@ class LanguageController extends GetxController {
   }
 
   // 更新GetX的语言环境
-  void _updateGetXLocale(Locale? locale) {
+  Future<void> _updateGetXLocale(Locale? locale) async {
+    Locale targetLocale;
+
     if (locale == null) {
       // 如果是跟随系统，并且系统语言不在支持列表中，则回落到英文
       if (!_isSupportedLocale(Get.deviceLocale)) {
-        Get.updateLocale(const Locale('en', 'US'));
+        targetLocale = const Locale('en', 'US');
       } else {
-        Get.updateLocale(Get.deviceLocale!);
+        targetLocale = Get.deviceLocale!;
       }
     } else {
       // 如果是手动选择的语言，直接应用
-      Get.updateLocale(locale);
+      targetLocale = locale;
     }
+
+    // 在更新GetX语言环境之前，初始化该语言环境的日期格式数据
+    await initializeDateFormatting(
+      targetLocale.languageCode,
+      targetLocale.countryCode,
+    );
+
+    Get.updateLocale(targetLocale);
   }
 
   // 检查给定的语言环境是否在支持列表中

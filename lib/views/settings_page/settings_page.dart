@@ -23,7 +23,11 @@ class SettingsPage extends StatelessWidget {
                   : null,
           body:
               isMobileDevice
-                  ? SettingsOptionsLayout()
+                  ? Column(
+                    children: [
+                      Center(child: SettingsOptionsLayout()),
+                    ],
+                  )
                   : SettingsDesktopBody(),
         );
       },

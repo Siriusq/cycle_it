@@ -51,43 +51,59 @@ class DetailsOverview extends StatelessWidget {
           children: [
             // 使用次数，自首次使用记录起
             DetailsBriefCard(
-              title: 'Usage Count',
+              title: 'usage_count'.tr,
               icon: Icons.pin,
               data: '$usageCount',
               comment:
                   firstUsedDate != null
-                      ? 'times since ${DateFormat('yyyy-MM-dd').format(firstUsedDate)}'
-                      : 'no usage records',
+                      ? 'usage_count_comment'.trParams({
+                        'date': DateFormat(
+                          'yyyy-MM-dd',
+                        ).format(firstUsedDate),
+                      })
+                      : 'no_usage_records'.tr,
             ),
             // 使用周期
             DetailsBriefCard(
-              title: 'Usage Cycle',
+              title: 'usage_cycle'.tr,
               icon: Icons.loop,
               data: usageCount > 1 ? '$usageFrequency' : '-',
               comment:
                   usageCount > 1
-                      ? 'days per usage'
-                      : 'data not enough',
+                      ? 'usage_cycle_comment'.tr
+                      : 'data_not_enough'.tr,
             ),
             // 上次使用
             DetailsBriefCard(
-              title: 'Last Used',
+              title: 'last_used_at'.tr,
               icon: Icons.history,
               data: usageCount > 0 ? '$daysSinceLastUse' : '-',
               comment:
                   lastUsedDate != null
-                      ? 'days ago since ${DateFormat('yyyy-MM-dd').format(lastUsedDate)}'
-                      : 'data not enough',
+                      ? 'last_used_at_comment'.trParams({
+                        'date': DateFormat(
+                          'yyyy-MM-dd',
+                        ).format(lastUsedDate),
+                      })
+                      : 'data_not_enough'.tr,
             ),
             // 下次使用预计
             DetailsBriefCard(
-              title: 'EST. Next Use',
+              title: 'est_next_use_date'.tr,
               icon: Icons.update,
               data: usageCount > 1 ? '${daysTillNextUse.abs()}' : '-',
               comment:
                   nextExpectedUseDate != null
-                      ? 'days ${daysTillNextUse >= 0 ? 'later' : 'ago'} at ${DateFormat('yyyy-MM-dd').format(nextExpectedUseDate)}'
-                      : 'data not enough',
+                      ? 'est_next_use_date_comment'.trParams({
+                        'trend':
+                            daysTillNextUse >= 0
+                                ? 'days_later'.tr
+                                : 'days_ago'.tr,
+                        'date': DateFormat(
+                          'yyyy-MM-dd',
+                        ).format(nextExpectedUseDate),
+                      })
+                      : 'data_not_enough'.tr,
             ),
           ],
         ),

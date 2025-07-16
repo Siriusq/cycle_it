@@ -28,9 +28,7 @@ class DetailsAppBar extends StatelessWidget
       return AppBar(
         automaticallyImplyLeading: false,
         // 防止滚动时变色
-        backgroundColor:
-            Theme.of(context).appBarTheme.backgroundColor ??
-            Theme.of(context).colorScheme.surface,
+        backgroundColor: Theme.of(context).colorScheme.surface,
         scrolledUnderElevation: 0,
         toolbarHeight: appBarHeight,
         // 左侧返回按钮
@@ -120,7 +118,14 @@ class DetailsAppBar extends StatelessWidget
       } else {
         itemCtrl.deleteItem(item.id!);
       }
-      Get.snackbar('删除成功', '物品 ${item.name} 已删除！');
+      Get.snackbar(
+        'deleted_successfully'.tr,
+        'item_changed_successfully'.trParams({
+          'name': item.name,
+          'action': 'delete'.tr,
+        }),
+        duration: const Duration(seconds: 1),
+      );
     }
   }
 
@@ -130,7 +135,11 @@ class DetailsAppBar extends StatelessWidget
   ) async {
     final result = await Get.toNamed('/AddEditItem', arguments: item);
     if (result != null && result['success']) {
-      Get.snackbar('成功', '${result['message']}');
+      Get.snackbar(
+        'success'.tr,
+        '${result['message']}',
+        duration: const Duration(seconds: 1),
+      );
     }
   }
 }

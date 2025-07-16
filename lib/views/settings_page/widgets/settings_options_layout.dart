@@ -19,10 +19,10 @@ class SettingsOptionsLayout extends StatelessWidget {
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           const ThemeSwitchSection(),
-          SizedBox(),
+          SizedBox(height: spacingMD),
           const LanguageSwitchSection(),
         ],
       ),

@@ -49,7 +49,7 @@ class SideMenuAppBar extends StatelessWidget
             Expanded(
               // Expanded 确保文本可以占据剩余空间并处理溢出
               child: Text(
-                "Cycle It",
+                'cycle_it'.tr,
                 style: titleTextEX,
                 overflow: TextOverflow.ellipsis,
               ),

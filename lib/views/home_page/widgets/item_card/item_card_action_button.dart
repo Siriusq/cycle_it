@@ -22,7 +22,7 @@ class ItemCardActionButton extends StatelessWidget {
     final TextStyle bodyTextStyle = style.bodyText;
 
     return PopupMenuButton<String>(
-      tooltip: 'More Action',
+      tooltip: 'more_action'.tr,
       onSelected:
           (value) => _handleAction(context, value, itemCtrl, item),
       itemBuilder:
@@ -78,8 +78,12 @@ class ItemCardActionButton extends StatelessWidget {
         Get.back();
         itemCtrl.addUsageRecord(pickedDate);
         Get.snackbar(
-          '添加成功',
-          '添加使用记录 ${DateFormat('yyyy-MM-dd').format(pickedDate)} 到物品 ${item.name}',
+          'success'.tr,
+          'usage_record_added_hint'.trParams({
+            'record': DateFormat('yyyy-MM-dd').format(pickedDate),
+            'item': item.name,
+          }),
+          duration: const Duration(seconds: 1),
         );
       }
     } else if (value == 'edit') {
@@ -88,16 +92,25 @@ class ItemCardActionButton extends StatelessWidget {
         arguments: item,
       );
       if (result != null && result['success']) {
-        Get.snackbar('成功', '${result['message']}');
+        Get.snackbar(
+          'success'.tr,
+          '${result['message']}',
+          duration: const Duration(seconds: 1),
+        );
       }
     } else if (value == 'delete') {
       final bool? confirmed = await showDeleteConfirmDialog(
         deleteTargetName: item.name,
       );
-      final String confirmMessage = '物品 ${item.name} 已删除！';
+      final String confirmMessage = 'item_changed_successfully'
+          .trParams({'name': item.name, 'action': 'delete'.tr});
       if (confirmed == true) {
         itemCtrl.deleteItem(item.id!);
-        Get.snackbar('删除成功', confirmMessage);
+        Get.snackbar(
+          'success'.tr,
+          confirmMessage,
+          duration: const Duration(seconds: 1),
+        );
       }
     }
   }

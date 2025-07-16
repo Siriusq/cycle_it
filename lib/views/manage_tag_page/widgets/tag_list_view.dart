@@ -5,6 +5,7 @@ import '../../../controllers/tag_controller.dart';
 import '../../../utils/responsive_style.dart';
 import 'tag_card.dart';
 
+// 标签列表
 class TagListView extends StatelessWidget {
   const TagListView({super.key});
 
@@ -23,7 +24,7 @@ class TagListView extends StatelessWidget {
     return Obx(() {
       if (controller.allTags.isEmpty) {
         return Center(
-          child: Text('暂无标签，点击右上角添加新标签。', style: bodyTextStyle),
+          child: Text('add_tag_hint'.tr, style: bodyTextStyle),
         );
       }
       return ListView.builder(
@@ -39,7 +40,10 @@ class TagListView extends StatelessWidget {
             return Padding(
               padding: EdgeInsets.symmetric(vertical: spacingMD),
               child: Center(
-                child: Text('—— 已经到底了 ——', style: bodyTextStyle),
+                child: Text(
+                  'reached_end_hint'.tr,
+                  style: bodyTextStyle,
+                ),
               ),
             );
           }

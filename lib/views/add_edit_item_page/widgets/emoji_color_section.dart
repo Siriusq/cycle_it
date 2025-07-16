@@ -81,30 +81,26 @@ class EmojiColorSection extends StatelessWidget {
     required TextStyle bodyTextStyle,
     required ThemeController themeController,
   }) {
-    return Obx(() {
-      final ThemeData currentTheme = themeController.currentThemeData;
-
-      return TextButton.icon(
-        onPressed: () {
-          showEmojiPickerDialog();
-        },
-        style: TextButton.styleFrom(
-          fixedSize: Size(emojiEditIconWidth, 40),
-          padding: EdgeInsets.all(spacingMD),
-          backgroundColor:
-              currentTheme.colorScheme.surfaceContainerLow,
-          shape: RoundedRectangleBorder(
-            side: BorderSide(
-              color: currentTheme.colorScheme.outline,
-              width: 1.0,
-            ),
-            borderRadius: BorderRadius.circular(10),
+    return TextButton.icon(
+      onPressed: () {
+        showEmojiPickerDialog();
+      },
+      style: TextButton.styleFrom(
+        fixedSize: Size(emojiEditIconWidth, 40),
+        padding: EdgeInsets.all(spacingMD),
+        backgroundColor:
+            Theme.of(context).colorScheme.surfaceContainerLow,
+        shape: RoundedRectangleBorder(
+          side: BorderSide(
+            color: Theme.of(context).colorScheme.outline,
+            width: 1.0,
           ),
+          borderRadius: BorderRadius.circular(10),
         ),
-        icon: Icon(Icons.emoji_emotions_outlined),
-        label: Text("选择 emoji", style: bodyTextStyle),
-      );
-    });
+      ),
+      icon: Icon(Icons.emoji_emotions_outlined),
+      label: Text('select_emoji'.tr, style: bodyTextStyle),
+    );
   }
 
   Widget _buildColorButton({
@@ -115,34 +111,30 @@ class EmojiColorSection extends StatelessWidget {
     required TextStyle bodyTextStyle,
     required ThemeController themeController,
   }) {
-    return Obx(() {
-      final ThemeData currentTheme = themeController.currentThemeData;
-
-      return TextButton.icon(
-        style: TextButton.styleFrom(
-          fixedSize: Size(emojiEditIconWidth, 40),
-          padding: EdgeInsets.all(spacingMD),
-          backgroundColor:
-              currentTheme.colorScheme.surfaceContainerLow,
-          shape: RoundedRectangleBorder(
-            side: BorderSide(
-              color: currentTheme.colorScheme.outline,
-              width: 1.0,
-            ),
-            borderRadius: BorderRadius.circular(10),
+    return TextButton.icon(
+      style: TextButton.styleFrom(
+        fixedSize: Size(emojiEditIconWidth, 40),
+        padding: EdgeInsets.all(spacingMD),
+        backgroundColor:
+            Theme.of(context).colorScheme.surfaceContainerLow,
+        shape: RoundedRectangleBorder(
+          side: BorderSide(
+            color: Theme.of(context).colorScheme.outline,
+            width: 1.0,
           ),
+          borderRadius: BorderRadius.circular(10),
         ),
-        onPressed: () async {
-          final result = await showCustomColorPickerDialog(
-            controller.selectedIconColor.value,
-          );
-          if (result != null) {
-            controller.selectedIconColor.value = result;
-          }
-        },
-        icon: Icon(Icons.color_lens_outlined),
-        label: Text("选择背景色", style: bodyTextStyle),
-      );
-    });
+      ),
+      onPressed: () async {
+        final result = await showCustomColorPickerDialog(
+          controller.selectedIconColor.value,
+        );
+        if (result != null) {
+          controller.selectedIconColor.value = result;
+        }
+      },
+      icon: Icon(Icons.color_lens_outlined),
+      label: Text('select_background_color'.tr, style: bodyTextStyle),
+    );
   }
 }

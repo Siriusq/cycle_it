@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../controllers/add_edit_item_controller.dart';
-import '../../../controllers/theme_controller.dart';
 import '../../../utils/responsive_style.dart';
 import '../../shared_widgets/icon_label.dart';
 import 'item_tag_picker_dialog.dart';
@@ -12,8 +11,6 @@ class TagSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ThemeController themeController =
-        Get.find<ThemeController>();
     final AddEditItemController controller =
         Get.find<AddEditItemController>();
     final ResponsiveStyle style = ResponsiveStyle.to;
@@ -26,7 +23,7 @@ class TagSection extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('标签', style: titleTextStyle),
+        Text('tags'.tr, style: titleTextStyle),
         SizedBox(height: topSpacing),
         SizedBox(
           width: double.infinity,
@@ -49,17 +46,12 @@ class TagSection extends StatelessWidget {
                   onTap: () {
                     showItemTagPickerDialog();
                   },
-                  child: Obx(() {
-                    final ThemeData currentTheme =
-                        themeController.currentThemeData;
-
-                    return IconLabel(
-                      icon: Icons.bookmark_add_outlined,
-                      label: "选择标签",
-                      iconColor: currentTheme.colorScheme.primary,
-                      isLarge: true,
-                    );
-                  }),
+                  child: IconLabel(
+                    icon: Icons.bookmark_add_outlined,
+                    label: 'select_tag'.tr,
+                    iconColor: Theme.of(context).colorScheme.primary,
+                    isLarge: true,
+                  ),
                 ),
               ),
             );

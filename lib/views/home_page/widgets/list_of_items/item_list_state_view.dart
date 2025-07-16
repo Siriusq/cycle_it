@@ -26,12 +26,15 @@ class ItemListStateView extends StatelessWidget {
         if (itemController.allItems.isEmpty) {
           // 状态2: 物品库为空 (数据库中没有任何物品)
           return Center(
-            child: Text('您的物品库是空的，快去添加吧！', style: style.bodyText),
+            child: Text(
+              'please_add_an_item'.tr,
+              style: style.bodyText,
+            ),
           );
         } else if (itemController.displayedItems.isEmpty) {
           // 状态3: 物品库有数据，但当前筛选/搜索后没有符合条件的物品
           return Center(
-            child: Text('没有符合条件的物品', style: style.bodyText),
+            child: Text('no_matched_item'.tr, style: style.bodyText),
           );
         } else {
           // 状态4: 有物品需要显示
@@ -42,7 +45,10 @@ class ItemListStateView extends StatelessWidget {
                 return Padding(
                   padding: EdgeInsets.symmetric(vertical: spacingMD),
                   child: Center(
-                    child: Text('—— 已经到底了 ——', style: bodyTextStyle),
+                    child: Text(
+                      'reached_end_hint'.tr,
+                      style: bodyTextStyle,
+                    ),
                   ),
                 );
               }

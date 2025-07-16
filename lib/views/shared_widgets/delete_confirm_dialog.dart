@@ -10,8 +10,11 @@ Future<bool?> showDeleteConfirmDialog({
 
   return await Get.dialog<bool?>(
     AlertDialog(
-      title: Text('删除确认'),
-      content: Text('确定要删除 $deleteTargetName 吗？', style: bodyTextLG),
+      title: Text('delete_confirm'.tr),
+      content: Text(
+        '${'are_you_sure_to_delete'.tr} $deleteTargetName ?',
+        style: bodyTextLG,
+      ),
       actions: <Widget>[
         // 取消按钮
         TextButton.icon(

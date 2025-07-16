@@ -4,13 +4,15 @@ import 'package:cycle_it/utils/responsive_style.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../../controllers/theme_controller.dart';
 import '../../../models/tag_model.dart';
 
 class AddEditTagDialog extends StatelessWidget {
   final TagModel? tagToEdit; // 用于编辑的标签，如果为null则表示添加
   final _tagNameCtrl = TextEditingController();
   late final Rx<Color> _selectedColor;
+
+  // 用于显示输入框错误信息的响应式变量
+  final RxString _nameErrorText = ''.obs;
 
   AddEditTagDialog({super.key, this.tagToEdit}) {
     if (tagToEdit != null) {
@@ -24,13 +26,17 @@ class AddEditTagDialog extends StatelessWidget {
   Future<void> _submit(TagController tagCtrl) async {
     final name = _tagNameCtrl.text.trim();
 
+    // 清除之前的错误信息
+    _nameErrorText.value = '';
+
     if (name.isEmpty) {
-      Get.snackbar('error'.tr, 'tag_name_cannot_be_empty'.tr);
+      _nameErrorText.value = 'tag_name_cannot_be_empty'.tr;
       return;
     }
 
+    // 最大长度为50
     if (name.length > 30) {
-      Get.snackbar('error'.tr, 'tag_name_too_long'.tr);
+      _nameErrorText.value = 'tag_name_too_long'.tr;
       return;
     }
 
@@ -45,17 +51,19 @@ class AddEditTagDialog extends StatelessWidget {
         _selectedColor.value,
       );
       if (success) {
-        message = 'tag_added_successfully: $name';
+        message = 'tag_updated_successfully'.trParams({'name': name});
       } else {
-        message = 'tag_name_already_exists'.tr;
+        _nameErrorText.value = 'tag_name_already_exists'.tr;
+        return; // 返回，不关闭弹窗
       }
     } else {
       // 添加模式
       success = await tagCtrl.addTag(name, _selectedColor.value);
       if (success) {
-        message = 'tag_added_successfully: $name';
+        message = 'tag_added_successfully'.trParams({'name': name});
       } else {
-        message = 'tag_name_already_exists'.tr;
+        _nameErrorText.value = 'tag_name_already_exists'.tr;
+        return; // 返回，不关闭弹窗
       }
     }
 
@@ -63,15 +71,11 @@ class AddEditTagDialog extends StatelessWidget {
       Get.back(
         result: {'success': true, 'message': message},
       ); // 关闭弹窗并返回结果
-    } else {
-      Get.snackbar('error'.tr, message);
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final ThemeController themeController =
-        Get.find<ThemeController>();
     final tagCtrl = Get.find<TagController>();
     final isEditing = tagToEdit != null;
 
@@ -99,11 +103,8 @@ class AddEditTagDialog extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // 标签名称
+            // 需要调整的输入框
             Obx(() {
-              final ThemeData currentTheme =
-                  themeController.currentThemeData;
-
               return TextFormField(
                 controller: _tagNameCtrl,
                 decoration: InputDecoration(
@@ -114,7 +115,10 @@ class AddEditTagDialog extends StatelessWidget {
                       Radius.circular(10),
                     ),
                     borderSide: BorderSide(
-                      color: currentTheme.colorScheme.outlineVariant,
+                      color:
+                          Theme.of(
+                            context,
+                          ).colorScheme.outlineVariant,
                       width: 2.0,
                     ),
                   ),
@@ -123,24 +127,32 @@ class AddEditTagDialog extends StatelessWidget {
                       Radius.circular(10),
                     ),
                     borderSide: BorderSide(
-                      color: currentTheme.colorScheme.outline,
+                      color: Theme.of(context).colorScheme.outline,
                       width: 2.0,
                     ),
                   ),
+                  errorText:
+                      _nameErrorText.value.isEmpty
+                          ? null
+                          : _nameErrorText.value,
                 ),
                 maxLength: 30,
+                onChanged: (_) {
+                  if (_nameErrorText.value.isNotEmpty) {
+                    _nameErrorText.value = '';
+                  }
+                },
               );
             }),
 
             SizedBox(height: spacingMD),
+            // 标签颜色选择
             Obx(() {
-              final ThemeData currentTheme =
-                  themeController.currentThemeData;
               return SafeArea(
                 child: Container(
                   decoration: BoxDecoration(
                     border: Border.all(
-                      color: currentTheme.colorScheme.outline,
+                      color: Theme.of(context).colorScheme.outline,
                       width: 1,
                     ),
                     borderRadius: BorderRadius.circular(10),

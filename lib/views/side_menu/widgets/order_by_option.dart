@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../controllers/item_list_order_controller.dart';
-import '../../../controllers/theme_controller.dart';
 
 class OrderByOption extends StatelessWidget {
   OrderByOption({
@@ -21,8 +20,6 @@ class OrderByOption extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ThemeController themeController =
-        Get.find<ThemeController>();
     final style = ResponsiveStyle.to;
     final double optionFontSize = style.optionFontSize;
     final double spacingSideMenuOption = style.spacingSideMenuOption;
@@ -30,7 +27,6 @@ class OrderByOption extends StatelessWidget {
     return Obx(() {
       final isActive =
           itemListOrderCtrl.selectedOrderOption.value == orderType;
-      final ThemeData currentTheme = themeController.currentThemeData;
 
       return Padding(
         padding: const EdgeInsets.symmetric(vertical: 2),
@@ -42,7 +38,7 @@ class OrderByOption extends StatelessWidget {
             decoration: BoxDecoration(
               color:
                   isActive
-                      ? currentTheme.colorScheme.primaryContainer
+                      ? Theme.of(context).colorScheme.primaryContainer
                       : Colors.transparent,
               borderRadius: BorderRadius.circular(8.0),
               border: Border.all(
@@ -61,10 +57,10 @@ class OrderByOption extends StatelessWidget {
                     icon,
                     color:
                         isActive
-                            ? currentTheme.colorScheme.primary
-                            : currentTheme
-                                .colorScheme
-                                .secondaryFixedDim,
+                            ? Theme.of(context).colorScheme.primary
+                            : Theme.of(
+                              context,
+                            ).colorScheme.secondaryFixedDim,
                     size: 22,
                   ),
                   const SizedBox(width: 12),
@@ -76,10 +72,12 @@ class OrderByOption extends StatelessWidget {
                         fontWeight: FontWeight.normal,
                         color:
                             isActive
-                                ? currentTheme
-                                    .colorScheme
-                                    .onSecondaryContainer
-                                : currentTheme.colorScheme.secondary,
+                                ? Theme.of(
+                                  context,
+                                ).colorScheme.onSecondaryContainer
+                                : Theme.of(
+                                  context,
+                                ).colorScheme.secondary,
                       ),
                       overflow: TextOverflow.ellipsis,
                       maxLines: 1,
@@ -91,12 +89,14 @@ class OrderByOption extends StatelessWidget {
                         ? Icon(
                           Icons.arrow_upward,
                           size: 22,
-                          color: currentTheme.colorScheme.primary,
+                          color:
+                              Theme.of(context).colorScheme.primary,
                         )
                         : Icon(
                           Icons.arrow_downward,
                           size: 22,
-                          color: currentTheme.colorScheme.primary,
+                          color:
+                              Theme.of(context).colorScheme.primary,
                         ),
                 ],
               ),

@@ -26,9 +26,7 @@ class ListOfItemsAppBar extends StatelessWidget
       automaticallyImplyLeading: false,
       toolbarHeight: searchBarHeight,
       titleSpacing: 0,
-      backgroundColor:
-          Theme.of(context).appBarTheme.backgroundColor ??
-          Theme.of(context).colorScheme.surface,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       scrolledUnderElevation: 0,
       // 非桌面端显示抽屉按钮
       leading:
@@ -62,7 +60,11 @@ class ListOfItemsAppBar extends StatelessWidget
             // 在显示 Snackbar 前添加一个微小延迟
             await Future.delayed(const Duration(milliseconds: 50));
             if (result != null && result['success']) {
-              Get.snackbar('成功', '${result['message']}');
+              Get.snackbar(
+                'success'.tr,
+                '${result['message']}',
+                duration: const Duration(seconds: 1),
+              );
             }
           },
         ),

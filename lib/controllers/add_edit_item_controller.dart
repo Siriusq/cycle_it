@@ -16,6 +16,9 @@ class AddEditItemController extends GetxController {
   final TextEditingController usageCommentController =
       TextEditingController();
 
+  // 用于物品名称输入框的错误信息
+  final RxString nameErrorText = ''.obs;
+
   // Reactive Variables for Icon and Color selection
   final RxString selectedEmoji;
   final Rx<Color> selectedIconColor; // Default color
@@ -78,16 +81,22 @@ class AddEditItemController extends GetxController {
     selectedEmoji.value = emoji;
   }
 
-  Future<String> saveItem() async {
+  Future<String?> saveItem() async {
+    // 每次保存前清除之前的名称错误信息
+    nameErrorText.value = '';
+
     if (nameController.text.trim().isEmpty) {
-      return 'item_name_empty';
+      nameErrorText.value = 'item_name_empty'.tr; // 设置名称错误信息
+      return 'item_name_empty'; // 返回错误类型，供 AppBar 判断
     }
 
     if (nameController.text.trim().length > 50) {
-      return 'item_name_too_long';
+      nameErrorText.value = 'item_name_too_long'.tr; // 设置名称错误信息
+      return 'item_name_too_long'; // 返回错误类型，供 AppBar 判断
     }
 
     if (selectedEmoji.value.isEmpty) {
+      // Emoji 错误
       return 'emoji_empty';
     }
 
@@ -133,10 +142,9 @@ class AddEditItemController extends GetxController {
         await _itemController.addNewItem(itemToSave);
       }
     } catch (e) {
-      return '操作失败: $e';
+      return 'Fatal Error: $e';
     }
-
-    return '';
+    return null;
   }
 
   @override

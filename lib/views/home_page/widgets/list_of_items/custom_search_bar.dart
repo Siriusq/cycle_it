@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../../controllers/search_bar_controller.dart';
-import '../../../../controllers/theme_controller.dart';
 import '../../../../utils/responsive_style.dart';
 
 class CustomSearchBar extends StatelessWidget {
@@ -10,8 +9,6 @@ class CustomSearchBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ThemeController themeController =
-        Get.find<ThemeController>();
     final SearchBarController searchBarCtrl =
         Get.find<SearchBarController>();
     final ResponsiveStyle style = ResponsiveStyle.to;
@@ -23,9 +20,6 @@ class CustomSearchBar extends StatelessWidget {
     return SizedBox(
       height: searchBarHeight,
       child: Obx(() {
-        final ThemeData currentTheme =
-            themeController.currentThemeData;
-
         return TextField(
           style: searchBarHintStyle,
           textAlignVertical: TextAlignVertical.center,
@@ -34,7 +28,7 @@ class CustomSearchBar extends StatelessWidget {
             searchBarCtrl.performSearch();
           },
           decoration: InputDecoration(
-            hintText: "Search",
+            hintText: 'search'.tr,
             hintStyle: searchBarHintStyle,
             contentPadding: const EdgeInsets.symmetric(
               vertical: 0,
@@ -45,7 +39,7 @@ class CustomSearchBar extends StatelessWidget {
                 Radius.circular(10),
               ),
               borderSide: BorderSide(
-                color: currentTheme.colorScheme.outline,
+                color: Theme.of(context).colorScheme.outline,
                 width: 2.0,
               ),
             ),
@@ -79,7 +73,7 @@ class CustomSearchBar extends StatelessWidget {
                 Radius.circular(10),
               ),
               borderSide: BorderSide(
-                color: currentTheme.colorScheme.outlineVariant,
+                color: Theme.of(context).colorScheme.outlineVariant,
                 width: 2.0,
               ),
             ),

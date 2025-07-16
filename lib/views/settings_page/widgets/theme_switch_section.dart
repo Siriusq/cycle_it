@@ -100,7 +100,7 @@ class ThemeSwitchSection extends StatelessWidget {
       case ThemeModeOption.dark:
         return 'dark_theme'.tr;
       case ThemeModeOption.system:
-        return 'system_theme'.tr;
+        return 'follow_system'.tr;
     }
   }
 }

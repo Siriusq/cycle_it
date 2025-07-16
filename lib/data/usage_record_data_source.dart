@@ -118,6 +118,7 @@ class UsageRecordDataSource extends DataTableSource {
           Center(
             child: PopupMenuButton<String>(
               icon: const Icon(Icons.more_vert),
+              tooltip: '❕',
               onSelected: (String value) async {
                 if (value == 'edit') {
                   final DateTime? pickedDate =
@@ -137,13 +138,20 @@ class UsageRecordDataSource extends DataTableSource {
                         ).format(record.usedAt),
                       );
                   final String confirmMessage =
-                      '使用记录 ${DateFormat('yyyy-MM-dd').format(record.usedAt)} 已删除！';
-
+                      'usage_record_deleted_hint'.trParams({
+                        'record': DateFormat(
+                          'yyyy-MM-dd',
+                        ).format(record.usedAt),
+                      });
                   if (confirmed == true) {
                     itemController.deleteUsageRecord(
                       record,
                     ); // 调用删除方法
-                    Get.snackbar('删除成功', confirmMessage);
+                    Get.snackbar(
+                      'deleted_successfully'.tr,
+                      confirmMessage,
+                      duration: const Duration(seconds: 1),
+                    );
                   }
                 }
               },

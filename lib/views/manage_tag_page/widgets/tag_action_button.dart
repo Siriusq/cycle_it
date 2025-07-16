@@ -34,7 +34,7 @@ class TagActionButton extends StatelessWidget {
     final TextStyle bodyTextStyle = style.bodyText;
 
     return PopupMenuButton<String>(
-      tooltip: 'More Action',
+      tooltip: 'more_action'.tr,
       icon: Icon(Icons.more_vert, size: iconSizeMD),
       onSelected: (value) async {
         if (value == 'edit') {
@@ -43,11 +43,15 @@ class TagActionButton extends StatelessWidget {
           final bool? confirmed = await showDeleteConfirmDialog(
             deleteTargetName: tag.name,
           );
-          final String confirmMessage =
-              '标签 ${tag.name} 已删除！'; // 删除确认消息
+          final String confirmMessage = 'tag_deleted_successfully'
+              .trParams({'name': tag.name}); // 删除确认消息
           if (confirmed == true) {
             await controller.removeTag(tag.id); // 调用删除方法
-            Get.snackbar('删除成功', confirmMessage); // 弹出删除成功提示
+            Get.snackbar(
+              'deleted_successfully'.tr,
+              confirmMessage,
+              duration: const Duration(seconds: 1),
+            ); // 弹出删除成功提示
           }
         }
       },
@@ -59,7 +63,7 @@ class TagActionButton extends StatelessWidget {
                 children: [
                   Icon(Icons.edit),
                   SizedBox(width: spacingSM),
-                  Text('编辑', style: bodyTextStyle),
+                  Text('edit'.tr, style: bodyTextStyle),
                 ],
               ),
             ),
@@ -70,7 +74,7 @@ class TagActionButton extends StatelessWidget {
                   Icon(Icons.delete, color: Colors.red),
                   SizedBox(width: spacingSM),
                   Text(
-                    '删除',
+                    'delete'.tr,
                     style: bodyTextStyle.copyWith(color: Colors.red),
                   ),
                 ],

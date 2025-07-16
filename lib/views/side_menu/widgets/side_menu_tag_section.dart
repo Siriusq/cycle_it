@@ -31,7 +31,7 @@ class SideMenuTagSection extends StatelessWidget {
             children: [
               const Icon(Icons.bookmark_outline),
               const SizedBox(width: 5),
-              Text("Tags", style: titleTextMD),
+              Text('tags'.tr, style: titleTextMD),
               const Spacer(),
               SizedBox(
                 height: iconSizeLG,

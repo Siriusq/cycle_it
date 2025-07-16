@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 import 'package:material_charts/material_charts.dart';
 
 import '../../../controllers/item_controller.dart';
-import '../../../controllers/theme_controller.dart';
 import '../../../models/usage_record_model.dart';
 import '../../../utils/responsive_style.dart';
 
@@ -12,15 +11,12 @@ class MonthlyUsageBarChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ThemeController themeController =
-        Get.find<ThemeController>();
     final ItemController itemController = Get.find<ItemController>();
     final ResponsiveStyle style = ResponsiveStyle.to;
     final TextStyle titleTextMD = style.titleTextMD;
     final TextStyle bodyText = style.bodyText;
 
     return Obx(() {
-      final ThemeData currentTheme = themeController.currentThemeData;
       final List<UsageRecordModel> records =
           itemController.currentItem.value?.usageRecords ?? [];
 
@@ -40,18 +36,18 @@ class MonthlyUsageBarChart extends StatelessWidget {
 
       final List<String> monthLabels = [
         '', //index placeholder
-        'Jan',
-        'Feb',
-        'Mar',
-        'Apr',
-        'May',
-        'Jun',
-        'Jul',
-        'Aug',
-        'Sep',
-        'Oct',
-        'Nov',
-        'Dec',
+        'Jan'.tr,
+        'Feb'.tr,
+        'Mar'.tr,
+        'Apr'.tr,
+        'May'.tr,
+        'Jun'.tr,
+        'Jul'.tr,
+        'Aug'.tr,
+        'Sep'.tr,
+        'Oct'.tr,
+        'Nov'.tr,
+        'Dec'.tr,
       ];
 
       // Prepare data for material_charts BarChart
@@ -69,11 +65,12 @@ class MonthlyUsageBarChart extends StatelessWidget {
           return Container(
             padding: const EdgeInsets.symmetric(vertical: 10),
             decoration: BoxDecoration(
-              color: currentTheme.colorScheme.surfaceContainerLow,
+              color:
+                  Theme.of(context).colorScheme.surfaceContainerLow,
               borderRadius: BorderRadius.circular(15),
               border: Border.all(
                 width: 1.5,
-                color: currentTheme.colorScheme.outlineVariant,
+                color: Theme.of(context).colorScheme.outlineVariant,
               ),
             ),
             child: Column(
@@ -87,7 +84,10 @@ class MonthlyUsageBarChart extends StatelessWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text('每月使用次数', style: titleTextMD),
+                      Text(
+                        'monthly_usage_count'.tr,
+                        style: titleTextMD,
+                      ),
                       Icon(Icons.bar_chart, size: 24),
                     ],
                   ),
@@ -107,16 +107,18 @@ class MonthlyUsageBarChart extends StatelessWidget {
                               height: chartHeight,
                               style: BarChartStyle(
                                 barColor:
-                                    currentTheme.colorScheme.primary,
+                                    Theme.of(
+                                      context,
+                                    ).colorScheme.primary,
                                 backgroundColor: Colors.transparent,
                                 barSpacing: 0.30,
                                 cornerRadius: 8.0,
                                 gradientEffect: false,
                                 labelStyle: bodyText.copyWith(
-                                  color: currentTheme.hintColor,
+                                  color: Theme.of(context).hintColor,
                                 ),
                                 valueStyle: bodyText.copyWith(
-                                  color: currentTheme.hintColor,
+                                  color: Theme.of(context).hintColor,
                                 ),
                                 animationDuration: Duration(
                                   milliseconds: 300,
@@ -133,7 +135,8 @@ class MonthlyUsageBarChart extends StatelessWidget {
                               //width: chartHeight,
                               child: Center(
                                 child: Text(
-                                  'No usage record in the past year.',
+                                  'no_usage_record_in_the_past_year'
+                                      .tr,
                                   style: bodyText,
                                 ),
                               ),
