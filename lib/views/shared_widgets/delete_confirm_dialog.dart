@@ -12,7 +12,9 @@ Future<bool?> showDeleteConfirmDialog({
     AlertDialog(
       title: Text('delete_confirm'.tr),
       content: Text(
-        '${'are_you_sure_to_delete'.tr} $deleteTargetName ?',
+        'are_you_sure_to_delete'.trParams({
+          'target': deleteTargetName,
+        }),
         style: bodyTextLG,
       ),
       actions: <Widget>[
