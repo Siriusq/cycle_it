@@ -236,6 +236,16 @@ class ItemController extends GetxController {
     await loadAllItems(); // 更新主页列表的 ItemModel
   }
 
+  // 物品卡片快速添加使用记录
+  Future<void> addUsageRecordFast(
+    ItemModel item,
+    DateTime usedAt,
+  ) async {
+    await _itemService.addUsageRecordAndRecalculate(item.id!, usedAt);
+
+    await loadAllItems(); // 更新主页列表的 ItemModel
+  }
+
   // 编辑使用记录的日期
   Future<void> editUsageRecord(
     UsageRecordModel record,
