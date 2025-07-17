@@ -164,6 +164,22 @@ class MultiLanguage extends Translations {
       'data_export': '导出数据',
       'data_import': '导入数据',
       'data_clear': '清除数据',
+      // 导出
+      'database_export_successfully': '数据库导出成功',
+      'database_export_to': '数据库已成功导出至 @filepath',
+      'database_export_failed': '数据库导出失败',
+      'database_export_permission_error': '权限错误：未授予存储权限，无法导出数据库',
+      'database_export_file_error': '文件不存在：当前不存在可导出的数据库文件',
+      'database_export_canceled_error': '操作取消：用户取消了文件选择',
+      // 导入
+      'database_import_successfully': '数据库导入成功',
+      'database_imported': '数据库已成功导入',
+      'database_import_failed': '数据库导入失败',
+      'database_import_permission_error': '权限错误：未授予存储权限，无法导入数据库',
+      'database_import_file_error': '文件不存在：未选择文件或选择的文件不存在',
+      'database_import_canceled_error': '操作取消：用户取消了文件选择',
+      // 重启
+      'restart_hint': '为确保所有更改完全生效，请手动关闭并重新启动应用程序',
     },
     'en_US': {
       'cycle_it': 'Cycle It',
@@ -325,6 +341,30 @@ class MultiLanguage extends Translations {
       'data_export': 'Export',
       'data_import': 'Import',
       'data_clear': 'Clear',
+      // Export
+      'database_export_successfully': 'Database Export Successful',
+      'database_export_to':
+          'Database successfully exported to @filepath',
+      'database_export_failed': 'Database Export Failed',
+      'database_export_permission_error':
+          'Permission error: Storage permission not granted, unable to export database',
+      'database_export_file_error':
+          'File not found: No database file available to export',
+      'database_export_canceled_error':
+          'Operation canceled: User canceled file selection',
+      // Import
+      'database_import_successfully': 'Database import successful',
+      'database_imported': 'Database successfully imported',
+      'database_import_failed': 'Database import failed',
+      'database_import_permission_error':
+          'Permission error: Storage permission not granted, unable to import database',
+      'database_import_file_error':
+          'File not found: No file selected or the selected file does not exist',
+      'database_import_canceled_error':
+          'Operation canceled: User canceled file selection',
+      // Restart
+      'restart_hint':
+          'To ensure all changes take full effect, please manually close and restart the application',
     },
     'zh_TW': {
       'cycle_it': '物循 · Cycle It',
@@ -479,6 +519,22 @@ class MultiLanguage extends Translations {
       'data_export': '匯出資料',
       'data_import': '匯入資料',
       'data_clear': '清除資料',
+      // 匯出
+      'database_export_successfully': '資料庫匯出成功',
+      'database_export_to': '資料庫已成功匯出至 @filepath',
+      'database_export_failed': '資料庫匯出失敗',
+      'database_export_permission_error': '權限錯誤：未授予儲存權限，無法匯出資料庫',
+      'database_export_file_error': '檔案不存在：目前不存在可匯出的資料庫檔案',
+      'database_export_canceled_error': '操作取消：使用者取消了檔案選擇',
+      // 匯入
+      'database_import_successfully': '資料庫匯入成功',
+      'database_imported': '資料庫已成功匯入',
+      'database_import_failed': '資料庫匯入失敗',
+      'database_import_permission_error': '權限錯誤：未授予儲存權限，無法匯入資料庫',
+      'database_import_file_error': '檔案不存在：未選擇檔案或選擇的檔案不存在',
+      'database_import_canceled_error': '操作取消：使用者取消了檔案選擇',
+      // 重啟
+      'restart_hint': '為確保所有變更完全生效，請手動關閉並重新啟動應用程式',
     },
   };
 }

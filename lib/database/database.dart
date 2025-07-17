@@ -8,6 +8,7 @@ import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart' hide Table; // 与颜色插件冲突
+import 'package:get/get.dart' hide Value;
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -324,7 +325,10 @@ class MyDatabase extends _$MyDatabase {
       if (Platform.isAndroid || Platform.isIOS) {
         var status = await Permission.storage.request();
         if (!status.isGranted) {
-          print('Storage permission not granted.');
+          Get.snackbar(
+            'database_export_failed'.tr,
+            'database_export_permission_error'.tr,
+          );
           return false;
         }
       }
@@ -333,7 +337,10 @@ class MyDatabase extends _$MyDatabase {
       final currentDbFile = File(currentDbPath);
 
       if (!await currentDbFile.exists()) {
-        print('Database file does not exist at: $currentDbPath');
+        Get.snackbar(
+          'database_export_failed'.tr,
+          'database_export_file_error'.tr,
+        );
         return false;
       }
 
@@ -343,7 +350,10 @@ class MyDatabase extends _$MyDatabase {
 
       if (selectedDirectory == null) {
         // 用户取消了选择
-        print('User cancelled directory selection.');
+        Get.snackbar(
+          'database_export_failed'.tr,
+          'database_export_canceled_error'.tr,
+        );
         return false;
       }
 
@@ -352,71 +362,44 @@ class MyDatabase extends _$MyDatabase {
         'cycle_it_backup_${DateTime.now().millisecondsSinceEpoch}.sqlite',
       );
       await currentDbFile.copy(exportPath);
-      print('Database exported to: $exportPath');
+      Get.snackbar(
+        'database_export_successfully'.tr,
+        'database_export_to'.trParams({'filepath': exportPath}),
+      );
       return true;
     } catch (e) {
-      print('Error exporting database: $e');
+      Get.snackbar('database_export_failed'.tr, '$e');
       return false;
     }
   }
 
-  // 导入数据库
-  Future<bool> importDatabase() async {
+  // 导入数据库，这个方法只负责处理实际的文件替换逻辑，不涉及数据库连接的关闭和重新打开
+  Future<bool> importDatabase(File selectedFile) async {
     try {
-      // 请求存储权限
-      if (Platform.isAndroid || Platform.isIOS) {
-        var status = await Permission.storage.request();
-        if (!status.isGranted) {
-          print('Storage permission not granted.');
-          return false;
-        }
-      }
-
-      // 使用 file_picker 选择数据库文件
-      FilePickerResult? result = await FilePicker.platform.pickFiles(
-        type: FileType.custom,
-        allowedExtensions: ['sqlite'],
-      );
-
-      if (result == null || result.files.single.path == null) {
-        // 用户取消了选择
-        print('User cancelled file selection.');
-        return false;
-      }
-
-      final selectedFilePath = result.files.single.path!;
-      final selectedFile = File(selectedFilePath);
-
-      if (!await selectedFile.exists()) {
-        print('Selected file does not exist: $selectedFilePath');
-        return false;
-      }
-
       final currentDbPath = await getDatabaseFilePath();
       final currentDbFile = File(currentDbPath);
+      final walFile = File('$currentDbPath-wal');
+      final shmFile = File('$currentDbPath-shm');
 
       // 删除现有数据库文件及其WAL和SHM文件（如果存在）
+      // 这里不进行重试或重命名，因为我们假设调用者（ItemController）
+      // 已经确保了旧的数据库连接被关闭，从而解除了文件占用。
       if (await currentDbFile.exists()) {
         await currentDbFile.delete();
       }
-      final walFile = File('$currentDbPath-wal');
       if (await walFile.exists()) {
         await walFile.delete();
       }
-      final shmFile = File('$currentDbPath-shm');
       if (await shmFile.exists()) {
         await shmFile.delete();
       }
 
       // 复制选择的文件到应用程序的数据库路径
       await selectedFile.copy(currentDbPath);
-      print(
-        'Database imported from: $selectedFilePath to $currentDbPath',
-      );
 
       return true;
     } catch (e) {
-      print('Error importing database: $e');
+      Get.snackbar('database_import_failed'.tr, '$e');
       return false;
     }
   }
@@ -437,9 +420,9 @@ MigrationStrategy get migration {
       await m.createAll();
     },
     onUpgrade: (Migrator m, int from, int to) async {
-      print(
-        'Migrating database from $from to $to. Data will be reset.',
-      );
+      // print(
+      //   'Migrating database from $from to $to. Data will be reset.',
+      // );
     },
   );
 }

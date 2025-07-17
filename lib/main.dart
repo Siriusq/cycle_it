@@ -92,35 +92,6 @@ class MyApp extends StatelessWidget {
         ],
         title: 'Cycle It',
         theme: themeController.currentThemeData,
-        // theme: ThemeData(
-        //   // This is the theme of your application.
-        //   //
-        //   // TRY THIS: Try running your application with "flutter run". You'll see
-        //   // the application has a purple toolbar. Then, without quitting the app,
-        //   // try changing the seedColor in the colorScheme below to Colors.green
-        //   // and then invoke "hot reload" (save your changes or press the "hot
-        //   // reload" button in a Flutter-supported IDE, or press "r" if you used
-        //   // the command line to start the app).
-        //   //
-        //   // Notice that the counter didn't reset back to zero; the application
-        //   // state is not lost during the reload. To reset the state, use hot
-        //   // restart instead.
-        //   //
-        //   // This works for code too, not just values: Most code changes can be
-        //   // tested with just a hot reload.
-        //   colorScheme: ColorScheme.fromSeed(seedColor: Colors.white),
-        //   appBarTheme: const AppBarTheme(
-        //     backgroundColor: kPrimaryBgColor, // 默认的AppBar背景色
-        //     surfaceTintColor: Colors.transparent, // 消除滚动时的表面色调
-        //     shadowColor: Colors.transparent, // 消除滚动时的阴影
-        //   ),
-        //   textSelectionTheme: TextSelectionThemeData(
-        //     selectionColor: Color(0x33000000), // 选中内容的背景色
-        //     cursorColor: kTextColor, // 光标颜色
-        //     selectionHandleColor: kPrimaryColor, // 拖动选中控制柄颜色（移动端）
-        //   ),
-        // ),
-        //home: HomePage(),
       );
     });
   }

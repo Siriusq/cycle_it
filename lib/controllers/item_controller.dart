@@ -1,6 +1,10 @@
+import 'dart:io';
+
 import 'package:cycle_it/controllers/search_bar_controller.dart';
 import 'package:cycle_it/controllers/tag_controller.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:get/get.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 import '../data/usage_record_data_source.dart';
 import '../database/database.dart';
@@ -8,10 +12,11 @@ import '../models/item_model.dart';
 import '../models/usage_record_model.dart';
 import '../services/item_service.dart';
 import '../utils/responsive_style.dart';
+import '../views/settings_page/widgets/restart_required_page.dart';
 import 'item_list_order_controller.dart';
 
 class ItemController extends GetxController {
-  late ItemService _itemService; // 注入服务
+  final ItemService _itemService = Get.find<ItemService>(); // 注入服务
   final ItemListOrderController _orderController =
       Get.find<ItemListOrderController>();
   final TagController _tagController = Get.find<TagController>();
@@ -48,9 +53,8 @@ class ItemController extends GetxController {
   void onInit() {
     super.onInit();
 
-    // 在 onInit 中获取 MyDatabase 和 ItemService 实例
+    // 在 onInit 中获取 MyDatabase 实例
     _db = Get.find<MyDatabase>();
-    _itemService = Get.find<ItemService>();
 
     // 监听排序和筛选变化，更新 displayedItems
     ever(
@@ -296,14 +300,9 @@ class ItemController extends GetxController {
   Future<void> exportDatabase() async {
     isLoading.value = true;
     try {
-      final success = await _db.exportDatabase();
-      if (success) {
-        Get.snackbar('成功', '数据库已成功导出！');
-      } else {
-        Get.snackbar('失败', '数据库导出失败！');
-      }
+      await _db.exportDatabase();
     } catch (e) {
-      Get.snackbar('错误', '导出数据库时发生错误: $e');
+      Get.snackbar('database_export_failed'.tr, '$e');
     } finally {
       isLoading.value = false;
     }
@@ -312,37 +311,74 @@ class ItemController extends GetxController {
   // 导入数据库
   Future<void> importDatabase() async {
     isLoading.value = true;
+    String restartMessage = ''; // 用于存储传递给重启页面的消息
+
     try {
-      // 1. 关闭当前数据库连接
+      // 请求存储权限
+      if (Platform.isAndroid || Platform.isIOS) {
+        var status = await Permission.storage.request();
+        if (!status.isGranted) {
+          Get.snackbar(
+            'database_import_failed'.tr,
+            'database_import_permission_error'.tr,
+          );
+          isLoading.value = false;
+          return;
+        }
+      }
+
+      //使用 file_picker 选择数据库文件
+      FilePickerResult? result = await FilePicker.platform.pickFiles(
+        type: FileType.custom,
+        allowedExtensions: ['sqlite'],
+      );
+
+      if (result == null || result.files.single.path == null) {
+        Get.snackbar(
+          'database_import_failed'.tr,
+          'database_import_canceled_error'.tr,
+        );
+        isLoading.value = false;
+        return;
+      }
+
+      final selectedFile = File(result.files.single.path!);
+      if (!await selectedFile.exists()) {
+        Get.snackbar(
+          'database_import_failed'.tr,
+          'database_import_file_error'.tr,
+        );
+        isLoading.value = false;
+        return;
+      }
+
+      // 关闭数据库连接
       await _db.close();
 
-      // 2. 执行文件替换操作 (重命名旧文件，复制新文件)
-      // 这部分逻辑依然放在 MyDatabase 中，因为它属于数据库文件管理
-      final success =
-          await _db.importDatabase(); // 调用 MyDatabase 中的新方法
+      // 执行文件替换操作 (重命名旧文件，复制新文件)
+      final bool fileOpsSuccess = await _db.importDatabase(
+        selectedFile,
+      );
 
-      if (success) {
-        Get.snackbar('成功', '数据库已成功导入！');
-
-        // 3. 重新注册 MyDatabase 和 ItemService
-        // 替换 GetX 容器中的 MyDatabase 实例
-        Get.put(MyDatabase(), permanent: true);
-        _db = Get.find<MyDatabase>(); // 更新控制器内部的 _db 引用
-
-        // 替换 GetX 容器中的 ItemService 实例，使其使用新的 MyDatabase 实例
-        // 确保 ItemService 依赖于新的 MyDatabase
-        Get.put(ItemService(_db), permanent: true); // 传入新的 _db 实例
-        _itemService =
-            Get.find<ItemService>(); // 更新控制器内部的 _itemService 引用
-
-        // 4. 重新加载所有数据并刷新 UI
-        await loadAllItems();
-        currentItem.value = null; // 清空当前详情页
+      if (fileOpsSuccess) {
+        restartMessage = 'database_imported'.tr;
       } else {
-        Get.snackbar('失败', '数据库导入失败！');
+        restartMessage = 'database_import_failed'.tr;
       }
+
+      Get.offAll(
+        () => RestartRequiredPage(
+          succeed: fileOpsSuccess,
+          message: restartMessage,
+        ),
+      );
     } catch (e) {
-      Get.snackbar('错误', '导入数据库时发生错误: $e');
+      Get.offAll(
+        () => RestartRequiredPage(
+          succeed: false,
+          message: e.toString(),
+        ),
+      );
     } finally {
       isLoading.value = false;
     }
