@@ -3,6 +3,7 @@ import 'package:cycle_it/controllers/tag_controller.dart';
 import 'package:get/get.dart';
 
 import '../data/usage_record_data_source.dart';
+import '../database/database.dart';
 import '../models/item_model.dart';
 import '../models/usage_record_model.dart';
 import '../services/item_service.dart';
@@ -10,13 +11,16 @@ import '../utils/responsive_style.dart';
 import 'item_list_order_controller.dart';
 
 class ItemController extends GetxController {
-  final ItemService _itemService = Get.find<ItemService>(); // 注入服务
+  late ItemService _itemService; // 注入服务
   final ItemListOrderController _orderController =
       Get.find<ItemListOrderController>();
   final TagController _tagController = Get.find<TagController>();
   final SearchBarController _searchBarController =
       Get.find<SearchBarController>();
   final ResponsiveStyle style = ResponsiveStyle.to;
+
+  // 获取 MyDatabase 实例
+  late MyDatabase _db; // 将 final 改为 late，以便在导入后重新赋值
 
   // 加载状态
   RxBool isLoading = true.obs; // 初始为 true，表示正在加载
@@ -44,11 +48,9 @@ class ItemController extends GetxController {
   void onInit() {
     super.onInit();
 
-    // Future.delayed(Duration(milliseconds: 100), () {
-    //   // Add a small delay to ensure initial DB writes from main are complete
-    //   _loadAllItems();
-    // });
-    //_loadAllItems(); // 应用启动时加载所有物品
+    // 在 onInit 中获取 MyDatabase 和 ItemService 实例
+    _db = Get.find<MyDatabase>();
+    _itemService = Get.find<ItemService>();
 
     // 监听排序和筛选变化，更新 displayedItems
     ever(
@@ -70,7 +72,7 @@ class ItemController extends GetxController {
     // 当标签被添加、编辑或删除时，重新加载所有物品以更新其关联的标签信息
     ever(_tagController.allTags, (_) async {
       await loadAllItems();
-      // If there's an item currently selected in details, refresh its data
+      // 如果详情页内有物品展示，刷新它的数据
       if (currentItem.value != null &&
           currentItem.value!.id != null) {
         await loadItemForDetails(currentItem.value!.id!);
@@ -95,9 +97,8 @@ class ItemController extends GetxController {
   @override
   void onReady() {
     super.onReady();
-    // This method is called after the first frame is rendered.
-    // The database should be fully populated by now from main.
-    loadAllItems(); // Now fetch the items from the database.
+    // 在首帧画面渲染完成后执行，此时数据库已完全加载，可以加载所有物品
+    loadAllItems();
   }
 
   // 从数据库加载所有物品
@@ -275,7 +276,7 @@ class ItemController extends GetxController {
       usageRecordsSortAscending.value = true;
     }
 
-    // 这一步是关键：我们需要确保数据源被告知排序变化，以便它重新排序内部数据
+    // 这一步是关键：需要确保数据源被告知排序变化，以便它重新排序内部数据
     // 然后数据源会调用 notifyListeners() 刷新 UI
     usageRecordDataSource.value?.sort(
       usageRecordsSortColumn.value,
@@ -289,5 +290,61 @@ class ItemController extends GetxController {
 
   void clearSelection() {
     currentItem.value = null;
+  }
+
+  // 导出数据库
+  Future<void> exportDatabase() async {
+    isLoading.value = true;
+    try {
+      final success = await _db.exportDatabase();
+      if (success) {
+        Get.snackbar('成功', '数据库已成功导出！');
+      } else {
+        Get.snackbar('失败', '数据库导出失败！');
+      }
+    } catch (e) {
+      Get.snackbar('错误', '导出数据库时发生错误: $e');
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  // 导入数据库
+  Future<void> importDatabase() async {
+    isLoading.value = true;
+    try {
+      // 1. 关闭当前数据库连接
+      await _db.close();
+
+      // 2. 执行文件替换操作 (重命名旧文件，复制新文件)
+      // 这部分逻辑依然放在 MyDatabase 中，因为它属于数据库文件管理
+      final success =
+          await _db.importDatabase(); // 调用 MyDatabase 中的新方法
+
+      if (success) {
+        Get.snackbar('成功', '数据库已成功导入！');
+
+        // 3. 重新注册 MyDatabase 和 ItemService
+        // 替换 GetX 容器中的 MyDatabase 实例
+        Get.put(MyDatabase(), permanent: true);
+        _db = Get.find<MyDatabase>(); // 更新控制器内部的 _db 引用
+
+        // 替换 GetX 容器中的 ItemService 实例，使其使用新的 MyDatabase 实例
+        // 确保 ItemService 依赖于新的 MyDatabase
+        Get.put(ItemService(_db), permanent: true); // 传入新的 _db 实例
+        _itemService =
+            Get.find<ItemService>(); // 更新控制器内部的 _itemService 引用
+
+        // 4. 重新加载所有数据并刷新 UI
+        await loadAllItems();
+        currentItem.value = null; // 清空当前详情页
+      } else {
+        Get.snackbar('失败', '数据库导入失败！');
+      }
+    } catch (e) {
+      Get.snackbar('错误', '导入数据库时发生错误: $e');
+    } finally {
+      isLoading.value = false;
+    }
   }
 }

@@ -1,3 +1,4 @@
+import 'package:cycle_it/views/settings_page/widgets/database_management_section.dart';
 import 'package:cycle_it/views/settings_page/widgets/language_switch_section.dart';
 import 'package:cycle_it/views/settings_page/widgets/theme_switch_section.dart';
 import 'package:flutter/material.dart';
@@ -21,9 +22,14 @@ class SettingsOptionsLayout extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
+          // 主题
           const ThemeSwitchSection(),
           SizedBox(height: spacingMD),
+          // 语言
           const LanguageSwitchSection(),
+          SizedBox(height: spacingMD),
+          // 数据
+          const DatabaseManagementSection(),
         ],
       ),
     );

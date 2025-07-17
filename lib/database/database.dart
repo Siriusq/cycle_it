@@ -6,15 +6,17 @@ import 'package:cycle_it/database/tables/tag_table.dart';
 import 'package:cycle_it/database/tables/usage_record_table.dart';
 import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
-import 'package:flutter/material.dart' hide Table; // For Color
+import 'package:file_picker/file_picker.dart';
+import 'package:flutter/material.dart' hide Table; // 与颜色插件冲突
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 import '../models/item_model.dart';
 import '../models/tag_model.dart';
 import '../models/usage_record_model.dart';
 
-part 'database.g.dart'; // Drift 会自动生成这个文件
+part 'database.g.dart'; // 由 Drift 自动生成
 
 // 将 TagModel 转换为 TagData
 TagData tagModelToData(TagModel model) {
@@ -55,8 +57,8 @@ ItemModel itemDataToModel(ItemData data) {
     usageComment: data.usageComment,
     emoji: data.emoji,
     iconColor: Color(data.iconColorValue),
-    usageRecords: [],
     // usageRecords 和 tags 需要单独加载，这里先给空列表
+    usageRecords: [],
     tags: [],
     notifyBeforeNextUse: data.notifyBeforeNextUse,
   );
@@ -72,16 +74,16 @@ UsageRecordData usageRecordModelToData(UsageRecordModel model) {
   );
 }
 
-// Helper to convert ItemModel to ItemsCompanion
+// 将 ItemModel 转换为 ItemsCompanion
 ItemsCompanion itemModelToCompanion(ItemModel item) {
   return ItemsCompanion(
     id: item.id != null ? Value(item.id!) : const Value.absent(),
     name: Value(item.name),
     usageComment: Value(item.usageComment),
     emoji: Value(item.emoji),
+    // 将颜色值存储为int
     iconColorValue: Value(item.iconColor.value),
-    // Store Color as int
-    // firstUsed 应该从 ItemModel 中获取
+    // firstUsed 从 ItemModel 中获取
     firstUsed:
         item.firstUsedDate != null
             ? Value(item.firstUsedDate!)
@@ -222,27 +224,21 @@ class MyDatabase extends _$MyDatabase {
 
   // 插入或更新物品
   Future<int> upsertItem(ItemModel item) async {
-    // Determine if this is an insert or update operation based on item.id
+    // 根据是否有 item.id 判断编辑和添加物品
     final isInsert = item.id == null;
 
     int itemId;
 
     if (isInsert) {
-      // For a new item, just insert. Drift will auto-generate the ID.
+      // 插入新物品
       itemId = await into(items).insert(itemModelToCompanion(item));
     } else {
-      // For an existing item, perform an update.
-      // Use replace instead of insert with onConflict: DoUpdate for clearer intent
-      // when you know it's an update and you have the ID.
-      // Or, you can stick with DoUpdate if you prefer.
-      // Let's use update for clarity if you have the ID.
+      // 更新已有物品
       await update(items).replace(itemModelToCompanion(item));
-      itemId = item.id!; // Use the existing ID for further operations
+      itemId = item.id!;
     }
 
-    // Sync item-tag relationships
-    // If `id` was auto-generated, `itemId` now holds the correct new ID.
-    // If it was an update, `itemId` holds the correct existing ID.
+    // 更新 item-tag 关系
     await (delete(itemTags)
       ..where((it) => it.itemId.equals(itemId))).go();
     if (item.tags.isNotEmpty) {
@@ -259,8 +255,7 @@ class MyDatabase extends _$MyDatabase {
       });
     }
 
-    // Sync usage records (delete old, insert new)
-    // Ensure the UsageRecordsCompanion uses Value.absent() for its own ID
+    // 更新使用记录，删除旧的，插入新的
     await (delete(usageRecords)
       ..where((ur) => ur.itemId.equals(itemId))).go();
     if (item.usageRecords.isNotEmpty) {
@@ -270,14 +265,13 @@ class MyDatabase extends _$MyDatabase {
             usageRecords,
             UsageRecordsCompanion(
               id: const Value.absent(),
-              // Let Drift auto-generate UsageRecord's ID
+              // 使用itemId作为外键
               itemId: Value(itemId),
-              // Use the item's ID for the foreign key
               usedAt: Value(record.usedAt),
               intervalSinceLastUse:
                   record.intervalSinceLastUse != null
                       ? Value(record.intervalSinceLastUse!)
-                      : const Value.absent(), // Correct for nullable
+                      : const Value.absent(),
             ),
           );
         }
@@ -300,13 +294,6 @@ class MyDatabase extends _$MyDatabase {
       ..where((tbl) => tbl.itemId.equals(itemId))).get();
   }
 
-  // 获取某个物品的使用记录总数
-  // Future<int> getUsageRecordCountByItemId(int itemId) {
-  //   return (select(usageRecords)..where(
-  //     (tbl) => tbl.itemId.equals(itemId),
-  //   )).get().then((list) => list.length);
-  // }
-
   // 插入或更新 UsageRecord
   Future<int> upsertUsageRecord(UsageRecordModel record) {
     return into(usageRecords).insert(
@@ -321,6 +308,117 @@ class MyDatabase extends _$MyDatabase {
   Future<int> deleteUsageRecordData(int recordId) {
     return (delete(usageRecords)
       ..where((tbl) => tbl.id.equals(recordId))).go();
+  }
+
+  // --------------------数据库导入与导出--------------------
+  // 获取数据库文件路径
+  Future<String> getDatabaseFilePath() async {
+    final dbFolder = await getApplicationDocumentsDirectory();
+    return p.join(dbFolder.path, 'db.sqlite');
+  }
+
+  // 导出数据库
+  Future<bool> exportDatabase() async {
+    try {
+      // 请求存储权限
+      if (Platform.isAndroid || Platform.isIOS) {
+        var status = await Permission.storage.request();
+        if (!status.isGranted) {
+          print('Storage permission not granted.');
+          return false;
+        }
+      }
+
+      final currentDbPath = await getDatabaseFilePath();
+      final currentDbFile = File(currentDbPath);
+
+      if (!await currentDbFile.exists()) {
+        print('Database file does not exist at: $currentDbPath');
+        return false;
+      }
+
+      // 使用 file_picker 选择保存目录
+      String? selectedDirectory =
+          await FilePicker.platform.getDirectoryPath();
+
+      if (selectedDirectory == null) {
+        // 用户取消了选择
+        print('User cancelled directory selection.');
+        return false;
+      }
+
+      final exportPath = p.join(
+        selectedDirectory,
+        'cycle_it_backup_${DateTime.now().millisecondsSinceEpoch}.sqlite',
+      );
+      await currentDbFile.copy(exportPath);
+      print('Database exported to: $exportPath');
+      return true;
+    } catch (e) {
+      print('Error exporting database: $e');
+      return false;
+    }
+  }
+
+  // 导入数据库
+  Future<bool> importDatabase() async {
+    try {
+      // 请求存储权限
+      if (Platform.isAndroid || Platform.isIOS) {
+        var status = await Permission.storage.request();
+        if (!status.isGranted) {
+          print('Storage permission not granted.');
+          return false;
+        }
+      }
+
+      // 使用 file_picker 选择数据库文件
+      FilePickerResult? result = await FilePicker.platform.pickFiles(
+        type: FileType.custom,
+        allowedExtensions: ['sqlite'],
+      );
+
+      if (result == null || result.files.single.path == null) {
+        // 用户取消了选择
+        print('User cancelled file selection.');
+        return false;
+      }
+
+      final selectedFilePath = result.files.single.path!;
+      final selectedFile = File(selectedFilePath);
+
+      if (!await selectedFile.exists()) {
+        print('Selected file does not exist: $selectedFilePath');
+        return false;
+      }
+
+      final currentDbPath = await getDatabaseFilePath();
+      final currentDbFile = File(currentDbPath);
+
+      // 删除现有数据库文件及其WAL和SHM文件（如果存在）
+      if (await currentDbFile.exists()) {
+        await currentDbFile.delete();
+      }
+      final walFile = File('$currentDbPath-wal');
+      if (await walFile.exists()) {
+        await walFile.delete();
+      }
+      final shmFile = File('$currentDbPath-shm');
+      if (await shmFile.exists()) {
+        await shmFile.delete();
+      }
+
+      // 复制选择的文件到应用程序的数据库路径
+      await selectedFile.copy(currentDbPath);
+      print(
+        'Database imported from: $selectedFilePath to $currentDbPath',
+      );
+
+      return true;
+    } catch (e) {
+      print('Error importing database: $e');
+      return false;
+    }
   }
 }
 
@@ -339,13 +437,9 @@ MigrationStrategy get migration {
       await m.createAll();
     },
     onUpgrade: (Migrator m, int from, int to) async {
-      // 如果你不关心数据，这里可以什么都不做，或者只打印日志
-      // 因为删除文件后，onCreate会被调用。
       print(
         'Migrating database from $from to $to. Data will be reset.',
       );
-      // 或者，如果你想确保新列被创建而旧列被忽略（如果它们仍然存在）
-      // 但通常如果你清除了数据库文件，onCreate会完全重建。
     },
   );
 }
