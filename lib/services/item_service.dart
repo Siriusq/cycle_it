@@ -1,4 +1,5 @@
 import 'package:drift/drift.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import '../database/database.dart';
@@ -54,8 +55,8 @@ class ItemService {
         newInterval = usedAt.difference(lastRecord.usedAt).inDays;
       }
 
-      // 插入新记录
-      final newRecordId = await _db
+      // 插入新记录 final newRecordId
+      await _db
           .into(_db.usageRecords)
           .insert(
             UsageRecordsCompanion.insert(
@@ -65,10 +66,7 @@ class ItemService {
             ),
           );
 
-      // 如果新记录不是最后一条（虽然正常添加时是最后一条），
-      // 但为了通用性，我们重新获取并更新受影响的记录。
-      // 更高效的做法是只更新新记录和下一条（如果存在）
-      // 这里我们简化为获取所有记录并重新计算所有，因为 GetX 控制器会重新加载 ItemModel，这也会触发 ItemModel 内部的 usageRecords 排序和缓存失效。
+      // 防止新记录不是最后一条（虽然正常添加时是最后一条），重新获取并更新受影响的记录。
       await _recalculateAndSaveUsageRecords(itemId);
     });
   }
@@ -240,12 +238,13 @@ class ItemService {
     await _db.deleteTag(tagId);
   }
 
-  // 初始化数据库数据
+  // --------------- 仅测试用 ---------------
+  // 使用/lib/test/mock_data.dart中的数据初始化数据库数据
   Future<void> initializeData() async {
     // 检查标签表是否为空，如果为空，则插入 mock 数据
-    final tagCount = await _db.getTagCount(); // 需要在 MyDatabase 中添加此方法
+    final tagCount = await _db.getTagCount();
     if (tagCount == 0) {
-      print('Inserting mock tags...');
+      if (kDebugMode) print('Inserting mock tags...');
       for (final tag in allTagsFromMock) {
         await _db.insertTag(
           TagsCompanion.insert(
@@ -257,10 +256,9 @@ class ItemService {
     }
 
     // 检查物品表是否为空，如果为空，则插入 mock 数据
-    final itemCount =
-        await _db.getItemCount(); // 需要在 MyDatabase 中添加此方法
+    final itemCount = await _db.getItemCount();
     if (itemCount == 0) {
-      print('Inserting mock items...');
+      if (kDebugMode) print('Inserting mock items...');
       for (final item in sampleItems) {
         // 在插入物品前，确保其关联的标签在数据库中存在，并获取它们的真实ID
         final List<TagModel> itemActualTags = [];
@@ -271,9 +269,11 @@ class ItemService {
           } else {
             // 如果 mock item 引用了不存在的标签，这里可以插入它或者抛出错误
             // 这里我们假设 mock tags 已经先被插入
-            print(
-              'Warning: Tag ${tag.name} not found in DB for item ${item.name}',
-            );
+            if (kDebugMode) {
+              print(
+                'Warning: Tag ${tag.name} not found in DB for item ${item.name}',
+              );
+            }
           }
         }
 

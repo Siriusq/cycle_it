@@ -1,6 +1,5 @@
 import 'package:cycle_it/bindings/add_edit_item_binding.dart';
 import 'package:cycle_it/bindings/home_binding.dart';
-import 'package:cycle_it/services/item_service.dart';
 import 'package:cycle_it/utils/custom_scroll_behavior.dart';
 import 'package:cycle_it/views/add_edit_item_page/add_edit_item_page.dart';
 import 'package:cycle_it/views/details_page/details_page.dart';
@@ -46,9 +45,10 @@ void main() async {
   final themeController = Get.find<ThemeController>();
   await themeController.themeInitializationFuture;
 
-  // 确保 ItemService 数据初始化完成
-  final itemService = Get.find<ItemService>();
-  await itemService.initializeData();
+  // --------------- 仅测试用 ---------------
+  // 使用/lib/test/mock_data.dart中的数据初始化数据库数据
+  // final itemService = Get.find<ItemService>();
+  // await itemService.initializeData();
 
   runApp(const MyApp());
 }

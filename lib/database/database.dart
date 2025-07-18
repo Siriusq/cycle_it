@@ -313,7 +313,7 @@ class MyDatabase extends _$MyDatabase {
   // --------------------数据库导入与导出--------------------
   // 获取数据库文件路径
   Future<String> getDatabaseFilePath() async {
-    final dbFolder = await getApplicationDocumentsDirectory();
+    final dbFolder = await _getDatabaseDirectory();
     return p.join(dbFolder.path, 'db.sqlite');
   }
 
@@ -390,9 +390,20 @@ class MyDatabase extends _$MyDatabase {
   }
 }
 
+// 根据平台获取数据库存储目录
+Future<Directory> _getDatabaseDirectory() async {
+  if (Platform.isWindows || Platform.isMacOS || Platform.isLinux) {
+    // 在桌面平台上，使用应用支持目录
+    return await getApplicationSupportDirectory();
+  } else {
+    // 在移动平台上，使用应用文档目录（沙盒私有目录）
+    return await getApplicationDocumentsDirectory();
+  }
+}
+
 LazyDatabase _openConnection() {
   return LazyDatabase(() async {
-    final dbFolder = await getApplicationDocumentsDirectory();
+    final dbFolder = await _getDatabaseDirectory();
     final file = File(p.join(dbFolder.path, 'db.sqlite'));
     return NativeDatabase(file);
   });
