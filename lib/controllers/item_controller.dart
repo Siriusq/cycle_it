@@ -175,9 +175,9 @@ class ItemController extends GetxController {
     displayedItems.assignAll(itemsToFilter);
   }
 
-  // 添加新物品
+  // 添加新物品 final newId =
   Future<void> addNewItem(ItemModel newItem) async {
-    final newId = await _itemService.saveItem(newItem);
+    await _itemService.saveItem(newItem);
     // 重新加载所有物品以更新列表
     await loadAllItems();
   }
@@ -241,7 +241,10 @@ class ItemController extends GetxController {
     DateTime usedAt,
   ) async {
     await _itemService.addUsageRecordAndRecalculate(item.id!, usedAt);
-
+    if (currentItem.value != null &&
+        currentItem.value!.id == item.id) {
+      await loadItemForDetails(item.id!);
+    }
     await loadAllItems(); // 更新主页列表的 ItemModel
   }
 

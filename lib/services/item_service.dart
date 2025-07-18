@@ -221,7 +221,7 @@ class ItemService {
     return await _db.insertTag(
       TagsCompanion.insert(
         name: tag.name,
-        colorValue: tag.color.value,
+        colorValue: tag.color.toARGB32(),
       ),
     );
   }
@@ -249,7 +249,7 @@ class ItemService {
         await _db.insertTag(
           TagsCompanion.insert(
             name: tag.name,
-            colorValue: tag.color.value,
+            colorValue: tag.color.toARGB32(),
           ),
         );
       }
@@ -287,7 +287,7 @@ class ItemService {
                 name: item.name,
                 usageComment: item.usageComment,
                 emoji: item.emoji,
-                iconColorValue: item.iconColor.value,
+                iconColorValue: item.iconColor.toARGB32(),
                 notifyBeforeNextUse: item.notifyBeforeNextUse,
               ).toCompanion(true), // 使用 toCompanion(true) 允许指定 ID
               mode: InsertMode.insertOrReplace,

@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
@@ -97,7 +98,7 @@ class ThemeController extends GetxController {
       // option == ThemeModeOption.system
       // **尝试在最早阶段通过 WidgetsBinding.instance.window.platformBrightness 获取系统亮度**
       final Brightness initialSystemBrightness =
-          WidgetsBinding.instance.window.platformBrightness;
+          PlatformDispatcher.instance.platformBrightness;
 
       if (initialSystemBrightness == Brightness.dark) {
         newThemeData = await _loadJsonTheme(

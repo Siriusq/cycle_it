@@ -101,7 +101,7 @@ class ItemModel {
   }
 
   // 计算到今天的日期差
-  int daysToToday(bool isNext) {
+  int daysToToday({required bool isNext}) {
     DateTime targetDate;
     if (isNext) {
       if (nextExpectedUse == null) return 0;
@@ -130,8 +130,8 @@ class ItemModel {
   }
 
   double _calculateProgress() {
-    final daysSinceLastUsage = daysToToday(false).abs();
-    final daysTillNextUsage = daysToToday(true).abs();
+    final daysSinceLastUsage = daysToToday(isNext: false).abs();
+    final daysTillNextUsage = daysToToday(isNext: true);
     if (daysSinceLastUsage == 0) return 0;
     if (daysTillNextUsage <= 0) return 1.0;
     final totalDuration = daysSinceLastUsage + daysTillNextUsage;

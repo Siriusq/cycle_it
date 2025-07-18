@@ -23,7 +23,7 @@ TagData tagModelToData(TagModel model) {
   return TagData(
     id: model.id,
     name: model.name,
-    colorValue: model.color.value,
+    colorValue: model.color.toARGB32(),
   );
 }
 
@@ -43,7 +43,7 @@ ItemData itemModelToData(ItemModel model) {
     name: model.name,
     usageComment: model.usageComment,
     emoji: model.emoji,
-    iconColorValue: model.iconColor.value,
+    iconColorValue: model.iconColor.toARGB32(),
     notifyBeforeNextUse: model.notifyBeforeNextUse,
     firstUsed: model.firstUsedDate,
   );
@@ -82,7 +82,7 @@ ItemsCompanion itemModelToCompanion(ItemModel item) {
     usageComment: Value(item.usageComment),
     emoji: Value(item.emoji),
     // 将颜色值存储为int
-    iconColorValue: Value(item.iconColor.value),
+    iconColorValue: Value(item.iconColor.toARGB32()),
     // firstUsed 从 ItemModel 中获取
     firstUsed:
         item.firstUsedDate != null

@@ -38,8 +38,10 @@ class DetailsOverview extends StatelessWidget {
               ? currentItem.usageRecords.last.usedAt
               : null;
       final int daysSinceLastUse =
-          currentItem.daysToToday(false).abs();
-      final int daysTillNextUse = currentItem.daysToToday(true);
+          currentItem.daysToToday(isNext: false).abs();
+      final int daysTillNextUse = currentItem.daysToToday(
+        isNext: true,
+      );
       final double usageFrequency = currentItem.usageFrequency
           .toPrecision(2);
 

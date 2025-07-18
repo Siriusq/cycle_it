@@ -1,10 +1,12 @@
 import 'package:cycle_it/bindings/add_edit_item_binding.dart';
 import 'package:cycle_it/bindings/home_binding.dart';
+import 'package:cycle_it/services/item_service.dart';
 import 'package:cycle_it/utils/custom_scroll_behavior.dart';
 import 'package:cycle_it/views/add_edit_item_page/add_edit_item_page.dart';
 import 'package:cycle_it/views/details_page/details_page.dart';
 import 'package:cycle_it/views/manage_tag_page/manage_tag_page.dart';
 import 'package:cycle_it/views/settings_page/settings_page.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
@@ -46,9 +48,11 @@ void main() async {
   await themeController.themeInitializationFuture;
 
   // --------------- 仅测试用 ---------------
-  // 使用/lib/test/mock_data.dart中的数据初始化数据库数据
-  // final itemService = Get.find<ItemService>();
-  // await itemService.initializeData();
+  // 使用/lib/test/mock_data.dart中的数据初始化数据库数据，需要在热重启后生效
+  if (kDebugMode) {
+    final itemService = Get.find<ItemService>();
+    await itemService.initializeData();
+  }
 
   runApp(const MyApp());
 }
