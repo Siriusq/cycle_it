@@ -4,7 +4,6 @@ import 'package:cycle_it/controllers/search_bar_controller.dart';
 import 'package:cycle_it/controllers/tag_controller.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:get/get.dart';
-import 'package:permission_handler/permission_handler.dart';
 
 import '../data/usage_record_data_source.dart';
 import '../database/database.dart';
@@ -324,19 +323,6 @@ class ItemController extends GetxController {
     String restartMessage = ''; // 用于存储传递给重启页面的消息
 
     try {
-      // 请求存储权限
-      if (Platform.isAndroid || Platform.isIOS) {
-        var status = await Permission.storage.request();
-        if (!status.isGranted) {
-          Get.snackbar(
-            'database_import_failed'.tr,
-            'database_import_permission_error'.tr,
-          );
-          isLoading.value = false;
-          return;
-        }
-      }
-
       //使用 file_picker 选择数据库文件
       FilePickerResult? result = await FilePicker.platform.pickFiles(
         type: FileType.custom,

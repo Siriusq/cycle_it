@@ -11,7 +11,6 @@ import 'package:flutter/material.dart' hide Table; // 与颜色插件冲突
 import 'package:get/get.dart' hide Value;
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
-import 'package:permission_handler/permission_handler.dart';
 
 import '../models/item_model.dart';
 import '../models/tag_model.dart';
@@ -321,18 +320,6 @@ class MyDatabase extends _$MyDatabase {
   // 导出数据库
   Future<bool> exportDatabase() async {
     try {
-      // 请求存储权限
-      if (Platform.isAndroid || Platform.isIOS) {
-        var status = await Permission.storage.request();
-        if (!status.isGranted) {
-          Get.snackbar(
-            'database_export_failed'.tr,
-            'database_export_permission_error'.tr,
-          );
-          return false;
-        }
-      }
-
       final currentDbPath = await getDatabaseFilePath();
       final currentDbFile = File(currentDbPath);
 
@@ -382,8 +369,6 @@ class MyDatabase extends _$MyDatabase {
       final shmFile = File('$currentDbPath-shm');
 
       // 删除现有数据库文件及其WAL和SHM文件（如果存在）
-      // 这里不进行重试或重命名，因为我们假设调用者（ItemController）
-      // 已经确保了旧的数据库连接被关闭，从而解除了文件占用。
       if (await currentDbFile.exists()) {
         await currentDbFile.delete();
       }

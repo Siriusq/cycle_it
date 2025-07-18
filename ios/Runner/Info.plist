@@ -45,9 +45,5 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
-	<key>NSPhotoLibraryUsageDescription</key>
-    <string>This app needs access to your photo library to save/load database files.</string>
-    <key>NSFileProviderDomainUsageDescription</key>
-    <string>This app needs access to files to save/load database files.</string>
 </dict>
 </plist>
