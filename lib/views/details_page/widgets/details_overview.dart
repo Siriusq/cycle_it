@@ -9,9 +9,7 @@ import '../../shared_widgets/responsive_component_group.dart';
 import 'details_brief_card.dart';
 
 class DetailsOverview extends StatelessWidget {
-  final ItemModel item;
-
-  const DetailsOverview({super.key, required this.item});
+  const DetailsOverview({super.key});
 
   @override
   Widget build(BuildContext context) {

@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 
 import '../../../../controllers/item_controller.dart';
 import '../../../../utils/responsive_style.dart';
-import '../../../details_page/details_page.dart';
 import '../item_card/item_card.dart';
 
 class ItemListStateView extends StatelessWidget {
@@ -60,10 +59,9 @@ class ItemListStateView extends StatelessWidget {
                 return ItemCard(
                   item: item,
                   isActive: isActive,
-                  press: () {
-                    Get.to(() => DetailsPage())!.then((_) {
-                      itemController.clearSelection(); // 返回时清除状态
-                    });
+                  press: () async {
+                    await Get.toNamed('/Details');
+                    itemController.clearSelection();
                   },
                 );
               });

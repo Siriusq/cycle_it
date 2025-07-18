@@ -9,25 +9,23 @@ import '../../../models/item_model.dart';
 import '../../shared_widgets/date_picker_helper.dart';
 
 class UsageRecordsTable extends StatelessWidget {
-  final ItemModel currentItem;
-
-  const UsageRecordsTable({super.key, required this.currentItem});
+  const UsageRecordsTable({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final ItemController itemController = Get.find<ItemController>();
+    final ItemController itemCtrl = Get.find<ItemController>();
     final ResponsiveStyle style = ResponsiveStyle.to;
     final TextStyle bodyText = style.bodyText;
     final TextStyle titleTextMD = style.titleTextMD;
     //final double tableHeight = style.tableHeight;
 
     return Obx(() {
-      if (itemController.currentItem.value == null ||
-          itemController.currentItem.value!.id != currentItem.id) {
+      final ItemModel? currentItem = itemCtrl.currentItem.value;
+      if (currentItem == null) {
         return const Center(child: CircularProgressIndicator());
       }
 
-      final dataSource = itemController.usageRecordDataSource.value;
+      final dataSource = itemCtrl.usageRecordDataSource.value;
       if (dataSource == null) {
         return Center(
           child: Text('loading_usage_record...'.tr, style: bodyText),
@@ -73,20 +71,14 @@ class UsageRecordsTable extends StatelessWidget {
                                 );
                             if (pickedDate != null) {
                               Get.back();
-                              itemController.addUsageRecord(
-                                pickedDate,
-                              );
+                              itemCtrl.addUsageRecord(pickedDate);
                               Get.snackbar(
                                 'success'.tr,
                                 'usage_record_added_hint'.trParams({
                                   'record': DateFormat(
                                     'yyyy-MM-dd',
                                   ).format(pickedDate),
-                                  'item':
-                                      itemController
-                                          .currentItem
-                                          .value!
-                                          .name,
+                                  'item': currentItem.name,
                                 }),
                                 duration: const Duration(seconds: 1),
                               );
@@ -114,9 +106,7 @@ class UsageRecordsTable extends StatelessWidget {
                               style: bodyText,
                             ),
                             onSort: (columnIndex, ascending) {
-                              itemController.onUsageRecordsSort(
-                                'usedAt',
-                              );
+                              itemCtrl.onUsageRecordsSort('usedAt');
                             },
                             size: ColumnSize.L,
                             headingRowAlignment:
@@ -128,7 +118,7 @@ class UsageRecordsTable extends StatelessWidget {
                               style: bodyText,
                             ),
                             onSort: (columnIndex, ascending) {
-                              itemController.onUsageRecordsSort(
+                              itemCtrl.onUsageRecordsSort(
                                 'intervalSinceLastUse',
                               );
                             },
@@ -183,12 +173,10 @@ class UsageRecordsTable extends StatelessWidget {
                         scrollController: ScrollController(),
                         sortArrowIcon: Icons.north,
                         sortColumnIndex: _getSortColumnIndex(
-                          itemController.usageRecordsSortColumn.value,
+                          itemCtrl.usageRecordsSortColumn.value,
                         ),
                         sortAscending:
-                            itemController
-                                .usageRecordsSortAscending
-                                .value,
+                            itemCtrl.usageRecordsSortAscending.value,
                       );
                     }),
                   ),
