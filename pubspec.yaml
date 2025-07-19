@@ -44,8 +44,8 @@ dependencies:
   get: ^4.7.2
 
   # Drift DB
-  drift: ^2.26.0
-  drift_flutter: ^0.2.4
+  drift: ^2.28.0
+  drift_flutter: ^0.2.5
 
   # SVG
   flutter_svg: ^2.1.0
