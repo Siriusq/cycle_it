@@ -3,7 +3,9 @@ import 'dart:io';
 import 'package:cycle_it/controllers/search_bar_controller.dart';
 import 'package:cycle_it/controllers/tag_controller.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
+import 'package:material_charts/material_charts.dart';
 
 import '../data/usage_record_data_source.dart';
 import '../database/database.dart';
@@ -48,6 +50,19 @@ class ItemController extends GetxController {
   final RxString usageRecordsSortColumn = 'usedAt'.obs; // 默认按使用日期排序
   final RxBool usageRecordsSortAscending = true.obs; // 默认升序
 
+  // 热力图相关状态和方法
+  final RxMap<DateTime, int> heatMapData =
+      <DateTime, int>{}.obs; // 热力图数据
+  final RxBool isLoadingHeatmapData = false.obs; // 热力图数据加载状态
+  final RxString heatMapError = ''.obs; // 热力图数据加载错误信息
+
+  // 月度使用图表相关状态
+  final RxList<BarChartData> monthlyBarChartData =
+      <BarChartData>[].obs;
+  final RxBool isLoadingMonthlyChartData = false.obs;
+  final RxString monthlyChartError = ''.obs;
+  final RxDouble monthlyUsageSum = 0.0.obs; // 用于判断是否有数据
+
   @override
   void onInit() {
     super.onInit();
@@ -82,17 +97,33 @@ class ItemController extends GetxController {
       }
     });
 
-    // --- currentItem 变化时直接使用 item.usageRecords 初始化数据源 ---
-    ever(currentItem, (item) {
+    // 当 currentItem 变化时，触发热力图和月度图表数据处理
+    ever(currentItem, (item) async {
       if (item != null && item.id != null) {
+        // 初始化使用记录数据源
         usageRecordDataSource.value = UsageRecordDataSource(
           itemId: item.id!,
           initialRecords: item.usageRecords,
           initialSortColumn: usageRecordsSortColumn.value,
           initialSortAscending: usageRecordsSortAscending.value,
         );
+        // 调用异步处理热力图数据的方法
+        await _loadHeatmapDataInIsolate(item.usageRecords);
+        // 调用异步处理月度图表数据的方法
+        await _loadMonthlyUsageDataInIsolate(item.usageRecords);
       } else {
         usageRecordDataSource.value = null;
+
+        // 清空热力图数据和状态
+        heatMapData.clear();
+        isLoadingHeatmapData.value = false;
+        heatMapError.value = '';
+
+        // 清空月度图表数据和状态
+        monthlyBarChartData.clear();
+        isLoadingMonthlyChartData.value = false;
+        monthlyChartError.value = '';
+        monthlyUsageSum.value = 0.0;
       }
     });
   }
@@ -292,7 +323,7 @@ class ItemController extends GetxController {
       usageRecordsSortAscending.value = true;
     }
 
-    // 这一步是关键：需要确保数据源被告知排序变化，以便它重新排序内部数据
+    // 确保数据源被告知排序变化，以便它重新排序内部数据
     // 然后数据源会调用 notifyListeners() 刷新 UI
     usageRecordDataSource.value?.sort(
       usageRecordsSortColumn.value,
@@ -306,6 +337,137 @@ class ItemController extends GetxController {
 
   void clearSelection() {
     currentItem.value = null;
+  }
+
+  // --- 物品详情页图表相关方法 ---
+
+  // 加载并处理热力图数据
+  Future<void> _loadHeatmapDataInIsolate(
+    List<UsageRecordModel> records,
+  ) async {
+    isLoadingHeatmapData.value = true;
+    heatMapError.value = '';
+    heatMapData.clear();
+
+    try {
+      if (records.isEmpty) {
+        isLoadingHeatmapData.value = false;
+        return;
+      }
+
+      final Map<DateTime, int> result = await compute(
+        _processHeatmapDataInIsolate,
+        records,
+      );
+      heatMapData.value = result;
+    } catch (e) {
+      heatMapError.value = 'Failed to process heatmap data: $e'.tr;
+      if (kDebugMode) {
+        print('Error processing heatmap data in isolate: $e');
+      }
+    } finally {
+      isLoadingHeatmapData.value = false;
+    }
+  }
+
+  // 执行热力图数据处理。
+  static Map<DateTime, int> _processHeatmapDataInIsolate(
+    List<UsageRecordModel> records,
+  ) {
+    Map<DateTime, int> tempHeatMapData = {};
+
+    for (var record in records) {
+      DateTime day = DateTime(
+        record.usedAt.year,
+        record.usedAt.month,
+        record.usedAt.day,
+      );
+      tempHeatMapData.update(
+        day,
+        (value) => value + 1,
+        ifAbsent: () => 1,
+      );
+    }
+    return tempHeatMapData;
+  }
+
+  // 加载并处理月度使用图表数据
+  Future<void> _loadMonthlyUsageDataInIsolate(
+    List<UsageRecordModel> records,
+  ) async {
+    isLoadingMonthlyChartData.value = true;
+    monthlyChartError.value = '';
+    monthlyBarChartData.clear();
+    monthlyUsageSum.value = 0.0;
+
+    try {
+      if (records.isEmpty) {
+        isLoadingMonthlyChartData.value = false;
+        return;
+      }
+
+      final Map<String, dynamic> result = await compute(
+        _processMonthlyUsageDataInIsolate,
+        records,
+      );
+
+      final List<BarChartData> processedData =
+          (result['data'] as List)
+              .map(
+                (item) => BarChartData(
+                  value: item['value'],
+                  label: item['label'],
+                ),
+              )
+              .toList();
+      final double sum = result['sum'];
+
+      monthlyBarChartData.assignAll(processedData);
+      monthlyUsageSum.value = sum;
+    } catch (e) {
+      monthlyChartError.value =
+          'Failed to process monthly chart data: $e'.tr;
+      if (kDebugMode) {
+        print('Error processing monthly chart data in isolate: $e');
+      }
+    } finally {
+      isLoadingMonthlyChartData.value = false;
+    }
+  }
+
+  // 执行月度使用图表数据处理。
+  static Map<String, dynamic> _processMonthlyUsageDataInIsolate(
+    List<UsageRecordModel> records,
+  ) {
+    List<double> monthlyUsage = List.filled(13, 0);
+    final int currentYear = DateTime.now().year;
+
+    for (var record in records) {
+      if (record.usedAt.year == currentYear) {
+        monthlyUsage[record.usedAt.month]++;
+      }
+    }
+
+    double usageSum = 0;
+    for (var usage in monthlyUsage) {
+      usageSum += usage;
+    }
+
+    final List<String> monthLabels = [
+      '', //index placeholder
+      'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+      'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec',
+    ];
+
+    final List<Map<String, dynamic>> barChartData = [];
+    for (int i = 1; i <= 12; i++) {
+      barChartData.add({
+        'value': monthlyUsage[i],
+        'label': monthLabels[i],
+      });
+    }
+
+    return {'data': barChartData, 'sum': usageSum};
   }
 
   // 导出数据库

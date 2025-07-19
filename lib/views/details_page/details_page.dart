@@ -35,32 +35,28 @@ class DetailsPage extends StatelessWidget {
         body: Column(
           children: [
             Expanded(
-              child: SingleChildScrollView(
+              child: ListView(
                 padding: EdgeInsets.symmetric(horizontal: spacingLG),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    //标题、标签与图标
-                    DetailsItemTitle(),
-                    DetailsItemTags(),
-                    SizedBox(height: spacingLG),
+                children: [
+                  DetailsItemTitle(),
+                  DetailsItemTags(),
+                  SizedBox(height: spacingLG),
 
-                    //图表
-                    DetailsOverview(),
-                    SizedBox(height: spacingMD),
+                  //图表
+                  DetailsOverview(),
+                  SizedBox(height: spacingMD),
 
-                    // 使用记录
-                    ResponsiveComponentGroup(
-                      minComponentWidth: style.minComponentWidthMD,
-                      aspectRation: 0.55,
-                      children: [
-                        UsageRecordsTable(),
-                        const DetailsChartsGroup(),
-                      ],
-                    ),
-                    SizedBox(height: spacingLG),
-                  ],
-                ),
+                  // 使用记录
+                  ResponsiveComponentGroup(
+                    minComponentWidth: style.minComponentWidthMD,
+                    aspectRation: 0.55,
+                    children: [
+                      UsageRecordsTable(),
+                      const DetailsChartsGroup(),
+                    ],
+                  ),
+                  SizedBox(height: spacingLG),
+                ],
               ),
             ),
           ],
