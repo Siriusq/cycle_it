@@ -17,7 +17,7 @@ class UsageRecordsTable extends StatelessWidget {
     final ResponsiveStyle style = ResponsiveStyle.to;
     final TextStyle bodyText = style.bodyText;
     final TextStyle titleTextMD = style.titleTextMD;
-    //final double tableHeight = style.tableHeight;
+    final double tableHeight = style.tableHeight;
 
     return Obx(() {
       final ItemModel? currentItem = itemCtrl.currentItem.value;
@@ -35,7 +35,7 @@ class UsageRecordsTable extends StatelessWidget {
       return LayoutBuilder(
         builder: (context, constraints) {
           return SizedBox(
-            //height: tableHeight, //实际上没啥用，组件被包在有限制的组件中了，这里只是个保证
+            height: tableHeight, //实际上没啥用，组件被包在有限制的组件中了，这里只是个保证
             child: Container(
               decoration: BoxDecoration(
                 color:
