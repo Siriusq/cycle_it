@@ -18,13 +18,12 @@ class SideMenu extends StatelessWidget {
   Widget build(BuildContext context) {
     final style = ResponsiveStyle.to;
 
-    return SafeArea(
-      top: false,
-      child: Scaffold(
-        appBar: SideMenuAppBar(),
-        body: Container(
-          height: double.infinity,
-          color: Theme.of(context).colorScheme.surfaceContainerLow,
+    return Scaffold(
+      appBar: SideMenuAppBar(),
+      body: Container(
+        height: double.infinity,
+        color: Theme.of(context).colorScheme.surfaceContainerLow,
+        child: SafeArea(
           child: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,

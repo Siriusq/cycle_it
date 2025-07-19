@@ -12,8 +12,19 @@ class ManageTagMobileAppBar extends StatelessWidget
   @override
   Widget build(BuildContext context) {
     final ResponsiveStyle style = ResponsiveStyle.to;
+    final double spacingSM = style.spacingSM;
+    final double spacingLG = style.spacingLG;
+    final bool isMobile = style.isMobileDevice;
+    final double searchBarHeight =
+        style.searchBarHeight +
+            (isMobile ? spacingSM : spacingLG) * 2;
 
     return AppBar(
+      automaticallyImplyLeading: false,
+      toolbarHeight: searchBarHeight,
+      titleSpacing: 0,
+      backgroundColor: Theme.of(context).colorScheme.surface,
+      scrolledUnderElevation: 0,
       title: Center(
         child: Text(
           'tag_management'.tr, // 标签管理标题
@@ -23,7 +34,7 @@ class ManageTagMobileAppBar extends StatelessWidget
       // AppBar底部的分割线
       bottom: PreferredSize(
         preferredSize: const Size.fromHeight(1.0),
-        child: Divider(),
+        child: Divider(height: 0,),
       ),
       // 返回按钮
       leading: IconButton(

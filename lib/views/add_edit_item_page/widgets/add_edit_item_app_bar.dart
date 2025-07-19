@@ -16,8 +16,18 @@ class AddEditItemAppBar extends StatelessWidget
 
     final TextStyle largeTitleTextStyle = style.titleTextEX;
     final double spacingSM = style.spacingSM;
+    final double spacingLG = style.spacingLG;
+    final bool isMobile = style.isMobileDevice;
+    final double searchBarHeight =
+        style.searchBarHeight +
+            (isMobile ? spacingSM : spacingLG) * 2;
 
     return AppBar(
+      automaticallyImplyLeading: false,
+      toolbarHeight: searchBarHeight,
+      titleSpacing: 0,
+      backgroundColor: Theme.of(context).colorScheme.surface,
+      scrolledUnderElevation: 0,
       title: Center(
         child: Text(
           controller.isEditing ? 'edit_item'.tr : 'add_new_item'.tr,

@@ -28,11 +28,15 @@ class ManageTagPage extends StatelessWidget {
                   : null,
 
           body:
-              isMobileDevice
-                  ? const TagListView()
-                  : ManageTagDesktopBody(
-                    onAddTag: _showAddEditTagDialog,
-                  ),
+              SizedBox(
+                child: SafeArea(
+                  child: isMobileDevice
+                      ? const TagListView()
+                      : ManageTagDesktopBody(
+                        onAddTag: _showAddEditTagDialog,
+                      ),
+                ),
+              ),
 
           // 宽屏幕
         );

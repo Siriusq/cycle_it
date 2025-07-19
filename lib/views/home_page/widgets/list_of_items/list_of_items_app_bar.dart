@@ -21,8 +21,10 @@ class ListOfItemsAppBar extends StatelessWidget
         style.searchBarHeight +
         (isMobile ? spacingSM : spacingLG) * 2;
     final bool isTripleCol = ResponsiveLayout.isTripleCol(context);
+    final bool isSingleCol = ResponsiveLayout.isSingleCol(context);
 
     return AppBar(
+      primary: isSingleCol,
       automaticallyImplyLeading: false,
       toolbarHeight: searchBarHeight,
       titleSpacing: 0,
