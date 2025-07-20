@@ -22,13 +22,15 @@ class DetailsAppBar extends StatelessWidget
         style.searchBarHeight +
         (isMobile ? spacingSM : spacingLG) * 2;
     final bool isSingleCol = ResponsiveLayout.isSingleCol(context);
+    final bool isPrimary =
+        GetPlatform.isAndroid || (GetPlatform.isIOS && isSingleCol);
 
     // 使用 Obx 监听 itemCtrl.currentItem，以便在 item 删除或加载时可以动态更新 AppBar 的内容
     return Obx(() {
       final ItemModel? item = itemCtrl.currentItem.value;
 
       return AppBar(
-        primary: isSingleCol,
+        primary: isPrimary,
         automaticallyImplyLeading: false,
         // 防止滚动时变色
         backgroundColor: Theme.of(context).colorScheme.surface,
