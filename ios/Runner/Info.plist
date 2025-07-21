@@ -47,5 +47,60 @@
 		<true/>
 		<key>UIStatusBarHidden</key>
 		<false/>
+		<key>LSSupportsOpeningDocumentsInPlace</key>
+        <true/>
+        <key>CFBundleDocumentTypes</key>
+        <array>
+            <dict>
+                <key>CFBundleTypeName</key>
+                <string>SQLite Database</string>
+                <key>LSHandlerRank</key>
+                <string>Owner</string>
+                <key>LSItemContentTypes</key>
+                <array>
+                    <string>public.data</string>
+                    <string>public.database</string>
+                    <string>public.sqlite</string>
+                    <string>com.sqlite.db</string>
+                    <string>org.sqlite.sqlite3</string>
+                    <string>com.apple.mobilecoreservices.sqlite3-database</string>
+                    <string>com.apple.uttype.sqlite</string>
+                    <string>com.apple.uttype.database</string>
+                    <string>public.item</string>    <!-- 通用项目类型 -->
+                    <string>public.content</string> <!-- 通用内容类型 -->
+                    <string>public.file</string>    <!-- 通用文件类型 -->
+                    <string>public.plain-text</string> <!-- 某些情况下数据库文件可能被识别为文本 -->
+                </array>
+            </dict>
+        </array>
+
+        <key>UTExportedTypeDeclarations</key>
+        <array>
+            <dict>
+                <key>UTTypeIdentifier</key>
+                <string>com.example.cycleIt.sqlite</string> <!-- ***非常重要：请将此处的 'com.yourcompany.cycleit.sqlite' 替换为你的应用程序的实际反向域名标识符，例如 'com.yourbundleid.sqlite'*** -->
+                <key>UTTypeTagSpecification</key>
+                <dict>
+                    <key>public.filename-extension</key>
+                    <array>
+                        <string>sqlite</string>
+                        <string>db</string>
+                    </array>
+                    <key>public.mime-type</key>
+                    <string>application/x-sqlite3</string>
+                </dict>
+                <key>UTTypeConformsTo</key>
+                <array>
+                    <string>public.data</string>
+                    <string>public.database</string>
+                    <string>public.item</string>
+                    <string>public.file</string>
+                </array>
+                <key>UTTypeDescription</key>
+                <string>Cycle It Database File</string>
+                <key>UTTypeIconFiles</key>
+                <array/>
+            </dict>
+        </array>
 	</dict>
 </plist>

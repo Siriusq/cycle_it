@@ -30,7 +30,7 @@ class DetailsAppBar extends StatelessWidget
       final ItemModel? item = itemCtrl.currentItem.value;
 
       return AppBar(
-        primary: isPrimary,
+        primary: GetPlatform.isMobile,
         automaticallyImplyLeading: false,
         // 防止滚动时变色
         backgroundColor: Theme.of(context).colorScheme.surface,
