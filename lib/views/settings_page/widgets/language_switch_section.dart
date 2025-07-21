@@ -41,20 +41,15 @@ class LanguageSwitchSection extends StatelessWidget {
         children: [
           Row(
             mainAxisSize: MainAxisSize.min,
-            children: [
-              Text('language'.tr, style: titleTextStyle),
-            ], // Use .tr for translation
+            children: [Text('language'.tr, style: titleTextStyle)],
           ),
           SizedBox(height: spacingMD),
-          // Changed from Row to Wrap for better responsiveness on smaller screens
           Wrap(
-            alignment: WrapAlignment.center, // Center the buttons
-            spacing: 8.0, // Horizontal spacing between buttons
-            runSpacing:
-                8.0, // Vertical spacing between lines of buttons
+            alignment: WrapAlignment.center,
+            spacing: 8.0,
+            runSpacing: 8.0,
             children:
                 LanguageOption.values.map((option) {
-                  // Determine if the current option is selected directly from reactive state
                   final bool isSelected =
                       (option == LanguageOption.system &&
                           languageController
@@ -69,7 +64,7 @@ class LanguageSwitchSection extends StatelessWidget {
                           languageController.currentLocale ==
                               const Locale('en', 'US'));
 
-                  return ElevatedButton(
+                  return TextButton.icon(
                     onPressed: () {
                       switch (option) {
                         case LanguageOption.simplifiedChinese:
@@ -96,7 +91,7 @@ class LanguageSwitchSection extends StatelessWidget {
                           break;
                       }
                     },
-                    style: ElevatedButton.styleFrom(
+                    style: TextButton.styleFrom(
                       foregroundColor:
                           isSelected
                               ? Theme.of(
@@ -110,15 +105,20 @@ class LanguageSwitchSection extends StatelessWidget {
                               ? Theme.of(context).colorScheme.primary
                               : Theme.of(context).colorScheme.surface,
                       shape: RoundedRectangleBorder(
+                        side: BorderSide(
+                          color:
+                              isSelected
+                                  ? Colors.transparent
+                                  : Theme.of(
+                                    context,
+                                  ).colorScheme.outline,
+                          width: 1.0,
+                        ),
                         borderRadius: BorderRadius.circular(10),
                       ),
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 20,
-                        vertical: 12,
-                      ),
-                      elevation: isSelected ? 5 : 2,
                     ),
-                    child: Text(
+                    icon: Icon(_getOptionIcon(option)),
+                    label: Text(
                       _getOptionText(option),
                       style: bodyTextStyle,
                     ),
@@ -130,7 +130,7 @@ class LanguageSwitchSection extends StatelessWidget {
     );
   }
 
-  // Get the display text for the language option
+  // 文本选项
   String _getOptionText(LanguageOption option) {
     switch (option) {
       case LanguageOption.simplifiedChinese:
@@ -141,6 +141,20 @@ class LanguageSwitchSection extends StatelessWidget {
         return 'english'.tr;
       case LanguageOption.system:
         return 'follow_system'.tr;
+    }
+  }
+
+  // 图标选项
+  IconData _getOptionIcon(LanguageOption option) {
+    switch (option) {
+      case LanguageOption.simplifiedChinese:
+        return Icons.translate;
+      case LanguageOption.traditionalChinese:
+        return Icons.g_translate;
+      case LanguageOption.english:
+        return Icons.font_download_outlined;
+      case LanguageOption.system:
+        return Icons.language;
     }
   }
 }

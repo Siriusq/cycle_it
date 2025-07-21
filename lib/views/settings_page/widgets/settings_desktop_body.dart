@@ -3,7 +3,6 @@ import 'package:cycle_it/views/settings_page/widgets/settings_options_layout.dar
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../../controllers/theme_controller.dart';
 import '../../../utils/responsive_style.dart';
 
 class SettingsDesktopBody extends StatelessWidget {
@@ -11,8 +10,6 @@ class SettingsDesktopBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ThemeController themeController =
-        Get.find<ThemeController>();
     final ResponsiveStyle style = ResponsiveStyle.to;
     final double maxFormWidth = style.desktopFormMaxWidth;
 
@@ -22,31 +19,26 @@ class SettingsDesktopBody extends StatelessWidget {
           maxWidth: maxFormWidth,
           maxHeight: Get.height * 0.9,
         ),
-        child: Obx(() {
-          final ThemeData currentTheme =
-              themeController.currentThemeData;
-
-          return Container(
-            decoration: BoxDecoration(
-              shape: BoxShape.rectangle,
-              border: Border.all(
-                width: 2,
-                color: currentTheme.colorScheme.outlineVariant,
-              ),
-              borderRadius: BorderRadius.circular(15),
-              color: currentTheme.colorScheme.surfaceContainerLow,
+        child: Container(
+          decoration: BoxDecoration(
+            shape: BoxShape.rectangle,
+            border: Border.all(
+              width: 2,
+              color: Theme.of(context).colorScheme.outlineVariant,
             ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                // 模拟AppBar
-                SettingsDesktopHeader(),
+            borderRadius: BorderRadius.circular(15),
+            color: Theme.of(context).colorScheme.surfaceContainerLow,
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              // 模拟AppBar
+              SettingsDesktopHeader(),
 
-                SettingsOptionsLayout(),
-              ],
-            ),
-          );
-        }),
+              SettingsOptionsLayout(),
+            ],
+          ),
+        ),
       ),
     );
   }

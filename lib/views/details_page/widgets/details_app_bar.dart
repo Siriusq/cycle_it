@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 
 import '../../../controllers/item_controller.dart';
 import '../../../models/item_model.dart';
-import '../../../utils/responsive_layout.dart';
 import '../../../utils/responsive_style.dart';
 import '../../shared_widgets/delete_confirm_dialog.dart';
 
@@ -21,9 +20,6 @@ class DetailsAppBar extends StatelessWidget
     final double appBarHeight =
         style.searchBarHeight +
         (isMobile ? spacingSM : spacingLG) * 2;
-    final bool isSingleCol = ResponsiveLayout.isSingleCol(context);
-    final bool isPrimary =
-        GetPlatform.isAndroid || (GetPlatform.isIOS && isSingleCol);
 
     // 使用 Obx 监听 itemCtrl.currentItem，以便在 item 删除或加载时可以动态更新 AppBar 的内容
     return Obx(() {

@@ -37,51 +37,53 @@ class ThemeSwitchSection extends StatelessWidget {
             children: [Text('theme'.tr, style: titleTextStyle)],
           ),
           SizedBox(height: spacingMD),
-          Row(
-            mainAxisSize: MainAxisSize.min,
+          Wrap(
+            alignment: WrapAlignment.center,
+            spacing: 8.0,
+            runSpacing: 8.0,
             children:
                 ThemeModeOption.values.map((option) {
                   return Obx(() {
                     final bool isSelected =
                         themeController.currentThemeModeOption ==
                         option;
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 4.0,
+                    return TextButton.icon(
+                      onPressed:
+                          () => themeController.setTheme(option),
+                      style: TextButton.styleFrom(
+                        foregroundColor:
+                            isSelected
+                                ? Theme.of(
+                                  context,
+                                ).colorScheme.onPrimary
+                                : Theme.of(
+                                  context,
+                                ).colorScheme.onSurface,
+                        backgroundColor:
+                            isSelected
+                                ? Theme.of(
+                                  context,
+                                ).colorScheme.primary
+                                : Theme.of(
+                                  context,
+                                ).colorScheme.surface,
+                        shape: RoundedRectangleBorder(
+                          side: BorderSide(
+                            color:
+                                isSelected
+                                    ? Colors.transparent
+                                    : Theme.of(
+                                      context,
+                                    ).colorScheme.outline,
+                            width: 1.0,
+                          ),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
                       ),
-                      child: ElevatedButton(
-                        onPressed:
-                            () => themeController.setTheme(option),
-                        style: ElevatedButton.styleFrom(
-                          foregroundColor:
-                              isSelected
-                                  ? Theme.of(
-                                    context,
-                                  ).colorScheme.onPrimary
-                                  : Theme.of(
-                                    context,
-                                  ).colorScheme.onSurface,
-                          backgroundColor:
-                              isSelected
-                                  ? Theme.of(
-                                    context,
-                                  ).colorScheme.primary
-                                  : Theme.of(
-                                    context,
-                                  ).colorScheme.surface,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 20,
-                            vertical: 12,
-                          ),
-                          elevation: isSelected ? 5 : 2,
-                        ),
-                        child: Text(
-                          _getOptionText(option),
-                          style: bodyTextStyle,
-                        ),
+                      icon: Icon(_getOptionIcon(option)),
+                      label: Text(
+                        _getOptionText(option),
+                        style: bodyTextStyle,
                       ),
                     );
                   });
@@ -101,6 +103,17 @@ class ThemeSwitchSection extends StatelessWidget {
         return 'dark_theme'.tr;
       case ThemeModeOption.system:
         return 'follow_system'.tr;
+    }
+  }
+
+  IconData _getOptionIcon(ThemeModeOption option) {
+    switch (option) {
+      case ThemeModeOption.light:
+        return Icons.light_mode;
+      case ThemeModeOption.dark:
+        return Icons.dark_mode;
+      case ThemeModeOption.system:
+        return Icons.brightness_medium_outlined;
     }
   }
 }

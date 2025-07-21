@@ -39,54 +39,53 @@ class DatabaseManagementSection extends StatelessWidget {
           SizedBox(height: spacingMD),
           Row(
             mainAxisSize: MainAxisSize.min,
+            spacing: spacingMD,
             children: [
               // 导出数据
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 4.0),
-                child: ElevatedButton(
-                  onPressed: () async {
-                    await controller.importDatabase();
-                  },
-                  style: ElevatedButton.styleFrom(
-                    foregroundColor:
-                        Theme.of(context).colorScheme.onSurface,
-                    backgroundColor:
-                        Theme.of(context).colorScheme.surface,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
+              TextButton.icon(
+                onPressed: () async {
+                  await controller.importDatabase();
+                },
+                style: TextButton.styleFrom(
+                  foregroundColor:
+                      Theme.of(context).colorScheme.onSurface,
+                  backgroundColor:
+                      Theme.of(
+                        context,
+                      ).colorScheme.surfaceContainerLow,
+                  shape: RoundedRectangleBorder(
+                    side: BorderSide(
+                      color: Theme.of(context).colorScheme.outline,
+                      width: 1.0,
                     ),
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 20,
-                      vertical: 12,
-                    ),
-                    elevation: 2,
+                    borderRadius: BorderRadius.circular(10),
                   ),
-                  child: Text('data_import'.tr, style: bodyTextStyle),
                 ),
+                icon: Icon(Icons.download),
+                label: Text('data_import'.tr, style: bodyTextStyle),
               ),
               // 导入数据
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 4.0),
-                child: ElevatedButton(
-                  onPressed: () async {
-                    await controller.exportDatabase();
-                  },
-                  style: ElevatedButton.styleFrom(
-                    foregroundColor:
-                        Theme.of(context).colorScheme.onSurface,
-                    backgroundColor:
-                        Theme.of(context).colorScheme.surface,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
+              TextButton.icon(
+                onPressed: () async {
+                  await controller.exportDatabase();
+                },
+                style: TextButton.styleFrom(
+                  foregroundColor:
+                      Theme.of(context).colorScheme.onSurface,
+                  backgroundColor:
+                      Theme.of(
+                        context,
+                      ).colorScheme.surfaceContainerLow,
+                  shape: RoundedRectangleBorder(
+                    side: BorderSide(
+                      color: Theme.of(context).colorScheme.outline,
+                      width: 1.0,
                     ),
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 20,
-                      vertical: 12,
-                    ),
-                    elevation: 2,
+                    borderRadius: BorderRadius.circular(10),
                   ),
-                  child: Text('data_export'.tr, style: bodyTextStyle),
                 ),
+                icon: Icon(Icons.upload),
+                label: Text('data_export'.tr, style: bodyTextStyle),
               ),
             ],
           ),
