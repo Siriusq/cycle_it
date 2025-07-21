@@ -136,9 +136,10 @@ class UsageHeatmapCalendar extends StatelessWidget {
 
           // 估算日历组件的最小高度，以确保加载指示器等也占据相似的空间
           final double estimatedCalendarHeight =
-              7 * heatmapTipCellSize +
+              7 * heatmapCellSize +
               6 * heatmapCellSpaceBetween +
-              16;
+              heatmapTipCellSize +
+              32;
 
           return Container(
             padding: const EdgeInsets.symmetric(vertical: 8),
