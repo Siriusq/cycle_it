@@ -156,69 +156,53 @@ class MyDatabase extends _$MyDatabase {
 
   // 获取所有物品（用于主页列表）
   Future<List<ItemModel>> getAllItems() async {
+    // 1. 一次性查询所有需要的数据表
     final allItemsData = await select(items).get();
-    final List<ItemModel> result = [];
-    for (final itemData in allItemsData) {
-      // 这里的 itemModel 已经包含了 IconData
-      final ItemModel itemModel = itemDataToModel(itemData);
+    final allRecordsData =
+        await (select(usageRecords)..orderBy([
+          (t) => OrderingTerm(expression: t.usedAt),
+        ])).get();
+    final allTagsData = await select(tags).get();
+    final allItemTagsData = await select(itemTags).get();
 
-      // 加载每个物品的标签和使用记录
-      final itemTag =
-          await (select(itemTags)
-                ..where((it) => it.itemId.equals(itemData.id)))
-              .join([
-                innerJoin(tags, tags.id.equalsExp(itemTags.tagId)),
-              ])
-              .map((row) => tagDataToModel(row.readTable(tags)))
-              .get();
-
-      final itemUsageRecords = await (select(usageRecords)
-            ..where((ur) => ur.itemId.equals(itemData.id))
-            ..orderBy([
-              (t) => OrderingTerm(
-                expression: t.usedAt,
-                mode: OrderingMode.asc,
-              ),
-            ]))
-          .get()
-          .then(
-            (list) =>
-                list
-                    .map(
-                      (data) => UsageRecordModel(
-                        id: data.id,
-                        itemId: data.itemId,
-                        usedAt: data.usedAt,
-                        intervalSinceLastUse:
-                            data.intervalSinceLastUse,
-                      ),
-                    )
-                    .toList(),
-          );
-
-      // 将加载的 tags 和 usageRecords 赋值给 itemModel
-      result.add(
-        ItemModel(
-          id: itemModel.id,
-          // 使用 itemModel 的 id
-          name: itemModel.name,
-          // 使用 itemModel 的 name
-          usageComment: itemModel.usageComment,
-          // 使用 itemModel 的 usageComment
-          emoji: itemModel.emoji,
-          // 直接使用 emoji
-          iconColor: itemModel.iconColor,
-          // 使用 itemModel 的 iconColor
-          usageRecords: itemUsageRecords,
-          // 赋值加载的记录
-          tags: itemTag,
-          // 赋值加载的标签
-          notifyBeforeNextUse:
-              itemModel
-                  .notifyBeforeNextUse, // 使用 itemModel 的 notifyBeforeNextUse
-        ),
+    // 2. 在内存中构建映射表以便快速查找，避免循环查询
+    final recordsByItemId = <int, List<UsageRecordModel>>{};
+    for (var record in allRecordsData) {
+      final model = UsageRecordModel(
+        id: record.id,
+        itemId: record.itemId,
+        usedAt: record.usedAt,
+        intervalSinceLastUse: record.intervalSinceLastUse,
       );
+      // 如果键不存在，则创建新列表
+      (recordsByItemId[record.itemId] ??= []).add(model);
     }
+
+    final tagsById = {
+      for (var tag in allTagsData) tag.id: tagDataToModel(tag),
+    };
+    final tagsByItemId = <int, List<TagModel>>{};
+    for (var itemTag in allItemTagsData) {
+      final tag = tagsById[itemTag.tagId];
+      if (tag != null) {
+        (tagsByItemId[itemTag.itemId] ??= []).add(tag);
+      }
+    }
+
+    // 3. 组装最终的 ItemModel 列表
+    final result =
+        allItemsData.map((itemData) {
+          final itemRecords = recordsByItemId[itemData.id] ?? [];
+          // 注意：这里已经通过查询排序了，但以防万一可以再次排序
+          // itemRecords.sort((a, b) => a.usedAt.compareTo(b.usedAt));
+
+          // 使用 copyWith 方法填充关联数据
+          return itemDataToModel(itemData).copyWith(
+            usageRecords: itemRecords,
+            tags: tagsByItemId[itemData.id] ?? [],
+          );
+        }).toList();
+
     return result;
   }
 

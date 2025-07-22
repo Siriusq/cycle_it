@@ -7,15 +7,34 @@ import '../details_page/details_page.dart';
 import '../side_menu/side_menu.dart';
 import 'widgets/list_of_items/list_of_items.dart';
 
-class HomePage extends StatelessWidget {
+// 在 initState 中触发初始数据加载
+class HomePage extends StatefulWidget {
   HomePage({super.key});
 
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
+  final itemCtrl = Get.find<ItemController>();
+
+  @override
+  void initState() {
+    super.initState();
+    // 初始加载逻辑
+    // 使用 addPostFrameCallback 确保在第一帧渲染后（即UI显示后）才开始加载数据
+    // 这样可以避免启动时UI线程被阻塞，用户会先看到加载指示器
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      // 检查 allItems 是否为空，防止在页面重建时重复加载数据
+      if (itemCtrl.allItems.isEmpty) {
+        itemCtrl.loadAllItems();
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    final itemCtrl = Get.find<ItemController>();
-
     return Scaffold(
       key: _scaffoldKey,
       drawer: ConstrainedBox(
@@ -23,19 +42,19 @@ class HomePage extends StatelessWidget {
         child: SideMenu(),
       ),
       body: ResponsiveLayout(
-        mobile: _buildMobileLayout(itemCtrl),
-        tablet: _buildTabletLayout(itemCtrl),
-        desktop: _buildDesktopLayout(itemCtrl),
+        mobile: _buildMobileLayout(),
+        tablet: _buildTabletLayout(),
+        desktop: _buildDesktopLayout(),
         scaffoldKey: _scaffoldKey,
       ),
     );
   }
 
-  Widget _buildMobileLayout(ItemController ctrl) {
+  Widget _buildMobileLayout() {
     return ListOfItems(scaffoldKey: _scaffoldKey);
   }
 
-  Widget _buildTabletLayout(ItemController ctrl) {
+  Widget _buildTabletLayout() {
     return Row(
       children: [
         Expanded(
@@ -45,9 +64,11 @@ class HomePage extends StatelessWidget {
         VerticalDivider(thickness: 1, width: 1),
         Expanded(
           flex: 3,
+          // 监听 selectedItemPreview
+          // DetailsPage 内部会自己处理加载状态
           child: Obx(
             () =>
-                ctrl.currentItem.value != null
+                itemCtrl.selectedItemPreview.value != null
                     ? DetailsPage()
                     : Center(child: Text('please_select_an_item'.tr)),
           ),
@@ -56,7 +77,7 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  Widget _buildDesktopLayout(ItemController ctrl) {
+  Widget _buildDesktopLayout() {
     return Row(
       children: [
         SizedBox(width: 250, child: SideMenu()),
@@ -67,9 +88,10 @@ class HomePage extends StatelessWidget {
         ),
         VerticalDivider(thickness: 1, width: 1),
         Expanded(
+          // 监听 selectedItemPreview
           child: Obx(
             () =>
-                ctrl.currentItem.value != null
+                itemCtrl.selectedItemPreview.value != null
                     ? DetailsPage()
                     : Center(child: Text('please_select_an_item'.tr)),
           ),

@@ -8,6 +8,7 @@ import 'package:cycle_it/views/details_page/widgets/usage_records_table.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../controllers/item_controller.dart';
 import '../../utils/responsive_layout.dart';
 import '../shared_widgets/responsive_component_group.dart';
 
@@ -19,11 +20,13 @@ class DetailsPage extends StatelessWidget {
     final style = ResponsiveStyle.to;
     final double spacingLG = style.spacingLG;
     final double spacingMD = style.spacingMD;
+    final ItemController itemCtrl = Get.find<ItemController>();
 
+    // 这个回调用于在宽屏布局下，如果从详情页返回，则清除选中状态
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!ResponsiveLayout.isSingleCol(context) &&
-          Get.currentRoute == '/Details') {
-        Get.back();
+          Get.previousRoute == '/Details') {
+        itemCtrl.clearSelection();
       }
     });
 
@@ -32,35 +35,55 @@ class DetailsPage extends StatelessWidget {
       top: false,
       child: Scaffold(
         appBar: DetailsAppBar(),
-        body: Column(
-          children: [
-            Expanded(
-              child: ListView(
-                padding: EdgeInsets.symmetric(horizontal: spacingLG),
-                children: [
-                  DetailsItemTitle(),
-                  DetailsItemTags(),
-                  SizedBox(height: spacingLG),
+        body: Obx(() {
+          final bool isLoading = itemCtrl.isDetailsLoading.value;
+          final item = itemCtrl.currentItem.value;
 
-                  //图表
-                  DetailsOverview(),
-                  SizedBox(height: spacingMD),
+          // 如果正在加载，显示加载指示器
+          if (isLoading) {
+            return const Center(child: CircularProgressIndicator());
+          }
 
-                  // 使用记录
-                  ResponsiveComponentGroup(
-                    minComponentWidth: style.minComponentWidthMD,
-                    aspectRation: 0.55,
-                    children: [
-                      UsageRecordsTable(),
-                      const DetailsChartsGroup(),
-                    ],
+          // 如果没有数据（加载失败或未选择），显示提示信息
+          if (item == null) {
+            return Center(
+              child: Text('no_item_details_available'.tr),
+            );
+          }
+
+          // 数据加载完成，显示页面内容
+          return Column(
+            children: [
+              Expanded(
+                child: ListView(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: spacingLG,
                   ),
-                  SizedBox(height: spacingLG),
-                ],
+                  children: [
+                    DetailsItemTitle(),
+                    DetailsItemTags(),
+                    SizedBox(height: spacingLG),
+
+                    //图表
+                    DetailsOverview(),
+                    SizedBox(height: spacingMD),
+
+                    // 使用记录
+                    ResponsiveComponentGroup(
+                      minComponentWidth: style.minComponentWidthMD,
+                      aspectRation: 0.55,
+                      children: [
+                        UsageRecordsTable(),
+                        const DetailsChartsGroup(),
+                      ],
+                    ),
+                    SizedBox(height: spacingLG),
+                  ],
+                ),
               ),
-            ),
-          ],
-        ),
+            ],
+          );
+        }),
       ),
     );
   }

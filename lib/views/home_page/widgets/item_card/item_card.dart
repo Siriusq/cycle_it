@@ -27,7 +27,6 @@ class ItemCard extends StatelessWidget {
 
     final style = ResponsiveStyle.to;
     final double spacingLG = style.spacingLG;
-
     final bool isSingleCol = ResponsiveLayout.isSingleCol(context);
 
     return Padding(

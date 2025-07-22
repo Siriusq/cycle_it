@@ -6,98 +6,102 @@ import 'usage_record_model.dart';
 class ItemModel {
   final int? id;
   final String name;
-  String? usageComment;
-  final String emoji; // <--- 直接改为 String 类型的 emoji
-  final Color iconColor;
-  List<UsageRecordModel> usageRecords; // 列表始终保持时间排序
-  final bool notifyBeforeNextUse;
+  final String? usageComment;
+  final List<UsageRecordModel> usageRecords;
   final List<TagModel> tags;
+  final String emoji;
+  final Color iconColor;
+  final bool notifyBeforeNextUse;
 
-  // 缓存变量
-  DateTime? _cachedFirstUsedDate;
-  double? _cachedUsageFrequency;
-  DateTime? _cachedNextExpectedUse;
+  // --- 缓存的计算属性 ---
+  DateTime? _firstUsedDate;
+  DateTime? _lastUsedDate;
+  double? _usageFrequency;
+  DateTime? _nextExpectedUse;
 
   ItemModel({
     this.id,
     required this.name,
     this.usageComment,
-    required this.usageRecords,
-    required this.tags,
+    this.usageRecords = const [],
+    this.tags = const [],
     required this.emoji,
     required this.iconColor,
     this.notifyBeforeNextUse = false,
   }) {
-    // 构造时进行排序
-    usageRecords.sort((a, b) => a.usedAt.compareTo(b.usedAt));
+    _calculateProperties();
   }
 
-  // 获取首次使用日期
-  DateTime? get firstUsedDate {
-    if (_cachedFirstUsedDate == null) {
-      if (usageRecords.isEmpty) {
-        _cachedUsageFrequency = null;
-      } else {
-        _cachedFirstUsedDate = usageRecords.first.usedAt;
+  DateTime? get firstUsedDate => _firstUsedDate;
+
+  DateTime? get lastUsedDate => _lastUsedDate;
+
+  double get usageFrequency => _usageFrequency ?? 0.0;
+
+  DateTime? get nextExpectedUse => _nextExpectedUse;
+
+  void _calculateProperties() {
+    if (usageRecords.isNotEmpty) {
+      // 确保记录是排序的
+      usageRecords.sort((a, b) => a.usedAt.compareTo(b.usedAt));
+      _firstUsedDate = usageRecords.first.usedAt;
+      _lastUsedDate = usageRecords.last.usedAt;
+
+      if (usageRecords.length > 1) {
+        final totalInterval = usageRecords
+            .skip(1)
+            .map((e) => e.intervalSinceLastUse ?? 0)
+            .reduce((a, b) => a + b);
+        _usageFrequency = totalInterval / (usageRecords.length - 1);
+        _nextExpectedUse = _lastUsedDate!.add(
+          Duration(days: _usageFrequency!.round()),
+        );
       }
     }
-    return _cachedFirstUsedDate;
   }
 
-  // 计算使用频率
-  double get usageFrequency {
-    if (_cachedUsageFrequency == null) {
-      if (usageRecords.isEmpty) {
-        _cachedUsageFrequency = 0;
-      } else {
-        final daysSinceFirst =
-            DateTime.now().difference(firstUsedDate!).inDays;
-        if (daysSinceFirst == 0) {
-          _cachedUsageFrequency = 1 / usageRecords.length.toDouble();
-        } else {
-          _cachedUsageFrequency =
-              daysSinceFirst / usageRecords.length;
-        }
-      }
-    }
-    return _cachedUsageFrequency!;
-  }
-
-  // 预计下次使用时间 = 上次使用时间 + 平均使用间隔
-  DateTime? get nextExpectedUse {
-    if (_cachedNextExpectedUse == null) {
-      if (usageRecords.length < 2) {
-        _cachedNextExpectedUse = null;
-      } else {
-        // 使用已排序的 usageRecords
-        List<int> intervals = [];
-        for (int i = 1; i < usageRecords.length; i++) {
-          final interval =
-              usageRecords[i].usedAt
-                  .difference(usageRecords[i - 1].usedAt)
-                  .inDays;
-          intervals.add(interval);
-        }
-        if (intervals.isEmpty) {
-          _cachedNextExpectedUse = null;
-        } else {
-          final avgInterval =
-              intervals.reduce((a, b) => a + b) ~/ intervals.length;
-          final lastUse = usageRecords.last.usedAt;
-          _cachedNextExpectedUse = lastUse.add(
-            Duration(days: avgInterval),
-          );
-        }
-      }
-    }
-    return _cachedNextExpectedUse;
-  }
-
-  // 在修改 usageRecords 后调用此方法来清除缓存
   void invalidateCalculatedProperties() {
-    _cachedUsageFrequency = null;
-    _cachedNextExpectedUse = null;
-    _cachedProgress = null; // 你的 _cachedProgress 也需要清空
+    _calculateProperties();
+  }
+
+  double timePercentageBetweenLastAndNext() {
+    if (_lastUsedDate == null || _nextExpectedUse == null) {
+      return 0.0;
+    }
+    final now = DateTime.now();
+    if (now.isBefore(_lastUsedDate!)) return 0.0;
+    if (now.isAfter(_nextExpectedUse!)) return 1.0;
+
+    final totalDuration =
+        _nextExpectedUse!.difference(_lastUsedDate!).inSeconds;
+    if (totalDuration <= 0) return 1.0;
+
+    final elapsedDuration = now.difference(_lastUsedDate!).inSeconds;
+    return (elapsedDuration / totalDuration).clamp(0.0, 1.0);
+  }
+
+  // copyWith 方法，方便创建对象的副本
+  ItemModel copyWith({
+    int? id,
+    String? name,
+    String? usageComment,
+    List<UsageRecordModel>? usageRecords,
+    List<TagModel>? tags,
+    String? emoji,
+    Color? iconColor,
+    bool? notifyBeforeNextUse,
+  }) {
+    return ItemModel(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      usageComment: usageComment ?? this.usageComment,
+      usageRecords: usageRecords ?? this.usageRecords,
+      tags: tags ?? this.tags,
+      emoji: emoji ?? this.emoji,
+      iconColor: iconColor ?? this.iconColor,
+      notifyBeforeNextUse:
+          notifyBeforeNextUse ?? this.notifyBeforeNextUse,
+    );
   }
 
   // 计算到今天的日期差
@@ -120,21 +124,5 @@ class ItemModel {
     );
 
     return target.difference(currentDate).inDays;
-  }
-
-  // 计算上次使用与下次使用之间的时间进度
-  double? _cachedProgress;
-
-  double timePercentageBetweenLastAndNext() {
-    return _cachedProgress ??= _calculateProgress();
-  }
-
-  double _calculateProgress() {
-    final daysSinceLastUsage = daysToToday(isNext: false).abs();
-    final daysTillNextUsage = daysToToday(isNext: true);
-    if (daysSinceLastUsage == 0) return 0;
-    if (daysTillNextUsage <= 0) return 1.0;
-    final totalDuration = daysSinceLastUsage + daysTillNextUsage;
-    return daysSinceLastUsage / totalDuration;
   }
 }

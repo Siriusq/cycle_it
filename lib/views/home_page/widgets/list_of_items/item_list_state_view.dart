@@ -17,7 +17,7 @@ class ItemListStateView extends StatelessWidget {
     final double spacingMD = style.spacingMD;
 
     return Obx(() {
-      if (itemController.isLoading.value) {
+      if (itemController.isListLoading.value) {
         // 状态1: 如果还没有加载数据，显示加载指示器
         return const Center(child: CircularProgressIndicator());
       } else {

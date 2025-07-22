@@ -4,6 +4,7 @@ import 'package:cycle_it/controllers/search_bar_controller.dart';
 import 'package:cycle_it/controllers/tag_controller.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:material_charts/material_charts.dart';
 
@@ -16,6 +17,31 @@ import '../utils/responsive_style.dart';
 import '../views/settings_page/widgets/restart_required_page.dart';
 import 'item_list_order_controller.dart';
 
+// [修改] 负载中增加 RootIsolateToken
+class _ItemDetailsPayload {
+  final int itemId;
+  final RootIsolateToken rootIsolateToken;
+
+  _ItemDetailsPayload(this.itemId, this.rootIsolateToken);
+}
+
+// [修改] 后台 Isolate 函数
+Future<ItemModel?> _fetchItemDetailsInIsolate(
+  _ItemDetailsPayload payload,
+) async {
+  // [关键修复] 在执行任何操作前，使用 Token 初始化平台通信
+  BackgroundIsolateBinaryMessenger.ensureInitialized(
+    payload.rootIsolateToken,
+  );
+
+  // 现在，Isolate 可以安全地调用 path_provider 等插件了
+  final db = MyDatabase();
+  final service = ItemService(db);
+  final item = await service.getItemWithUsageRecords(payload.itemId);
+  await db.close();
+  return item;
+}
+
 class ItemController extends GetxController {
   final ItemService _itemService = Get.find<ItemService>(); // 注入服务
   final ItemListOrderController _orderController =
@@ -24,12 +50,13 @@ class ItemController extends GetxController {
   final SearchBarController _searchBarController =
       Get.find<SearchBarController>();
   final ResponsiveStyle style = ResponsiveStyle.to;
-
-  // 获取 MyDatabase 实例
   late MyDatabase _db; // 将 final 改为 late，以便在导入后重新赋值
 
-  // 加载状态
-  RxBool isLoading = true.obs; // 初始为 true，表示正在加载
+  // 主列表加载状态
+  RxBool isListLoading = true.obs;
+
+  // 详情页加载状态
+  RxBool isDetailsLoading = false.obs;
 
   // 主页列表数据
   final RxList<ItemModel> allItems = <ItemModel>[].obs; // 存储所有加载的物品
@@ -37,16 +64,18 @@ class ItemController extends GetxController {
       <ItemModel>[].obs; // 经过排序和筛选后显示在主页的物品
 
   // 物品详情页数据
-  final Rx<ItemModel?> currentItem = Rx<ItemModel?>(
-    null,
-  ); // 用于详情页的当前物品
+  // 在列表中标记哪个被选中
+  final Rx<ItemModel?> selectedItemPreview = Rx<ItemModel?>(null);
+
+  // 存储从数据库加载的完整物品详情
+  final Rx<ItemModel?> currentItem = Rx<ItemModel?>(null);
 
   // 表格状态管理
   // 使用 Rx<UsageRecordDataSource?> 来允许它在初始化之前为 null
   Rx<UsageRecordDataSource?> usageRecordDataSource =
       Rx<UsageRecordDataSource?>(null);
 
-  // 用于管理使用记录表格的排序状态
+  // 管理使用记录表格的排序状态
   final RxString usageRecordsSortColumn = 'usedAt'.obs; // 默认按使用日期排序
   final RxBool usageRecordsSortAscending = true.obs; // 默认升序
 
@@ -91,15 +120,14 @@ class ItemController extends GetxController {
     ever(_tagController.allTags, (_) async {
       await loadAllItems();
       // 如果详情页内有物品展示，刷新它的数据
-      if (currentItem.value != null &&
-          currentItem.value!.id != null) {
+      if (currentItem.value != null) {
         await loadItemForDetails(currentItem.value!.id!);
       }
     });
 
-    // 当 currentItem 变化时，触发热力图和月度图表数据处理
+    // 当详情数据加载完成后，触发图表和表格数据的处理
     ever(currentItem, (item) async {
-      if (item != null && item.id != null) {
+      if (item != null) {
         // 初始化使用记录数据源
         usageRecordDataSource.value = UsageRecordDataSource(
           itemId: item.id!,
@@ -107,10 +135,10 @@ class ItemController extends GetxController {
           initialSortColumn: usageRecordsSortColumn.value,
           initialSortAscending: usageRecordsSortAscending.value,
         );
-        // 调用异步处理热力图数据的方法
-        await _loadHeatmapDataInIsolate(item.usageRecords);
-        // 调用异步处理月度图表数据的方法
-        await _loadMonthlyUsageDataInIsolate(item.usageRecords);
+        // 处理热力图数据
+        _loadHeatmapDataInIsolate(item.usageRecords);
+        // 处理月度图表数据
+        _loadMonthlyUsageDataInIsolate(item.usageRecords);
       } else {
         usageRecordDataSource.value = null;
 
@@ -128,23 +156,16 @@ class ItemController extends GetxController {
     });
   }
 
-  @override
-  void onReady() {
-    super.onReady();
-    // 在首帧画面渲染完成后执行，此时数据库已完全加载，可以加载所有物品
-    loadAllItems();
-  }
-
   // 从数据库加载所有物品
   Future<void> loadAllItems() async {
-    isLoading.value = true; // 开始加载
+    isListLoading.value = true; // 开始加载
     try {
       final loadedItems = await _itemService.getAllItems();
       allItems.assignAll(loadedItems);
     } catch (e) {
       Get.snackbar('error'.tr, '$e');
     } finally {
-      isLoading.value = false; // 结束加载
+      isListLoading.value = false; // 结束加载
     }
     // _updateDisplayedItems 会在 _allItems 变化时自动被 ever 触发
   }
@@ -216,22 +237,18 @@ class ItemController extends GetxController {
   // 编辑物品
   Future<void> updateItem(ItemModel updatedItem) async {
     await _itemService.saveItem(updatedItem);
-    await loadAllItems(); // 重新加载所有物品
-    // 如果当前详情页显示的就是这个物品，也需要更新 currentItem
+    await loadAllItems();
     if (currentItem.value?.id == updatedItem.id) {
-      currentItem.value = await _itemService.getItemWithUsageRecords(
-        updatedItem.id!,
-      );
-      currentItem.value!.invalidateCalculatedProperties();
+      await loadItemForDetails(updatedItem.id!);
     }
   }
 
-  // 删除物品 (示例)
+  // 删除物品
   Future<void> deleteItem(int itemId) async {
     await _itemService.deleteItem(itemId);
-    await loadAllItems(); // 重新加载所有物品
-    if (currentItem.value?.id == itemId) {
-      currentItem.value = null; // 如果删除的是当前详情页的物品，清空
+    await loadAllItems();
+    if (selectedItemPreview.value?.id == itemId) {
+      clearSelection();
     }
   }
 
@@ -239,16 +256,44 @@ class ItemController extends GetxController {
 
   // 加载物品及其使用记录（用于详情页）
   Future<void> loadItemForDetails(int itemId) async {
-    final item = await _itemService.getItemWithUsageRecords(itemId);
-    if (item != null) {
-      currentItem.value = item;
-      currentItem.value!.invalidateCalculatedProperties(); // 清除缓存
-      // 当 currentItem 变化时，如果数据源已存在，更新其记录
-      if (usageRecordDataSource.value != null) {
-        usageRecordDataSource.value!.updateRecords(item.usageRecords);
+    // 如果正在加载同一个物品，则不重复加载
+    if (isDetailsLoading.value && currentItem.value?.id == itemId) {
+      return;
+    }
+
+    isDetailsLoading.value = true;
+    currentItem.value = null; // 先清空旧数据以显示加载指示器
+
+    try {
+      // [关键修复] 获取 RootIsolateToken，确保它不为 null
+      final rootToken = RootIsolateToken.instance;
+      if (rootToken == null) {
+        throw Exception(
+          "Could not get RootIsolateToken. Make sure this is running on the main isolate.",
+        );
       }
-    } else {
-      currentItem.value = null;
+
+      // 使用 compute 调用后台函数，并传递 Token
+      final item = await compute(
+        _fetchItemDetailsInIsolate,
+        _ItemDetailsPayload(itemId, rootToken),
+      );
+
+      if (item != null) {
+        currentItem.value = item;
+      }
+    } catch (e) {
+      print(e);
+      Get.snackbar(
+        'error'.tr,
+        'failed_to_load_item_details'.trParams({
+          'error': e.toString(),
+        }),
+      );
+    } finally {
+      if (isDetailsLoading.value) {
+        isDetailsLoading.value = false;
+      }
     }
   }
 
@@ -272,8 +317,7 @@ class ItemController extends GetxController {
     DateTime usedAt,
   ) async {
     await _itemService.addUsageRecordAndRecalculate(item.id!, usedAt);
-    if (currentItem.value != null &&
-        currentItem.value!.id == item.id) {
+    if (currentItem.value?.id == item.id) {
       await loadItemForDetails(item.id!);
     }
     await loadAllItems(); // 更新主页列表的 ItemModel
@@ -332,10 +376,14 @@ class ItemController extends GetxController {
   }
 
   void selectItem(ItemModel item) {
+    selectedItemPreview.value = item;
     currentItem.value = item;
+    loadItemForDetails(item.id!);
   }
 
+  // [修改] 清除选中状态
   void clearSelection() {
+    selectedItemPreview.value = null;
     currentItem.value = null;
   }
 
@@ -472,19 +520,19 @@ class ItemController extends GetxController {
 
   // 导出数据库
   Future<void> exportDatabase() async {
-    isLoading.value = true;
+    isListLoading.value = true;
     try {
       await _db.exportDatabase();
     } catch (e) {
       Get.snackbar('database_export_failed'.tr, '$e');
     } finally {
-      isLoading.value = false;
+      isListLoading.value = false;
     }
   }
 
   // 导入数据库
   Future<void> importDatabase() async {
-    isLoading.value = true;
+    isListLoading.value = true;
     String restartMessage = ''; // 用于存储传递给重启页面的消息
 
     try {
@@ -499,7 +547,7 @@ class ItemController extends GetxController {
           'database_import_failed'.tr,
           'database_import_canceled_error'.tr,
         );
-        isLoading.value = false;
+        isListLoading.value = false;
         return;
       }
 
@@ -509,7 +557,7 @@ class ItemController extends GetxController {
           'database_import_failed'.tr,
           'database_import_file_error'.tr,
         );
-        isLoading.value = false;
+        isListLoading.value = false;
         return;
       }
 
@@ -541,7 +589,7 @@ class ItemController extends GetxController {
         ),
       );
     } finally {
-      isLoading.value = false;
+      isListLoading.value = false;
     }
   }
 }
