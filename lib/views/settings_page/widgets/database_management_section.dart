@@ -1,7 +1,7 @@
-import 'package:cycle_it/controllers/item_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../controllers/database_management_controller.dart';
 import '../../../utils/responsive_style.dart';
 
 class DatabaseManagementSection extends StatelessWidget {
@@ -9,7 +9,8 @@ class DatabaseManagementSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ItemController controller = Get.find<ItemController>();
+    final DatabaseManagementController controller =
+        Get.find<DatabaseManagementController>();
     final ResponsiveStyle style = ResponsiveStyle.to;
 
     final TextStyle titleTextStyle = style.titleTextMD;

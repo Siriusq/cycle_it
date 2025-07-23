@@ -12,6 +12,7 @@ import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
 import 'package:window_manager/window_manager.dart';
 
+import 'bindings/settings_binding.dart';
 import 'controllers/language_controller.dart';
 import 'controllers/theme_controller.dart';
 import 'utils/i18n.dart';
@@ -85,7 +86,11 @@ class MyApp extends StatelessWidget {
         initialRoute: '/',
         getPages: [
           GetPage(name: '/', page: () => HomePage()),
-          GetPage(name: '/Settings', page: () => SettingsPage()),
+          GetPage(
+            name: '/Settings',
+            page: () => SettingsPage(),
+            binding: SettingsBinding(),
+          ),
           GetPage(name: '/Details', page: () => DetailsPage()),
           GetPage(
             name: '/AddEditItem',

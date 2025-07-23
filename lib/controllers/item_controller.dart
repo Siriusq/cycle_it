@@ -1,8 +1,5 @@
-import 'dart:io';
-
 import 'package:cycle_it/controllers/search_bar_controller.dart';
 import 'package:cycle_it/controllers/tag_controller.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -14,7 +11,6 @@ import '../models/item_model.dart';
 import '../models/usage_record_model.dart';
 import '../services/item_service.dart';
 import '../utils/responsive_style.dart';
-import '../views/settings_page/widgets/restart_required_page.dart';
 import 'item_list_order_controller.dart';
 
 // 负载中增加 RootIsolateToken
@@ -49,7 +45,6 @@ class ItemController extends GetxController {
   final SearchBarController _searchBarController =
       Get.find<SearchBarController>();
   final ResponsiveStyle style = ResponsiveStyle.to;
-  late MyDatabase _db; // 将 final 改为 late，以便在导入后重新赋值
 
   // 主列表加载状态
   RxBool isListLoading = true.obs;
@@ -94,9 +89,6 @@ class ItemController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-
-    // 在 onInit 中获取 MyDatabase 实例
-    _db = Get.find<MyDatabase>();
 
     // 监听排序和筛选变化，更新 displayedItems
     ever(
@@ -514,80 +506,5 @@ class ItemController extends GetxController {
     }
 
     return {'data': barChartData, 'sum': usageSum};
-  }
-
-  // 导出数据库
-  Future<void> exportDatabase() async {
-    isListLoading.value = true;
-    try {
-      await _db.exportDatabase();
-    } catch (e) {
-      Get.snackbar('database_export_failed'.tr, '$e');
-    } finally {
-      isListLoading.value = false;
-    }
-  }
-
-  // 导入数据库
-  Future<void> importDatabase() async {
-    isListLoading.value = true;
-    String restartMessage = ''; // 用于存储传递给重启页面的消息
-
-    try {
-      //使用 file_picker 选择数据库文件
-      FilePickerResult? result = await FilePicker.platform.pickFiles(
-        type: FileType.custom,
-        allowedExtensions: ['sqlite'],
-      );
-
-      if (result == null || result.files.single.path == null) {
-        Get.snackbar(
-          'database_import_failed'.tr,
-          'database_import_canceled_error'.tr,
-        );
-        isListLoading.value = false;
-        return;
-      }
-
-      final selectedFile = File(result.files.single.path!);
-      if (!await selectedFile.exists()) {
-        Get.snackbar(
-          'database_import_failed'.tr,
-          'database_import_file_error'.tr,
-        );
-        isListLoading.value = false;
-        return;
-      }
-
-      // 关闭数据库连接
-      await _db.close();
-
-      // 执行文件替换操作 (重命名旧文件，复制新文件)
-      final bool fileOpsSuccess = await _db.importDatabase(
-        selectedFile,
-      );
-
-      if (fileOpsSuccess) {
-        restartMessage = 'database_imported'.tr;
-      } else {
-        restartMessage = 'database_import_failed'.tr;
-      }
-
-      Get.offAll(
-        () => RestartRequiredPage(
-          succeed: fileOpsSuccess,
-          message: restartMessage,
-        ),
-      );
-    } catch (e) {
-      Get.offAll(
-        () => RestartRequiredPage(
-          succeed: false,
-          message: e.toString(),
-        ),
-      );
-    } finally {
-      isListLoading.value = false;
-    }
   }
 }

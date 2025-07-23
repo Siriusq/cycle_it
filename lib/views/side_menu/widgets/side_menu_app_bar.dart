@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../utils/responsive_style.dart';
-import '../../settings_page/settings_page.dart'; // 确保此路径正确
 
 class SideMenuAppBar extends StatelessWidget
     implements PreferredSizeWidget {
@@ -73,7 +72,7 @@ class SideMenuAppBar extends StatelessWidget
             // 移除默认填充
             constraints: const BoxConstraints(),
             // 移除默认约束
-            onPressed: () => Get.to(() => const SettingsPage()),
+            onPressed: () => Get.toNamed('/Settings'),
             icon: const Icon(Icons.tune),
           ),
         ),
