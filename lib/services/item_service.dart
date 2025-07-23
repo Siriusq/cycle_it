@@ -279,6 +279,9 @@ class ItemService {
               );
             }
           });
+
+          await _db.recalculateAndSaveUsageRecords(item.id!);
+          await _db.updateItemStatistics(item.id!);
         }
       }
     }
