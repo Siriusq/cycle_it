@@ -18,12 +18,11 @@ class ItemCardOverview extends StatelessWidget {
     final ResponsiveStyle style = ResponsiveStyle.to;
     final bool isTripleCol = ResponsiveLayout.isTripleCol(context);
 
-    final int usageCount = item.usageRecords.length;
+    // [修改] 直接从 item 模型中读取预先计算好的统计数据
+    final int usageCount = item.usageCount;
     final DateTime? nextExpectedUseDate = item.nextExpectedUse;
-    final DateTime? firstUsedDate =
-        usageCount > 0 ? item.usageRecords.first.usedAt : null;
-    final DateTime? lastUsedDate =
-        usageCount > 0 ? item.usageRecords.last.usedAt : null;
+    final DateTime? firstUsedDate = item.firstUsedDate;
+    final DateTime? lastUsedDate = item.lastUsedDate;
     final double usageFrequency = item.usageFrequency.toPrecision(2);
 
     final TextStyle smallBodyTextStyle = style.bodyTextSM;

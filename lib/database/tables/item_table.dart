@@ -14,8 +14,16 @@ class Items extends Table {
 
   IntColumn get iconColorValue => integer()(); // 存储 Color 的 int 值
 
-  DateTimeColumn get firstUsed => dateTime().nullable()();
-
   BoolColumn get notifyBeforeNextUse =>
       boolean().withDefault(const Constant(false))();
+
+  DateTimeColumn get firstUsed => dateTime().nullable()();
+
+  IntColumn get usageCount =>
+      integer().withDefault(const Constant(0))();
+
+  DateTimeColumn get lastUsedDate => dateTime().nullable()();
+
+  RealColumn get avgInterval =>
+      real().withDefault(const Constant(0.0))();
 }

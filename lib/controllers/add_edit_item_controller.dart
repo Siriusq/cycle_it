@@ -3,14 +3,13 @@ import 'package:get/get.dart';
 
 import '../models/item_model.dart';
 import '../models/tag_model.dart';
-import 'item_controller.dart'; // To refresh the main item list
-import 'tag_controller.dart'; // To get available tags
+import 'item_controller.dart';
+import 'tag_controller.dart';
 
 class AddEditItemController extends GetxController {
   final ItemController _itemController = Get.find<ItemController>();
   final TagController _tagController = Get.find<TagController>();
 
-  // Form Field Controllers
   final TextEditingController nameController =
       TextEditingController();
   final TextEditingController usageCommentController =
@@ -19,20 +18,17 @@ class AddEditItemController extends GetxController {
   // 用于物品名称输入框的错误信息
   final RxString nameErrorText = ''.obs;
 
-  // Reactive Variables for Icon and Color selection
   final RxString selectedEmoji;
-  final Rx<Color> selectedIconColor; // Default color
+  final Rx<Color> selectedIconColor;
 
-  // Reactive Variable for Notification Toggle
   final RxBool notifyBeforeNextUse = false.obs;
 
-  // Reactive List for Selected Tags
   final RxList<TagModel> selectedTags = <TagModel>[].obs;
 
-  // All available tags from TagController
+  // 所有的标签
   List<TagModel> get allAvailableTags => _tagController.allTags;
 
-  // Item being edited (null for adding new item)
+  // 被编辑的物品，添加时为空
   final ItemModel? _initialItem;
 
   bool get isEditing => _initialItem != null;
@@ -50,10 +46,10 @@ class AddEditItemController extends GetxController {
   void onInit() {
     super.onInit();
     if (_initialItem != null) {
-      // Populate fields if we're editing an existing item
+      // 编辑时，自动填充被编辑物品的信息
       nameController.text = _initialItem.name;
       usageCommentController.text = _initialItem.usageComment ?? '';
-      selectedEmoji.value = _initialItem.emoji; // <--- 设置 Emoji
+      selectedEmoji.value = _initialItem.emoji;
       selectedIconColor.value = _initialItem.iconColor;
       notifyBeforeNextUse.value = _initialItem.notifyBeforeNextUse;
       selectedTags.assignAll(_initialItem.tags);
@@ -65,7 +61,7 @@ class AddEditItemController extends GetxController {
   }
 
   void toggleTag(TagModel tag) {
-    // Find if a tag with the same ID already exists in selectedTags
+    // 判断tag是否已存在于物品上
     final existingTagIndex = selectedTags.indexWhere(
       (t) => t.id == tag.id,
     );
@@ -101,11 +97,9 @@ class AddEditItemController extends GetxController {
     }
 
     try {
-      final ItemModel itemToSave;
-
       if (isEditing) {
-        // When editing, use the original ID
-        itemToSave = ItemModel(
+        // 编辑时，创建一个不包含使用记录的 ItemModel，并调用安全的更新方法
+        final itemToUpdate = ItemModel(
           id: _initialItem!.id,
           // Use the existing ID
           name: nameController.text.trim(),
@@ -115,31 +109,30 @@ class AddEditItemController extends GetxController {
                   : usageCommentController.text.trim(),
           emoji: selectedEmoji.value,
           iconColor: selectedIconColor.value,
-          usageRecords: _initialItem.usageRecords,
-          // Preserve existing records
           notifyBeforeNextUse: notifyBeforeNextUse.value,
           tags: selectedTags.toList(),
+          usageCount: _initialItem.usageCount,
+          lastUsedDate: _initialItem.lastUsedDate,
+          avgInterval: _initialItem.avgInterval,
+          firstUsedDate: _initialItem.firstUsedDate,
         );
-        await _itemController.updateItem(itemToSave);
+        await _itemController.updateItemDetails(itemToUpdate);
       } else {
-        // When adding, don't provide an ID, let Drift auto-generate
-        itemToSave = ItemModel(
+        // 添加时不指定ID，让Drift自己生成
+        final itemToAdd = ItemModel(
           id: null,
-          // <--- Key change: Pass null for ID for new items
           name: nameController.text.trim(),
           usageComment:
               usageCommentController.text.trim().isEmpty
                   ? null
                   : usageCommentController.text.trim(),
           emoji: selectedEmoji.value,
-          // <--- Use selectedIconData.value
           iconColor: selectedIconColor.value,
           usageRecords: [],
-          // New item has no records initially
           notifyBeforeNextUse: notifyBeforeNextUse.value,
           tags: selectedTags.toList(),
         );
-        await _itemController.addNewItem(itemToSave);
+        await _itemController.addNewItem(itemToAdd);
       }
     } catch (e) {
       return 'Fatal Error: $e';

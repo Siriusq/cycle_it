@@ -99,6 +99,8 @@ class MultiLanguage extends Translations {
       'usage_record_hot_map': '使用记录热点图',
       'less': '少',
       'more': '多',
+      // 加载报错
+      'failed_to_load_item_details': '加载物品详情失败：@error',
 
       // 物品管理页
       'item_name': '物品名称',
@@ -275,6 +277,9 @@ class MultiLanguage extends Translations {
       'usage_record_hot_map': 'Usage Record Hot Map',
       'less': 'Less',
       'more': 'More',
+      // 加载报错
+      'failed_to_load_item_details':
+          'Failed to load item details: @error',
 
       // 物品管理页
       'item_name': 'Item Name',
@@ -454,6 +459,8 @@ class MultiLanguage extends Translations {
       'usage_record_hot_map': '使用紀錄熱點圖',
       'less': '少',
       'more': '多',
+      // 載入報錯
+      'failed_to_load_item_details': '加載物品詳情失敗：@error',
 
       // 物品管理頁
       'item_name': '物品名稱',

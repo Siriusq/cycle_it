@@ -13,11 +13,11 @@ class ItemModel {
   final Color iconColor;
   final bool notifyBeforeNextUse;
 
-  // --- 缓存的计算属性 ---
-  DateTime? _firstUsedDate;
-  DateTime? _lastUsedDate;
-  double? _usageFrequency;
-  DateTime? _nextExpectedUse;
+  // --- 统计属性 ---
+  final int usageCount;
+  final DateTime? firstUsedDate;
+  final DateTime? lastUsedDate;
+  final double avgInterval; // 平均使用间隔天数
 
   ItemModel({
     this.id,
@@ -28,55 +28,31 @@ class ItemModel {
     required this.emoji,
     required this.iconColor,
     this.notifyBeforeNextUse = false,
-  }) {
-    _calculateProperties();
-  }
+    this.usageCount = 0,
+    this.firstUsedDate,
+    this.lastUsedDate,
+    this.avgInterval = 0.0,
+  });
 
-  DateTime? get firstUsedDate => _firstUsedDate;
+  // [修改] Getter 现在直接返回存储的属性值
+  double get usageFrequency => avgInterval;
 
-  DateTime? get lastUsedDate => _lastUsedDate;
-
-  double get usageFrequency => _usageFrequency ?? 0.0;
-
-  DateTime? get nextExpectedUse => _nextExpectedUse;
-
-  void _calculateProperties() {
-    if (usageRecords.isNotEmpty) {
-      // 确保记录是排序的
-      usageRecords.sort((a, b) => a.usedAt.compareTo(b.usedAt));
-      _firstUsedDate = usageRecords.first.usedAt;
-      _lastUsedDate = usageRecords.last.usedAt;
-
-      if (usageRecords.length > 1) {
-        final totalInterval = usageRecords
-            .skip(1)
-            .map((e) => e.intervalSinceLastUse ?? 0)
-            .reduce((a, b) => a + b);
-        _usageFrequency = totalInterval / (usageRecords.length - 1);
-        _nextExpectedUse = _lastUsedDate!.add(
-          Duration(days: _usageFrequency!.round()),
-        );
-      }
-    }
-  }
-
-  void invalidateCalculatedProperties() {
-    _calculateProperties();
-  }
+  DateTime? get nextExpectedUse =>
+      lastUsedDate?.add(Duration(days: avgInterval.round()));
 
   double timePercentageBetweenLastAndNext() {
-    if (_lastUsedDate == null || _nextExpectedUse == null) {
+    if (lastUsedDate == null || nextExpectedUse == null) {
       return 0.0;
     }
     final now = DateTime.now();
-    if (now.isBefore(_lastUsedDate!)) return 0.0;
-    if (now.isAfter(_nextExpectedUse!)) return 1.0;
+    if (now.isBefore(lastUsedDate!)) return 0.0;
+    if (now.isAfter(nextExpectedUse!)) return 1.0;
 
     final totalDuration =
-        _nextExpectedUse!.difference(_lastUsedDate!).inSeconds;
+        nextExpectedUse!.difference(lastUsedDate!).inSeconds;
     if (totalDuration <= 0) return 1.0;
 
-    final elapsedDuration = now.difference(_lastUsedDate!).inSeconds;
+    final elapsedDuration = now.difference(lastUsedDate!).inSeconds;
     return (elapsedDuration / totalDuration).clamp(0.0, 1.0);
   }
 
@@ -90,6 +66,10 @@ class ItemModel {
     String? emoji,
     Color? iconColor,
     bool? notifyBeforeNextUse,
+    int? usageCount,
+    DateTime? firstUsedDate,
+    DateTime? lastUsedDate,
+    double? avgInterval,
   }) {
     return ItemModel(
       id: id ?? this.id,
@@ -101,6 +81,10 @@ class ItemModel {
       iconColor: iconColor ?? this.iconColor,
       notifyBeforeNextUse:
           notifyBeforeNextUse ?? this.notifyBeforeNextUse,
+      usageCount: usageCount ?? this.usageCount,
+      firstUsedDate: firstUsedDate ?? this.firstUsedDate,
+      lastUsedDate: lastUsedDate ?? this.lastUsedDate,
+      avgInterval: avgInterval ?? this.avgInterval,
     );
   }
 

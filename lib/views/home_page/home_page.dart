@@ -9,7 +9,7 @@ import 'widgets/list_of_items/list_of_items.dart';
 
 // 在 initState 中触发初始数据加载
 class HomePage extends StatefulWidget {
-  HomePage({super.key});
+  const HomePage({super.key});
 
   @override
   State<HomePage> createState() => _HomePageState();

@@ -18,9 +18,45 @@ class ItemService {
     return await _db.getAllItems(); // 调用数据库层的方法
   }
 
-  // 插入或更新物品
+  // 用于添加新物品，或者需要全量替换的场景
   Future<int> saveItem(ItemModel item) async {
     return await _db.upsertItem(item);
+  }
+
+  // 更新物品信息，不会触碰使用记录
+  Future<void> updateItemDetails(ItemModel item) async {
+    await _db.transaction(() async {
+      // 1. 只更新 Items 表中在编辑页可修改的字段
+      await (_db.update(_db.items)
+        ..where((tbl) => tbl.id.equals(item.id!))).write(
+        ItemsCompanion(
+          name: Value(item.name),
+          usageComment: Value(item.usageComment),
+          emoji: Value(item.emoji),
+          iconColorValue: Value(item.iconColor.toARGB32()),
+          notifyBeforeNextUse: Value(item.notifyBeforeNextUse),
+        ),
+      );
+
+      // 2. 更新物品与标签的关联关系（先删后增）
+      await (_db.delete(_db.itemTags)
+        ..where((it) => it.itemId.equals(item.id!))).go();
+
+      if (item.tags.isNotEmpty) {
+        await _db.batch((batch) {
+          for (final tag in item.tags) {
+            batch.insert(
+              _db.itemTags,
+              ItemTagsCompanion(
+                itemId: Value(item.id!),
+                tagId: Value(tag.id),
+              ),
+            );
+          }
+        });
+      }
+    });
+    // 这个方法完全不涉及 UsageRecords 表
   }
 
   // 删除物品
@@ -35,40 +71,7 @@ class ItemService {
     int itemId,
     DateTime usedAt,
   ) async {
-    await _db.transaction(() async {
-      // 获取当前物品的所有使用记录（已排序）
-      final currentRecordsData =
-          await (_db.select(_db.usageRecords)
-                ..where((ur) => ur.itemId.equals(itemId))
-                ..orderBy([
-                  (t) => OrderingTerm(
-                    expression: t.usedAt,
-                    mode: OrderingMode.asc,
-                  ),
-                ]))
-              .get();
-
-      // 计算新记录的间隔
-      int? newInterval;
-      if (currentRecordsData.isNotEmpty) {
-        final lastRecord = currentRecordsData.last;
-        newInterval = usedAt.difference(lastRecord.usedAt).inDays;
-      }
-
-      // 插入新记录 final newRecordId
-      await _db
-          .into(_db.usageRecords)
-          .insert(
-            UsageRecordsCompanion.insert(
-              itemId: itemId,
-              usedAt: usedAt,
-              intervalSinceLastUse: Value(newInterval),
-            ),
-          );
-
-      // 防止新记录不是最后一条（虽然正常添加时是最后一条），重新获取并更新受影响的记录。
-      await _recalculateAndSaveUsageRecords(itemId);
-    });
+    await _db.addUsageRecordAndRecalculate(itemId, usedAt);
   }
 
   // 编辑使用记录并重新计算间隔 (事务处理)
@@ -77,18 +80,11 @@ class ItemService {
     int itemId,
     DateTime newUsedAt,
   ) async {
-    await _db.transaction(() async {
-      // 更新指定记录的 usedAt
-      await (_db.update(_db.usageRecords)
-        ..where((tbl) => tbl.id.equals(recordId))).write(
-        UsageRecordsCompanion(
-          usedAt: Value(newUsedAt),
-          intervalSinceLastUse: const Value(null),
-        ), // 先清空，再重新计算
-      );
-
-      await _recalculateAndSaveUsageRecords(itemId);
-    });
+    await _db.editUsageRecordAndRecalculate(
+      recordId,
+      itemId,
+      newUsedAt,
+    );
   }
 
   // 删除使用记录并重新计算间隔 (事务处理)
@@ -96,44 +92,7 @@ class ItemService {
     int recordId,
     int itemId,
   ) async {
-    await _db.transaction(() async {
-      await _db.deleteUsageRecordData(recordId); // 调用数据库层的删除方法
-
-      await _recalculateAndSaveUsageRecords(itemId);
-    });
-  }
-
-  // 辅助方法：重新计算某个物品的所有使用记录的间隔并保存
-  Future<void> _recalculateAndSaveUsageRecords(int itemId) async {
-    final allRecordsData =
-        await (_db.select(_db.usageRecords)
-              ..where((ur) => ur.itemId.equals(itemId))
-              ..orderBy([
-                (t) => OrderingTerm(
-                  expression: t.usedAt,
-                  mode: OrderingMode.asc,
-                ),
-              ]))
-            .get();
-
-    await _db.batch((batch) {
-      for (int i = 0; i < allRecordsData.length; i++) {
-        int? interval;
-        if (i > 0) {
-          interval =
-              allRecordsData[i].usedAt
-                  .difference(allRecordsData[i - 1].usedAt)
-                  .inDays;
-        }
-        batch.update(
-          _db.usageRecords,
-          UsageRecordsCompanion(
-            intervalSinceLastUse: Value(interval),
-          ),
-          where: (tbl) => tbl.id.equals(allRecordsData[i].id),
-        );
-      }
-    });
+    await _db.deleteUsageRecordAndRecalculate(recordId, itemId);
   }
 
   // 获取某个物品及其关联的使用记录和标签
@@ -183,33 +142,12 @@ class ItemService {
       emoji: itemData.emoji,
       iconColor: Color(itemData.iconColorValue),
       notifyBeforeNextUse: itemData.notifyBeforeNextUse,
+      usageCount: itemData.usageCount,
+      firstUsedDate: itemData.firstUsed,
+      lastUsedDate: itemData.lastUsedDate,
+      avgInterval: itemData.avgInterval,
     );
   }
-
-  // 加载某个物品的所有使用记录，并确保按时间排序
-  // Future<List<UsageRecordModel>> getUsageRecordsByItemId(
-  //   int itemId,
-  // ) async {
-  //   final List<UsageRecordData> recordsData =
-  //       await (_db.select(_db.usageRecords)
-  //             ..where((tbl) => tbl.itemId.equals(itemId))
-  //             ..orderBy([
-  //               (tbl) => OrderingTerm(
-  //                 expression: tbl.usedAt,
-  //                 mode: OrderingMode.asc,
-  //               ), // 按照 usedAt 升序排列
-  //             ]))
-  //           .get();
-  //
-  //   return recordsData.map((data) {
-  //     return UsageRecordModel(
-  //       id: data.id,
-  //       itemId: data.itemId,
-  //       usedAt: data.usedAt,
-  //       intervalSinceLastUse: data.intervalSinceLastUse,
-  //     );
-  //   }).toList();
-  // }
 
   // --- Tag 相关操作 ---
 
@@ -289,6 +227,10 @@ class ItemService {
                 emoji: item.emoji,
                 iconColorValue: item.iconColor.toARGB32(),
                 notifyBeforeNextUse: item.notifyBeforeNextUse,
+                firstUsed: item.firstUsedDate,
+                usageCount: item.usageCount,
+                lastUsedDate: item.lastUsedDate,
+                avgInterval: item.avgInterval,
               ).toCompanion(true), // 使用 toCompanion(true) 允许指定 ID
               mode: InsertMode.insertOrReplace,
             );

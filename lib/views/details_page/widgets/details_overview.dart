@@ -24,24 +24,25 @@ class DetailsOverview extends StatelessWidget {
         return const SizedBox.shrink(); // 如果物品为空，不显示此部分
       }
 
-      final int usageCount = currentItem.usageRecords.length;
+      // [修改] 直接从 currentItem 读取预先计算好的统计数据
+      final int usageCount = currentItem.usageCount;
       final DateTime? nextExpectedUseDate =
           currentItem.nextExpectedUse;
-      final DateTime? firstUsedDate =
-          usageCount > 0
-              ? currentItem.usageRecords.first.usedAt
-              : null;
-      final DateTime? lastUsedDate =
-          usageCount > 0
-              ? currentItem.usageRecords.last.usedAt
-              : null;
-      final int daysSinceLastUse =
-          currentItem.daysToToday(isNext: false).abs();
-      final int daysTillNextUse = currentItem.daysToToday(
-        isNext: true,
-      );
+      final DateTime? firstUsedDate = currentItem.firstUsedDate;
+      final DateTime? lastUsedDate = currentItem.lastUsedDate;
       final double usageFrequency = currentItem.usageFrequency
           .toPrecision(2);
+      //print(DateFormat('yyyy-MM-dd').format(firstUsedDate!));
+
+      // [修改] 在这里重新计算与“今天”相关的天数差
+      final int daysSinceLastUse =
+          lastUsedDate != null
+              ? DateTime.now().difference(lastUsedDate).inDays
+              : 0;
+      final int daysTillNextUse =
+          nextExpectedUseDate != null
+              ? nextExpectedUseDate.difference(DateTime.now()).inDays
+              : 0;
 
       return Padding(
         padding: const EdgeInsets.all(0),
@@ -49,7 +50,7 @@ class DetailsOverview extends StatelessWidget {
           minComponentWidth: minComponentWidth,
           aspectRation: 1.8,
           children: [
-            // 使用次数，自首次使用记录起
+            // 使用次数
             DetailsBriefCard(
               title: 'usage_count'.tr,
               icon: Icons.pin,

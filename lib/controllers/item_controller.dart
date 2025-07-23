@@ -17,7 +17,7 @@ import '../utils/responsive_style.dart';
 import '../views/settings_page/widgets/restart_required_page.dart';
 import 'item_list_order_controller.dart';
 
-// [修改] 负载中增加 RootIsolateToken
+// 负载中增加 RootIsolateToken
 class _ItemDetailsPayload {
   final int itemId;
   final RootIsolateToken rootIsolateToken;
@@ -25,16 +25,15 @@ class _ItemDetailsPayload {
   _ItemDetailsPayload(this.itemId, this.rootIsolateToken);
 }
 
-// [修改] 后台 Isolate 函数
+// 后台 Isolate 函数
 Future<ItemModel?> _fetchItemDetailsInIsolate(
   _ItemDetailsPayload payload,
 ) async {
-  // [关键修复] 在执行任何操作前，使用 Token 初始化平台通信
+  // 在执行任何操作前，使用 Token 初始化平台通信
   BackgroundIsolateBinaryMessenger.ensureInitialized(
     payload.rootIsolateToken,
   );
 
-  // 现在，Isolate 可以安全地调用 path_provider 等插件了
   final db = MyDatabase();
   final service = ItemService(db);
   final item = await service.getItemWithUsageRecords(payload.itemId);
@@ -167,7 +166,6 @@ class ItemController extends GetxController {
     } finally {
       isListLoading.value = false; // 结束加载
     }
-    // _updateDisplayedItems 会在 _allItems 变化时自动被 ever 触发
   }
 
   // 更新主页显示的物品列表 (排序和筛选)
@@ -227,16 +225,19 @@ class ItemController extends GetxController {
     displayedItems.assignAll(itemsToFilter);
   }
 
-  // 添加新物品 final newId =
+  // 添加新物品
   Future<void> addNewItem(ItemModel newItem) async {
     await _itemService.saveItem(newItem);
     // 重新加载所有物品以更新列表
     await loadAllItems();
   }
 
-  // 编辑物品
-  Future<void> updateItem(ItemModel updatedItem) async {
-    await _itemService.saveItem(updatedItem);
+  // 编辑物品（不包括使用记录）
+  Future<void> updateItemDetails(ItemModel updatedItem) async {
+    // 调用 Service 层新的、安全的方法
+    await _itemService.updateItemDetails(updatedItem);
+
+    // 更新完成后，刷新主列表和详情页（如果正在显示）
     await loadAllItems();
     if (currentItem.value?.id == updatedItem.id) {
       await loadItemForDetails(updatedItem.id!);
@@ -265,7 +266,7 @@ class ItemController extends GetxController {
     currentItem.value = null; // 先清空旧数据以显示加载指示器
 
     try {
-      // [关键修复] 获取 RootIsolateToken，确保它不为 null
+      // 获取 RootIsolateToken，确保它不为 null
       final rootToken = RootIsolateToken.instance;
       if (rootToken == null) {
         throw Exception(
@@ -283,7 +284,9 @@ class ItemController extends GetxController {
         currentItem.value = item;
       }
     } catch (e) {
-      print(e);
+      if (kDebugMode) {
+        print(e);
+      }
       Get.snackbar(
         'error'.tr,
         'failed_to_load_item_details'.trParams({
@@ -381,7 +384,7 @@ class ItemController extends GetxController {
     loadItemForDetails(item.id!);
   }
 
-  // [修改] 清除选中状态
+  // 清除选中状态
   void clearSelection() {
     selectedItemPreview.value = null;
     currentItem.value = null;
@@ -394,7 +397,6 @@ class ItemController extends GetxController {
     List<UsageRecordModel> records,
   ) async {
     isLoadingHeatmapData.value = true;
-    heatMapError.value = '';
     heatMapData.clear();
 
     try {
@@ -409,7 +411,6 @@ class ItemController extends GetxController {
       );
       heatMapData.value = result;
     } catch (e) {
-      heatMapError.value = 'Failed to process heatmap data: $e'.tr;
       if (kDebugMode) {
         print('Error processing heatmap data in isolate: $e');
       }
@@ -444,7 +445,6 @@ class ItemController extends GetxController {
     List<UsageRecordModel> records,
   ) async {
     isLoadingMonthlyChartData.value = true;
-    monthlyChartError.value = '';
     monthlyBarChartData.clear();
     monthlyUsageSum.value = 0.0;
 
@@ -473,8 +473,6 @@ class ItemController extends GetxController {
       monthlyBarChartData.assignAll(processedData);
       monthlyUsageSum.value = sum;
     } catch (e) {
-      monthlyChartError.value =
-          'Failed to process monthly chart data: $e'.tr;
       if (kDebugMode) {
         print('Error processing monthly chart data in isolate: $e');
       }

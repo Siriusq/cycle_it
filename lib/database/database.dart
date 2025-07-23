@@ -46,6 +46,9 @@ ItemData itemModelToData(ItemModel model) {
     iconColorValue: model.iconColor.toARGB32(),
     notifyBeforeNextUse: model.notifyBeforeNextUse,
     firstUsed: model.firstUsedDate,
+    usageCount: model.usageCount,
+    lastUsedDate: model.lastUsedDate,
+    avgInterval: model.avgInterval,
   );
 }
 
@@ -57,10 +60,11 @@ ItemModel itemDataToModel(ItemData data) {
     usageComment: data.usageComment,
     emoji: data.emoji,
     iconColor: Color(data.iconColorValue),
-    // usageRecords 和 tags 需要单独加载，这里先给空列表
-    usageRecords: [],
-    tags: [],
     notifyBeforeNextUse: data.notifyBeforeNextUse,
+    firstUsedDate: data.firstUsed,
+    usageCount: data.usageCount,
+    lastUsedDate: data.lastUsedDate,
+    avgInterval: data.avgInterval,
   );
 }
 
@@ -97,7 +101,7 @@ class MyDatabase extends _$MyDatabase {
   MyDatabase() : super(_openConnection());
 
   @override
-  int get schemaVersion => 3; // 数据库版本号，如果表结构改变需要增加
+  int get schemaVersion => 4; // 数据库版本号，如果表结构改变需要增加
 
   // 获取标签数量
   Future<int> getTagCount() async {
@@ -156,54 +160,36 @@ class MyDatabase extends _$MyDatabase {
 
   // 获取所有物品（用于主页列表）
   Future<List<ItemModel>> getAllItems() async {
-    // 1. 一次性查询所有需要的数据表
+    // 1. 直接从 items 表中查询所有数据，因为统计数据已经存在
     final allItemsData = await select(items).get();
-    final allRecordsData =
-        await (select(usageRecords)..orderBy([
-          (t) => OrderingTerm(expression: t.usedAt),
-        ])).get();
-    final allTagsData = await select(tags).get();
-    final allItemTagsData = await select(itemTags).get();
 
-    // 2. 在内存中构建映射表以便快速查找，避免循环查询
-    final recordsByItemId = <int, List<UsageRecordModel>>{};
-    for (var record in allRecordsData) {
-      final model = UsageRecordModel(
-        id: record.id,
-        itemId: record.itemId,
-        usedAt: record.usedAt,
-        intervalSinceLastUse: record.intervalSinceLastUse,
-      );
-      // 如果键不存在，则创建新列表
-      (recordsByItemId[record.itemId] ??= []).add(model);
-    }
+    if (allItemsData.isEmpty) return [];
 
-    final tagsById = {
-      for (var tag in allTagsData) tag.id: tagDataToModel(tag),
-    };
+    // 2. 高效地获取所有标签
+    final itemIds = allItemsData.map((item) => item.id).toList();
+    final tagQuery = select(itemTags).join([
+      innerJoin(tags, tags.id.equalsExp(itemTags.tagId)),
+    ])..where(itemTags.itemId.isIn(itemIds));
+
+    final tagRows = await tagQuery.get();
+
     final tagsByItemId = <int, List<TagModel>>{};
-    for (var itemTag in allItemTagsData) {
-      final tag = tagsById[itemTag.tagId];
-      if (tag != null) {
-        (tagsByItemId[itemTag.itemId] ??= []).add(tag);
-      }
+    for (final row in tagRows) {
+      final tag = tagDataToModel(row.readTable(tags));
+      final itemId = row.readTable(itemTags).itemId;
+      (tagsByItemId[itemId] ??= []).add(tag);
     }
 
-    // 3. 组装最终的 ItemModel 列表
-    final result =
+    // 3. 组装模型，几乎没有计算
+    final lightweightItems =
         allItemsData.map((itemData) {
-          final itemRecords = recordsByItemId[itemData.id] ?? [];
-          // 注意：这里已经通过查询排序了，但以防万一可以再次排序
-          // itemRecords.sort((a, b) => a.usedAt.compareTo(b.usedAt));
-
-          // 使用 copyWith 方法填充关联数据
           return itemDataToModel(itemData).copyWith(
-            usageRecords: itemRecords,
             tags: tagsByItemId[itemData.id] ?? [],
+            usageRecords: [], // 首页列表不需要完整的记录
           );
         }).toList();
 
-    return result;
+    return lightweightItems;
   }
 
   // 插入或更新物品
@@ -292,6 +278,136 @@ class MyDatabase extends _$MyDatabase {
   Future<int> deleteUsageRecordData(int recordId) {
     return (delete(usageRecords)
       ..where((tbl) => tbl.id.equals(recordId))).go();
+  }
+
+  // 核心统计更新逻辑，用于计算并更新单个物品的统计数据
+  Future<void> updateItemStatistics(int itemId) async {
+    // 1. 获取该物品的所有使用记录
+    final records =
+        await (select(usageRecords)
+              ..where((tbl) => tbl.itemId.equals(itemId))
+              ..orderBy([(t) => OrderingTerm(expression: t.usedAt)]))
+            .get();
+
+    // 2. 计算统计数据
+    final int usageCount = records.length;
+    DateTime? firstUsed;
+    DateTime? lastUsed;
+    double avgInterval = 0.0;
+
+    if (records.isNotEmpty) {
+      firstUsed = records.first.usedAt;
+      lastUsed = records.last.usedAt;
+      if (records.length > 1) {
+        // 使用 Drift 的聚合函数来计算平均值，更高效
+        final avgQuery =
+            selectOnly(usageRecords)
+              ..addColumns([usageRecords.intervalSinceLastUse.avg()])
+              ..where(usageRecords.itemId.equals(itemId));
+
+        avgInterval =
+            await avgQuery
+                .map(
+                  (row) => row.read(
+                    usageRecords.intervalSinceLastUse.avg(),
+                  ),
+                )
+                .getSingle() ??
+            0.0;
+      }
+    }
+
+    // 3. 将计算出的统计数据更新回 Items 表
+    await (update(items)
+      ..where((tbl) => tbl.id.equals(itemId))).write(
+      ItemsCompanion(
+        usageCount: Value(usageCount),
+        firstUsed: Value(firstUsed),
+        lastUsedDate: Value(lastUsed),
+        avgInterval: Value(avgInterval),
+      ),
+    );
+  }
+
+  // 重新计算某个物品所有使用记录的间隔
+  Future<void> recalculateAndSaveUsageRecords(int itemId) async {
+    final allRecordsData =
+        await (select(usageRecords)
+              ..where((ur) => ur.itemId.equals(itemId))
+              ..orderBy([(t) => OrderingTerm(expression: t.usedAt)]))
+            .get();
+
+    await batch((batch) {
+      for (int i = 0; i < allRecordsData.length; i++) {
+        int? interval;
+        if (i > 0) {
+          interval =
+              allRecordsData[i].usedAt
+                  .difference(allRecordsData[i - 1].usedAt)
+                  .inDays;
+        }
+        batch.update(
+          usageRecords,
+          UsageRecordsCompanion(
+            intervalSinceLastUse: Value(interval),
+          ),
+          where: (tbl) => tbl.id.equals(allRecordsData[i].id),
+        );
+      }
+    });
+  }
+
+  // 添加使用记录并重新计算间隔 (事务处理)
+  Future<void> addUsageRecordAndRecalculate(
+    int itemId,
+    DateTime usedAt,
+  ) async {
+    await transaction(() async {
+      // 插入新记录
+      await into(usageRecords).insert(
+        UsageRecordsCompanion.insert(itemId: itemId, usedAt: usedAt),
+      );
+
+      // 重新计算并保存所有记录的间隔
+      await recalculateAndSaveUsageRecords(itemId);
+
+      // 更新物品的统计数据
+      await updateItemStatistics(itemId);
+    });
+  }
+
+  // 编辑使用记录并重新计算间隔 (事务处理)
+  Future<void> editUsageRecordAndRecalculate(
+    int recordId,
+    int itemId,
+    DateTime newUsedAt,
+  ) async {
+    await transaction(() async {
+      // 更新指定记录的 usedAt
+      await (update(usageRecords)..where(
+        (tbl) => tbl.id.equals(recordId),
+      )).write(UsageRecordsCompanion(usedAt: Value(newUsedAt)));
+
+      await recalculateAndSaveUsageRecords(itemId);
+
+      // 更新统计数据
+      await updateItemStatistics(itemId);
+    });
+  }
+
+  // 删除使用记录并重新计算间隔 (事务处理)
+  Future<void> deleteUsageRecordAndRecalculate(
+    int recordId,
+    int itemId,
+  ) async {
+    await transaction(() async {
+      await deleteUsageRecordData(recordId); // 调用已有的数据库层删除方法
+
+      await recalculateAndSaveUsageRecords(itemId);
+
+      // 更新统计数据
+      await updateItemStatistics(itemId);
+    });
   }
 
   // --------------------数据库导入与导出--------------------
