@@ -9,6 +9,7 @@ import 'package:drift/native.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart' hide Table; // 与颜色插件冲突
 import 'package:get/get.dart' hide Value;
+import 'package:intl/intl.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 
@@ -469,7 +470,7 @@ class MyDatabase extends _$MyDatabase {
 
       final exportPath = p.join(
         selectedDirectory,
-        'cycle_it_backup_${DateTime.now().millisecondsSinceEpoch}.sqlite',
+        'cycle_it_backup_${DateFormat('yyyy-MM-dd_HH-mm-ss').format(DateTime.now())}.sqlite',
       );
       await currentDbFile.copy(exportPath);
       Get.snackbar(
