@@ -67,7 +67,7 @@ class UsageHeatmapCalendar extends StatelessWidget {
               child: Padding(
                 padding: const EdgeInsets.all(20.0),
                 child: Text(
-                  'no_usage_records_found'.tr,
+                  'no_usage_records'.tr,
                   style: bodyText.copyWith(
                     color: Theme.of(context).hintColor,
                   ),

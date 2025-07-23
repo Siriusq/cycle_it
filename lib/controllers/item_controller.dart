@@ -191,15 +191,15 @@ class ItemController extends GetxController {
           break;
         case OrderType.lastUsed:
           // 如果没有使用记录，排在后面
-          if (a.usageRecords.isEmpty && b.usageRecords.isEmpty) {
+          if (a.usageCount == 0 && b.usageCount == 0) {
             compareResult = 0;
-          } else if (a.usageRecords.isEmpty) {
+          } else if (a.usageCount == 0) {
             compareResult = 1;
-          } else if (b.usageRecords.isEmpty) {
+          } else if (b.usageCount == 0) {
             compareResult = -1;
           } else {
-            compareResult = a.usageRecords.last.usedAt.compareTo(
-              b.usageRecords.last.usedAt,
+            compareResult = a.lastUsedDate!.compareTo(
+              b.lastUsedDate!,
             );
           }
           break;
