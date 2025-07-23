@@ -10,21 +10,4 @@ class UsageRecordModel {
     required this.usedAt,
     this.intervalSinceLastUse,
   });
-
-  // 计算间隔的工厂方法
-  factory UsageRecordModel.withInterval({
-    required int itemId,
-    required DateTime usedAt,
-    required DateTime? previousUsedAt,
-  }) {
-    return UsageRecordModel(
-      id: 0, // 插入新记录时自动生成
-      itemId: itemId,
-      usedAt: usedAt,
-      intervalSinceLastUse:
-          previousUsedAt != null
-              ? usedAt.difference(previousUsedAt).inDays
-              : null,
-    );
-  }
 }

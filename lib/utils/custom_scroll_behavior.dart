@@ -1,4 +1,3 @@
-// custom_scroll_behavior.dart
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 

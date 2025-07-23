@@ -7,6 +7,8 @@ import '../models/item_model.dart';
 import '../models/tag_model.dart';
 import '../models/usage_record_model.dart';
 
+// 仅用于测试
+
 final List<TagModel> allTagsFromMock =
     [
       TagModel(id: 1, name: 'Kitchen', color: kColorPalette[0]),
@@ -26,7 +28,8 @@ final List<ItemModel> sampleItems =
         usageComment: 'Clean Inside',
         emoji: '🍯',
         iconColor: Colors.orange,
-        usageRecords: testRecords, //100000条记录的极端测试数据
+        usageRecords: testRecords,
+        //100000条记录的极端测试数据
         tags: [
           allTagsFromMock[0],
           allTagsFromMock[1],

@@ -173,7 +173,7 @@ class ItemController extends GetxController {
     if (query.isNotEmpty) {
       itemsToFilter =
           itemsToFilter.where((item) {
-            // 你可以根据物品的名称、描述或任何其他字段进行搜索
+            // 可以根据物品的名称、描述或任何其他字段进行搜索
             return item.name.toLowerCase().contains(query) ||
                 (item.usageComment != null &&
                     item.usageComment!.toLowerCase().contains(query));
@@ -226,7 +226,6 @@ class ItemController extends GetxController {
 
   // 编辑物品（不包括使用记录）
   Future<void> updateItemDetails(ItemModel updatedItem) async {
-    // 调用 Service 层新的、安全的方法
     await _itemService.updateItemDetails(updatedItem);
 
     // 更新完成后，刷新主列表和详情页（如果正在显示）
@@ -245,7 +244,7 @@ class ItemController extends GetxController {
     }
   }
 
-  // --- 物品详情页使用记录表格相关方法 ---
+  // -------------------- 物品详情页使用记录表格相关方法 --------------------
 
   // 加载物品及其使用记录（用于详情页）
   Future<void> loadItemForDetails(int itemId) async {
@@ -363,7 +362,6 @@ class ItemController extends GetxController {
     }
 
     // 确保数据源被告知排序变化，以便它重新排序内部数据
-    // 然后数据源会调用 notifyListeners() 刷新 UI
     usageRecordDataSource.value?.sort(
       usageRecordsSortColumn.value,
       usageRecordsSortAscending.value,
@@ -382,7 +380,7 @@ class ItemController extends GetxController {
     currentItem.value = null;
   }
 
-  // --- 物品详情页图表相关方法 ---
+  // -------------------- 物品详情页图表相关方法 --------------------
 
   // 加载并处理热力图数据
   Future<void> _loadHeatmapDataInIsolate(

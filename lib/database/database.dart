@@ -87,7 +87,6 @@ ItemsCompanion itemModelToCompanion(ItemModel item) {
     emoji: Value(item.emoji),
     // 将颜色值存储为int
     iconColorValue: Value(item.iconColor.toARGB32()),
-    // firstUsed 从 ItemModel 中获取
     firstUsed:
         item.firstUsedDate != null
             ? Value(item.firstUsedDate!)
@@ -127,7 +126,7 @@ class MyDatabase extends _$MyDatabase {
     return result ?? 0;
   }
 
-  // ---- 查询方法 ----
+  // -------------------- 标签相关 --------------------
 
   // 获取所有标签
   Future<List<TagModel>> getAllTags() async {
@@ -154,9 +153,18 @@ class MyDatabase extends _$MyDatabase {
   }
 
   // 删除标签
-  Future<int> deleteTag(int id) {
-    return (delete(tags)..where((t) => t.id.equals(id))).go();
+  Future<void> deleteTag(int id) async {
+    await transaction(() async {
+      // 1. 首先，删除 item_tags 表中所有引用此标签的记录
+      await (delete(itemTags)
+        ..where((tbl) => tbl.tagId.equals(id))).go();
+
+      // 2. 然后，再删除 tags 表中的标签本身
+      await (delete(tags)..where((tbl) => tbl.id.equals(id))).go();
+    });
   }
+
+  // -------------------- 物品相关 --------------------
 
   // 获取所有物品（用于主页列表）
   Future<List<ItemModel>> getAllItems() async {
@@ -251,10 +259,23 @@ class MyDatabase extends _$MyDatabase {
     return itemId;
   }
 
-  // 删除物品
-  Future<int> deleteItem(int id) {
-    return (delete(items)..where((t) => t.id.equals(id))).go();
+  // 删除物品,级联删除
+  Future<void> deleteItem(int id) async {
+    await transaction(() async {
+      // 1. 删除所有与该 item 关联的使用记录
+      await (delete(usageRecords)
+        ..where((tbl) => tbl.itemId.equals(id))).go();
+
+      // 2. 删除所有与该 item 关联的标签关系
+      await (delete(itemTags)
+        ..where((tbl) => tbl.itemId.equals(id))).go();
+
+      // 3. 最后删除 item 本身
+      await (delete(items)..where((tbl) => tbl.id.equals(id))).go();
+    });
   }
+
+  // -------------------- 使用记录 --------------------
 
   // 获取使用记录
   Future<List<UsageRecordData>> getUsageRecordsByItemId({
@@ -280,7 +301,9 @@ class MyDatabase extends _$MyDatabase {
       ..where((tbl) => tbl.id.equals(recordId))).go();
   }
 
-  // 核心统计更新逻辑，用于计算并更新单个物品的统计数据
+  // -------------------- 核心统计更新逻辑 --------------------
+
+  // 计算并更新单个物品的统计数据
   Future<void> updateItemStatistics(int itemId) async {
     // 1. 获取该物品的所有使用记录
     final records =
@@ -410,7 +433,7 @@ class MyDatabase extends _$MyDatabase {
     });
   }
 
-  // --------------------数据库导入与导出--------------------
+  // -------------------- 数据库导入与导出 --------------------
   // 获取数据库文件路径
   Future<String> getDatabaseFilePath() async {
     final dbFolder = await _getDatabaseDirectory();

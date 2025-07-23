@@ -17,7 +17,7 @@ class ThemeController extends GetxController {
   final Rx<ThemeModeOption> _currentThemeModeOption =
       ThemeModeOption.system.obs;
 
-  // 当前应用的主题数据，可观察
+  // 当前应用的主题数据
   final Rx<ThemeData> _currentThemeData = ThemeData.light().obs;
 
   ThemeModeOption get currentThemeModeOption =>
@@ -95,8 +95,7 @@ class ThemeController extends GetxController {
         'assets/themes/dark_theme.json',
       );
     } else {
-      // option == ThemeModeOption.system
-      // **尝试在最早阶段通过 WidgetsBinding.instance.window.platformBrightness 获取系统亮度**
+      // 主题跟随系统时，尝试在尽可能早的阶段获取系统亮度
       final Brightness initialSystemBrightness =
           PlatformDispatcher.instance.platformBrightness;
 

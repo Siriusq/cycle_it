@@ -98,7 +98,7 @@ class AddEditItemController extends GetxController {
 
     try {
       if (isEditing) {
-        // 编辑时，创建一个不包含使用记录的 ItemModel，并调用安全的更新方法
+        // 编辑时，创建一个不包含使用记录的 ItemModel，并调用更新方法
         final itemToUpdate = ItemModel(
           id: _initialItem!.id,
           // Use the existing ID
@@ -118,7 +118,7 @@ class AddEditItemController extends GetxController {
         );
         await _itemController.updateItemDetails(itemToUpdate);
       } else {
-        // 添加时不指定ID，让Drift自己生成
+        // 添加时，不指定ID，让Drift自己生成
         final itemToAdd = ItemModel(
           id: null,
           name: nameController.text.trim(),

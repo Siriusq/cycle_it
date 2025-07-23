@@ -34,7 +34,6 @@ class ItemModel {
     this.avgInterval = 0.0,
   });
 
-  // [修改] Getter 现在直接返回存储的属性值
   double get usageFrequency => avgInterval;
 
   DateTime? get nextExpectedUse =>
@@ -86,27 +85,5 @@ class ItemModel {
       lastUsedDate: lastUsedDate ?? this.lastUsedDate,
       avgInterval: avgInterval ?? this.avgInterval,
     );
-  }
-
-  // 计算到今天的日期差
-  int daysToToday({required bool isNext}) {
-    DateTime targetDate;
-    if (isNext) {
-      if (nextExpectedUse == null) return 0;
-      targetDate = nextExpectedUse!;
-    } else {
-      if (usageRecords.isEmpty) return 0;
-      targetDate = usageRecords.last.usedAt;
-    }
-    // 获取当前日期，去除时分秒，避免计算误差
-    final today = DateTime.now();
-    final currentDate = DateTime(today.year, today.month, today.day);
-    final target = DateTime(
-      targetDate.year,
-      targetDate.month,
-      targetDate.day,
-    );
-
-    return target.difference(currentDate).inDays;
   }
 }

@@ -13,9 +13,11 @@ class ItemService {
 
   ItemService(this._db);
 
-  // --- Item 相关操作 ---
+  // -------------------- 物品相关操作 --------------------
+
+  // 获取所有物品
   Future<List<ItemModel>> getAllItems() async {
-    return await _db.getAllItems(); // 调用数据库层的方法
+    return await _db.getAllItems();
   }
 
   // 用于添加新物品，或者需要全量替换的场景
@@ -23,7 +25,7 @@ class ItemService {
     return await _db.upsertItem(item);
   }
 
-  // 更新物品信息，不会触碰使用记录
+  // 更新物品信息，不会涉及使用记录
   Future<void> updateItemDetails(ItemModel item) async {
     await _db.transaction(() async {
       // 1. 只更新 Items 表中在编辑页可修改的字段
@@ -56,7 +58,6 @@ class ItemService {
         });
       }
     });
-    // 这个方法完全不涉及 UsageRecords 表
   }
 
   // 删除物品
@@ -64,9 +65,9 @@ class ItemService {
     await _db.deleteItem(itemId);
   }
 
-  // --- UsageRecord 相关操作 ---
+  // -------------------- 使用记录相关操作 --------------------
 
-  // 添加使用记录并重新计算间隔 (事务处理)
+  // 添加使用记录并重新计算间隔
   Future<void> addUsageRecordAndRecalculate(
     int itemId,
     DateTime usedAt,
@@ -74,7 +75,7 @@ class ItemService {
     await _db.addUsageRecordAndRecalculate(itemId, usedAt);
   }
 
-  // 编辑使用记录并重新计算间隔 (事务处理)
+  // 编辑使用记录并重新计算间隔
   Future<void> editUsageRecordAndRecalculate(
     int recordId,
     int itemId,
@@ -87,7 +88,7 @@ class ItemService {
     );
   }
 
-  // 删除使用记录并重新计算间隔 (事务处理)
+  // 删除使用记录并重新计算间隔
   Future<void> deleteUsageRecordAndRecalculate(
     int recordId,
     int itemId,
@@ -118,7 +119,7 @@ class ItemService {
                   )
                   .toList(),
         );
-    //在 Service 层对 usageRecords 进行初始排序
+    // 对 usageRecords 进行初始排序
     usageRecords.sort((a, b) => a.usedAt.compareTo(b.usedAt));
 
     final itemTags =
@@ -149,7 +150,7 @@ class ItemService {
     );
   }
 
-  // --- Tag 相关操作 ---
+  // -------------------- 标签相关操作 --------------------
 
   Future<List<TagModel>> getAllTags() async {
     return await _db.getAllTags();
@@ -176,7 +177,7 @@ class ItemService {
     await _db.deleteTag(tagId);
   }
 
-  // --------------- 仅测试用 ---------------
+  // -------------------- 仅测试用数据 --------------------
   // 使用/lib/test/mock_data.dart中的数据初始化数据库数据
   Future<void> initializeData() async {
     // 检查标签表是否为空，如果为空，则插入 mock 数据
@@ -205,8 +206,6 @@ class ItemService {
           if (existingTag != null) {
             itemActualTags.add(existingTag);
           } else {
-            // 如果 mock item 引用了不存在的标签，这里可以插入它或者抛出错误
-            // 这里我们假设 mock tags 已经先被插入
             if (kDebugMode) {
               print(
                 'Warning: Tag ${tag.name} not found in DB for item ${item.name}',
@@ -280,6 +279,7 @@ class ItemService {
             }
           });
 
+          // 更新统计数据
           await _db.recalculateAndSaveUsageRecords(item.id!);
           await _db.updateItemStatistics(item.id!);
         }

@@ -48,7 +48,7 @@ void main() async {
   final themeController = Get.find<ThemeController>();
   await themeController.themeInitializationFuture;
 
-  // --------------- 仅测试用 ---------------
+  // -------------------- 仅测试用 --------------------
   // 使用/lib/test/mock_data.dart中的数据初始化数据库数据，需要在热重启后生效
   if (kDebugMode) {
     final itemService = Get.find<ItemService>();
@@ -61,7 +61,6 @@ void main() async {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     final LanguageController languageController =

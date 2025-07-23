@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:intl/date_symbol_data_local.dart'; // 导入这个包，用于日期格式化数据
+import 'package:intl/date_symbol_data_local.dart'; // 用于日期格式化数据
 import '../utils/i18n.dart'; // 导入 MultiLanguage 类
 
 class LanguageController extends GetxController {

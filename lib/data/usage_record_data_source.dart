@@ -203,7 +203,7 @@ class UsageRecordDataSource extends DataTableSource {
   void sort(String columnName, bool ascending) {
     _sortColumn = columnName;
     _sortAscending = ascending;
-    _applySort(); // 【修改点11】应用排序
+    _applySort();
     notifyListeners(); // 通知 UI 刷新
   }
 }

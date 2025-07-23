@@ -5,8 +5,8 @@ class MultiLanguage extends Translations {
   // 定义所有支持的语言环境
   static final List<Locale> supportedLocales = [
     const Locale('en', 'US'), // English
-    const Locale('zh', 'CN'), // Simplified Chinese
-    const Locale('zh', 'TW'), // Traditional Chinese
+    const Locale('zh', 'CN'), // 简体中文
+    const Locale('zh', 'TW'), // 繁体中文
   ];
 
   @override
