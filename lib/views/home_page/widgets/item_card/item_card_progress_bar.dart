@@ -93,17 +93,20 @@ class ItemCardProgressBar extends StatelessWidget {
                       children: [
                         Icon(Icons.update, size: iconSizeSM),
                         SizedBox(width: spacingXS),
-                        Text(
-                          nextExpectedUseDate != null
-                              ? 'est_timer_brief'.trParams({
-                                'date': DateFormat(
-                                  'yyyy-MM-dd',
-                                ).format(nextExpectedUseDate),
-                              })
-                              : 'data_not_enough'.tr,
-                          style: smallBodyTextStyle,
+                        Expanded(
+                          child: Text(
+                            nextExpectedUseDate != null
+                                ? 'est_timer_brief'.trParams({
+                                  'date': DateFormat(
+                                    'yyyy-MM-dd',
+                                  ).format(nextExpectedUseDate),
+                                })
+                                : 'data_not_enough'.tr,
+                            style: smallBodyTextStyle,
+                            overflow: TextOverflow.visible,
+                          ),
                         ),
-                        const Spacer(),
+
                         Text(
                           nextExpectedUseDate != null
                               ? "${(progress * 100).toStringAsFixed(2)}%"

@@ -32,7 +32,8 @@ class DetailsPage extends StatelessWidget {
 
     return SafeArea(
       left: false,
-      top: false,
+      top: !ResponsiveLayout.isSingleCol(context),
+      bottom: false,
       child: Scaffold(
         appBar: DetailsAppBar(),
         body: Obx(() {

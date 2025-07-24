@@ -103,6 +103,7 @@ class AddEditTagDialog extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            const SizedBox(height: 6),
             // 需要调整的输入框
             Obx(() {
               return TextFormField(

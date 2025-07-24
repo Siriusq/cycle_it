@@ -15,6 +15,7 @@ class ListOfItems extends StatelessWidget {
 
     return SafeArea(
       right: false,
+      bottom: false,
       child: Scaffold(
         appBar: ListOfItemsAppBar(scaffoldKey: scaffoldKey),
         body: Column(
