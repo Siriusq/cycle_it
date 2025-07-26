@@ -28,22 +28,23 @@ class ItemUsageStatItem extends StatelessWidget {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
+                spacing: 4,
                 children: [
                   // 标题
                   Text(
                     title,
                     style: const TextStyle(fontSize: 12, height: 1.1),
                     maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
+                    overflow: TextOverflow.clip,
                   ),
 
                   // 数值
                   Text(
                     value,
                     style: const TextStyle(
-                      fontWeight: FontWeight.w400,
                       fontSize: 12,
                       letterSpacing: -0.3,
+                      height: 1.1,
                     ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,

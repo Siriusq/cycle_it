@@ -64,9 +64,8 @@ class DetailsBriefCard extends StatelessWidget {
                   ],
                 ),
 
-                // 中间主数据区域（占剩余高度的75%）
+                // 中间主数据区域
                 Expanded(
-                  //flex: 3, // 占总高度的3/4
                   child: Align(
                     alignment: Alignment.centerLeft,
                     child: FittedBox(
@@ -84,11 +83,17 @@ class DetailsBriefCard extends StatelessWidget {
                 ),
 
                 // 底部注释区域
-                Text(
-                  comment,
-                  style: bodyTextStyle,
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
+                Row(
+                  children: [
+                    Flexible(
+                      child: Text(
+                        comment,
+                        style: bodyTextStyle,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),

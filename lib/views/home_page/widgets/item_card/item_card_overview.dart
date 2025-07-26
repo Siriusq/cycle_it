@@ -1,11 +1,10 @@
+import 'package:cycle_it/utils/responsive_layout.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../models/item_model.dart';
-import '../../../../utils/responsive_layout.dart';
 import '../../../../utils/responsive_style.dart';
-import '../../../shared_widgets/responsive_component_group.dart';
 import 'item_usage_stat_item.dart';
 
 class ItemCardOverview extends StatelessWidget {
@@ -16,9 +15,9 @@ class ItemCardOverview extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ResponsiveStyle style = ResponsiveStyle.to;
-    final bool isTripleCol = ResponsiveLayout.isTripleCol(context);
+    final bool isSingleCol = ResponsiveLayout.isSingleCol(context);
 
-    // [修改] 直接从 item 模型中读取预先计算好的统计数据
+    // 读取预先计算好的统计数据
     final int usageCount = item.usageCount;
     final DateTime? nextExpectedUseDate = item.nextExpectedUse;
     final DateTime? firstUsedDate = item.firstUsedDate;
@@ -30,7 +29,7 @@ class ItemCardOverview extends StatelessWidget {
     final double spacingSM = style.spacingSM;
     final double iconSizeSM = style.iconSizeSM;
 
-    if (!isTripleCol) {
+    if (isSingleCol) {
       // 移动端
       return Padding(
         padding: EdgeInsets.only(
@@ -88,57 +87,79 @@ class ItemCardOverview extends StatelessWidget {
       // 桌面布局
       return Padding(
         padding: const EdgeInsets.all(8),
-        child: ResponsiveComponentGroup(
-          minComponentWidth: 160,
-          aspectRation: 5,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          spacing: 8,
           children: [
-            // 上次使用
-            ItemUsageStatItem(
-              icon: Icons.history,
-              title: 'last_used_at'.tr,
-              value:
-                  lastUsedDate != null
-                      ? 'last_used_at_brief_data'.trParams({
-                        'date': DateFormat(
-                          'yyyy-MM-dd',
-                        ).format(lastUsedDate),
-                      })
-                      : 'data_not_enough'.tr,
+            SizedBox(
+              height: 32,
+              child: Row(
+                children: [
+                  Expanded(
+                    child: // 上次使用
+                        ItemUsageStatItem(
+                      icon: Icons.history,
+                      title: 'last_used_at'.tr,
+                      value:
+                          lastUsedDate != null
+                              ? 'last_used_at_brief_data'.trParams({
+                                'date': DateFormat(
+                                  'yyyy-MM-dd',
+                                ).format(lastUsedDate),
+                              })
+                              : 'data_not_enough'.tr,
+                    ),
+                  ),
+                  Expanded(
+                    child: // 使用次数
+                        ItemUsageStatItem(
+                      icon: Icons.pin_outlined,
+                      title: 'usage_count'.tr,
+                      value:
+                          firstUsedDate != null
+                              ? 'usage_count_brief_data'.trParams({
+                                'count': '$usageCount',
+                              })
+                              : 'no_usage_records'.tr,
+                    ),
+                  ),
+                ],
+              ),
             ),
-            // 使用次数
-            ItemUsageStatItem(
-              icon: Icons.pin_outlined,
-              title: 'usage_count'.tr,
-              value:
-                  firstUsedDate != null
-                      ? 'usage_count_brief_data'.trParams({
-                        'count': '$usageCount',
-                      })
-                      : 'no_usage_records'.tr,
-            ),
-            // 使用周期
-            ItemUsageStatItem(
-              icon: Icons.repeat,
-              title: 'usage_cycle'.tr,
-              value:
-                  usageCount > 1
-                      ? 'usage_cycle_brief_data'.trParams({
-                        'freq': '$usageFrequency',
-                      })
-                      : 'data_not_enough'.tr,
-            ),
-            // 下次使用预计
-            ItemUsageStatItem(
-              icon: Icons.update,
-              title: 'est_next_use_date'.tr,
-              value:
-                  nextExpectedUseDate != null
-                      ? 'est_next_use_date_data'.trParams({
-                        'date': DateFormat(
-                          'yyyy-MM-dd',
-                        ).format(nextExpectedUseDate),
-                      })
-                      : 'data_not_enough'.tr,
+            SizedBox(
+              height: 32,
+              child: Row(
+                children: [
+                  Expanded(
+                    child: // 使用周期
+                        ItemUsageStatItem(
+                      icon: Icons.repeat,
+                      title: 'usage_cycle'.tr,
+                      value:
+                          usageCount > 1
+                              ? 'usage_cycle_brief_data'.trParams({
+                                'freq': '$usageFrequency',
+                              })
+                              : 'data_not_enough'.tr,
+                    ),
+                  ),
+                  Expanded(
+                    child: // 下次使用预计
+                        ItemUsageStatItem(
+                      icon: Icons.update,
+                      title: 'est_next_use_date'.tr,
+                      value:
+                          nextExpectedUseDate != null
+                              ? 'est_next_use_date_data'.trParams({
+                                'date': DateFormat(
+                                  'yyyy-MM-dd',
+                                ).format(nextExpectedUseDate),
+                              })
+                              : 'data_not_enough'.tr,
+                    ),
+                  ),
+                ],
+              ),
             ),
           ],
         ),

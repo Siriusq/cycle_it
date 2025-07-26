@@ -20,7 +20,6 @@ class ItemCardProgressBar extends StatelessWidget {
   Widget build(BuildContext context) {
     final ResponsiveStyle style = ResponsiveStyle.to;
     final bool isSingleCol = ResponsiveLayout.isSingleCol(context);
-    final bool isTripleCol = ResponsiveLayout.isTripleCol(context);
 
     final double spacingXS = style.spacingXS;
     final double iconSizeSM = style.iconSizeSM;
@@ -75,21 +74,8 @@ class ItemCardProgressBar extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 4),
             child:
-                isTripleCol
+                isSingleCol
                     ? Row(
-                      children: [
-                        Text(
-                          'est_timer'.tr,
-                          style: smallBodyTextStyle,
-                        ),
-                        const Spacer(),
-                        Text(
-                          "${(progress * 100).toStringAsFixed(2)}%",
-                          style: smallBodyTextStyle,
-                        ),
-                      ],
-                    )
-                    : Row(
                       children: [
                         Icon(Icons.update, size: iconSizeSM),
                         SizedBox(width: spacingXS),
@@ -111,6 +97,19 @@ class ItemCardProgressBar extends StatelessWidget {
                           nextExpectedUseDate != null
                               ? "${(progress * 100).toStringAsFixed(2)}%"
                               : 'N/A',
+                          style: smallBodyTextStyle,
+                        ),
+                      ],
+                    )
+                    : Row(
+                      children: [
+                        Text(
+                          'est_timer'.tr,
+                          style: smallBodyTextStyle,
+                        ),
+                        const Spacer(),
+                        Text(
+                          "${(progress * 100).toStringAsFixed(2)}%",
                           style: smallBodyTextStyle,
                         ),
                       ],

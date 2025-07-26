@@ -231,7 +231,7 @@ class MultiLanguage extends Translations {
       'est_next_use_date_data': '@date',
       // 进度条
       'est_timer': 'EST. Usage Cycle Progress',
-      'est_timer_brief': 'EST. Next Use Date: @date',
+      'est_timer_brief': 'EST. Next Use: @date',
 
       // 详情页
       'please_select_an_item': 'Please select an item',
@@ -251,9 +251,9 @@ class MultiLanguage extends Translations {
       'usage_count_comment': 'from @date',
       'usage_cycle': 'Usage Cycle',
       'usage_cycle_comment': 'days/time',
-      'last_used_at': 'Last Used At',
+      'last_used_at': 'Last Used',
       'last_used_at_comment': 'days ago at @date',
-      'est_next_use_date': 'EST. Next Use Date',
+      'est_next_use_date': 'EST. Next Use',
       'est_next_use_date_comment': '@trend at @date',
       'days_later': 'days later',
       'days_ago': 'days ago',
