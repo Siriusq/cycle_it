@@ -57,6 +57,15 @@ class ResponsiveLayout extends StatelessWidget {
           responsiveCtrl.resetShouldJumpStates();
         }
 
+        // 小屏转大屏时，如果当前路由在详情页，则切换回主页
+        if (!isSingle && Get.currentRoute == '/Details') {
+          final prevItem = itemCtrl.currentItem.value;
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            Get.back();
+            itemCtrl.currentItem.value = prevItem;
+          });
+        }
+
         //切换时关闭抽屉
         WidgetsBinding.instance.addPostFrameCallback((_) {
           if (constraints.maxWidth > desktopBreakPoint) {
