@@ -197,7 +197,7 @@ class MultiLanguage extends Translations {
       'success': 'Success',
       'more_action': 'More Action',
       'deleted_successfully': 'Delete successfully',
-      'reached_end_hint': '—— End of list ——',
+      'reached_end_hint': '—— End of content ——',
 
       // 侧边栏
       // 排序

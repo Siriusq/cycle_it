@@ -45,34 +45,32 @@ class DetailsPage extends StatelessWidget {
 
           // 如果没有数据（加载失败或未选择），显示提示信息
           if (item == null) {
-            return Center(
-              child: Text('no_item_details_available'.tr),
-            );
+            return Center(child: Text('no_item_details_available'.tr));
           }
 
           // 数据加载完成，显示页面内容
-          return SafeArea(
-            left: false,
-            child: Column(
-              children: [
-                Expanded(
-                  child: ListView(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: spacingLG,
-                    ),
-                    children: [
-                      DetailsItemTitle(),
-                      DetailsItemTags(),
-                      SizedBox(height: spacingLG),
-                      DetailsOverview(),
-                      SizedBox(height: spacingMD),
-                      DetailsChartsGroup(),
-                      SizedBox(height: spacingLG),
-                    ],
-                  ),
+          return Column(
+            children: [
+              Expanded(
+                child: ListView(
+                  padding: EdgeInsets.symmetric(horizontal: spacingLG),
+                  children: [
+                    DetailsItemTitle(),
+                    DetailsItemTags(),
+                    SizedBox(height: spacingLG),
+                    DetailsOverview(),
+                    SizedBox(height: spacingMD),
+                    DetailsChartsGroup(),
+                    if (ResponsiveLayout.isSingleCol(context))
+                      Padding(
+                        padding: EdgeInsets.symmetric(vertical: spacingMD),
+                        child: Center(child: Text('reached_end_hint'.tr)),
+                      ),
+                    SizedBox(height: spacingLG),
+                  ],
                 ),
-              ],
-            ),
+              ),
+            ],
           );
         }),
       ),
