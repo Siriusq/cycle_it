@@ -25,8 +25,8 @@ class MonthlyUsageBarChart extends StatelessWidget {
 
       return LayoutBuilder(
         builder: (context, constraints) {
-          final chartWidth = constraints.maxWidth;
-          final chartHeight = chartWidth * 0.5;
+          final double chartWidth = constraints.maxWidth;
+          final double chartHeight = constraints.maxHeight - 119;
 
           // 根据不同的状态，决定显示哪个子组件
           Widget contentToDisplay;
@@ -111,9 +111,12 @@ class MonthlyUsageBarChart extends StatelessWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
-                        'monthly_usage_count'.tr,
-                        style: titleTextMD,
+                      Expanded(
+                        child: Text(
+                          'monthly_usage_count'.tr,
+                          style: titleTextMD,
+                          overflow: TextOverflow.ellipsis,
+                        ),
                       ),
                       const Icon(Icons.bar_chart, size: 24),
                     ],

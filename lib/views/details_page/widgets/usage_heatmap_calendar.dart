@@ -19,6 +19,8 @@ class UsageHeatmapCalendar extends StatelessWidget {
     final double heatmapTipCellSize = style.heatmapTipCellSize;
     final double heatmapCellSpaceBetween =
         style.heatmapCellSpaceBetween;
+    // 估算日历组件的最小高度，以确保加载指示器等也占据相似的空间
+    final double heatmapHeight = style.heatmapHeight;
 
     final LanguageController languageController =
         Get.find<LanguageController>();
@@ -134,13 +136,6 @@ class UsageHeatmapCalendar extends StatelessWidget {
             );
           }
 
-          // 估算日历组件的最小高度，以确保加载指示器等也占据相似的空间
-          final double estimatedCalendarHeight =
-              7 * heatmapCellSize +
-              6 * heatmapCellSpaceBetween +
-              heatmapTipCellSize +
-              32;
-
           return Container(
             padding: const EdgeInsets.symmetric(vertical: 8),
             decoration: BoxDecoration(
@@ -163,9 +158,12 @@ class UsageHeatmapCalendar extends StatelessWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
-                        'usage_record_hot_map'.tr,
-                        style: titleTextMD,
+                      Expanded(
+                        child: Text(
+                          'usage_record_hot_map'.tr,
+                          style: titleTextMD,
+                          overflow: TextOverflow.ellipsis,
+                        ),
                       ),
                       const Icon(Icons.calendar_month, size: 24),
                     ],
@@ -192,7 +190,7 @@ class UsageHeatmapCalendar extends StatelessWidget {
                   // 这样在内容切换时，整体高度不会剧烈跳动
                   child: ConstrainedBox(
                     constraints: BoxConstraints(
-                      minHeight: estimatedCalendarHeight,
+                      minHeight: heatmapHeight,
                     ),
                     child: contentToAnimate,
                   ),

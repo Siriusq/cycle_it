@@ -1,3 +1,4 @@
+import 'package:cycle_it/views/details_page/widgets/usage_records_table.dart';
 import 'package:flutter/material.dart';
 
 import '../../../utils/responsive_style.dart';
@@ -10,14 +11,48 @@ class DetailsChartsGroup extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ResponsiveStyle style = ResponsiveStyle.to; // 直接获取 style
+    final double tableHeight = style.tableHeight;
     final double spacingMD = style.spacingMD;
 
-    return Wrap(
-      children: [
-        const UsageHeatmapCalendar(),
-        SizedBox(height: spacingMD, width: spacingMD),
-        const MonthlyUsageBarChart(),
-      ],
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        /// 窄屏单列布局
+        if (constraints.maxWidth < 660) {
+          return Column(
+            spacing: 8,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              UsageRecordsTable(),
+              UsageHeatmapCalendar(),
+              SizedBox(height: 350, child: MonthlyUsageBarChart()),
+            ],
+          );
+        }
+        // 宽屏双列布局
+        else {
+          return SizedBox(
+            height: tableHeight,
+            child: Row(
+              spacing: spacingMD,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(child: UsageRecordsTable()),
+                Expanded(
+                  child: Column(
+                    spacing: spacingMD,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      UsageHeatmapCalendar(),
+                      // 柱状图占满剩余高度
+                      Expanded(child: MonthlyUsageBarChart()),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          );
+        }
+      },
     );
   }
 }

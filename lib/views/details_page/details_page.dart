@@ -4,13 +4,11 @@ import 'package:cycle_it/views/details_page/widgets/details_charts_group.dart';
 import 'package:cycle_it/views/details_page/widgets/details_item_tags.dart';
 import 'package:cycle_it/views/details_page/widgets/details_item_title.dart';
 import 'package:cycle_it/views/details_page/widgets/details_overview.dart';
-import 'package:cycle_it/views/details_page/widgets/usage_records_table.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../controllers/item_controller.dart';
 import '../../utils/responsive_layout.dart';
-import '../shared_widgets/responsive_component_group.dart';
 
 class DetailsPage extends StatelessWidget {
   const DetailsPage({super.key});
@@ -53,36 +51,28 @@ class DetailsPage extends StatelessWidget {
           }
 
           // 数据加载完成，显示页面内容
-          return Column(
-            children: [
-              Expanded(
-                child: ListView(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: spacingLG,
-                  ),
-                  children: [
-                    DetailsItemTitle(),
-                    DetailsItemTags(),
-                    SizedBox(height: spacingLG),
-
-                    //图表
-                    DetailsOverview(),
-                    SizedBox(height: spacingMD),
-
-                    // 使用记录
-                    ResponsiveComponentGroup(
-                      minComponentWidth: style.minComponentWidthMD,
-                      aspectRation: 0.55,
-                      children: [
-                        UsageRecordsTable(),
-                        const DetailsChartsGroup(),
-                      ],
+          return SafeArea(
+            left: false,
+            child: Column(
+              children: [
+                Expanded(
+                  child: ListView(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: spacingLG,
                     ),
-                    SizedBox(height: spacingLG),
-                  ],
+                    children: [
+                      DetailsItemTitle(),
+                      DetailsItemTags(),
+                      SizedBox(height: spacingLG),
+                      DetailsOverview(),
+                      SizedBox(height: spacingMD),
+                      DetailsChartsGroup(),
+                      SizedBox(height: spacingLG),
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           );
         }),
       ),

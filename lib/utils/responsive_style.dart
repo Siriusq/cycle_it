@@ -182,7 +182,7 @@ class ResponsiveStyle extends GetxController {
       _getValue(mobile: Get.width * 0.9, tablet: 600, desktop: 600);
 
   // 表格高度
-  double get tableHeight => max(Get.height * 0.8, 400);
+  double get tableHeight => max(Get.height * 0.8, 520);
 
   // 热点日历格子大小
   double get heatmapCellSize =>
@@ -195,6 +195,10 @@ class ResponsiveStyle extends GetxController {
   // 热点日历参照指示格子大小
   double get heatmapCellSpaceBetween =>
       _getValue(mobile: 2, tablet: 4, desktop: 4);
+
+  // 热点日历高度
+  double get heatmapHeight =>
+      _getValue(mobile: 168, tablet: 196, desktop: 196);
 }
 
 // 标签样式子类
