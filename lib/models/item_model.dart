@@ -12,6 +12,7 @@ class ItemModel {
   final String emoji;
   final Color iconColor;
   final bool notifyBeforeNextUse;
+  final TimeOfDay? notificationTime;
 
   // --- 统计属性 ---
   final int usageCount;
@@ -28,6 +29,7 @@ class ItemModel {
     required this.emoji,
     required this.iconColor,
     this.notifyBeforeNextUse = false,
+    this.notificationTime,
     this.usageCount = 0,
     this.firstUsedDate,
     this.lastUsedDate,
@@ -65,6 +67,7 @@ class ItemModel {
     String? emoji,
     Color? iconColor,
     bool? notifyBeforeNextUse,
+    ValueGetter<TimeOfDay?>? notificationTime,
     int? usageCount,
     DateTime? firstUsedDate,
     DateTime? lastUsedDate,
@@ -80,6 +83,10 @@ class ItemModel {
       iconColor: iconColor ?? this.iconColor,
       notifyBeforeNextUse:
           notifyBeforeNextUse ?? this.notifyBeforeNextUse,
+      notificationTime:
+          notificationTime != null
+              ? notificationTime()
+              : this.notificationTime,
       usageCount: usageCount ?? this.usageCount,
       firstUsedDate: firstUsedDate ?? this.firstUsedDate,
       lastUsedDate: lastUsedDate ?? this.lastUsedDate,

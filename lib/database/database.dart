@@ -46,6 +46,8 @@ ItemData itemModelToData(ItemModel model) {
     emoji: model.emoji,
     iconColorValue: model.iconColor.toARGB32(),
     notifyBeforeNextUse: model.notifyBeforeNextUse,
+    notificationHour: model.notificationTime?.hour,
+    notificationMinute: model.notificationTime?.minute,
     firstUsed: model.firstUsedDate,
     usageCount: model.usageCount,
     lastUsedDate: model.lastUsedDate,
@@ -62,6 +64,14 @@ ItemModel itemDataToModel(ItemData data) {
     emoji: data.emoji,
     iconColor: Color(data.iconColorValue),
     notifyBeforeNextUse: data.notifyBeforeNextUse,
+    notificationTime:
+        (data.notificationHour != null &&
+                data.notificationMinute != null)
+            ? TimeOfDay(
+              hour: data.notificationHour!,
+              minute: data.notificationMinute!,
+            )
+            : null,
     firstUsedDate: data.firstUsed,
     usageCount: data.usageCount,
     lastUsedDate: data.lastUsedDate,
@@ -93,6 +103,14 @@ ItemsCompanion itemModelToCompanion(ItemModel item) {
             ? Value(item.firstUsedDate!)
             : const Value.absent(),
     notifyBeforeNextUse: Value(item.notifyBeforeNextUse),
+    notificationHour:
+        item.notificationTime != null
+            ? Value(item.notificationTime!.hour)
+            : const Value(null),
+    notificationMinute:
+        item.notificationTime != null
+            ? Value(item.notificationTime!.minute)
+            : const Value(null),
   );
 }
 
@@ -101,7 +119,23 @@ class MyDatabase extends _$MyDatabase {
   MyDatabase() : super(_openConnection());
 
   @override
-  int get schemaVersion => 4; // 数据库版本号，如果表结构改变需要增加
+  int get schemaVersion => 5; // 数据库版本号，如果表结构改变需要增加
+
+  @override
+  MigrationStrategy get migration {
+    return MigrationStrategy(
+      onCreate: (Migrator m) async {
+        await m.createAll();
+      },
+      onUpgrade: (Migrator m, int from, int to) async {
+        // 2. 添加迁移逻辑
+        if (from < 5) {
+          await m.addColumn(items, items.notificationHour);
+          await m.addColumn(items, items.notificationMinute);
+        }
+      },
+    );
+  }
 
   // 获取标签数量
   Future<int> getTagCount() async {
@@ -533,16 +567,16 @@ LazyDatabase _openConnection() {
   });
 }
 
-@override
-MigrationStrategy get migration {
-  return MigrationStrategy(
-    onCreate: (Migrator m) async {
-      await m.createAll();
-    },
-    onUpgrade: (Migrator m, int from, int to) async {
-      // print(
-      //   'Migrating database from $from to $to. Data will be reset.',
-      // );
-    },
-  );
-}
+// @override
+// MigrationStrategy get migration {
+//   return MigrationStrategy(
+//     onCreate: (Migrator m) async {
+//       await m.createAll();
+//     },
+//     onUpgrade: (Migrator m, int from, int to) async {
+//       // print(
+//       //   'Migrating database from $from to $to. Data will be reset.',
+//       // );
+//     },
+//   );
+// }

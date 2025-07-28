@@ -26,4 +26,10 @@ class Items extends Table {
 
   RealColumn get avgInterval =>
       real().withDefault(const Constant(0.0))();
+
+  // 存储通知的小时 (0-23)
+  IntColumn get notificationHour => integer().nullable()();
+
+  // 存储通知的分钟 (0-59)
+  IntColumn get notificationMinute => integer().nullable()();
 }
