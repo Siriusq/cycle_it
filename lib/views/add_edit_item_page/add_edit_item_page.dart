@@ -2,7 +2,7 @@ import 'package:cycle_it/views/add_edit_item_page/widgets/add_edit_item_app_bar.
 import 'package:cycle_it/views/add_edit_item_page/widgets/add_edit_item_desktop_layout.dart';
 import 'package:cycle_it/views/add_edit_item_page/widgets/emoji_color_section.dart';
 import 'package:cycle_it/views/add_edit_item_page/widgets/name_comment_section.dart';
-import 'package:cycle_it/views/add_edit_item_page/widgets/notify_switch_section.dart';
+import 'package:cycle_it/views/add_edit_item_page/widgets/notification_options_section.dart';
 import 'package:cycle_it/views/add_edit_item_page/widgets/tag_section.dart';
 import 'package:flutter/material.dart';
 
@@ -59,9 +59,9 @@ class AddEditItemPage extends StatelessWidget {
           SizedBox(height: spacingMD),
           // --- 3. 标签 ---
           const TagSection(),
-          SizedBox(height: spacingMD),
+          SizedBox(height: spacingMD * 1.5),
           // --- 4. 是否开启通知功能 ---
-          const NotifySwitchSection(),
+          const NotificationOptionsSection(),
         ],
       ),
     );

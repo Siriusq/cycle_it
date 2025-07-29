@@ -108,7 +108,8 @@ class MultiLanguage extends Translations {
       'add_new_item': '添加物品',
       'edit_item': '编辑物品',
       'item_changed_successfully': '已成功@action@name',
-      'enable_notify': '开启下次使用通知',
+      'enable_notify': '预计使用日期到达时通知提醒',
+      'notification': '通知',
       'item_name_empty': '物品名称不能为空',
       'item_name_too_long': '物品名称过长',
 
@@ -148,6 +149,13 @@ class MultiLanguage extends Translations {
       // 标签选择弹窗
       'select_tag': '选择标签',
       'no_tag_hint': '没有可用标签，请先添加标签',
+      // 时间选择弹窗
+      'select_time': '选择时间',
+      'time_help': '选择时间',
+      'hour_label': '小时',
+      'minute_label': '分钟',
+      'time_invalid_error': '时间不可用',
+      'notification_time_title': '通知时间',
 
       // 设置
       'settings': '设置',
@@ -287,7 +295,8 @@ class MultiLanguage extends Translations {
       'add_new_item': 'Add Item',
       'edit_item': 'Edit Item',
       'item_changed_successfully': 'Successfully @action @name',
-      'enable_notify': 'Enable next use notification',
+      'enable_notify': 'Notify on Estimated Usage Date',
+      'notification': 'Notification',
       'item_name_empty': 'Item name cannot be empty',
       'item_name_too_long': 'Item name is too long',
 
@@ -328,6 +337,13 @@ class MultiLanguage extends Translations {
       // 标签选择弹窗
       'select_tag': 'Select Tag',
       'no_tag_hint': 'No tags available, please add tags first',
+      // 时间选择弹窗
+      'select_time': 'Select Time',
+      'time_help': 'Select time',
+      'hour_label': 'Hour',
+      'minute_label': 'Minute',
+      'time_invalid_error': 'Time invalid',
+      'notification_time_title': 'Notification Time',
 
       // 设置
       'settings': 'Settings',
@@ -468,7 +484,8 @@ class MultiLanguage extends Translations {
       'add_new_item': '新增物品',
       'edit_item': '編輯物品',
       'item_changed_successfully': '已成功@action@name',
-      'enable_notify': '啟用下次使用通知',
+      'enable_notify': '預計使用日期到達時通知提醒',
+      'notification': '通知',
       'item_name_empty': '物品名稱不能為空',
       'item_name_too_long': '物品名稱過長',
 
@@ -508,6 +525,13 @@ class MultiLanguage extends Translations {
       // 標籤選擇彈窗
       'select_tag': '選擇標籤',
       'no_tag_hint': '沒有可用標籤，請先新增標籤',
+      // 時間選擇彈窗
+      'select_time': '選擇時間',
+      'time_help': '選擇時間',
+      'hour_label': '小時',
+      'minute_label': '分鐘',
+      'time_invalid_error': '時間無效',
+      'notification_time_title': '通知時間',
 
       // 設定
       'settings': '設定',
