@@ -2,14 +2,17 @@ import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../database/database.dart';
+import '../services/notification_service.dart';
 import '../views/settings_page/widgets/restart_required_page.dart';
 import 'item_controller.dart'; // 导入 ItemController
 
 class DatabaseManagementController extends GetxController {
   late MyDatabase _db;
   late ItemController _itemController; // 注入 ItemController
+  late NotificationService _notificationService; // 声明服务
 
   @override
   void onInit() {
@@ -17,6 +20,7 @@ class DatabaseManagementController extends GetxController {
     _db = Get.find<MyDatabase>();
     _itemController =
         Get.find<ItemController>(); // 获取 ItemController 实例
+    _notificationService = Get.find<NotificationService>(); // 获取服务实例
   }
 
   // 导出数据库
@@ -78,6 +82,14 @@ class DatabaseManagementController extends GetxController {
 
       if (fileOpsSuccess) {
         restartMessage = 'database_imported'.tr;
+        // 在弹出要求重启的页面前，取消所有已有的计划通知
+        await _notificationService.cancelAllNotifications();
+        // 导入成功后，设置标志位，以便在下次启动时重新注册通知
+        final prefs = await SharedPreferences.getInstance();
+        await prefs.setBool(
+          'reschedule_notifications_after_import',
+          true,
+        );
       } else {
         restartMessage = 'database_import_failed'.tr;
       }

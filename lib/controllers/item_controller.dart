@@ -10,6 +10,7 @@ import '../database/database.dart';
 import '../models/item_model.dart';
 import '../models/usage_record_model.dart';
 import '../services/item_service.dart';
+import '../services/notification_service.dart';
 import '../utils/responsive_style.dart';
 import 'item_list_order_controller.dart';
 
@@ -39,6 +40,8 @@ Future<ItemModel?> _fetchItemDetailsInIsolate(
 
 class ItemController extends GetxController {
   final ItemService _itemService = Get.find<ItemService>(); // 注入服务
+  final NotificationService _notificationService =
+      Get.find<NotificationService>(); // 注入服务
   final ItemListOrderController _orderController =
       Get.find<ItemListOrderController>();
   final TagController _tagController = Get.find<TagController>();
@@ -220,6 +223,7 @@ class ItemController extends GetxController {
   // 添加新物品
   Future<void> addNewItem(ItemModel newItem) async {
     await _itemService.saveItem(newItem);
+    await _notificationService.updateNotificationForItem(newItem);
     // 重新加载所有物品以更新列表
     await loadAllItems();
   }
@@ -227,7 +231,7 @@ class ItemController extends GetxController {
   // 编辑物品（不包括使用记录）
   Future<void> updateItemDetails(ItemModel updatedItem) async {
     await _itemService.updateItemDetails(updatedItem);
-
+    await _notificationService.updateNotificationForItem(updatedItem);
     // 更新完成后，刷新主列表和详情页（如果正在显示）
     await loadAllItems();
     if (currentItem.value?.id == updatedItem.id) {
@@ -237,6 +241,8 @@ class ItemController extends GetxController {
 
   // 删除物品
   Future<void> deleteItem(int itemId) async {
+    // 在数据库删除前，先取消通知
+    await _notificationService.cancelNotification(itemId);
     await _itemService.deleteItem(itemId);
     await loadAllItems();
     if (selectedItemPreview.value?.id == itemId) {

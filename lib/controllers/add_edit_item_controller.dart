@@ -22,6 +22,7 @@ class AddEditItemController extends GetxController {
   final Rx<Color> selectedIconColor;
 
   final RxBool notifyBeforeNextUse = false.obs;
+  final Rx<TimeOfDay?> notificationTime;
 
   final RxList<TagModel> selectedTags = <TagModel>[].obs;
 
@@ -40,6 +41,9 @@ class AddEditItemController extends GetxController {
       selectedIconColor = Rx<Color>(
         initialItem?.iconColor ??
             Get.theme.colorScheme.surfaceContainerHighest,
+      ),
+      notificationTime = Rx<TimeOfDay?>(
+        initialItem?.notificationTime,
       );
 
   @override
@@ -52,6 +56,7 @@ class AddEditItemController extends GetxController {
       selectedEmoji.value = _initialItem.emoji;
       selectedIconColor.value = _initialItem.iconColor;
       notifyBeforeNextUse.value = _initialItem.notifyBeforeNextUse;
+      notificationTime.value = _initialItem.notificationTime;
       selectedTags.assignAll(_initialItem.tags);
     } else {
       selectedEmoji.value = '📦';
@@ -72,7 +77,7 @@ class AddEditItemController extends GetxController {
     }
   }
 
-  // 方法来选择 emoji (供 emoji_picker_flutter 调用)
+  // 选择 emoji (供 emoji_picker_flutter 调用)
   void chooseEmoji(String emoji) {
     selectedEmoji.value = emoji;
   }
@@ -110,6 +115,7 @@ class AddEditItemController extends GetxController {
           emoji: selectedEmoji.value,
           iconColor: selectedIconColor.value,
           notifyBeforeNextUse: notifyBeforeNextUse.value,
+          notificationTime: notificationTime.value,
           tags: selectedTags.toList(),
           usageCount: _initialItem.usageCount,
           lastUsedDate: _initialItem.lastUsedDate,
@@ -130,6 +136,7 @@ class AddEditItemController extends GetxController {
           iconColor: selectedIconColor.value,
           usageRecords: [],
           notifyBeforeNextUse: notifyBeforeNextUse.value,
+          notificationTime: notificationTime.value,
           tags: selectedTags.toList(),
         );
         await _itemController.addNewItem(itemToAdd);

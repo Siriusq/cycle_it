@@ -4,6 +4,7 @@
 
 list(APPEND FLUTTER_PLUGIN_LIST
   emoji_picker_flutter
+  flutter_timezone
   permission_handler_windows
   screen_retriever_windows
   sqlite3_flutter_libs

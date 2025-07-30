@@ -37,6 +37,14 @@ class ItemService {
           emoji: Value(item.emoji),
           iconColorValue: Value(item.iconColor.toARGB32()),
           notifyBeforeNextUse: Value(item.notifyBeforeNextUse),
+          notificationHour:
+              item.notificationTime != null
+                  ? Value(item.notificationTime!.hour)
+                  : const Value(null),
+          notificationMinute:
+              item.notificationTime != null
+                  ? Value(item.notificationTime!.minute)
+                  : const Value(null),
         ),
       );
 
