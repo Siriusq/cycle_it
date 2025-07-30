@@ -1,6 +1,5 @@
 import 'package:drift/drift.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 
 import '../database/database.dart';
 import '../models/item_model.dart';
@@ -142,20 +141,9 @@ class ItemService {
             .map((row) => tagDataToModel(row.readTable(_db.tags)))
             .get();
 
-    return ItemModel(
-      id: itemData.id,
-      name: itemData.name,
-      usageComment: itemData.usageComment,
-      usageRecords: usageRecords,
-      tags: itemTags,
-      emoji: itemData.emoji,
-      iconColor: Color(itemData.iconColorValue),
-      notifyBeforeNextUse: itemData.notifyBeforeNextUse,
-      usageCount: itemData.usageCount,
-      firstUsedDate: itemData.firstUsed,
-      lastUsedDate: itemData.lastUsedDate,
-      avgInterval: itemData.avgInterval,
-    );
+    return itemDataToModel(
+      itemData,
+    ).copyWith(usageRecords: usageRecords, tags: itemTags);
   }
 
   // -------------------- 标签相关操作 --------------------

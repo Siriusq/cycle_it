@@ -104,9 +104,7 @@ class AddEditItemController extends GetxController {
     try {
       if (isEditing) {
         // 编辑时，创建一个不包含使用记录的 ItemModel，并调用更新方法
-        final itemToUpdate = ItemModel(
-          id: _initialItem!.id,
-          // Use the existing ID
+        final itemToUpdate = _initialItem!.copyWith(
           name: nameController.text.trim(),
           usageComment:
               usageCommentController.text.trim().isEmpty
@@ -115,12 +113,9 @@ class AddEditItemController extends GetxController {
           emoji: selectedEmoji.value,
           iconColor: selectedIconColor.value,
           notifyBeforeNextUse: notifyBeforeNextUse.value,
-          notificationTime: notificationTime.value,
+          // 使用 ValueGetter 传递可空值
+          notificationTime: () => notificationTime.value,
           tags: selectedTags.toList(),
-          usageCount: _initialItem.usageCount,
-          lastUsedDate: _initialItem.lastUsedDate,
-          avgInterval: _initialItem.avgInterval,
-          firstUsedDate: _initialItem.firstUsedDate,
         );
         await _itemController.updateItemDetails(itemToUpdate);
       } else {
