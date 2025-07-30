@@ -124,7 +124,6 @@ class UsageRecordDataSource extends DataTableSource {
                   final DateTime? pickedDate =
                       await promptForUsageDate(record.usedAt);
                   if (pickedDate != null) {
-                    Get.back();
                     itemController.editUsageRecord(
                       record,
                       pickedDate,

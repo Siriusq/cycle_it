@@ -62,6 +62,7 @@ class ResponsiveLayout extends StatelessWidget {
           final prevItem = itemCtrl.currentItem.value;
           WidgetsBinding.instance.addPostFrameCallback((_) {
             Get.back();
+            itemCtrl.selectedItemPreview.value = prevItem;
             itemCtrl.currentItem.value = prevItem;
           });
         }

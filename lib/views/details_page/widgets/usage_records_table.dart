@@ -79,7 +79,6 @@ class UsageRecordsTable extends StatelessWidget {
                                   DateTime.now(),
                                 );
                             if (pickedDate != null) {
-                              Get.back();
                               itemCtrl.addUsageRecord(pickedDate);
                               Get.snackbar(
                                 'success'.tr,
