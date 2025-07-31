@@ -21,7 +21,6 @@ class NotificationOptionsSection extends StatelessWidget {
     return Obx(() {
       final isEnabled = controller.notifyBeforeNextUse.value;
       final time = controller.notificationTime.value;
-      print("time: $time");
       final displayText = time?.format(context) ?? 'select_time'.tr;
 
       return Column(

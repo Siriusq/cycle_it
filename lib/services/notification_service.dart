@@ -103,7 +103,7 @@ class NotificationService extends GetxService {
     }
   }
 
-  /// 核心方法：根据物品状态更新通知（计划或取消）
+  /// 根据物品状态更新通知（计划或取消）
   Future<void> updateNotificationForItem(ItemModel item) async {
     if (item.id == null) return;
 
@@ -118,7 +118,7 @@ class NotificationService extends GetxService {
     }
   }
 
-  /// 内部方法：计划一个具体的通知
+  /// 计划一个通知
   Future<void> _scheduleNotification(ItemModel item) async {
     // 再次确认所有必需数据都存在
     if (item.id == null ||
@@ -179,7 +179,6 @@ class NotificationService extends GetxService {
         ),
         windows: WindowsNotificationDetails(),
       ),
-      // 使用新的 matchDateTimeComponents 参数
       androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
       matchDateTimeComponents: DateTimeComponents.dateAndTime,
       payload: item.id.toString(),

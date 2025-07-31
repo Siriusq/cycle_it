@@ -171,7 +171,6 @@ class ItemController extends GetxController {
     List<ItemModel> items,
   ) async {
     final prefs = await SharedPreferences.getInstance();
-    // 使用 ?? false 来安全地处理 null 值
     final bool needsReschedule =
         prefs.getBool('reschedule_notifications_after_import') ??
         false;

@@ -112,6 +112,11 @@ class MultiLanguage extends Translations {
       'notification': '通知',
       'item_name_empty': '物品名称不能为空',
       'item_name_too_long': '物品名称过长',
+      // 通知
+      'permission_denied': '未取得权限',
+      'notification_permission_denied_message': 'App 未取得通知权限，请检查系统设置',
+      'item_usage_reminder': '预计使用日期到达',
+      'item_usage_reminder_body': '@itemName 的预计使用日期已到达',
 
       // 标签管理页
       'tag_management': '标签管理',
@@ -299,6 +304,14 @@ class MultiLanguage extends Translations {
       'notification': 'Notification',
       'item_name_empty': 'Item name cannot be empty',
       'item_name_too_long': 'Item name is too long',
+      // 通知
+      // 通知
+      'permission_denied': 'Permission Denied',
+      'notification_permission_denied_message':
+          'The app does not have notification permissions. Please check your system settings',
+      'item_usage_reminder': 'Estimated date of use arrival',
+      'item_usage_reminder_body':
+          'The estimated date of use for @itemName has arrived.',
 
       // 标签管理页
       'tag_management': 'Tag Management',
@@ -488,6 +501,11 @@ class MultiLanguage extends Translations {
       'notification': '通知',
       'item_name_empty': '物品名稱不能為空',
       'item_name_too_long': '物品名稱過長',
+      // 通知
+      'permission_denied': '未取得權限',
+      'notification_permission_denied_message': 'App 未取得通知權限，請檢查系統設定',
+      'item_usage_reminder': '預計使用日期已到',
+      'item_usage_reminder_body': '@itemName 的預計使用日期已到',
 
       // 標籤管理頁
       'tag_management': '標籤管理',

@@ -7,20 +7,19 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../database/database.dart';
 import '../services/notification_service.dart';
 import '../views/settings_page/widgets/restart_required_page.dart';
-import 'item_controller.dart'; // 导入 ItemController
+import 'item_controller.dart';
 
 class DatabaseManagementController extends GetxController {
   late MyDatabase _db;
-  late ItemController _itemController; // 注入 ItemController
-  late NotificationService _notificationService; // 声明服务
+  late ItemController _itemController;
+  late NotificationService _notificationService;
 
   @override
   void onInit() {
     super.onInit();
     _db = Get.find<MyDatabase>();
-    _itemController =
-        Get.find<ItemController>(); // 获取 ItemController 实例
-    _notificationService = Get.find<NotificationService>(); // 获取服务实例
+    _itemController = Get.find<ItemController>();
+    _notificationService = Get.find<NotificationService>();
   }
 
   // 导出数据库
