@@ -3,7 +3,6 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 import 'package:timezone/timezone.dart' as tz;
 
-import '../controllers/item_controller.dart';
 import '../models/item_model.dart';
 
 class NotificationService extends GetxService {
@@ -142,7 +141,9 @@ class NotificationService extends GetxService {
     // 如果计划时间已过，则取消并返回
     if (scheduledDateTime.isBefore(DateTime.now())) {
       await cancelNotification(item.id!);
-      print('Time already passed');
+      if (kDebugMode) {
+        print('Time already passed');
+      }
       return;
     }
 
@@ -183,7 +184,9 @@ class NotificationService extends GetxService {
       matchDateTimeComponents: DateTimeComponents.dateAndTime,
       payload: item.id.toString(),
     );
-    print('Notification Added');
+    if (kDebugMode) {
+      print('Notification Added');
+    }
   }
 
   /// 取消单个通知
@@ -197,12 +200,17 @@ class NotificationService extends GetxService {
   }
 
   /// 重新计划所有物品的通知
-  Future<void> rescheduleAllNotifications() async {
-    final itemController = Get.find<ItemController>();
-    if (itemController.isListLoading.isFalse) {
-      for (final item in itemController.allItems) {
-        await updateNotificationForItem(item);
-      }
+  Future<void> rescheduleAllNotifications(
+    List<ItemModel> items,
+  ) async {
+    if (kDebugMode) {
+      print(
+        'NotificationService received ${items.length} items to reschedule.',
+      );
+    }
+
+    for (final item in items) {
+      await updateNotificationForItem(item);
     }
   }
 }

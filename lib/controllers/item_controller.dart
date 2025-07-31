@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:material_charts/material_charts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../data/usage_record_data_source.dart';
 import '../database/database.dart';
@@ -156,10 +157,45 @@ class ItemController extends GetxController {
     try {
       final loadedItems = await _itemService.getAllItems();
       allItems.assignAll(loadedItems);
+      // 检查是否需要重新设置通知
+      await _checkAndRescheduleNotificationsAfterImport(loadedItems);
     } catch (e) {
       Get.snackbar('error'.tr, '$e');
     } finally {
       isListLoading.value = false; // 结束加载
+    }
+  }
+
+  /// 检查和执行导入后的通知重新注册
+  Future<void> _checkAndRescheduleNotificationsAfterImport(
+    List<ItemModel> items,
+  ) async {
+    final prefs = await SharedPreferences.getInstance();
+    // 使用 ?? false 来安全地处理 null 值
+    final bool needsReschedule =
+        prefs.getBool('reschedule_notifications_after_import') ??
+        false;
+
+    if (needsReschedule) {
+      if (kDebugMode) {
+        print(
+          'Post-import startup detected in ItemController. Rescheduling all notifications...',
+        );
+      }
+
+      await _notificationService.rescheduleAllNotifications(items);
+
+      // 完成后重置标志位
+      await prefs.setBool(
+        'reschedule_notifications_after_import',
+        false,
+      );
+
+      if (kDebugMode) {
+        print(
+          'Notification reschedule complete. Flag has been reset.',
+        );
+      }
     }
   }
 
