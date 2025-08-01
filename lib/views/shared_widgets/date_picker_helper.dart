@@ -33,5 +33,16 @@ Future<DateTime?> promptForUsageDate(DateTime initialDate) async {
     },
   );
 
-  return pickedDate;
+  if (pickedDate != null) {
+    // 将时间部分统一设置为零点零分，避免时间间隔运算不准确
+    return pickedDate.copyWith(
+      hour: 0,
+      minute: 0,
+      second: 0,
+      millisecond: 0,
+      microsecond: 0,
+    );
+  }
+
+  return null;
 }

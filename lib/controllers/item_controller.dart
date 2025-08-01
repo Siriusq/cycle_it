@@ -112,41 +112,13 @@ class ItemController extends GetxController {
       (_) => _updateDisplayedItems(),
     );
     // 当标签被添加、编辑或删除时，重新加载所有物品以更新其关联的标签信息
-    ever(_tagController.allTags, (_) async {
-      await loadAllItems();
-      // 如果详情页内有物品展示，刷新它的数据
-      if (currentItem.value != null) {
-        await loadItemForDetails(currentItem.value!.id!);
-      }
-    });
-
+    ever(_tagController.allTags, (_) => _refreshData());
     // 当详情数据加载完成后，触发图表和表格数据的处理
     ever(currentItem, (item) async {
       if (item != null) {
-        // 初始化使用记录数据源
-        usageRecordDataSource.value = UsageRecordDataSource(
-          itemId: item.id!,
-          initialRecords: item.usageRecords,
-          initialSortColumn: usageRecordsSortColumn.value,
-          initialSortAscending: usageRecordsSortAscending.value,
-        );
-        // 处理热力图数据
-        _loadHeatmapDataInIsolate(item.usageRecords);
-        // 处理月度图表数据
-        _loadMonthlyUsageDataInIsolate(item.usageRecords);
+        _updateDetailsUI(item);
       } else {
-        usageRecordDataSource.value = null;
-
-        // 清空热力图数据和状态
-        heatMapData.clear();
-        isLoadingHeatmapData.value = false;
-        heatMapError.value = '';
-
-        // 清空月度图表数据和状态
-        monthlyBarChartData.clear();
-        isLoadingMonthlyChartData.value = false;
-        monthlyChartError.value = '';
-        monthlyUsageSum.value = 0.0;
+        _clearDetailsUI();
       }
     });
   }
@@ -195,6 +167,15 @@ class ItemController extends GetxController {
           'Notification reschedule complete. Flag has been reset.',
         );
       }
+    }
+  }
+
+  // 使用新数据刷新页面
+  Future<void> _refreshData() async {
+    await loadAllItems();
+    // 如果详情页内有物品展示，刷新它的数据
+    if (currentItem.value != null) {
+      await loadItemForDetails(currentItem.value!.id!);
     }
   }
 
@@ -286,6 +267,35 @@ class ItemController extends GetxController {
   }
 
   // -------------------- 物品详情页使用记录表格相关方法 --------------------
+  /// 处理使用记录更新
+  Future<void> _processUsageRecordUpdate(int itemId) async {
+    final rootToken = RootIsolateToken.instance;
+    if (rootToken == null) {
+      throw Exception("RootIsolateToken is null.");
+    }
+
+    // 后台整合 ItemModel
+    final freshItem = await compute(
+      _fetchItemDetailsInIsolate,
+      _ItemDetailsPayload(itemId, rootToken),
+    );
+
+    if (freshItem == null) return; // 物品可能被删除
+
+    // 刷新物品列表
+    final index = allItems.indexWhere((item) => item.id == itemId);
+    if (index != -1) {
+      allItems[index] = freshItem;
+    }
+
+    // 如果详情页当前显示的物品是同一个，则刷新
+    if (currentItem.value?.id == itemId) {
+      currentItem.value = freshItem;
+    }
+
+    // 处理计划通知
+    await _notificationService.updateNotificationForItem(freshItem);
+  }
 
   // 加载物品及其使用记录（用于详情页）
   Future<void> loadItemForDetails(int itemId) async {
@@ -335,15 +345,10 @@ class ItemController extends GetxController {
   // 添加使用记录
   Future<void> addUsageRecord(DateTime usedAt) async {
     if (currentItem.value == null) return;
+    final itemId = currentItem.value!.id!;
+    await _itemService.addUsageRecordAndRecalculate(itemId, usedAt);
 
-    await _itemService.addUsageRecordAndRecalculate(
-      currentItem.value!.id!,
-      usedAt,
-    );
-
-    // 重新加载当前物品的详情，这将自动更新 usageRecordDataSource
-    await loadItemForDetails(currentItem.value!.id!);
-    await loadAllItems(); // 更新主页列表的 ItemModel
+    await _processUsageRecordUpdate(itemId);
   }
 
   // 物品卡片快速添加使用记录
@@ -351,11 +356,9 @@ class ItemController extends GetxController {
     ItemModel item,
     DateTime usedAt,
   ) async {
-    await _itemService.addUsageRecordAndRecalculate(item.id!, usedAt);
-    if (currentItem.value?.id == item.id) {
-      await loadItemForDetails(item.id!);
-    }
-    await loadAllItems(); // 更新主页列表的 ItemModel
+    final itemId = item.id!;
+    await _itemService.addUsageRecordAndRecalculate(itemId, usedAt);
+    await _processUsageRecordUpdate(itemId);
   }
 
   // 编辑使用记录的日期
@@ -364,30 +367,26 @@ class ItemController extends GetxController {
     DateTime newUsedAt,
   ) async {
     if (currentItem.value == null) return;
-
+    final itemId = currentItem.value!.id!;
     await _itemService.editUsageRecordAndRecalculate(
       record.id,
-      currentItem.value!.id!,
+      itemId,
       newUsedAt,
     );
 
-    // 重新加载当前物品的详情，这将自动更新 usageRecordDataSource
-    await loadItemForDetails(currentItem.value!.id!);
-    await loadAllItems();
+    await _processUsageRecordUpdate(itemId);
   }
 
   // 删除使用记录
   Future<void> deleteUsageRecord(UsageRecordModel record) async {
     if (currentItem.value == null) return;
-
+    final itemId = currentItem.value!.id!;
     await _itemService.deleteUsageRecordAndRecalculate(
       record.id,
       currentItem.value!.id!,
     );
 
-    // 重新加载当前物品的详情，这将自动更新 usageRecordDataSource
-    await loadItemForDetails(currentItem.value!.id!);
-    await loadAllItems();
+    await _processUsageRecordUpdate(itemId);
   }
 
   // 处理使用记录表格排序的回调方法
@@ -422,6 +421,35 @@ class ItemController extends GetxController {
   }
 
   // -------------------- 物品详情页图表相关方法 --------------------
+
+  void _updateDetailsUI(ItemModel item) {
+    // 初始化使用记录数据源
+    usageRecordDataSource.value = UsageRecordDataSource(
+      itemId: item.id!,
+      initialRecords: item.usageRecords,
+      initialSortColumn: usageRecordsSortColumn.value,
+      initialSortAscending: usageRecordsSortAscending.value,
+    );
+    // 处理热力图数据
+    _loadHeatmapDataInIsolate(item.usageRecords);
+    // 处理月度图表数据
+    _loadMonthlyUsageDataInIsolate(item.usageRecords);
+  }
+
+  void _clearDetailsUI() {
+    usageRecordDataSource.value = null;
+
+    // 清空热力图数据和状态
+    heatMapData.clear();
+    isLoadingHeatmapData.value = false;
+    heatMapError.value = '';
+
+    // 清空月度图表数据和状态
+    monthlyBarChartData.clear();
+    isLoadingMonthlyChartData.value = false;
+    monthlyChartError.value = '';
+    monthlyUsageSum.value = 0.0;
+  }
 
   // 加载并处理热力图数据
   Future<void> _loadHeatmapDataInIsolate(
