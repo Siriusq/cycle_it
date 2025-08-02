@@ -75,7 +75,7 @@ class ItemCardActionButton extends StatelessWidget {
         DateTime.now(),
       );
       if (pickedDate != null) {
-        itemCtrl.addUsageRecordFast(item, pickedDate);
+        itemCtrl.addUsageRecordFast(item.id!, pickedDate);
         Get.snackbar(
           'success'.tr,
           'usage_record_added_hint'.trParams({

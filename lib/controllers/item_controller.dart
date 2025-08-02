@@ -352,11 +352,7 @@ class ItemController extends GetxController {
   }
 
   // 物品卡片快速添加使用记录
-  Future<void> addUsageRecordFast(
-    ItemModel item,
-    DateTime usedAt,
-  ) async {
-    final itemId = item.id!;
+  Future<void> addUsageRecordFast(int itemId, DateTime usedAt) async {
     await _itemService.addUsageRecordAndRecalculate(itemId, usedAt);
     await _processUsageRecordUpdate(itemId);
   }

@@ -83,6 +83,15 @@ void main() async {
   }
 
   runApp(const MyApp());
+
+  // 等待APP完全启动后，处理点击通知的后续动作
+  Future.delayed(Duration(seconds: 1), () {
+    // 延迟1秒执行
+    if (kDebugMode) {
+      print("延迟1秒执行");
+    }
+    notificationService.configureSelectNotificationSubject();
+  });
 }
 
 class MyApp extends StatelessWidget {

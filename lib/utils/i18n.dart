@@ -116,7 +116,12 @@ class MultiLanguage extends Translations {
       'permission_denied': '未取得权限',
       'notification_permission_denied_message': 'App 未取得通知权限，请检查系统设置',
       'item_usage_reminder': '预计使用日期到达',
-      'item_usage_reminder_body': '@itemName 的预计使用日期已到达',
+      'item_usage_reminder_body': '@itemName的预计使用日期已到达',
+      // 通知弹窗
+      'item_usage_reminder_details': '@itemName的预计使用日期已到达，请选择要进行的操作',
+      'notify_delay_one_hour': '一小时后通知我',
+      'notify_delay_one_day': '明天再通知我',
+      'notify_delay_custom': '自定义通知时间',
 
       // 标签管理页
       'tag_management': '标签管理',
@@ -305,13 +310,18 @@ class MultiLanguage extends Translations {
       'item_name_empty': 'Item name cannot be empty',
       'item_name_too_long': 'Item name is too long',
       // 通知
-      // 通知
       'permission_denied': 'Permission Denied',
       'notification_permission_denied_message':
           'The app does not have notification permissions. Please check your system settings',
       'item_usage_reminder': 'Estimated date of use arrival',
       'item_usage_reminder_body':
           'The estimated date of use for @itemName has arrived.',
+      // 通知弹窗
+      'item_usage_reminder_details':
+          'The estimated date of use for @itemName has arrived. Please select the action you want to perform.',
+      'notify_delay_one_hour': 'Notify me one hour later',
+      'notify_delay_one_day': 'Notify me tomorrow',
+      'notify_delay_custom': 'Custom notification time',
 
       // 标签管理页
       'tag_management': 'Tag Management',
@@ -506,6 +516,11 @@ class MultiLanguage extends Translations {
       'notification_permission_denied_message': 'App 未取得通知權限，請檢查系統設定',
       'item_usage_reminder': '預計使用日期已到',
       'item_usage_reminder_body': '@itemName 的預計使用日期已到',
+      // 通知彈窗
+      'item_usage_reminder_details': '@itemName 的預計使用日期已到，請選擇要執行的操作',
+      'notify_delay_one_hour': '一小時後通知我',
+      'notify_delay_one_day': '明天通知我',
+      'notify_delay_custom': '自訂通知時間',
 
       // 標籤管理頁
       'tag_management': '標籤管理',

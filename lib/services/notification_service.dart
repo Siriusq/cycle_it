@@ -1,9 +1,15 @@
+import 'dart:async';
+
+import 'package:cycle_it/views/shared_widgets/notification_handling_dialog.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 import 'package:timezone/timezone.dart' as tz;
 
 import '../models/item_model.dart';
+
+final StreamController<String?> selectNotificationStream =
+    StreamController<String?>.broadcast();
 
 class NotificationService extends GetxService {
   final FlutterLocalNotificationsPlugin _plugin =
@@ -59,14 +65,50 @@ class NotificationService extends GetxService {
       initializationSettings,
       onDidReceiveNotificationResponse:
           onDidReceiveNotificationResponse,
-      onDidReceiveBackgroundNotificationResponse:
-          onDidReceiveBackgroundNotificationResponse,
+      //todo: 处理冷启动后的通知处理
+      // onDidReceiveBackgroundNotificationResponse:
+      //     onDidReceiveBackgroundNotificationResponse,
     );
 
-    // 6. 请求权限
+    // 6. 检查 APP 是否由通知拉起
+    final NotificationAppLaunchDetails? notificationAppLaunchDetails =
+        await _plugin.getNotificationAppLaunchDetails();
+    if (notificationAppLaunchDetails?.didNotificationLaunchApp ??
+        false) {
+      selectNotificationStream.add(
+        notificationAppLaunchDetails!.notificationResponse?.payload,
+      );
+    }
+
+    // 7. 请求权限
     await _requestPermissions();
 
     return this;
+  }
+
+  // 通知后的动作
+  void configureSelectNotificationSubject() {
+    selectNotificationStream.stream.listen((String? payload) {
+      if (payload != null) {
+        final int divideIdx = payload.indexOf(' ');
+        final int? itemId = int.tryParse(
+          payload.substring(0, divideIdx),
+        );
+        final String itemName = payload.substring(divideIdx + 1);
+
+        if (itemId != null) {
+          if (kDebugMode) {
+            print('App launched by notification with $itemId');
+          }
+          Get.dialog(
+            NotificationHandlingDialog(
+              itemId: itemId,
+              itemName: itemName,
+            ),
+          );
+        }
+      }
+    });
   }
 
   /// 内部方法：请求各平台权限
@@ -111,36 +153,46 @@ class NotificationService extends GetxService {
     if (item.notifyBeforeNextUse &&
         item.nextExpectedUse != null &&
         item.notificationTime != null) {
-      await _scheduleNotification(item);
+      // 拼装通知时间
+      final expectedDate = item.nextExpectedUse!;
+      final scheduledTime = item.notificationTime!;
+      final scheduledDateTime = DateTime(
+        expectedDate.year,
+        expectedDate.month,
+        expectedDate.day,
+        scheduledTime.hour,
+        scheduledTime.minute,
+      );
+      // 计划通知
+      await _scheduleNotification(
+        item.id!,
+        item.name,
+        scheduledDateTime,
+      );
     } else {
       // 任何一个条件不满足，都取消已有的通知
       await cancelNotification(item.id!);
     }
   }
 
-  /// 计划一个通知
-  Future<void> _scheduleNotification(ItemModel item) async {
-    // 再次确认所有必需数据都存在
-    if (item.id == null ||
-        item.nextExpectedUse == null ||
-        item.notificationTime == null) {
-      return;
-    }
+  // 推迟通知
+  Future<void> delayNotificationForItem(
+    int itemId,
+    String itemName,
+    DateTime scheduledDateTime,
+  ) async {
+    _scheduleNotification(itemId, itemName, scheduledDateTime);
+  }
 
-    final expectedDate = item.nextExpectedUse!;
-    final scheduledTime = item.notificationTime!;
-
-    final scheduledDateTime = DateTime(
-      expectedDate.year,
-      expectedDate.month,
-      expectedDate.day,
-      scheduledTime.hour,
-      scheduledTime.minute,
-    );
-
+  // 计划一个通知
+  Future<void> _scheduleNotification(
+    int itemId,
+    String itemName,
+    DateTime scheduledDateTime,
+  ) async {
     // 如果计划时间已过，则取消并返回
     if (scheduledDateTime.isBefore(DateTime.now())) {
-      await cancelNotification(item.id!);
+      await cancelNotification(itemId);
       if (kDebugMode) {
         print('Time already passed');
       }
@@ -154,9 +206,9 @@ class NotificationService extends GetxService {
     );
 
     await _plugin.zonedSchedule(
-      item.id!,
+      itemId,
       'item_usage_reminder'.tr,
-      'item_usage_reminder_body'.trParams({'itemName': item.name}),
+      'item_usage_reminder_body'.trParams({'itemName': itemName}),
       tzScheduledDate,
       const NotificationDetails(
         android: AndroidNotificationDetails(
@@ -181,7 +233,7 @@ class NotificationService extends GetxService {
       ),
       androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
       matchDateTimeComponents: DateTimeComponents.dateAndTime,
-      payload: item.id.toString(),
+      payload: "$itemId $itemName",
     );
     if (kDebugMode) {
       print('Notification Added');
@@ -226,15 +278,10 @@ void onDidReceiveBackgroundNotificationResponse(
 }
 
 /// 处理前台和后台的通知点击事件
-void onDidReceiveNotificationResponse(NotificationResponse response) {
+void onDidReceiveNotificationResponse(
+  NotificationResponse response,
+) async {
   if (response.payload != null) {
-    if (kDebugMode) {
-      print('Notification payload: ${response.payload}');
-    }
-    // 示例：可以根据 payload 跳转到详情页
-    // final itemId = int.tryParse(response.payload!);
-    // if (itemId != null) {
-    //   Get.toNamed('/Details', arguments: itemId);
-    // }
+    selectNotificationStream.add(response.payload);
   }
 }
