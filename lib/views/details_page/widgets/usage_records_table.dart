@@ -75,7 +75,7 @@ class UsageRecordsTable extends StatelessWidget {
                           ), // 添加按钮
                           onPressed: () async {
                             final DateTime? pickedDate =
-                                await promptForUsageDate(
+                                await promptForDateSelection(
                                   DateTime.now(),
                                 );
                             if (pickedDate != null) {

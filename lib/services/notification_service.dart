@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:cycle_it/views/shared_widgets/notification_handling_dialog.dart';
+import 'package:cycle_it/views/notification_handling/notification_handling_dialog.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';

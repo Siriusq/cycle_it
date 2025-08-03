@@ -3,15 +3,21 @@ import 'package:get/get.dart';
 
 import '../../utils/responsive_style.dart';
 
-Future<DateTime?> promptForUsageDate(DateTime initialDate) async {
+Future<DateTime?> promptForDateSelection(
+  DateTime initialDate, {
+  bool isPrevious = true,
+}) async {
   final style = ResponsiveStyle.to;
   final spacingMD = style.spacingMD;
 
   final DateTime? pickedDate = await showDatePicker(
     context: Get.context!,
     initialDate: initialDate,
-    firstDate: DateTime(2000),
-    lastDate: DateTime.now(),
+    firstDate: isPrevious ? DateTime(2000) : DateTime.now(),
+    lastDate:
+        isPrevious
+            ? DateTime.now()
+            : DateTime.now().add(Duration(days: 365)),
     helpText: 'date_help'.tr,
     cancelText: 'cancel'.tr,
     confirmText: 'confirm'.tr,

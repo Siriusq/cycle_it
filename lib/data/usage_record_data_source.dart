@@ -122,7 +122,7 @@ class UsageRecordDataSource extends DataTableSource {
               onSelected: (String value) async {
                 if (value == 'edit') {
                   final DateTime? pickedDate =
-                      await promptForUsageDate(record.usedAt);
+                      await promptForDateSelection(record.usedAt);
                   if (pickedDate != null) {
                     itemController.editUsageRecord(
                       record,

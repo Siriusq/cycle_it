@@ -122,6 +122,12 @@ class MultiLanguage extends Translations {
       'notify_delay_one_hour': '一小时后通知我',
       'notify_delay_one_day': '明天再通知我',
       'notify_delay_custom': '自定义通知时间',
+      // 通知延迟反馈 snack bar
+      'selection_cancel': '选择取消',
+      'notify_delay_custom_cancel': '延迟通知时间操作已被取消',
+      'selection_invalid': '选择无效',
+      'notify_delay_custom_invalid': '延迟通知时间早于当前时间，操作无效',
+      'notify_delay_custom_success': '通知时间已延迟至@time',
 
       // 标签管理页
       'tag_management': '标签管理',
@@ -322,6 +328,15 @@ class MultiLanguage extends Translations {
       'notify_delay_one_hour': 'Notify me one hour later',
       'notify_delay_one_day': 'Notify me tomorrow',
       'notify_delay_custom': 'Custom notification time',
+      // 通知延迟反馈 snack bar
+      'selection_cancel': 'Selection canceled',
+      'notify_delay_custom_cancel':
+          'The operation to delay the notification time has been canceled',
+      'selection_invalid': 'Selection invalid',
+      'notify_delay_custom_invalid':
+          'The selected delay notification time is earlier than the current time, so the operation is invalid',
+      'notify_delay_custom_success':
+          'The notification time has been delayed to @time.',
 
       // 标签管理页
       'tag_management': 'Tag Management',
@@ -521,6 +536,12 @@ class MultiLanguage extends Translations {
       'notify_delay_one_hour': '一小時後通知我',
       'notify_delay_one_day': '明天通知我',
       'notify_delay_custom': '自訂通知時間',
+      // 通知延遲回饋 snack bar
+      'selection_cancel': '選擇取消',
+      'notify_delay_custom_cancel': '延遲通知時間操作已被取消',
+      'selection_invalid': '選擇無效',
+      'notify_delay_custom_invalid': '延遲通知時間早於當前時間，操作無效',
+      'notify_delay_custom_success': '通知時間已延遲至@time',
 
       // 標籤管理頁
       'tag_management': '標籤管理',

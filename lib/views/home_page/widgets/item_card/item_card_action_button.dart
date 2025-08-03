@@ -71,7 +71,7 @@ class ItemCardActionButton extends StatelessWidget {
     ItemModel item,
   ) async {
     if (value == 'cycle') {
-      final DateTime? pickedDate = await promptForUsageDate(
+      final DateTime? pickedDate = await promptForDateSelection(
         DateTime.now(),
       );
       if (pickedDate != null) {
