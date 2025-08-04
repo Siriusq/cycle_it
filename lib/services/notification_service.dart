@@ -15,6 +15,9 @@ class NotificationService extends GetxService {
   final FlutterLocalNotificationsPlugin _plugin =
       FlutterLocalNotificationsPlugin();
 
+  // 存储从终止状态启动 App 时的通知响应
+  NotificationResponse? _initialNotificationResponse;
+
   Future<NotificationService> init() async {
     // 1. Android 初始化设置
     const AndroidInitializationSettings
@@ -39,6 +42,7 @@ class NotificationService extends GetxService {
     const LinuxInitializationSettings initializationSettingsLinux =
         LinuxInitializationSettings(defaultActionName: 'Open');
 
+    // 4. Windows 初始化设置
     final WindowsInitializationSettings
     initializationSettingsWindows = WindowsInitializationSettings(
       appName: 'Flutter Local Notifications Example',
@@ -48,7 +52,7 @@ class NotificationService extends GetxService {
       guid: '56d804df-4bf8-4a95-990a-8574d1f770dd',
     );
 
-    // 4. 组合成总的初始化设置
+    // 5. 组合成总的初始化设置
     final InitializationSettings initializationSettings =
         InitializationSettings(
           android: initializationSettingsAndroid,
@@ -58,32 +62,42 @@ class NotificationService extends GetxService {
           windows: initializationSettingsWindows,
         );
 
-    // 5. 初始化插件
-    //    onDidReceiveNotificationResponse: 用户点击通知时触发（应用在后台或已终止）
-    //    onDidReceiveBackgroundNotificationResponse: 应用在后台时，用户与通知交互时触发
+    // 6. 初始化插件
     await _plugin.initialize(
       initializationSettings,
       onDidReceiveNotificationResponse:
           onDidReceiveNotificationResponse,
-      //todo: 处理冷启动后的通知处理
-      // onDidReceiveBackgroundNotificationResponse:
-      //     onDidReceiveBackgroundNotificationResponse,
     );
 
-    // 6. 检查 APP 是否由通知拉起
+    // 7. 检查 APP 是否由通知拉起，如果是，则暂存该通知响应，而不是立即处理
     final NotificationAppLaunchDetails? notificationAppLaunchDetails =
         await _plugin.getNotificationAppLaunchDetails();
     if (notificationAppLaunchDetails?.didNotificationLaunchApp ??
         false) {
-      selectNotificationStream.add(
-        notificationAppLaunchDetails!.notificationResponse?.payload,
-      );
+      _initialNotificationResponse =
+          notificationAppLaunchDetails!.notificationResponse;
+      if (kDebugMode) {
+        print('App launched by notification, payload stored.');
+      }
     }
 
-    // 7. 请求权限
+    // 8. 请求权限
     await _requestPermissions();
 
     return this;
+  }
+
+  // 在 UI 准备好后处理初始通知
+  void handleInitialNotification() {
+    if (_initialNotificationResponse != null) {
+      if (kDebugMode) {
+        print('Handling initial notification now.');
+      }
+      // 将存储的 payload 添加到流中，后续逻辑与普通通知点击一致
+      selectNotificationStream.add(
+        _initialNotificationResponse!.payload,
+      );
+    }
   }
 
   // 通知后的动作
@@ -111,7 +125,7 @@ class NotificationService extends GetxService {
     });
   }
 
-  /// 内部方法：请求各平台权限
+  /// 请求各平台权限
   Future<void> _requestPermissions() async {
     if (GetPlatform.isIOS || GetPlatform.isMacOS) {
       // 为 iOS 和 macOS 请求权限
@@ -266,7 +280,7 @@ class NotificationService extends GetxService {
   }
 }
 
-/// 这是一个顶层函数或静态方法，用于处理后台通知响应
+/// 顶层函数或静态方法，用于处理后台通知响应
 @pragma('vm:entry-point')
 void onDidReceiveBackgroundNotificationResponse(
   NotificationResponse response,

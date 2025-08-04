@@ -82,15 +82,14 @@ void main() async {
     await itemService.initializeData();
   }
 
+  // 设置流监听器，用于处理所有（包括冷启动和后续）通知点击
+  notificationService.configureSelectNotificationSubject();
+
   runApp(const MyApp());
 
-  // 等待APP完全启动后，处理点击通知的后续动作
-  Future.delayed(Duration(seconds: 1), () {
-    // 延迟1秒执行
-    if (kDebugMode) {
-      print("延迟1秒执行");
-    }
-    notificationService.configureSelectNotificationSubject();
+  // 在 App 启动后，并且第一帧已经渲染完毕后，再处理冷启动时的通知，避免dialog无法触发
+  WidgetsBinding.instance.addPostFrameCallback((_) {
+    notificationService.handleInitialNotification();
   });
 }
 

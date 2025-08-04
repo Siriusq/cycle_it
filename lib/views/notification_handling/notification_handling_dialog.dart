@@ -46,7 +46,7 @@ class NotificationHandlingDialog extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.center,
-            spacing: 8,
+            spacing: 16,
             children: [
               Row(
                 children: [
@@ -62,7 +62,6 @@ class NotificationHandlingDialog extends StatelessWidget {
                 ],
               ),
 
-              const SizedBox(height: 4),
               // 快速添加使用记录
               _buildActionButton(
                 context: context,
