@@ -55,7 +55,7 @@ void main() async {
     WindowOptions windowOptions = WindowOptions(
       size: const Size(800, 600),
       minimumSize: const Size(320, 300),
-      center: false,
+      center: true,
       title: 'Cycle It',
     );
 

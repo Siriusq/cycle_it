@@ -99,6 +99,9 @@ dev_dependencies:
   drift_dev: ^2.26.0
   build_runner: ^2.4.15
 
+  # app icon
+  flutter_launcher_icons: ^0.14.4
+
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
@@ -116,6 +119,8 @@ flutter:
   #   - images/a_dot_ham.jpeg
   assets:
     - assets/images/logo_transparent.png
+    - assets/images/app_icon.png
+    - assets/images/app_logo_white_bg.png
     - assets/images/splash_logo.png
     - assets/images/splash_logo_android_12.png
     - assets/themes/
@@ -169,3 +174,24 @@ flutter_native_splash:
 
     color_dark: "#111418"
     image_dark: assets/images/splash_logo_android_12.png
+
+flutter_launcher_icons:
+  # 图标文件路径
+  image_path: "assets/images/app_icon.png"
+  # Android 配置
+  android: true
+  # iOS 配置
+  ios: true
+  remove_alpha_ios: true
+  image_path_ios_dark_transparent: "assets/images/app_icon.png"
+  # 桌面平台配置
+  windows:
+    generate: true
+    image_path: "assets/images/app_icon.png"
+    icon_size: 256 # 生成 .ico 文件的大小
+  macos:
+    generate: true
+    image_path: "assets/images/app_icon.png"
+  linux:
+    generate: true
+    image_path: "assets/images/app_icon.png"

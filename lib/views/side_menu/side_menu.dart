@@ -1,7 +1,6 @@
 import 'package:cycle_it/controllers/item_list_order_controller.dart';
 import 'package:cycle_it/controllers/tag_controller.dart';
 import 'package:cycle_it/utils/responsive_style.dart';
-import 'package:cycle_it/views/notification_handling/notification_handling_dialog.dart';
 import 'package:cycle_it/views/side_menu/widgets/side_menu_app_bar.dart';
 import 'package:cycle_it/views/side_menu/widgets/side_menu_ordering_section.dart';
 import 'package:cycle_it/views/side_menu/widgets/side_menu_tag_section.dart';
@@ -42,19 +41,6 @@ class SideMenu extends StatelessWidget {
 
                 //标签
                 SideMenuTagSection(),
-
-                // 测试通知弹窗
-                ElevatedButton(
-                  onPressed: () {
-                    Get.dialog(
-                      NotificationHandlingDialog(
-                        itemId: 13,
-                        itemName: 'This is a test name for an item',
-                      ),
-                    );
-                  },
-                  child: Text('data'),
-                ),
               ],
             ),
           ),

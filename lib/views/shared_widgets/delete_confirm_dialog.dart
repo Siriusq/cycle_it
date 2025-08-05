@@ -7,15 +7,20 @@ Future<bool?> showDeleteConfirmDialog({
 }) async {
   final style = ResponsiveStyle.to;
   final TextStyle bodyTextLG = style.bodyTextLG;
+  final TextStyle titleTextStyleLG = style.titleTextLG;
 
   return await Get.dialog<bool?>(
     AlertDialog(
-      title: Text('delete_confirm'.tr),
+      title: Text(
+        'delete_confirm'.tr,
+        style: titleTextStyleLG.copyWith(fontSize: 18),
+        overflow: TextOverflow.visible,
+      ),
       content: Text(
         'are_you_sure_to_delete'.trParams({
           'target': deleteTargetName,
         }),
-        style: bodyTextLG,
+        textAlign: TextAlign.justify,
       ),
       actions: <Widget>[
         // 取消按钮
