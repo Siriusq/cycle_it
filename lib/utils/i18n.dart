@@ -31,8 +31,8 @@ class MultiLanguage extends Translations {
       // 排序
       'order_by': '排序',
       'order_by_names': '物品名称',
-      'order_by_recent_used_time': '最后使用时间',
-      'order_by_frequency': '使用频率',
+      'order_by_recent_used_time': '最后记录时间',
+      'order_by_frequency': '循环频率',
       // 标签
       'tags': '标签',
 
@@ -44,45 +44,45 @@ class MultiLanguage extends Translations {
       'no_matched_item': '没有符合条件的物品',
       // 物品卡片
       'cycle': '循物',
-      'usage_record_added_hint': '已成功添加使用记录@record到@item',
-      'usage_cycle_brief': '使用周期：@freq天/次',
-      'usage_cycle_brief_data_not_enough': '使用周期：数据不足',
+      'usage_record_added_hint': '已成功添加循环记录@record到@item',
+      'usage_cycle_brief': '循环周期：@freq天/次',
+      'usage_cycle_brief_data_not_enough': '循环周期：数据不足',
       'usage_cycle_brief_data': '@freq天/次',
-      'last_used_at_brief': '上次使用：@date',
-      'last_used_at_brief_data_not_enough': '上次使用：数据不足',
+      'last_used_at_brief': '最近记录：@date',
+      'last_used_at_brief_data_not_enough': '最近记录：数据不足',
       'last_used_at_brief_data': '@date',
       'usage_count_brief_data': '@count次',
       'est_next_use_date_data': '@date',
       // 进度条
-      'est_timer': '使用周期进度预测',
-      'est_timer_brief': '预计下次使用：@date',
+      'est_timer': '循环周期进度预测',
+      'est_timer_brief': '预计下次循环：@date',
 
       // 详情页
       'please_select_an_item': '请选择物品',
       // 使用记录
-      'usage_record': '使用记录',
+      'usage_record': '循环记录',
       'index': '序号',
-      'used_at': '使用日期',
+      'used_at': '循环日期',
       'interval_since_last_use': '间隔天数',
       'actions': '操作',
-      'usage_record_deleted_hint': '已成功删除使用记录@record',
-      'loading_usage_record': '加载使用记录中...',
+      'usage_record_deleted_hint': '已成功删除循环记录@record',
+      'loading_usage_record': '加载循环记录中...',
       // 基础信息
-      'no_usage_records': '暂无使用记录',
+      'no_usage_records': '暂无循环记录',
       'data_not_enough': '数据不足',
-      'usage_count': '使用次数',
+      'usage_count': '循环次数',
       'usage_count_comment': '自@date起',
-      'usage_cycle': '使用周期',
+      'usage_cycle': '循环周期',
       'usage_cycle_comment': '天/次',
-      'last_used_at': '上次使用',
+      'last_used_at': '上次记录',
       'last_used_at_comment': '天前，@date',
-      'est_next_use_date': '下次使用预测',
+      'est_next_use_date': '下次循环预测',
       'est_next_use_date_comment': '@trend，@date',
       'days_later': '天后',
       'days_ago': '天前',
       // 柱状图
-      'monthly_usage_count': '每月使用次数',
-      'no_usage_record_in_the_past_year': '过去一年内无使用记录',
+      'monthly_usage_count': '每月循环次数',
+      'no_usage_record_in_the_past_year': '过去一年内无循环记录',
       'Jan': '1月',
       'Feb': '2月',
       'Mar': '3月',
@@ -96,7 +96,7 @@ class MultiLanguage extends Translations {
       'Nov': '11月',
       'Dec': '12月',
       // 热点图
-      'usage_record_hot_map': '使用记录热点图',
+      'usage_record_hot_map': '循环记录热点图',
       'less': '少',
       'more': '多',
       // 加载报错
@@ -104,21 +104,21 @@ class MultiLanguage extends Translations {
 
       // 物品管理页
       'item_name': '物品名称',
-      'item_comment': '使用注释 (可选)',
+      'item_comment': '注释 (可选)',
       'add_new_item': '添加物品',
       'edit_item': '编辑物品',
       'item_changed_successfully': '已成功@action@name',
-      'enable_notify': '预计使用日期到达时通知提醒',
+      'enable_notify': '预计循环周期到达时通知提醒',
       'notification': '通知',
       'item_name_empty': '物品名称不能为空',
       'item_name_too_long': '物品名称过长',
       // 通知
       'permission_denied': '未取得权限',
       'notification_permission_denied_message': 'App 未取得通知权限，请检查系统设置',
-      'item_usage_reminder': '预计使用日期到达',
-      'item_usage_reminder_body': '@itemName的预计使用日期已到达',
+      'item_usage_reminder': '预计循环周期到达',
+      'item_usage_reminder_body': '@itemName的预计循环周期已到达',
       // 通知弹窗
-      'item_usage_reminder_details': '@itemName的预计使用日期已到达，请选择要进行的操作',
+      'item_usage_reminder_details': '@itemName的预计循环周期已到达，请选择要进行的操作',
       'notify_delay_one_hour': '一小时后通知我',
       'notify_delay_one_day': '明天再通知我',
       'notify_delay_custom': '自定义通知时间',
@@ -145,7 +145,7 @@ class MultiLanguage extends Translations {
 
       // 删除确认弹窗
       'delete_confirm': '删除确认',
-      'are_you_sure_to_delete': '确定要删除',
+      'are_you_sure_to_delete': '确定要删除@target吗？',
       // 日期选择弹窗
       'date_format_error': '日期格式错误',
       'date_invalid_error': '日期不可用',
@@ -227,8 +227,8 @@ class MultiLanguage extends Translations {
       // 排序
       'order_by': 'Order By',
       'order_by_names': 'Names',
-      'order_by_recent_used_time': 'Last Used Time',
-      'order_by_frequency': 'Usage Frequency',
+      'order_by_recent_used_time': 'Last Recorded Time',
+      'order_by_frequency': 'Cycle Frequency',
       // 标签
       'tags': 'Tags',
 
@@ -242,49 +242,49 @@ class MultiLanguage extends Translations {
       // 物品卡片
       'cycle': 'Cycle It',
       'usage_record_added_hint':
-          'Successfully added usage record @record to @item',
-      'usage_cycle_brief': 'Usage Cycle: @freq days/time',
+          'Successfully added cycle record @record to @item',
+      'usage_cycle_brief': 'Cycle Interval: @freq days/time',
       'usage_cycle_brief_data_not_enough':
-          'Usage Cycle: data not enough',
+          'Cycle Interval: data not enough',
       'usage_cycle_brief_data': '@freq days/time',
-      'last_used_at_brief': 'Last Used Date: @date',
+      'last_used_at_brief': 'Last Recorded Date: @date',
       'last_used_at_brief_data_not_enough':
-          'Last Used Date: data not enough',
+          'Last Recorded Date: data not enough',
       'last_used_at_brief_data': '@date',
       'usage_count_brief_data': '@count times',
       'est_next_use_date_data': '@date',
       // 进度条
-      'est_timer': 'EST. Usage Cycle Progress',
-      'est_timer_brief': 'EST. Next Use: @date',
+      'est_timer': 'EST. Cycle Progress',
+      'est_timer_brief': 'EST. Next Cycle Date: @date',
 
       // 详情页
       'please_select_an_item': 'Please select an item',
       // 使用记录
-      'usage_record': 'Usage Record',
+      'usage_record': 'Cycle Record',
       'index': 'ID',
-      'used_at': 'Used At',
+      'used_at': 'Recorded At',
       'interval_since_last_use': 'Interval',
       'actions': 'Action',
       'usage_record_deleted_hint':
-          'Successfully deleted the usage record @record',
-      'loading_usage_record': 'Loading usage records...',
+          'Successfully deleted the cycle record @record',
+      'loading_usage_record': 'Loading cycle records...',
       // 基础信息
-      'no_usage_records': 'No usage record',
+      'no_usage_records': 'No cycle record',
       'data_not_enough': 'Data not enough',
-      'usage_count': 'Usage Count',
+      'usage_count': 'Cycle Count',
       'usage_count_comment': 'from @date',
-      'usage_cycle': 'Usage Cycle',
+      'usage_cycle': 'Cycle Interval',
       'usage_cycle_comment': 'days/time',
-      'last_used_at': 'Last Used',
+      'last_used_at': 'Last Recorded',
       'last_used_at_comment': 'days ago at @date',
-      'est_next_use_date': 'EST. Next Use',
+      'est_next_use_date': 'EST. Next Cycle Date',
       'est_next_use_date_comment': '@trend at @date',
       'days_later': 'days later',
       'days_ago': 'days ago',
       // 柱状图
-      'monthly_usage_count': 'Monthly Usage Count',
+      'monthly_usage_count': 'Monthly Cycle Count',
       'no_usage_record_in_the_past_year':
-          'No usage record in the past year',
+          'No cycle record in the past year',
       'Jan': 'Jan',
       'Feb': 'Feb',
       'Mar': 'Mar',
@@ -298,7 +298,7 @@ class MultiLanguage extends Translations {
       'Nov': 'Nov',
       'Dec': 'Dec',
       // 热点图
-      'usage_record_hot_map': 'Usage Record Hot Map',
+      'usage_record_hot_map': 'Cycle Record Hot Map',
       'less': 'Less',
       'more': 'More',
       // 加载报错
@@ -311,7 +311,7 @@ class MultiLanguage extends Translations {
       'add_new_item': 'Add Item',
       'edit_item': 'Edit Item',
       'item_changed_successfully': 'Successfully @action @name',
-      'enable_notify': 'Notify on Estimated Usage Date',
+      'enable_notify': 'Notify on Estimated Cycle Date',
       'notification': 'Notification',
       'item_name_empty': 'Item name cannot be empty',
       'item_name_too_long': 'Item name is too long',
@@ -319,12 +319,12 @@ class MultiLanguage extends Translations {
       'permission_denied': 'Permission Denied',
       'notification_permission_denied_message':
           'The app does not have notification permissions. Please check your system settings',
-      'item_usage_reminder': 'Estimated date of use arrival',
+      'item_usage_reminder': 'Estimated date of cycle arrival',
       'item_usage_reminder_body':
-          'The estimated date of use for @itemName has arrived.',
+          'The estimated cycle date for @itemName has arrived.',
       // 通知弹窗
       'item_usage_reminder_details':
-          'The estimated date of use for @itemName has arrived. Please select the action you want to perform.',
+          'The estimated cycle date for @itemName has arrived. Please select the action you want to perform.',
       'notify_delay_one_hour': 'Notify me one hour later',
       'notify_delay_one_day': 'Notify me tomorrow',
       'notify_delay_custom': 'Custom notification time',
@@ -445,8 +445,8 @@ class MultiLanguage extends Translations {
       // 排序
       'order_by': '排序',
       'order_by_names': '物品名稱',
-      'order_by_recent_used_time': '最後使用時間',
-      'order_by_frequency': '使用頻率',
+      'order_by_recent_used_time': '最後記錄時間',
+      'order_by_frequency': '循環頻率',
       // 標籤
       'tags': '標籤',
 
@@ -458,45 +458,45 @@ class MultiLanguage extends Translations {
       'no_matched_item': '沒有符合條件的物品',
       // 物品卡片
       'cycle': '循物',
-      'usage_record_added_hint': '已成功新增使用紀錄@record到@item',
-      'usage_cycle_brief': '使用週期：@freq天/次',
-      'usage_cycle_brief_data_not_enough': '使用週期：資料不足',
+      'usage_record_added_hint': '已成功新增循環紀錄@record到@item',
+      'usage_cycle_brief': '循環週期：@freq天/次',
+      'usage_cycle_brief_data_not_enough': '循環週期：資料不足',
       'usage_cycle_brief_data': '@freq天/次',
-      'last_used_at_brief': '上次使用：@date',
-      'last_used_at_brief_data_not_enough': '上次使用：資料不足',
+      'last_used_at_brief': '最近記錄：@date',
+      'last_used_at_brief_data_not_enough': '最近記錄：資料不足',
       'last_used_at_brief_data': '@date',
       'usage_count_brief_data': '@count次',
       'est_next_use_date_data': '@date',
       // 進度條
-      'est_timer': '使用週期進度預測',
-      'est_timer_brief': '預計下次使用：@date',
+      'est_timer': '循環週期進度預測',
+      'est_timer_brief': '預計下次循環：@date',
 
       // 詳情頁
       'please_select_an_item': '請選擇物品',
       // 使用紀錄
-      'usage_record': '使用紀錄',
+      'usage_record': '循環紀錄',
       'index': '序號',
-      'used_at': '使用日期',
+      'used_at': '循環日期',
       'interval_since_last_use': '間隔天數',
       'actions': '操作',
-      'usage_record_deleted_hint': '已成功刪除使用紀錄@record',
-      'loading_usage_record': '載入使用紀錄中...',
+      'usage_record_deleted_hint': '已成功刪除循環紀錄@record',
+      'loading_usage_record': '載入循環紀錄中...',
       // 基礎資訊
-      'no_usage_records': '暫無使用紀錄',
+      'no_usage_records': '暫無循環紀錄',
       'data_not_enough': '資料不足',
-      'usage_count': '使用次數',
+      'usage_count': '循環次數',
       'usage_count_comment': '自@date起',
-      'usage_cycle': '使用週期',
+      'usage_cycle': '循環週期',
       'usage_cycle_comment': '天/次',
-      'last_used_at': '上次使用',
+      'last_used_at': '上次紀錄',
       'last_used_at_comment': '天前，@date',
-      'est_next_use_date': '下次使用預測',
+      'est_next_use_date': '下次循環預測',
       'est_next_use_date_comment': '@trend，@date',
       'days_later': '天後',
       'days_ago': '天前',
       // 柱狀圖
-      'monthly_usage_count': '每月使用次數',
-      'no_usage_record_in_the_past_year': '過去一年內無使用紀錄',
+      'monthly_usage_count': '每月循環次數',
+      'no_usage_record_in_the_past_year': '過去一年內無循環紀錄',
       'Jan': '1月',
       'Feb': '2月',
       'Mar': '3月',
@@ -510,7 +510,7 @@ class MultiLanguage extends Translations {
       'Nov': '11月',
       'Dec': '12月',
       // 熱點圖
-      'usage_record_hot_map': '使用紀錄熱點圖',
+      'usage_record_hot_map': '循環紀錄熱點圖',
       'less': '少',
       'more': '多',
       // 載入報錯
@@ -518,21 +518,21 @@ class MultiLanguage extends Translations {
 
       // 物品管理頁
       'item_name': '物品名稱',
-      'item_comment': '使用註解（可選）',
+      'item_comment': '註解（可選）',
       'add_new_item': '新增物品',
       'edit_item': '編輯物品',
       'item_changed_successfully': '已成功@action@name',
-      'enable_notify': '預計使用日期到達時通知提醒',
+      'enable_notify': '預計循環週期到達時通知提醒',
       'notification': '通知',
       'item_name_empty': '物品名稱不能為空',
       'item_name_too_long': '物品名稱過長',
       // 通知
       'permission_denied': '未取得權限',
       'notification_permission_denied_message': 'App 未取得通知權限，請檢查系統設定',
-      'item_usage_reminder': '預計使用日期已到',
-      'item_usage_reminder_body': '@itemName 的預計使用日期已到',
+      'item_usage_reminder': '預計循環週期已到',
+      'item_usage_reminder_body': '@itemName 的預計循環週期已到',
       // 通知彈窗
-      'item_usage_reminder_details': '@itemName 的預計使用日期已到，請選擇要執行的操作',
+      'item_usage_reminder_details': '@itemName 的預計循環週期已到，請選擇要執行的操作',
       'notify_delay_one_hour': '一小時後通知我',
       'notify_delay_one_day': '明天通知我',
       'notify_delay_custom': '自訂通知時間',
@@ -559,7 +559,7 @@ class MultiLanguage extends Translations {
 
       // 刪除確認彈窗
       'delete_confirm': '刪除確認',
-      'are_you_sure_to_delete': '確定要刪除',
+      'are_you_sure_to_delete': '確定要刪除@target嗎？',
       // 日期選擇彈窗
       'date_format_error': '日期格式錯誤',
       'date_invalid_error': '日期無效',

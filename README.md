@@ -1,4 +1,4 @@
 # cycle_it
 
-A cross-platform app that records the usage cycle of an item and is able to predict when the item will be used next based on usage data
-
+An app that tracks the reuse cycle of items and can predict the next reuse time based on the cycle
+records and send notifications.
