@@ -92,7 +92,7 @@ BEGIN
             VALUE "CompanyName", "com.example" "\0"
             VALUE "FileDescription", "cycle_it" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "cycle_it" "\0"
+            VALUE "InternalName", "top.siriusq.cycleit" "\0"
             VALUE "LegalCopyright", "Copyright (C) 2025 com.example. All rights reserved." "\0"
             VALUE "OriginalFilename", "cycle_it.exe" "\0"
             VALUE "ProductName", "cycle_it" "\0"
