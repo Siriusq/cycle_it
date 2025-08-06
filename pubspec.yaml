@@ -120,6 +120,7 @@ flutter:
   assets:
     - assets/images/logo_transparent.png
     - assets/images/app_icon.png
+    - assets/images/app_logo_ios.png
     - assets/images/app_logo_white_bg.png
     - assets/images/splash_logo.png
     - assets/images/splash_logo_android_12.png
@@ -183,7 +184,8 @@ flutter_launcher_icons:
   # iOS 配置
   ios: true
   remove_alpha_ios: true
-  image_path_ios_dark_transparent: "assets/images/app_icon.png"
+  image_path_ios: "assets/images/app_logo_ios.png"
+  image_path_ios_dark_transparent: "assets/images/app_logo_ios.png"
   # 桌面平台配置
   windows:
     generate: true
@@ -191,7 +193,7 @@ flutter_launcher_icons:
     icon_size: 256 # 生成 .ico 文件的大小
   macos:
     generate: true
-    image_path: "assets/images/app_icon.png"
+    image_path: "assets/images/app_logo_white_bg.png"
   linux:
     generate: true
     image_path: "assets/images/app_icon.png"
