@@ -53,9 +53,9 @@ void main() async {
     await windowManager.ensureInitialized();
 
     WindowOptions windowOptions = WindowOptions(
-      size: const Size(800, 600),
+      //size: const Size(800, 600),
       minimumSize: const Size(320, 300),
-      center: true,
+      //center: true,
       title: 'Cycle It',
     );
 
