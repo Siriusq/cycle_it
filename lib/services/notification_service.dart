@@ -46,10 +46,10 @@ class NotificationService extends GetxService {
     final WindowsInitializationSettings
     initializationSettingsWindows = WindowsInitializationSettings(
       appName: 'Cycle It',
-      appUserModelId:
-          'Com.Dexterous.FlutterLocalNotificationsExample',
+      appUserModelId: 'Top.Siriusq.CycleIt',
       // Search online for GUID generators to make your own
       guid: '56d804df-4bf8-4a95-990a-8574d1f770dd',
+      iconPath: 'assets/images/app_icon_windows.png',
     );
 
     // 5. 组合成总的初始化设置
