@@ -16,7 +16,7 @@ class SideMenu extends StatelessWidget {
   @override
   @override
   Widget build(BuildContext context) {
-    final style = ResponsiveStyle.to;
+    final spacingLG = ResponsiveStyle.to.spacingLG;
 
     return Scaffold(
       appBar: SideMenuAppBar(),
@@ -34,7 +34,7 @@ class SideMenu extends StatelessWidget {
                 // 分割线
                 Padding(
                   padding: EdgeInsets.symmetric(
-                    horizontal: style.spacingLG,
+                    horizontal: spacingLG,
                   ),
                   child: const Divider(height: 0),
                 ),

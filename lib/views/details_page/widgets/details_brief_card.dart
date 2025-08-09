@@ -1,6 +1,5 @@
+import 'package:chinese_font_library/chinese_font_library.dart';
 import 'package:flutter/material.dart';
-
-import '../../../utils/responsive_style.dart';
 
 class DetailsBriefCard extends StatelessWidget {
   final String title;
@@ -18,16 +17,10 @@ class DetailsBriefCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ResponsiveStyle style = ResponsiveStyle.to;
-    final TextStyle bodyTextStyle = style.bodyText;
-    final TextStyle titleTextMD = style.titleTextMD;
-
     return LayoutBuilder(
       builder: (context, constraints) {
-        final double maxWidth = constraints.maxWidth;
-        final double iconSize = maxWidth * 0.1;
-        final double dataFontSize = maxWidth * 0.18;
-        final double cardPadding = maxWidth * 0.005;
+        // 数字字体动态大小
+        final double dataFontSize = constraints.maxWidth * 0.18;
 
         return Container(
           padding: const EdgeInsets.all(10),
@@ -40,7 +33,7 @@ class DetailsBriefCard extends StatelessWidget {
             ),
           ),
           child: Padding(
-            padding: EdgeInsets.all(cardPadding),
+            padding: const EdgeInsets.all(4),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
@@ -52,15 +45,14 @@ class DetailsBriefCard extends StatelessWidget {
                     Flexible(
                       child: Text(
                         title,
-                        style: titleTextMD,
+                        style:
+                            Theme.of(context).textTheme.titleMedium!
+                                .useSystemChineseFont(),
                         maxLines: 1,
-                        overflow: TextOverflow.clip,
+                        overflow: TextOverflow.ellipsis,
                       ),
                     ),
-                    SizedBox(
-                      height: titleTextMD.fontSize,
-                      child: Icon(icon, size: iconSize),
-                    ),
+                    SizedBox(height: 16, child: Icon(icon)),
                   ],
                 ),
 
@@ -72,8 +64,9 @@ class DetailsBriefCard extends StatelessWidget {
                       fit: BoxFit.scaleDown,
                       child: Text(
                         data,
-                        style: TextStyle(
-                          fontWeight: FontWeight.w500,
+                        style: Theme.of(
+                          context,
+                        ).textTheme.titleLarge!.copyWith(
                           fontSize: dataFontSize,
                           letterSpacing: -0.5,
                         ),
@@ -88,7 +81,7 @@ class DetailsBriefCard extends StatelessWidget {
                     Flexible(
                       child: Text(
                         comment,
-                        style: bodyTextStyle,
+                        style: Theme.of(context).textTheme.bodySmall!,
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                       ),

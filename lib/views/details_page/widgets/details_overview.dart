@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
-import '../../../utils/responsive_style.dart';
 import 'details_brief_card.dart';
 
 // 封装卡片的数据
@@ -27,10 +26,9 @@ class _CardData {
 class DetailsOverview extends StatelessWidget {
   const DetailsOverview({super.key});
 
-  // 定义常量，提高可读性
+  // 定义常量
   static const double _breakPoint = 660;
-  static const double _cardSpacing = 8;
-  static const double _narrowLayoutHeightRatio = 0.32;
+  static const double _narrowLayoutHeightRatio = 0.5;
   static const double _narrowLayoutMaxHeight = 120;
   static const double _wideLayoutHeightRatio = 0.16;
   static const double _wideLayoutMaxHeight = 160;
@@ -38,7 +36,6 @@ class DetailsOverview extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ItemController itemCtrl = Get.find<ItemController>();
-    final ResponsiveStyle style = ResponsiveStyle.to;
 
     return Obx(() {
       final ItemModel? currentItem = itemCtrl.currentItem.value;
@@ -141,7 +138,7 @@ class DetailsOverview extends StatelessWidget {
           if (constraints.maxWidth < _breakPoint) {
             return Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              spacing: _cardSpacing,
+              spacing: 8,
               children: [
                 SizedBox(
                   height: min(
@@ -150,7 +147,7 @@ class DetailsOverview extends StatelessWidget {
                   ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    spacing: _cardSpacing,
+                    spacing: 8,
                     children:
                         cardDataList
                             .sublist(0, 2)
@@ -165,7 +162,7 @@ class DetailsOverview extends StatelessWidget {
                   ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    spacing: _cardSpacing,
+                    spacing: 8,
                     children:
                         cardDataList
                             .sublist(2, 4)
@@ -187,7 +184,7 @@ class DetailsOverview extends StatelessWidget {
                   ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    spacing: style.spacingMD,
+                    spacing: 12,
                     children:
                         cardDataList.map(buildBriefCard).toList(),
                   ),

@@ -10,9 +10,7 @@ class DetailsChartsGroup extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ResponsiveStyle style = ResponsiveStyle.to; // 直接获取 style
-    final double tableHeight = style.tableHeight;
-    final double spacingMD = style.spacingMD;
+    final double tableHeight = ResponsiveStyle.to.tableHeight;
 
     return LayoutBuilder(
       builder: (context, constraints) {
@@ -33,13 +31,13 @@ class DetailsChartsGroup extends StatelessWidget {
           return SizedBox(
             height: tableHeight,
             child: Row(
-              spacing: spacingMD,
+              spacing: 12,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Expanded(child: UsageRecordsTable()),
                 Expanded(
                   child: Column(
-                    spacing: spacingMD,
+                    spacing: 12,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       UsageHeatmapCalendar(),

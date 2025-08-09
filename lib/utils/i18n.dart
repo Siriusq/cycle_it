@@ -262,7 +262,7 @@ class MultiLanguage extends Translations {
       // 使用记录
       'usage_record': 'Cycle Record',
       'index': 'ID',
-      'used_at': 'Recorded At',
+      'used_at': 'Record',
       'interval_since_last_use': 'Interval',
       'actions': 'Action',
       'usage_record_deleted_hint':
@@ -271,11 +271,11 @@ class MultiLanguage extends Translations {
       // 基础信息
       'no_usage_records': 'No cycle record',
       'data_not_enough': 'Data not enough',
-      'usage_count': 'Cycle Count',
-      'usage_count_comment': 'from @date',
-      'usage_cycle': 'Cycle Interval',
+      'usage_count': 'Count',
+      'usage_count_comment': 'since @date',
+      'usage_cycle': 'Interval',
       'usage_cycle_comment': 'days/time',
-      'last_used_at': 'Last Recorded',
+      'last_used_at': 'Last Record',
       'last_used_at_comment': 'days ago at @date',
       'est_next_use_date': 'EST. Next Cycle Date',
       'est_next_use_date_comment': '@trend at @date',

@@ -10,17 +10,13 @@ class SideMenuAppBar extends StatelessWidget
   @override
   Widget build(BuildContext context) {
     final ResponsiveStyle style = ResponsiveStyle.to;
-    final double spacingSM = style.spacingSM;
-    final double spacingMD = style.spacingMD;
     final double spacingLG = style.spacingLG;
-    final bool isMobile = style.isMobileDevice;
+    final double appBarHeight = style.appBarHeight;
     final double appIconSize = style.appIconSize;
-    final TextStyle titleTextEX = style.titleTextEX;
-    final double iconSizeMD = style.iconSizeMD;
-    final double iconSizeLG = style.iconSizeLG;
-    final double appBarHeight =
-        style.searchBarHeight +
-        (isMobile ? spacingSM : spacingLG) * 2;
+
+    final TextStyle titleLG = Theme.of(
+      context,
+    ).textTheme.titleLarge!.copyWith(fontWeight: FontWeight.bold);
 
     return AppBar(
       automaticallyImplyLeading: false,
@@ -37,6 +33,7 @@ class SideMenuAppBar extends StatelessWidget
         padding: EdgeInsets.only(left: spacingLG),
         child: Row(
           mainAxisSize: MainAxisSize.min,
+          spacing: 12,
           children: [
             Image.asset(
               "assets/images/logo_transparent.png",
@@ -44,12 +41,11 @@ class SideMenuAppBar extends StatelessWidget
               height: appIconSize,
               fit: BoxFit.contain,
             ),
-            SizedBox(width: spacingMD),
             Expanded(
               // Expanded 确保文本可以占据剩余空间并处理溢出
               child: Text(
                 'cycle_it'.tr,
-                style: titleTextEX,
+                style: titleLG,
                 overflow: TextOverflow.ellipsis,
               ),
             ),
@@ -57,42 +53,24 @@ class SideMenuAppBar extends StatelessWidget
         ),
       ),
       // AppBar底部的分割线
-      bottom: PreferredSize(
-        preferredSize: const Size.fromHeight(1.0),
+      bottom: const PreferredSize(
+        preferredSize: Size.fromHeight(1.0),
         child: Divider(height: 0),
       ),
       // 设置按钮作为 AppBar 的 actions
+      actionsPadding: EdgeInsets.symmetric(horizontal: spacingLG),
       actions: [
-        SizedBox(
-          height: iconSizeLG,
-          width: iconSizeLG,
-          child: IconButton(
-            iconSize: iconSizeMD,
-            padding: EdgeInsets.zero,
-            // 移除默认填充
-            constraints: const BoxConstraints(),
-            // 移除默认约束
-            onPressed: () => Get.toNamed('/Settings'),
-            icon: const Icon(Icons.tune),
-          ),
+        IconButton(
+          onPressed: () => Get.toNamed('/Settings'),
+          icon: const Icon(Icons.tune),
         ),
-        SizedBox(width: spacingLG), // 右侧间距
       ],
     );
   }
 
-  // 定义 AppBar 的首选大小，与 toolbarHeight 保持一致
+  // AppBar 高度设置
   @override
   Size get preferredSize {
-    final ResponsiveStyle style = ResponsiveStyle.to;
-    final double spacingSM = style.spacingSM;
-    final double spacingLG = style.spacingLG;
-    final bool isMobile = style.isMobileDevice;
-    final double appBarHeight =
-        style.searchBarHeight +
-        (isMobile ? spacingSM : spacingLG) * 2;
-
-    // AppBar 高度设置
-    return Size.fromHeight(appBarHeight + 1);
+    return Size.fromHeight(ResponsiveStyle.to.appBarHeight + 1);
   }
 }

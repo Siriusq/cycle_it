@@ -10,11 +10,9 @@ class SideMenuOrderingSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ResponsiveStyle style = ResponsiveStyle.to;
-
-    final double spacingXS = style.spacingXS;
-    final double spacingLG = style.spacingLG;
-    final TextStyle titleTextMD = style.titleTextMD;
+    final double spacingLG = ResponsiveStyle.to.spacingLG;
+    final TextStyle titleMD =
+        Theme.of(context).textTheme.titleMedium!;
 
     return Padding(
       padding: EdgeInsets.all(spacingLG),
@@ -25,10 +23,10 @@ class SideMenuOrderingSection extends StatelessWidget {
             children: [
               const Icon(Icons.sort),
               const SizedBox(width: 5),
-              Text('order_by'.tr, style: titleTextMD),
+              Text('order_by'.tr, style: titleMD),
             ],
           ),
-          SizedBox(height: spacingXS),
+          const SizedBox(height: 4),
           OrderByOption(
             orderType: OrderType.name,
             icon: Icons.sort_by_alpha,

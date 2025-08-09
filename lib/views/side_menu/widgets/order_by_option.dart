@@ -1,4 +1,3 @@
-import 'package:cycle_it/utils/responsive_style.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -20,9 +19,7 @@ class OrderByOption extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final style = ResponsiveStyle.to;
-    final double optionFontSize = style.optionFontSize;
-    final double spacingSideMenuOption = style.spacingSideMenuOption;
+    final TextStyle bodyMD = Theme.of(context).textTheme.bodyMedium!;
 
     return Obx(() {
       final isActive =
@@ -47,11 +44,12 @@ class OrderByOption extends StatelessWidget {
               ),
             ),
             child: Padding(
-              padding: EdgeInsets.symmetric(
+              padding: const EdgeInsets.symmetric(
                 horizontal: 16.0,
-                vertical: spacingSideMenuOption,
+                vertical: 8.0,
               ),
               child: Row(
+                spacing: 12,
                 children: [
                   Icon(
                     icon,
@@ -63,13 +61,10 @@ class OrderByOption extends StatelessWidget {
                             ).colorScheme.secondaryFixedDim,
                     size: 22,
                   ),
-                  const SizedBox(width: 12),
                   Expanded(
                     child: Text(
                       title,
-                      style: TextStyle(
-                        fontSize: optionFontSize,
-                        fontWeight: FontWeight.normal,
+                      style: bodyMD.copyWith(
                         color:
                             isActive
                                 ? Theme.of(
@@ -83,7 +78,6 @@ class OrderByOption extends StatelessWidget {
                       maxLines: 1,
                     ),
                   ),
-                  const SizedBox(width: 12),
                   if (isActive)
                     itemListOrderCtrl.isAscending.value
                         ? Icon(

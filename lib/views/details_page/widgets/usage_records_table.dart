@@ -1,3 +1,4 @@
+import 'package:chinese_font_library/chinese_font_library.dart';
 import 'package:cycle_it/utils/responsive_style.dart';
 import 'package:data_table_2/data_table_2.dart';
 import 'package:flutter/material.dart';
@@ -14,10 +15,13 @@ class UsageRecordsTable extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ItemController itemCtrl = Get.find<ItemController>();
-    final ResponsiveStyle style = ResponsiveStyle.to;
-    final TextStyle bodyTextStyleLG = style.bodyTextLG;
-    final TextStyle titleTextMD = style.titleTextMD;
-    final double tableHeight = style.tableHeight;
+    final double tableHeight = ResponsiveStyle.to.tableHeight;
+
+    final TextStyle bodyMD = Theme.of(context).textTheme.bodyMedium!;
+    final TextStyle titleMD =
+        Theme.of(
+          context,
+        ).textTheme.titleMedium!.useSystemChineseFont();
 
     return Obx(() {
       final ItemModel? currentItem = itemCtrl.currentItem.value;
@@ -28,17 +32,14 @@ class UsageRecordsTable extends StatelessWidget {
       final dataSource = itemCtrl.usageRecordDataSource.value;
       if (dataSource == null) {
         return Center(
-          child: Text(
-            'loading_usage_record...'.tr,
-            style: bodyTextStyleLG,
-          ),
+          child: Text('loading_usage_record...'.tr, style: bodyMD),
         );
       }
 
       return LayoutBuilder(
         builder: (context, constraints) {
           return SizedBox(
-            height: tableHeight, //实际上没啥用，组件被包在有限制的组件中了，这里只是个保证
+            height: tableHeight,
             child: Container(
               decoration: BoxDecoration(
                 color:
@@ -53,10 +54,7 @@ class UsageRecordsTable extends StatelessWidget {
                 children: [
                   Padding(
                     // 顶部栏
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 16.0,
-                      vertical: 8.0,
-                    ),
+                    padding: const EdgeInsets.fromLTRB(16, 8, 8, 8),
                     child: Row(
                       mainAxisAlignment:
                           MainAxisAlignment.spaceBetween,
@@ -64,7 +62,7 @@ class UsageRecordsTable extends StatelessWidget {
                         Expanded(
                           child: Text(
                             'usage_record'.tr,
-                            style: titleTextMD,
+                            style: titleMD,
                             overflow: TextOverflow.ellipsis,
                           ),
                         ),
@@ -103,19 +101,13 @@ class UsageRecordsTable extends StatelessWidget {
                         source: dataSource,
                         columns: [
                           DataColumn2(
-                            label: Text(
-                              'index'.tr,
-                              style: bodyTextStyleLG,
-                            ),
+                            label: Text('index'.tr, style: bodyMD),
                             size: ColumnSize.S,
                             headingRowAlignment:
                                 MainAxisAlignment.center,
                           ),
                           DataColumn2(
-                            label: Text(
-                              'used_at'.tr,
-                              style: bodyTextStyleLG,
-                            ),
+                            label: Text('used_at'.tr, style: bodyMD),
                             onSort: (columnIndex, ascending) {
                               itemCtrl.onUsageRecordsSort('usedAt');
                             },
@@ -126,7 +118,7 @@ class UsageRecordsTable extends StatelessWidget {
                           DataColumn2(
                             label: Text(
                               'interval_since_last_use'.tr,
-                              style: bodyTextStyleLG,
+                              style: bodyMD,
                             ),
                             onSort: (columnIndex, ascending) {
                               itemCtrl.onUsageRecordsSort(
@@ -138,10 +130,7 @@ class UsageRecordsTable extends StatelessWidget {
                                 MainAxisAlignment.center,
                           ),
                           DataColumn2(
-                            label: Text(
-                              'actions'.tr,
-                              style: bodyTextStyleLG,
-                            ),
+                            label: Text('actions'.tr, style: bodyMD),
                             headingRowAlignment:
                                 MainAxisAlignment.center,
                             size: ColumnSize.S,
@@ -153,7 +142,7 @@ class UsageRecordsTable extends StatelessWidget {
                         empty: Center(
                           child: Text(
                             'no_usage_records'.tr,
-                            style: bodyTextStyleLG,
+                            style: bodyMD,
                           ),
                         ),
                         horizontalMargin: 0,

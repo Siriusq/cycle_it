@@ -1,4 +1,3 @@
-import 'package:cycle_it/utils/responsive_style.dart';
 import 'package:flutter/material.dart';
 
 // 标签组件
@@ -18,10 +17,11 @@ class IconLabel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final style =
+    final double iconSize = isLarge ? 18 : 14;
+    final TextStyle labelStyle =
         isLarge
-            ? ResponsiveStyle.to.tagStyleLG
-            : ResponsiveStyle.to.tagStyle;
+            ? Theme.of(context).textTheme.bodyMedium!
+            : Theme.of(context).textTheme.bodySmall!;
 
     return Container(
       decoration: BoxDecoration(
@@ -33,23 +33,17 @@ class IconLabel extends StatelessWidget {
         borderRadius: BorderRadius.circular(5),
       ),
       child: Padding(
-        padding: EdgeInsets.symmetric(
-          horizontal: style.spacing * 2,
-          vertical: style.spacing * 0.5,
+        padding: const EdgeInsets.symmetric(
+          horizontal: 4,
+          vertical: 2,
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          spacing: 2,
           children: [
-            Icon(icon, size: style.iconSize, color: iconColor),
-            SizedBox(width: style.spacing * 0.5),
-            Text(
-              label,
-              style: TextStyle(
-                fontSize: style.fontSize,
-                fontWeight: FontWeight.w400,
-              ),
-            ),
+            Icon(icon, size: iconSize, color: iconColor),
+            Text(label, style: labelStyle),
           ],
         ),
       ),

@@ -11,18 +11,16 @@ class SideMenuTagSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final TagController tagCtrl = Get.find<TagController>();
-    final ResponsiveStyle style = ResponsiveStyle.to;
 
-    final double spacingLG = style.spacingLG;
-    final double spacingMD = style.spacingMD;
-    final TextStyle titleTextMD = style.titleTextMD;
-    final double iconSizeMD = style.iconSizeMD;
-    final double iconSizeLG = style.iconSizeLG;
+    final double spacingSM = ResponsiveStyle.to.spacingSM;
+    final double spacingLG = ResponsiveStyle.to.spacingLG;
+    final TextStyle titleMD =
+        Theme.of(context).textTheme.titleMedium!;
 
     return Padding(
       padding: EdgeInsets.symmetric(
         horizontal: spacingLG,
-        vertical: spacingMD,
+        vertical: spacingSM,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -31,20 +29,13 @@ class SideMenuTagSection extends StatelessWidget {
             children: [
               const Icon(Icons.bookmark_outline),
               const SizedBox(width: 5),
-              Text('tags'.tr, style: titleTextMD),
+              Text('tags'.tr, style: titleMD),
               const Spacer(),
-              SizedBox(
-                height: iconSizeLG,
-                width: iconSizeLG,
-                child: IconButton(
-                  iconSize: iconSizeMD,
-                  padding: EdgeInsets.zero,
-                  constraints: const BoxConstraints(),
-                  onPressed: () {
-                    Get.toNamed('/ManageTag');
-                  },
-                  icon: const Icon(Icons.more_horiz),
-                ),
+              IconButton(
+                onPressed: () {
+                  Get.toNamed('/ManageTag');
+                },
+                icon: const Icon(Icons.more_horiz),
               ),
             ],
           ),

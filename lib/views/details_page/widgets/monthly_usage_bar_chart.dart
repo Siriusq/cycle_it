@@ -1,9 +1,9 @@
+import 'package:chinese_font_library/chinese_font_library.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:material_charts/material_charts.dart'; // 导入 material_charts
 
 import '../../../controllers/item_controller.dart';
-import '../../../utils/responsive_style.dart';
 
 class MonthlyUsageBarChart extends StatelessWidget {
   const MonthlyUsageBarChart({super.key});
@@ -11,9 +11,12 @@ class MonthlyUsageBarChart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ItemController itemController = Get.find<ItemController>();
-    final ResponsiveStyle style = ResponsiveStyle.to;
-    final TextStyle titleTextMD = style.titleTextMD;
-    final TextStyle bodyText = style.bodyText;
+    final TextStyle titleMD =
+        Theme.of(
+          context,
+        ).textTheme.titleMedium!.useSystemChineseFont();
+    final TextStyle bodyMD = Theme.of(context).textTheme.bodyMedium!;
+    final TextStyle bodySM = Theme.of(context).textTheme.bodySmall!;
 
     return Obx(() {
       final bool isLoading =
@@ -43,7 +46,7 @@ class MonthlyUsageBarChart extends StatelessWidget {
                   padding: const EdgeInsets.all(20.0),
                   child: Text(
                     'Error: $error',
-                    style: bodyText.copyWith(
+                    style: bodyMD.copyWith(
                       color: Theme.of(context).colorScheme.error,
                     ),
                     textAlign: TextAlign.center,
@@ -57,7 +60,7 @@ class MonthlyUsageBarChart extends StatelessWidget {
               child: Center(
                 child: Text(
                   'no_usage_record_in_the_past_year'.tr,
-                  style: bodyText,
+                  style: bodyMD,
                   textAlign: TextAlign.center,
                 ),
               ),
@@ -73,10 +76,10 @@ class MonthlyUsageBarChart extends StatelessWidget {
                 barSpacing: 0.30,
                 cornerRadius: 8.0,
                 gradientEffect: false,
-                labelStyle: bodyText.copyWith(
+                labelStyle: bodySM.copyWith(
                   color: Theme.of(context).hintColor,
                 ),
-                valueStyle: bodyText.copyWith(
+                valueStyle: bodySM.copyWith(
                   color: Theme.of(context).hintColor,
                 ),
                 animationDuration: const Duration(milliseconds: 300),
@@ -114,7 +117,7 @@ class MonthlyUsageBarChart extends StatelessWidget {
                       Expanded(
                         child: Text(
                           'monthly_usage_count'.tr,
-                          style: titleTextMD,
+                          style: titleMD,
                           overflow: TextOverflow.ellipsis,
                         ),
                       ),

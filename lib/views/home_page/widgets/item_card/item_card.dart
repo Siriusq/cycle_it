@@ -26,14 +26,17 @@ class ItemCard extends StatelessWidget {
     final itemCtrl = Get.find<ItemController>();
 
     final style = ResponsiveStyle.to;
+    final double spacingSM = style.spacingSM;
+    final double spacingMD = style.spacingMD;
     final double spacingLG = style.spacingLG;
     final bool isSingleCol = ResponsiveLayout.isSingleCol(context);
 
     return Padding(
-      padding: EdgeInsets.only(
-        left: spacingLG,
-        right: spacingLG,
-        top: spacingLG,
+      padding: EdgeInsets.fromLTRB(
+        spacingLG,
+        0,
+        spacingLG,
+        spacingMD,
       ),
       child: InkWell(
         borderRadius: BorderRadius.circular(15),
@@ -43,7 +46,7 @@ class ItemCard extends StatelessWidget {
         },
         child: Container(
           clipBehavior: Clip.antiAlias,
-          padding: EdgeInsets.all(spacingLG * 0.5),
+          padding: EdgeInsets.all(spacingSM),
           //动态边框
           decoration: BoxDecoration(
             color:

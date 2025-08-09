@@ -1,4 +1,3 @@
-import 'package:cycle_it/utils/responsive_style.dart';
 import 'package:data_table_2/data_table_2.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -83,26 +82,14 @@ class UsageRecordDataSource extends DataTableSource {
     final record = _usageRecords[index];
     // 序号基于内存中已排序列表的索引
     final int displayIndex = index + 1;
-    final style = ResponsiveStyle.to;
-    final bodyTextStyleLG = style.bodyTextLG;
-    final bodyTextStyle = style.bodyText;
-    final spacingSM = style.spacingSM;
 
     return DataRow2(
       cells: [
-        DataCell(
-          Center(
-            child: Text(
-              displayIndex.toString(),
-              style: bodyTextStyleLG,
-            ),
-          ),
-        ),
+        DataCell(Center(child: Text(displayIndex.toString()))),
         DataCell(
           Center(
             child: Text(
               DateFormat('yyyy-MM-dd').format(record.usedAt),
-              style: bodyTextStyleLG,
             ),
           ),
         ),
@@ -110,7 +97,6 @@ class UsageRecordDataSource extends DataTableSource {
           Center(
             child: Text(
               record.intervalSinceLastUse?.toString() ?? 'N/A',
-              style: bodyTextStyleLG,
             ),
           ),
         ),
@@ -160,9 +146,15 @@ class UsageRecordDataSource extends DataTableSource {
                       value: 'edit',
                       child: Row(
                         children: [
-                          Icon(Icons.edit),
-                          SizedBox(width: spacingSM),
-                          Text('edit'.tr, style: bodyTextStyle),
+                          const Icon(Icons.edit),
+                          const SizedBox(width: 8),
+                          Text(
+                            'edit'.tr,
+                            style:
+                                Theme.of(
+                                  context,
+                                ).textTheme.bodyMedium,
+                          ),
                         ],
                       ),
                     ),
@@ -170,13 +162,14 @@ class UsageRecordDataSource extends DataTableSource {
                       value: 'delete',
                       child: Row(
                         children: [
-                          Icon(Icons.delete, color: Colors.red),
-                          SizedBox(width: spacingSM),
+                          const Icon(Icons.delete, color: Colors.red),
+                          const SizedBox(width: 8),
                           Text(
                             'delete'.tr,
-                            style: bodyTextStyle.copyWith(
-                              color: Colors.red,
-                            ),
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyMedium!
+                                .copyWith(color: Colors.red),
                           ),
                         ],
                       ),

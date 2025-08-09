@@ -4,7 +4,6 @@ import 'package:intl/intl.dart';
 
 import '../../../../controllers/item_controller.dart';
 import '../../../../models/item_model.dart';
-import '../../../../utils/responsive_style.dart';
 import '../../../shared_widgets/date_picker_helper.dart';
 import '../../../shared_widgets/delete_confirm_dialog.dart';
 
@@ -16,10 +15,8 @@ class ItemCardActionButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ItemController itemCtrl = Get.find<ItemController>();
-    final ResponsiveStyle style = ResponsiveStyle.to;
 
-    final double spacingSM = style.spacingSM;
-    final TextStyle bodyTextStyle = style.bodyText;
+    final TextStyle bodyMD = Theme.of(context).textTheme.bodyMedium!;
 
     return PopupMenuButton<String>(
       tooltip: 'more_action'.tr,
@@ -31,9 +28,9 @@ class ItemCardActionButton extends StatelessWidget {
               value: 'cycle',
               child: Row(
                 children: [
-                  Icon(Icons.refresh),
-                  SizedBox(width: spacingSM),
-                  Text('cycle'.tr, style: bodyTextStyle),
+                  const Icon(Icons.refresh),
+                  const SizedBox(width: 8),
+                  Text('cycle'.tr, style: bodyMD),
                 ],
               ),
             ),
@@ -41,9 +38,9 @@ class ItemCardActionButton extends StatelessWidget {
               value: 'edit',
               child: Row(
                 children: [
-                  Icon(Icons.edit),
-                  SizedBox(width: spacingSM),
-                  Text('edit'.tr, style: bodyTextStyle),
+                  const Icon(Icons.edit),
+                  const SizedBox(width: 8),
+                  Text('edit'.tr, style: bodyMD),
                 ],
               ),
             ),
@@ -51,11 +48,11 @@ class ItemCardActionButton extends StatelessWidget {
               value: 'delete',
               child: Row(
                 children: [
-                  Icon(Icons.delete, color: Colors.red),
-                  SizedBox(width: spacingSM),
+                  const Icon(Icons.delete, color: Colors.red),
+                  const SizedBox(width: 8),
                   Text(
                     'delete'.tr,
-                    style: bodyTextStyle.copyWith(color: Colors.red),
+                    style: bodyMD.copyWith(color: Colors.red),
                   ),
                 ],
               ),

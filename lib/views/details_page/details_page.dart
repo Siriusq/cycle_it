@@ -55,20 +55,24 @@ class DetailsPage extends StatelessWidget {
             children: [
               Expanded(
                 child: ListView(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: spacingLG,
+                  padding: EdgeInsets.fromLTRB(
+                    spacingLG,
+                    spacingLG,
+                    spacingLG,
+                    0,
                   ),
                   children: [
                     DetailsItemTitle(),
+                    const SizedBox(height: 8),
                     DetailsItemTags(),
-                    SizedBox(height: spacingLG),
+                    SizedBox(height: spacingMD),
                     DetailsOverview(),
                     SizedBox(height: spacingMD),
                     DetailsChartsGroup(),
                     if (ResponsiveLayout.isSingleCol(context))
                       Padding(
-                        padding: EdgeInsets.symmetric(
-                          vertical: spacingMD,
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 12,
                         ),
                         child: Center(
                           child: Text('reached_end_hint'.tr),

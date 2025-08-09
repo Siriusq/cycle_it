@@ -1,3 +1,4 @@
+import 'package:chinese_font_library/chinese_font_library.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:simple_heatmap_calendar/simple_heatmap_calendar.dart';
@@ -13,8 +14,11 @@ class UsageHeatmapCalendar extends StatelessWidget {
   Widget build(BuildContext context) {
     final ItemController itemController = Get.find<ItemController>();
     final ResponsiveStyle style = ResponsiveStyle.to;
-    final TextStyle titleTextMD = style.titleTextMD;
-    final TextStyle bodyText = style.bodyText;
+    final TextStyle titleMD =
+        Theme.of(
+          context,
+        ).textTheme.titleMedium!.useSystemChineseFont();
+    final TextStyle bodyMD = Theme.of(context).textTheme.bodyMedium!;
     final double heatmapCellSize = style.heatmapCellSize;
     final double heatmapTipCellSize = style.heatmapTipCellSize;
     final double heatmapCellSpaceBetween =
@@ -56,7 +60,7 @@ class UsageHeatmapCalendar extends StatelessWidget {
                 padding: const EdgeInsets.all(20.0),
                 child: Text(
                   'Error: $error',
-                  style: bodyText.copyWith(
+                  style: bodyMD.copyWith(
                     color: Theme.of(context).colorScheme.error,
                   ),
                   textAlign: TextAlign.center,
@@ -70,7 +74,7 @@ class UsageHeatmapCalendar extends StatelessWidget {
                 padding: const EdgeInsets.all(20.0),
                 child: Text(
                   'no_usage_records'.tr,
-                  style: bodyText.copyWith(
+                  style: bodyMD.copyWith(
                     color: Theme.of(context).hintColor,
                   ),
                   textAlign: TextAlign.center,
@@ -102,20 +106,20 @@ class UsageHeatmapCalendar extends StatelessWidget {
                     cellRadius: const BorderRadius.all(
                       Radius.circular(4.0),
                     ),
-                    weekLabelValueFontSize: bodyText.fontSize!,
+                    weekLabelValueFontSize: bodyMD.fontSize!,
                     weekLabelColor: Theme.of(context).hintColor,
-                    monthLabelFontSize: bodyText.fontSize!,
+                    monthLabelFontSize: bodyMD.fontSize!,
                     monthLabelColor: Theme.of(context).hintColor,
                   ),
                   colorTipLeftHelper: Text(
                     'less'.tr,
-                    style: bodyText.copyWith(
+                    style: bodyMD.copyWith(
                       color: Theme.of(context).hintColor,
                     ),
                   ),
                   colorTipRightHelper: Text(
                     'more'.tr,
-                    style: bodyText.copyWith(
+                    style: bodyMD.copyWith(
                       color: Theme.of(context).hintColor,
                     ),
                   ),
@@ -161,7 +165,7 @@ class UsageHeatmapCalendar extends StatelessWidget {
                       Expanded(
                         child: Text(
                           'usage_record_hot_map'.tr,
-                          style: titleTextMD,
+                          style: titleMD,
                           overflow: TextOverflow.ellipsis,
                         ),
                       ),

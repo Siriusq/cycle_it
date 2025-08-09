@@ -4,7 +4,6 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../models/item_model.dart';
-import '../../../../utils/responsive_style.dart';
 import 'item_usage_stat_item.dart';
 
 class ItemCardOverview extends StatelessWidget {
@@ -14,7 +13,6 @@ class ItemCardOverview extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ResponsiveStyle style = ResponsiveStyle.to;
     final bool isSingleCol = ResponsiveLayout.isSingleCol(context);
 
     // 读取预先计算好的统计数据
@@ -24,26 +22,20 @@ class ItemCardOverview extends StatelessWidget {
     final DateTime? lastUsedDate = item.lastUsedDate;
     final double usageFrequency = item.usageFrequency.toPrecision(2);
 
-    final TextStyle smallBodyTextStyle = style.bodyTextSM;
-    final double spacingXS = style.spacingXS;
-    final double spacingSM = style.spacingSM;
-    final double iconSizeSM = style.iconSizeSM;
+    final TextStyle bodySM = Theme.of(context).textTheme.bodySmall!;
 
     if (isSingleCol) {
       // 移动端
       return Padding(
-        padding: EdgeInsets.only(
-          left: 5,
-          bottom: spacingSM,
-          top: spacingSM,
-        ),
+        padding: const EdgeInsets.fromLTRB(4, 4, 0, 4),
         child: Column(
+          spacing: 4,
           children: [
             // 使用周期
             Row(
               children: [
-                Icon(Icons.repeat, size: iconSizeSM),
-                SizedBox(width: spacingXS),
+                Icon(Icons.repeat, size: 12),
+                SizedBox(width: 4),
                 Flexible(
                   child: Text(
                     usageCount > 1
@@ -51,19 +43,18 @@ class ItemCardOverview extends StatelessWidget {
                           'freq': '$usageFrequency',
                         })
                         : 'usage_cycle_brief_data_not_enough'.tr,
-                    style: smallBodyTextStyle,
+                    style: bodySM,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),
               ],
             ),
-            SizedBox(height: spacingSM),
             // 上次使用
             Row(
               children: [
-                Icon(Icons.history, size: iconSizeSM),
-                SizedBox(width: spacingXS),
+                Icon(Icons.history, size: 12),
+                SizedBox(width: 4),
                 Flexible(
                   child: Text(
                     lastUsedDate != null
@@ -73,7 +64,7 @@ class ItemCardOverview extends StatelessWidget {
                           ).format(lastUsedDate),
                         })
                         : 'last_used_at_brief_data_not_enough'.tr,
-                    style: smallBodyTextStyle,
+                    style: bodySM,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),

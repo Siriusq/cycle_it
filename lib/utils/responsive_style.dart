@@ -50,68 +50,54 @@ class ResponsiveStyle extends GetxController {
   // 文本样式
   // 加粗大标题
   TextStyle get titleTextEX => TextStyle(
-    fontSize: _getValue(mobile: 14, tablet: 16, desktop: 18),
+    fontSize: _getValue(mobile: 20, tablet: 20, desktop: 20),
     fontWeight: FontWeight.bold,
   );
 
   // 大标题
   TextStyle get titleTextLG => TextStyle(
-    fontSize: _getValue(mobile: 14, tablet: 16, desktop: 18),
+    fontSize: _getValue(mobile: 18, tablet: 18, desktop: 18),
     fontWeight: FontWeight.w600,
   );
 
   // 标题
   TextStyle get titleTextMD => TextStyle(
-    fontSize: _getValue(mobile: 12, tablet: 14, desktop: 16),
+    fontSize: _getValue(mobile: 16, tablet: 16, desktop: 16),
     fontWeight: FontWeight.w500,
   );
 
   // 标题
   double get optionFontSize =>
-      _getValue(mobile: 11, tablet: 13, desktop: 15);
+      _getValue(mobile: 14, tablet: 14, desktop: 14);
 
   // 文本
   TextStyle get bodyTextLG => TextStyle(
-    fontSize: _getValue(mobile: 12, tablet: 14, desktop: 16),
+    fontSize: _getValue(mobile: 16, tablet: 16, desktop: 16),
     //height: _getValue(mobile: 1.2, tablet: 1.3, desktop: 1.4),
   );
 
   TextStyle get bodyText => TextStyle(
-    fontSize: _getValue(mobile: 10, tablet: 12, desktop: 14),
-    height: _getValue(mobile: 1.2, tablet: 1.3, desktop: 1.4),
+    fontSize: _getValue(mobile: 14, tablet: 14, desktop: 14),
+    //height: _getValue(mobile: 1.2, tablet: 1.3, desktop: 1.4),
   );
 
-  // 小文本
-  TextStyle get bodyTextSM => TextStyle(
-    fontSize: _getValue(mobile: 8, tablet: 10, desktop: 12),
-    height: _getValue(mobile: 1.0, tablet: 1.1, desktop: 1.2),
-  );
+  // 详情页物品图标大小
+  double get itemCardIconSize =>
+      _getValue(mobile: 40, tablet: 44, desktop: 48);
 
-  // 详情页标题
-  TextStyle get detailsTitleText => TextStyle(
-    fontSize: _getValue(
-      mobile: 14,
-      tablet: 16,
-      desktop: max(18, Get.width * 0.014),
-    ),
-    fontWeight: FontWeight.w600,
-  );
-
-  // 详情页动态图标
   double get detailsIconSize =>
-      _getValue(mobile: 50, tablet: 60, desktop: 70);
+      _getValue(mobile: 60, tablet: 72, desktop: 80);
 
   // 间距系统
-  double get spacingXS => _getValue(mobile: 2, tablet: 4, desktop: 6);
+  double get spacingXS => _getValue(mobile: 2, tablet: 4, desktop: 4);
 
-  double get spacingSM =>
-      _getValue(mobile: 6, tablet: 8, desktop: 10);
+  double get spacingSM => _getValue(mobile: 4, tablet: 8, desktop: 8);
 
   double get spacingMD =>
-      _getValue(mobile: 8, tablet: 12, desktop: 14);
+      _getValue(mobile: 8, tablet: 12, desktop: 12);
 
   double get spacingLG =>
-      _getValue(mobile: 8, tablet: 14, desktop: 20);
+      _getValue(mobile: 8, tablet: 16, desktop: 16);
 
   double get spacingSideMenuOption =>
       _getValue(mobile: 6, tablet: 8, desktop: 8);
@@ -120,39 +106,8 @@ class ResponsiveStyle extends GetxController {
   double get iconSizeMD =>
       _getValue(mobile: 24, tablet: 26, desktop: 26);
 
-  double get iconSizeSM =>
-      _getValue(mobile: 12, tablet: 16, desktop: 20);
-
   double get iconSizeLG =>
       _getValue(mobile: 32, tablet: 36, desktop: 40);
-
-  // 顶栏高度
-  double get topBarHeight =>
-      _getValue(mobile: 32, tablet: 36, desktop: 48);
-
-  // 响应卡片最小宽度
-  double get minComponentWidthSM =>
-      _getValue(mobile: 120, tablet: 140, desktop: 160);
-
-  double get minComponentWidthMD =>
-      _getValue(mobile: 240, tablet: 280, desktop: 320);
-
-  // 响应卡片动态比例
-  double get aspectRation =>
-      _getValue(mobile: 0.6, tablet: 0.7, desktop: 0.6);
-
-  // 组件样式
-  TagStyle get tagStyle => TagStyle(
-    fontSize: _getValue(mobile: 8, tablet: 10, desktop: 12),
-    iconSize: _getValue(mobile: 10, tablet: 12, desktop: 16),
-    spacing: _getValue(mobile: 1, tablet: 2, desktop: 4),
-  );
-
-  TagStyle get tagStyleLG => TagStyle(
-    fontSize: _getValue(mobile: 10, tablet: 12, desktop: 14),
-    iconSize: _getValue(mobile: 14, tablet: 16, desktop: 18),
-    spacing: _getValue(mobile: 2, tablet: 4, desktop: 4),
-  );
 
   // 侧边栏应用图标
   double get appIconSize => isMobileDevice ? 32 : 40; // 静态值，不随窗口拖动改变
@@ -168,6 +123,9 @@ class ResponsiveStyle extends GetxController {
       isMobileDevice
           ? const TextStyle(fontSize: 12)
           : const TextStyle(fontSize: 16);
+
+  // 导航栏高度 = 搜索栏高度 + 上下spacing，手机为MD，PC为LG
+  double get appBarHeight => isMobileDevice ? 56 : 80;
 
   // 每行的emoji个数
   int get emojiColCount =>
@@ -199,17 +157,4 @@ class ResponsiveStyle extends GetxController {
   // 热点日历高度
   double get heatmapHeight =>
       _getValue(mobile: 168, tablet: 196, desktop: 196);
-}
-
-// 标签样式子类
-class TagStyle {
-  final double fontSize;
-  final double iconSize;
-  final double spacing;
-
-  const TagStyle({
-    required this.fontSize,
-    required this.iconSize,
-    required this.spacing,
-  });
 }

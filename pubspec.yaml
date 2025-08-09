@@ -84,6 +84,8 @@ dependencies:
   # splash screen
   flutter_native_splash: ^2.4.6
 
+  chinese_font_library: ^1.2.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

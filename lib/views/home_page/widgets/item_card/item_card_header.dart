@@ -1,3 +1,4 @@
+import 'package:chinese_font_library/chinese_font_library.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../models/item_model.dart';
@@ -15,12 +16,15 @@ class ItemCardHeader extends StatelessWidget {
     final ResponsiveStyle style = ResponsiveStyle.to;
     final bool isTripleCol = ResponsiveLayout.isTripleCol(context);
 
-    final TextStyle titleTextStyle = style.titleTextMD;
-    final TextStyle smallBodyTextStyle = style.bodyTextSM;
-    final double spacingSM = style.spacingSM;
+    final TextStyle titleMD =
+        Theme.of(
+          context,
+        ).textTheme.titleMedium!.useSystemChineseFont();
+    final TextStyle bodySM = Theme.of(context).textTheme.bodySmall!;
+    final double itemCardIconSize = style.itemCardIconSize;
 
     return Padding(
-      padding: EdgeInsets.only(left: 5, bottom: isTripleCol ? 5 : 0),
+      padding: EdgeInsets.only(left: 4, bottom: isTripleCol ? 4 : 0),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
@@ -28,8 +32,8 @@ class ItemCardHeader extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(top: 4.0),
             child: Container(
-              width: 40,
-              height: 40,
+              width: itemCardIconSize,
+              height: itemCardIconSize,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(8.0),
                 color: item.iconColor,
@@ -48,13 +52,14 @@ class ItemCardHeader extends StatelessWidget {
               ),
             ),
           ),
-          SizedBox(width: spacingSM),
+          const SizedBox(width: 8),
           // 文字内容区域
           Expanded(
             child: Column(
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
+              spacing: 4,
               children: [
                 // 标题行
                 Row(
@@ -62,7 +67,7 @@ class ItemCardHeader extends StatelessWidget {
                     Flexible(
                       child: Text(
                         item.name,
-                        style: titleTextStyle,
+                        style: titleMD,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
@@ -71,17 +76,15 @@ class ItemCardHeader extends StatelessWidget {
                 ),
 
                 // 备注区域
-                if (item.usageComment?.isNotEmpty ?? false) ...[
-                  const SizedBox(height: 4),
+                if (item.usageComment?.isNotEmpty ?? false)
                   Flexible(
                     child: Text(
                       item.usageComment!,
-                      style: smallBodyTextStyle,
+                      style: bodySM,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
                   ),
-                ],
               ],
             ),
           ),

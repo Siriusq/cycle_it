@@ -15,13 +15,13 @@ class CustomSearchBar extends StatelessWidget {
 
     final double searchBarHeight = style.searchBarHeight;
     final double searchBarButtonSize = style.searchBarButtonSize;
-    final TextStyle searchBarHintStyle = style.searchBarHintStyle;
+    final TextStyle bodyLG = Theme.of(context).textTheme.bodyLarge!;
 
     return SizedBox(
       height: searchBarHeight,
       child: Obx(() {
         return TextField(
-          style: searchBarHintStyle,
+          style: bodyLG,
           textAlignVertical: TextAlignVertical.center,
           controller: searchBarCtrl.textController,
           onChanged: (value) {
@@ -29,7 +29,7 @@ class CustomSearchBar extends StatelessWidget {
           },
           decoration: InputDecoration(
             hintText: 'search'.tr,
-            hintStyle: searchBarHintStyle,
+            hintStyle: bodyLG,
             contentPadding: const EdgeInsets.symmetric(
               vertical: 0,
               horizontal: 12,

@@ -61,7 +61,7 @@ class _HomePageState extends State<HomePage> {
           flex: 2,
           child: ListOfItems(scaffoldKey: _scaffoldKey),
         ),
-        VerticalDivider(thickness: 1, width: 1),
+        const VerticalDivider(thickness: 1, width: 1),
         Expanded(
           flex: 3,
           // 监听 selectedItemPreview
@@ -81,12 +81,12 @@ class _HomePageState extends State<HomePage> {
     return Row(
       children: [
         SizedBox(width: 250, child: SideMenu()),
-        VerticalDivider(thickness: 1, width: 1),
+        const VerticalDivider(thickness: 1, width: 1),
         SizedBox(
           width: 440,
           child: ListOfItems(scaffoldKey: _scaffoldKey),
         ),
-        VerticalDivider(thickness: 1, width: 1),
+        const VerticalDivider(thickness: 1, width: 1),
         Expanded(
           // 监听 selectedItemPreview
           child: Obx(

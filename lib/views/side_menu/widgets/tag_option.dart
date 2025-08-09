@@ -1,5 +1,4 @@
 import 'package:cycle_it/controllers/tag_controller.dart';
-import 'package:cycle_it/utils/responsive_style.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -12,9 +11,7 @@ class TagOption extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final style = ResponsiveStyle.to;
-    final double optionFontSize = style.optionFontSize;
-    final double spacingSideMenuOption = style.spacingSideMenuOption;
+    final TextStyle bodyMD = Theme.of(context).textTheme.bodyMedium!;
 
     return Obx(() {
       final isSelected = tagCtrl.selectedTags.contains(tagName);
@@ -39,7 +36,7 @@ class TagOption extends StatelessWidget {
             child: Padding(
               padding: EdgeInsets.symmetric(
                 horizontal: 16.0,
-                vertical: spacingSideMenuOption,
+                vertical: 8.0,
               ),
               child: Row(
                 children: [
@@ -54,9 +51,7 @@ class TagOption extends StatelessWidget {
                   Expanded(
                     child: Text(
                       tagName,
-                      style: TextStyle(
-                        fontSize: optionFontSize,
-                        fontWeight: FontWeight.normal,
+                      style: bodyMD.copyWith(
                         color:
                             isSelected
                                 ? Theme.of(

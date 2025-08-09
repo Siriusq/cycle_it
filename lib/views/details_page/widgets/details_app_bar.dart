@@ -1,3 +1,4 @@
+import 'package:chinese_font_library/chinese_font_library.dart';
 import 'package:cycle_it/utils/responsive_layout.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -15,17 +16,9 @@ class DetailsAppBar extends StatelessWidget
   Widget build(BuildContext context) {
     final ItemController itemCtrl = Get.find<ItemController>();
     final ResponsiveStyle style = ResponsiveStyle.to;
-    final double spacingSM = style.spacingSM;
     final double spacingLG = style.spacingLG;
-    final bool isMobile = style.isMobileDevice;
-    final double appBarHeight =
-        style.searchBarHeight +
-        (isMobile ? spacingSM : spacingLG) * 2;
-    // final bool isPrimary =
-    //     GetPlatform.isAndroid ||
-    //     (GetPlatform.isIOS && ResponsiveLayout.isSingleCol(context));
+    final double appBarHeight = ResponsiveStyle.to.appBarHeight;
 
-    // 使用 Obx 监听 itemCtrl.currentItem，以便在 item 删除或加载时可以动态更新 AppBar 的内容
     return Obx(() {
       final ItemModel? item = itemCtrl.currentItem.value;
 
@@ -48,14 +41,18 @@ class DetailsAppBar extends StatelessWidget
                 ? Text(
                   item.name,
                   overflow: TextOverflow.ellipsis, // 防止文本过长溢出
+                  style:
+                      Theme.of(
+                        context,
+                      ).textTheme.titleLarge!.useSystemChineseFont(),
                 )
                 : null,
         // 如果 item 为空，则不显示标题
         centerTitle: true,
         // 标题居中
         // AppBar底部的分割线
-        bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(1.0),
+        bottom: const PreferredSize(
+          preferredSize: Size.fromHeight(1.0),
           child: Divider(height: 0),
         ),
         // 右侧删除与编辑按钮，仅当 item 不为空时显示
@@ -71,26 +68,17 @@ class DetailsAppBar extends StatelessWidget
                     onPressed: () => _handleEdit(itemCtrl, item),
                     icon: const Icon(Icons.edit_outlined),
                   ),
-                  SizedBox(width: isMobile ? 4 : spacingLG), // 右侧间距
+                  SizedBox(width: spacingLG), // 右侧间距
                 ]
                 : [], // 如果 item 为空，则不显示任何操作按钮
       );
     });
   }
 
-  // 定义 AppBar 的首选大小
+  // AppBar 高度设置
   @override
   Size get preferredSize {
-    final ResponsiveStyle style = ResponsiveStyle.to;
-    final double spacingSM = style.spacingSM;
-    final double spacingLG = style.spacingLG;
-    final bool isMobile = style.isMobileDevice;
-    final double appBarHeight =
-        style.searchBarHeight +
-        (isMobile ? spacingSM : spacingLG) * 2;
-
-    // AppBar 高度设置
-    return Size.fromHeight(appBarHeight + 1);
+    return Size.fromHeight(ResponsiveStyle.to.appBarHeight + 1);
   }
 
   void _handleBack(ItemController itemCtrl) {

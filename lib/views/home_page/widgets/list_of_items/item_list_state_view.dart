@@ -13,8 +13,8 @@ class ItemListStateView extends StatelessWidget {
     final ItemController itemController = Get.find<ItemController>();
     final ResponsiveStyle style = ResponsiveStyle.to;
 
-    final TextStyle bodyTextStyle = style.bodyText;
-    final double spacingMD = style.spacingMD;
+    final TextStyle bodyMD = Theme.of(context).textTheme.bodyMedium!;
+    final double spacingLG = style.spacingLG;
 
     return Obx(() {
       if (itemController.isListLoading.value) {
@@ -25,30 +25,22 @@ class ItemListStateView extends StatelessWidget {
         if (itemController.allItems.isEmpty) {
           // 状态2: 物品库为空 (数据库中没有任何物品)
           return Center(
-            child: Text(
-              'please_add_an_item'.tr,
-              style: style.bodyText,
-            ),
+            child: Text('please_add_an_item'.tr, style: bodyMD),
           );
         } else if (itemController.displayedItems.isEmpty) {
           // 状态3: 物品库有数据，但当前筛选/搜索后没有符合条件的物品
           return Center(
-            child: Text('no_matched_item'.tr, style: style.bodyText),
+            child: Text('no_matched_item'.tr, style: bodyMD),
           );
         } else {
           // 状态4: 有物品需要显示
           return ListView.builder(
+            padding: EdgeInsets.symmetric(vertical: spacingLG),
             itemCount: itemController.displayedItems.length + 1,
             itemBuilder: (context, index) {
               if (index == itemController.displayedItems.length) {
-                return Padding(
-                  padding: EdgeInsets.symmetric(vertical: spacingMD),
-                  child: Center(
-                    child: Text(
-                      'reached_end_hint'.tr,
-                      style: bodyTextStyle,
-                    ),
-                  ),
+                return Center(
+                  child: Text('reached_end_hint'.tr, style: bodyMD),
                 );
               }
 

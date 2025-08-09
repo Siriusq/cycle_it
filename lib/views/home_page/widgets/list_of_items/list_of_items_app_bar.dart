@@ -15,18 +15,14 @@ class ListOfItemsAppBar extends StatelessWidget
   Widget build(BuildContext context) {
     final ResponsiveStyle style = ResponsiveStyle.to;
     final double spacingSM = style.spacingSM;
-    final double spacingLG = style.spacingLG;
-    final bool isMobile = style.isMobileDevice;
-    final double searchBarHeight =
-        style.searchBarHeight +
-        (isMobile ? spacingSM : spacingLG) * 2;
+    final double appBarHeight = ResponsiveStyle.to.appBarHeight;
     final bool isTripleCol = ResponsiveLayout.isTripleCol(context);
     final bool isSingleCol = ResponsiveLayout.isSingleCol(context);
 
     return AppBar(
       primary: isSingleCol,
       automaticallyImplyLeading: false,
-      toolbarHeight: searchBarHeight,
+      toolbarHeight: appBarHeight,
       titleSpacing: 0,
       backgroundColor: Theme.of(context).colorScheme.surface,
       scrolledUnderElevation: 0,
@@ -42,13 +38,13 @@ class ListOfItemsAppBar extends StatelessWidget
 
       // 搜索框
       title: Padding(
-        padding: EdgeInsets.only(left: isTripleCol ? 20 : 0),
+        padding: EdgeInsets.only(left: isTripleCol ? 16 : 0),
         child: const CustomSearchBar(),
       ),
 
       // AppBar底部的分割线
-      bottom: PreferredSize(
-        preferredSize: const Size.fromHeight(1.0),
+      bottom: const PreferredSize(
+        preferredSize: Size.fromHeight(1.0),
         child: Divider(height: 0),
       ),
 
@@ -59,7 +55,7 @@ class ListOfItemsAppBar extends StatelessWidget
           icon: const Icon(Icons.library_add_outlined),
           onPressed: () async {
             final result = await Get.toNamed('/AddEditItem');
-            // 在显示 Snackbar 前添加一个微小延迟
+            // 在显示 Snack bar 前添加一个微小延迟
             await Future.delayed(const Duration(milliseconds: 50));
             if (result != null && result['success']) {
               Get.snackbar(
@@ -74,17 +70,9 @@ class ListOfItemsAppBar extends StatelessWidget
     );
   }
 
+  // AppBar 高度设置
   @override
   Size get preferredSize {
-    final ResponsiveStyle style = ResponsiveStyle.to;
-    final double spacingSM = style.spacingSM;
-    final double spacingLG = style.spacingLG;
-    final bool isMobile = style.isMobileDevice;
-    final double searchBarHeight =
-        style.searchBarHeight +
-        (isMobile ? spacingSM : spacingLG) * 2;
-
-    // AppBar 高度设置
-    return Size.fromHeight(searchBarHeight + 1);
+    return Size.fromHeight(ResponsiveStyle.to.appBarHeight + 1);
   }
 }

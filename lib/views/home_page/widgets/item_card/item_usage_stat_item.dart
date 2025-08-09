@@ -14,14 +14,18 @@ class ItemUsageStatItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final TextStyle bodySM = Theme.of(
+      context,
+    ).textTheme.bodySmall!.copyWith(height: 1.1);
+
     return LayoutBuilder(
       builder: (context, constraints) {
         return Row(
           mainAxisAlignment: MainAxisAlignment.start,
+          spacing: 8,
           children: [
             // 图标部分
             Icon(icon, size: 18),
-            const SizedBox(width: 6),
 
             // 文字部分
             Flexible(
@@ -33,7 +37,7 @@ class ItemUsageStatItem extends StatelessWidget {
                   // 标题
                   Text(
                     title,
-                    style: const TextStyle(fontSize: 12, height: 1.1),
+                    style: bodySM,
                     maxLines: 1,
                     overflow: TextOverflow.clip,
                   ),
@@ -41,11 +45,7 @@ class ItemUsageStatItem extends StatelessWidget {
                   // 数值
                   Text(
                     value,
-                    style: const TextStyle(
-                      fontSize: 12,
-                      letterSpacing: -0.3,
-                      height: 1.1,
-                    ),
+                    style: bodySM,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),

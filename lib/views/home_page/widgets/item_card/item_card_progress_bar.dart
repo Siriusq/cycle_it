@@ -4,7 +4,6 @@ import 'package:intl/intl.dart';
 
 import '../../../../models/item_model.dart';
 import '../../../../utils/responsive_layout.dart';
-import '../../../../utils/responsive_style.dart';
 
 class ItemCardProgressBar extends StatelessWidget {
   final ItemModel item;
@@ -18,17 +17,14 @@ class ItemCardProgressBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ResponsiveStyle style = ResponsiveStyle.to;
     final bool isSingleCol = ResponsiveLayout.isSingleCol(context);
 
-    final double spacingXS = style.spacingXS;
-    final double iconSizeSM = style.iconSizeSM;
-    final TextStyle smallBodyTextStyle = style.bodyTextSM;
+    final TextStyle bodySM = Theme.of(context).textTheme.bodySmall!;
     final DateTime? nextExpectedUseDate = item.nextExpectedUse;
     final double progress = item.timePercentageBetweenLastAndNext();
 
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 5),
+      padding: const EdgeInsets.symmetric(horizontal: 4),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -48,7 +44,7 @@ class ItemCardProgressBar extends StatelessWidget {
                               : Theme.of(
                                 context,
                               ).colorScheme.surfaceContainer,
-                      borderRadius: BorderRadius.circular(3),
+                      borderRadius: BorderRadius.circular(4),
                     ),
                   ),
                   // 进度条颜色
@@ -64,7 +60,7 @@ class ItemCardProgressBar extends StatelessWidget {
                               : Theme.of(
                                 context,
                               ).colorScheme.outlineVariant,
-                      borderRadius: BorderRadius.circular(3),
+                      borderRadius: BorderRadius.circular(4),
                     ),
                   ),
                 ],
@@ -77,8 +73,8 @@ class ItemCardProgressBar extends StatelessWidget {
                 isSingleCol
                     ? Row(
                       children: [
-                        Icon(Icons.update, size: iconSizeSM),
-                        SizedBox(width: spacingXS),
+                        const Icon(Icons.update, size: 12),
+                        const SizedBox(width: 4),
                         Expanded(
                           child: Text(
                             nextExpectedUseDate != null
@@ -88,7 +84,7 @@ class ItemCardProgressBar extends StatelessWidget {
                                   ).format(nextExpectedUseDate),
                                 })
                                 : 'data_not_enough'.tr,
-                            style: smallBodyTextStyle,
+                            style: bodySM,
                             overflow: TextOverflow.visible,
                           ),
                         ),
@@ -97,20 +93,18 @@ class ItemCardProgressBar extends StatelessWidget {
                           nextExpectedUseDate != null
                               ? "${(progress * 100).toStringAsFixed(2)}%"
                               : 'N/A',
-                          style: smallBodyTextStyle,
+                          style: bodySM,
                         ),
                       ],
                     )
                     : Row(
+                      mainAxisAlignment:
+                          MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(
-                          'est_timer'.tr,
-                          style: smallBodyTextStyle,
-                        ),
-                        const Spacer(),
+                        Text('est_timer'.tr, style: bodySM),
                         Text(
                           "${(progress * 100).toStringAsFixed(2)}%",
-                          style: smallBodyTextStyle,
+                          style: bodySM,
                         ),
                       ],
                     ),
