@@ -19,15 +19,6 @@ class ResponsiveStyle extends GetxController {
   final bool isMobileDevice =
       GetPlatform.isIOS || GetPlatform.isAndroid;
 
-  // 当前窗口宽度断点
-  bool get isCurrentWidthMobile => Get.width < Breakpoints.tablet;
-
-  bool get isCurrentWidthTablet =>
-      Get.width >= Breakpoints.tablet &&
-      Get.width < Breakpoints.desktop;
-
-  bool get isCurrentWidthDesktop => Get.width >= Breakpoints.desktop;
-
   // 最大表单宽度
   final double desktopFormMaxWidth = 700.0;
 

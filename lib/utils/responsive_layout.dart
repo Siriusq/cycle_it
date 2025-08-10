@@ -22,14 +22,14 @@ class ResponsiveLayout extends StatelessWidget {
   static int desktopBreakPoint = 1350;
 
   static bool isSingleCol(BuildContext context) =>
-      MediaQuery.of(context).size.width < mobileBreakPoint;
+      MediaQuery.sizeOf(context).width < mobileBreakPoint;
 
   static bool isDoubleCol(BuildContext context) =>
-      MediaQuery.of(context).size.width < desktopBreakPoint &&
-      MediaQuery.of(context).size.width >= mobileBreakPoint;
+      MediaQuery.sizeOf(context).width < desktopBreakPoint &&
+      MediaQuery.sizeOf(context).width >= mobileBreakPoint;
 
   static bool isTripleCol(BuildContext context) =>
-      MediaQuery.of(context).size.width >= desktopBreakPoint;
+      MediaQuery.sizeOf(context).width >= desktopBreakPoint;
 
   @override
   Widget build(BuildContext context) {
