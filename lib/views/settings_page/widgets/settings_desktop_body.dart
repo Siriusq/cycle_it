@@ -35,7 +35,7 @@ class SettingsDesktopBody extends StatelessWidget {
               // 模拟AppBar
               SettingsDesktopHeader(),
 
-              SettingsOptionsLayout(),
+              Flexible(child: SettingsOptionsLayout()),
             ],
           ),
         ),

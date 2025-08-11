@@ -70,7 +70,13 @@ class _HomePageState extends State<HomePage> {
             () =>
                 itemCtrl.selectedItemPreview.value != null
                     ? DetailsPage()
-                    : Center(child: Text('please_select_an_item'.tr)),
+                    : Center(
+                      child: Text(
+                        'please_select_an_item'.tr,
+                        style:
+                            Theme.of(context).textTheme.bodyMedium!,
+                      ),
+                    ),
           ),
         ),
       ],
@@ -93,7 +99,13 @@ class _HomePageState extends State<HomePage> {
             () =>
                 itemCtrl.selectedItemPreview.value != null
                     ? DetailsPage()
-                    : Center(child: Text('please_select_an_item'.tr)),
+                    : Center(
+                      child: Text(
+                        'please_select_an_item'.tr,
+                        style:
+                            Theme.of(context).textTheme.bodyMedium!,
+                      ),
+                    ),
           ),
         ),
       ],
