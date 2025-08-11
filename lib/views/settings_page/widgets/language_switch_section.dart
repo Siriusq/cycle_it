@@ -1,8 +1,8 @@
+import 'package:chinese_font_library/chinese_font_library.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../controllers/language_controller.dart';
-import '../../../utils/responsive_style.dart';
 
 enum LanguageOption {
   simplifiedChinese,
@@ -17,11 +17,11 @@ class LanguageSwitchSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final LanguageController languageController = Get.find();
-    final ResponsiveStyle style = ResponsiveStyle.to;
 
-    final TextStyle titleTextStyle = style.titleTextMD;
-    final TextStyle bodyTextStyle = style.bodyText;
-    final double spacingMD = style.spacingMD;
+    final TextStyle titleMD =
+        Theme.of(
+          context,
+        ).textTheme.titleMedium!.useSystemChineseFont();
 
     return Container(
       padding: const EdgeInsets.all(8.0),
@@ -38,12 +38,12 @@ class LanguageSwitchSection extends StatelessWidget {
         ],
       ),
       child: Column(
+        spacing: 12,
         children: [
           Row(
             mainAxisSize: MainAxisSize.min,
-            children: [Text('language'.tr, style: titleTextStyle)],
+            children: [Text('language'.tr, style: titleMD)],
           ),
-          SizedBox(height: spacingMD),
           Wrap(
             alignment: WrapAlignment.center,
             spacing: 8.0,
@@ -118,10 +118,7 @@ class LanguageSwitchSection extends StatelessWidget {
                       ),
                     ),
                     icon: Icon(_getOptionIcon(option)),
-                    label: Text(
-                      _getOptionText(option),
-                      style: bodyTextStyle,
-                    ),
+                    label: Text(_getOptionText(option)),
                   );
                 }).toList(),
           ),

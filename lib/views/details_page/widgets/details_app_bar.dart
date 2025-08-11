@@ -18,6 +18,10 @@ class DetailsAppBar extends StatelessWidget
     final ResponsiveStyle style = ResponsiveStyle.to;
     final double spacingLG = style.spacingLG;
     final double appBarHeight = ResponsiveStyle.to.appBarHeight;
+    final TextStyle titleLG =
+        Theme.of(
+          context,
+        ).textTheme.titleLarge!.useSystemChineseFont();
 
     return Obx(() {
       final ItemModel? item = itemCtrl.currentItem.value;
@@ -41,10 +45,7 @@ class DetailsAppBar extends StatelessWidget
                 ? Text(
                   item.name,
                   overflow: TextOverflow.ellipsis, // 防止文本过长溢出
-                  style:
-                      Theme.of(
-                        context,
-                      ).textTheme.titleLarge!.useSystemChineseFont(),
+                  style: titleLG,
                 )
                 : null,
         // 如果 item 为空，则不显示标题

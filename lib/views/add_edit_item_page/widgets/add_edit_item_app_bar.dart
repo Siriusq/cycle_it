@@ -1,8 +1,8 @@
+import 'package:chinese_font_library/chinese_font_library.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../controllers/add_edit_item_controller.dart';
-import '../../../utils/responsive_style.dart';
 
 class AddEditItemAppBar extends StatelessWidget
     implements PreferredSizeWidget {
@@ -10,32 +10,30 @@ class AddEditItemAppBar extends StatelessWidget
 
   @override
   Widget build(BuildContext context) {
-    final ResponsiveStyle style = ResponsiveStyle.to;
     final AddEditItemController controller =
         Get.find<AddEditItemController>();
 
-    final TextStyle largeTitleTextStyle = style.titleTextEX;
-    final double spacingSM = style.spacingSM;
-    final double spacingLG = style.spacingLG;
-    final bool isMobile = style.isMobileDevice;
-    final double searchBarHeight =
-        style.searchBarHeight +
-            (isMobile ? spacingSM : spacingLG) * 2;
+    final TextStyle titleLG =
+        Theme.of(
+          context,
+        ).textTheme.titleLarge!.useSystemChineseFont();
 
     return AppBar(
       automaticallyImplyLeading: false,
-      toolbarHeight: searchBarHeight,
+      toolbarHeight: 56,
       titleSpacing: 0,
       backgroundColor: Theme.of(context).colorScheme.surface,
       scrolledUnderElevation: 0,
+      // 标题
       title: Center(
         child: Text(
           controller.isEditing ? 'edit_item'.tr : 'add_new_item'.tr,
-          style: largeTitleTextStyle,
+          style: titleLG,
         ),
       ),
-      bottom: PreferredSize(
-        preferredSize: const Size.fromHeight(1.0),
+      // AppBar底部的分割线
+      bottom: const PreferredSize(
+        preferredSize: Size.fromHeight(1.0),
         child: Divider(height: 0),
       ),
       leading: IconButton(
@@ -47,7 +45,7 @@ class AddEditItemAppBar extends StatelessWidget
           icon: const Icon(Icons.save_outlined),
           onPressed: () => _saveAndGoBack(controller), // 保存
         ),
-        SizedBox(width: spacingSM),
+        const SizedBox(width: 8),
       ],
     );
   }
@@ -86,6 +84,5 @@ class AddEditItemAppBar extends StatelessWidget
   }
 
   @override
-  Size get preferredSize =>
-      const Size.fromHeight(kToolbarHeight + 1.0); // AppBar 默认高度 + 分割线
+  Size get preferredSize => const Size.fromHeight(57); // AppBar 默认高度 + 分割线
 }

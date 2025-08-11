@@ -1,12 +1,8 @@
+import 'package:chinese_font_library/chinese_font_library.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../utils/responsive_style.dart';
-
 Future<TimeOfDay?> promptForNotifyTime(TimeOfDay initialTime) async {
-  final style = ResponsiveStyle.to;
-  final spacingMD = style.spacingMD;
-
   final TimeOfDay? pickedTime = await showTimePicker(
     context: Get.context!,
     initialTime: initialTime,
@@ -18,17 +14,24 @@ Future<TimeOfDay?> promptForNotifyTime(TimeOfDay initialTime) async {
     minuteLabelText: 'minute_label'.tr,
     builder: (BuildContext context, Widget? child) {
       final ThemeData currentTheme = Get.theme;
+      final TextStyle titleLG =
+          Theme.of(
+            context,
+          ).textTheme.titleLarge!.useSystemChineseFont();
+      final TextStyle bodyLG =
+          Theme.of(
+            context,
+          ).textTheme.bodyLarge!.useSystemChineseFont();
+
       return Theme(
         data: currentTheme.copyWith(
           // 修复默认状态下数字 Overflow 的问题
-          textTheme: TextTheme(bodyLarge: style.bodyTextLG),
+          textTheme: TextTheme(bodyLarge: bodyLG),
           textButtonTheme: TextButtonThemeData(
-            style: TextButton.styleFrom(
-              padding: EdgeInsets.all(spacingMD),
-            ),
+            style: TextButton.styleFrom(padding: EdgeInsets.all(12)),
           ),
           timePickerTheme: TimePickerThemeData(
-            helpTextStyle: style.titleTextMD.copyWith(
+            helpTextStyle: titleLG.copyWith(
               color: currentTheme.colorScheme.onSurface,
             ),
             dayPeriodColor: currentTheme.colorScheme.inversePrimary,

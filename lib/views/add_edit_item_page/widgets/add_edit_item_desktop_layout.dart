@@ -1,3 +1,4 @@
+import 'package:chinese_font_library/chinese_font_library.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -14,14 +15,15 @@ class AddEditItemDesktopLayout extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ResponsiveStyle style = ResponsiveStyle.to;
     final AddEditItemController controller =
         Get.find<AddEditItemController>();
 
-    final double spacingSM = style.spacingSM;
-    final double spacingMD = style.spacingMD;
-    final TextStyle largeTitleTextStyle = style.titleTextEX;
-    final double maxFormWidth = style.desktopFormMaxWidth;
+    final double maxFormWidth =
+        ResponsiveStyle.to.desktopFormMaxWidth;
+    final TextStyle titleLG =
+        Theme.of(
+          context,
+        ).textTheme.titleLarge!.useSystemChineseFont();
 
     return Center(
       child: SingleChildScrollView(
@@ -42,14 +44,14 @@ class AddEditItemDesktopLayout extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Padding(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: spacingSM,
-                    vertical: spacingMD,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8,
+                    vertical: 12,
                   ),
                   child: Row(
                     children: [
                       IconButton(
-                        icon: Icon(Icons.arrow_back),
+                        icon: const Icon(Icons.arrow_back),
                         onPressed: () => Get.back(),
                       ),
                       Expanded(
@@ -58,7 +60,8 @@ class AddEditItemDesktopLayout extends StatelessWidget {
                             controller.isEditing
                                 ? 'edit_item'.tr
                                 : 'add_new_item'.tr,
-                            style: largeTitleTextStyle,
+                            style: titleLG,
+                            overflow: TextOverflow.ellipsis,
                           ),
                         ),
                       ),
@@ -70,7 +73,7 @@ class AddEditItemDesktopLayout extends StatelessWidget {
                     ],
                   ),
                 ),
-                Divider(height: 0),
+                const Divider(height: 0),
                 mainContent, // 主要内容 Widget
               ],
             ),
@@ -102,7 +105,7 @@ class AddEditItemDesktopLayout extends StatelessWidget {
       );
     } else {
       // 存在错误
-      // 如果是名称相关的错误（已在 TextFormField 中显示），则不显示 Snackbar
+      // 如果是名称相关的错误（已在 TextFormField 中显示），则不显示 Snack bar
       if (message == 'item_name_empty' ||
           message == 'item_name_too_long') {
         return;

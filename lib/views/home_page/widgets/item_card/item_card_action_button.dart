@@ -27,9 +27,9 @@ class ItemCardActionButton extends StatelessWidget {
             PopupMenuItem(
               value: 'cycle',
               child: Row(
+                spacing: 8,
                 children: [
                   const Icon(Icons.refresh),
-                  const SizedBox(width: 8),
                   Text('cycle'.tr, style: bodyMD),
                 ],
               ),
@@ -37,9 +37,9 @@ class ItemCardActionButton extends StatelessWidget {
             PopupMenuItem(
               value: 'edit',
               child: Row(
+                spacing: 8,
                 children: [
                   const Icon(Icons.edit),
-                  const SizedBox(width: 8),
                   Text('edit'.tr, style: bodyMD),
                 ],
               ),
@@ -47,9 +47,9 @@ class ItemCardActionButton extends StatelessWidget {
             PopupMenuItem(
               value: 'delete',
               child: Row(
+                spacing: 8,
                 children: [
                   const Icon(Icons.delete, color: Colors.red),
-                  const SizedBox(width: 8),
                   Text(
                     'delete'.tr,
                     style: bodyMD.copyWith(color: Colors.red),

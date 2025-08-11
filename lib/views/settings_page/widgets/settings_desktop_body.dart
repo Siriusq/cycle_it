@@ -10,8 +10,8 @@ class SettingsDesktopBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ResponsiveStyle style = ResponsiveStyle.to;
-    final double maxFormWidth = style.desktopFormMaxWidth;
+    final double maxFormWidth =
+        ResponsiveStyle.to.desktopFormMaxWidth;
 
     return Center(
       child: ConstrainedBox(

@@ -1,15 +1,11 @@
+import 'package:chinese_font_library/chinese_font_library.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
-import '../../utils/responsive_style.dart';
 
 Future<DateTime?> promptForDateSelection(
   DateTime initialDate, {
   bool isPrevious = true,
 }) async {
-  final style = ResponsiveStyle.to;
-  final spacingMD = style.spacingMD;
-
   final DateTime? pickedDate = await showDatePicker(
     context: Get.context!,
     initialDate: initialDate,
@@ -26,12 +22,18 @@ Future<DateTime?> promptForDateSelection(
     fieldHintText: 'date_input_hint'.tr,
     fieldLabelText: 'date_input_label'.tr,
     builder: (BuildContext context, Widget? child) {
+      final TextStyle titleLG =
+          Theme.of(
+            context,
+          ).textTheme.titleLarge!.useSystemChineseFont();
+
       return Theme(
         data: Get.theme.copyWith(
           textButtonTheme: TextButtonThemeData(
-            style: TextButton.styleFrom(
-              padding: EdgeInsets.all(spacingMD),
-            ),
+            style: TextButton.styleFrom(padding: EdgeInsets.all(12)),
+          ),
+          datePickerTheme: DatePickerThemeData(
+            headerHelpStyle: titleLG,
           ),
         ),
         child: child!,

@@ -145,9 +145,9 @@ class UsageRecordDataSource extends DataTableSource {
                     PopupMenuItem<String>(
                       value: 'edit',
                       child: Row(
+                        spacing: 8,
                         children: [
                           const Icon(Icons.edit),
-                          const SizedBox(width: 8),
                           Text(
                             'edit'.tr,
                             style:
@@ -161,9 +161,9 @@ class UsageRecordDataSource extends DataTableSource {
                     PopupMenuItem<String>(
                       value: 'delete',
                       child: Row(
+                        spacing: 8,
                         children: [
                           const Icon(Icons.delete, color: Colors.red),
-                          const SizedBox(width: 8),
                           Text(
                             'delete'.tr,
                             style: Theme.of(context)

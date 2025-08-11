@@ -1,8 +1,8 @@
+import 'package:chinese_font_library/chinese_font_library.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../controllers/add_edit_item_controller.dart';
-import '../../../utils/responsive_style.dart';
 
 class NameCommentSection extends StatelessWidget {
   const NameCommentSection({super.key});
@@ -11,20 +11,20 @@ class NameCommentSection extends StatelessWidget {
   Widget build(BuildContext context) {
     final AddEditItemController controller =
         Get.find<AddEditItemController>();
-    final ResponsiveStyle style = ResponsiveStyle.to;
 
-    final double spacingMD = style.spacingMD;
-    final TextStyle bodyTextLG = style.bodyTextLG;
+    final TextStyle bodyLG =
+        Theme.of(context).textTheme.bodyLarge!.useSystemChineseFont();
 
     return Column(
+      spacing: 12,
       children: [
-        // 需要修改的文本输入框
+        // 物品名称
         Obx(() {
           return TextFormField(
             controller: controller.nameController,
             decoration: InputDecoration(
               labelText: 'item_name'.tr,
-              labelStyle: bodyTextLG,
+              labelStyle: bodyLG,
               border: const OutlineInputBorder(),
               errorText:
                   controller.nameErrorText.value.isEmpty
@@ -39,12 +39,12 @@ class NameCommentSection extends StatelessWidget {
             },
           );
         }),
-        SizedBox(height: spacingMD),
+        // 注释
         TextFormField(
           controller: controller.usageCommentController,
           decoration: InputDecoration(
             labelText: 'item_comment'.tr,
-            labelStyle: bodyTextLG,
+            labelStyle: bodyLG,
             border: const OutlineInputBorder(),
           ),
           maxLines: 1,

@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 
 import '../../../controllers/tag_controller.dart';
 import '../../../models/tag_model.dart';
-import '../../../utils/responsive_style.dart';
 import '../../shared_widgets/delete_confirm_dialog.dart';
 import 'add_edit_tag_dialog.dart';
 
@@ -27,15 +26,12 @@ class TagActionButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final TagController controller = Get.find<TagController>();
-    final ResponsiveStyle style = ResponsiveStyle.to;
 
-    final double spacingSM = style.spacingSM;
-    final double iconSizeMD = style.iconSizeMD;
-    final TextStyle bodyTextStyle = style.bodyText;
+    final TextStyle bodyMD = Theme.of(context).textTheme.bodyMedium!;
 
     return PopupMenuButton<String>(
       tooltip: 'more_action'.tr,
-      icon: Icon(Icons.more_vert, size: iconSizeMD),
+      icon: Icon(Icons.more_vert),
       onSelected: (value) async {
         if (value == 'edit') {
           _showAddEditTagDialog(tag: tag); // 编辑标签
@@ -60,22 +56,22 @@ class TagActionButton extends StatelessWidget {
             PopupMenuItem<String>(
               value: 'edit',
               child: Row(
+                spacing: 8,
                 children: [
-                  Icon(Icons.edit),
-                  SizedBox(width: spacingSM),
-                  Text('edit'.tr, style: bodyTextStyle),
+                  const Icon(Icons.edit),
+                  Text('edit'.tr, style: bodyMD),
                 ],
               ),
             ),
             PopupMenuItem<String>(
               value: 'delete',
               child: Row(
+                spacing: 8,
                 children: [
-                  Icon(Icons.delete, color: Colors.red),
-                  SizedBox(width: spacingSM),
+                  const Icon(Icons.delete, color: Colors.red),
                   Text(
                     'delete'.tr,
-                    style: bodyTextStyle.copyWith(color: Colors.red),
+                    style: bodyMD.copyWith(color: Colors.red),
                   ),
                 ],
               ),

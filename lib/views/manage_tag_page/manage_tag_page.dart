@@ -13,8 +13,7 @@ class ManageTagPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ResponsiveStyle style = ResponsiveStyle.to;
-    final bool isMobileDevice = style.isMobileDevice;
+    final bool isMobileDevice = ResponsiveStyle.to.isMobileDevice;
 
     return LayoutBuilder(
       builder: (context, constraints) {
@@ -27,16 +26,16 @@ class ManageTagPage extends StatelessWidget {
                   )
                   : null,
 
-          body:
-              SizedBox(
-                child: SafeArea(
-                  child: isMobileDevice
+          body: SizedBox(
+            child: SafeArea(
+              child:
+                  isMobileDevice
                       ? const TagListView()
                       : ManageTagDesktopBody(
                         onAddTag: _showAddEditTagDialog,
                       ),
-                ),
-              ),
+            ),
+          ),
 
           // 宽屏幕
         );
@@ -51,7 +50,7 @@ class ManageTagPage extends StatelessWidget {
         Get.snackbar(
           'success'.tr, // 成功提示
           result['message'], // 消息内容
-          duration: Duration(seconds: 1),
+          duration: const Duration(seconds: 1),
         );
       }
     });

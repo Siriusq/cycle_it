@@ -1,15 +1,17 @@
+import 'package:chinese_font_library/chinese_font_library.dart';
 import 'package:flex_color_picker/flex_color_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../utils/responsive_style.dart';
 
-Future<Color?> showCustomColorPickerDialog(Color initColor) async {
+Future<Color?> showCustomColorPickerDialog(
+  Color initColor,
+  BuildContext context,
+) async {
   Color selectedColor = initColor;
-  final ResponsiveStyle style = ResponsiveStyle.to;
-  final TextStyle titleTextStyle = style.titleTextMD;
-  final double spacingSM = style.spacingSM;
-  final TextStyle bodyTextStyle = style.bodyText;
+  final TextStyle titleMD =
+      Theme.of(context).textTheme.titleMedium!.useSystemChineseFont();
 
   return await Get.dialog<Color>(
     AlertDialog(
@@ -24,7 +26,7 @@ Future<Color?> showCustomColorPickerDialog(Color initColor) async {
       contentPadding: const EdgeInsets.all(16.0),
       content: SizedBox(
         //height: Get.height * 0.7, // 占据屏幕高度的 70%
-        width: style.dialogWidth, // 占据屏幕宽度的 90%
+        width: ResponsiveStyle.to.dialogWidth, // 占据屏幕宽度的 90%
         child: SingleChildScrollView(
           child: ColorPicker(
             color: selectedColor,
@@ -34,21 +36,18 @@ Future<Color?> showCustomColorPickerDialog(Color initColor) async {
             width: 44,
             height: 44,
             borderRadius: 4,
-            spacing: spacingSM,
-            runSpacing: spacingSM,
+            spacing: 8,
+            runSpacing: 8,
             wheelDiameter: 250,
             title: Text('select_color'.tr),
-            subheading: Text(
-              'shades_and_tones'.tr,
-              style: titleTextStyle,
-            ),
+            subheading: Text('shades_and_tones'.tr, style: titleMD),
             wheelSubheading: Text(
               'pick_color_wheel'.tr,
-              style: titleTextStyle,
+              style: titleMD,
             ),
             recentColorsSubheading: Text(
               'recent_color'.tr,
-              style: titleTextStyle,
+              style: titleMD,
             ),
             showMaterialName: false,
             showColorName: false,
@@ -74,15 +73,15 @@ Future<Color?> showCustomColorPickerDialog(Color initColor) async {
           onPressed: () {
             Get.back();
           },
-          icon: Icon(Icons.cancel_outlined),
-          label: Text('cancel'.tr, style: bodyTextStyle),
+          icon: const Icon(Icons.cancel),
+          label: Text('cancel'.tr),
         ),
         TextButton.icon(
           onPressed: () {
             Get.back(result: selectedColor);
           },
-          icon: Icon(Icons.check_circle_outline),
-          label: Text('confirm'.tr, style: bodyTextStyle),
+          icon: const Icon(Icons.check),
+          label: Text('confirm'.tr),
         ),
       ],
     ),

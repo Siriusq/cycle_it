@@ -1,19 +1,24 @@
-import 'package:cycle_it/utils/responsive_style.dart';
+import 'package:chinese_font_library/chinese_font_library.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 Future<bool?> showDeleteConfirmDialog({
   required String deleteTargetName,
 }) async {
-  final style = ResponsiveStyle.to;
-  final TextStyle bodyTextLG = style.bodyTextLG;
-  final TextStyle titleTextStyleLG = style.titleTextLG;
+  final TextStyle titleLG =
+      Theme.of(
+        Get.context!,
+      ).textTheme.titleLarge!.useSystemChineseFont();
+  final TextStyle bodyLG =
+      Theme.of(
+        Get.context!,
+      ).textTheme.bodyLarge!.useSystemChineseFont();
 
   return await Get.dialog<bool?>(
     AlertDialog(
       title: Text(
         'delete_confirm'.tr,
-        style: titleTextStyleLG.copyWith(fontSize: 18),
+        style: titleLG,
         overflow: TextOverflow.visible,
       ),
       content: Text(
@@ -29,7 +34,7 @@ Future<bool?> showDeleteConfirmDialog({
             Get.back(result: false);
           },
           icon: const Icon(Icons.cancel),
-          label: Text('cancel'.tr, style: bodyTextLG),
+          label: Text('cancel'.tr, style: bodyLG),
         ),
         // 删除按钮
         TextButton.icon(
@@ -39,13 +44,13 @@ Future<bool?> showDeleteConfirmDialog({
           icon: const Icon(Icons.delete, color: Colors.red),
           label: Text(
             'delete'.tr,
-            style: bodyTextLG.copyWith(color: Colors.red),
+            style: bodyLG.copyWith(color: Colors.red),
           ),
         ),
       ],
       // 应用圆角
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(15.0),
+        borderRadius: BorderRadius.circular(16.0),
       ),
     ),
   );

@@ -2,11 +2,9 @@ import 'package:chinese_font_library/chinese_font_library.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class ManageTagMobileAppBar extends StatelessWidget
+class SettingsAppBar extends StatelessWidget
     implements PreferredSizeWidget {
-  final VoidCallback onAddTag; // 用于触发添加标签对话框的回调
-
-  const ManageTagMobileAppBar({super.key, required this.onAddTag});
+  const SettingsAppBar({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -22,33 +20,20 @@ class ManageTagMobileAppBar extends StatelessWidget
       backgroundColor: Theme.of(context).colorScheme.surface,
       scrolledUnderElevation: 0,
       // 标题
-      title: Center(
-        child: Text(
-          'tag_management'.tr, // 标签管理标题
-          style: titleLG,
-        ),
-      ),
+      title: Center(child: Text('settings'.tr, style: titleLG)),
       // AppBar底部的分割线
       bottom: const PreferredSize(
         preferredSize: Size.fromHeight(1.0),
         child: Divider(height: 0),
       ),
-      // 返回按钮
       leading: IconButton(
-        icon: const Icon(Icons.arrow_back),
+        icon: Icon(Icons.arrow_back),
         onPressed: () => Get.back(),
       ),
-      // 添加按钮
-      actions: <Widget>[
-        IconButton(
-          icon: const Icon(Icons.add),
-          onPressed: onAddTag, // 调用传入的回调
-        ),
-        const SizedBox(width: 8),
-      ],
+      actions: [SizedBox(width: 52)], //补偿返回按钮宽度，保证标题居中
     );
   }
 
   @override
-  Size get preferredSize => const Size.fromHeight(57); // 加上 bottom 的高度
+  Size get preferredSize => const Size.fromHeight(57); // AppBar 默认高度 + 分割线
 }

@@ -14,7 +14,7 @@ class ItemListStateView extends StatelessWidget {
     final ResponsiveStyle style = ResponsiveStyle.to;
 
     final TextStyle bodyMD = Theme.of(context).textTheme.bodyMedium!;
-    final double spacingLG = style.spacingLG;
+    final double topSpacing = style.isMobileDevice ? 8 : 16;
 
     return Obx(() {
       if (itemController.isListLoading.value) {
@@ -35,7 +35,7 @@ class ItemListStateView extends StatelessWidget {
         } else {
           // 状态4: 有物品需要显示
           return ListView.builder(
-            padding: EdgeInsets.symmetric(vertical: spacingLG),
+            padding: EdgeInsets.symmetric(vertical: topSpacing),
             itemCount: itemController.displayedItems.length + 1,
             itemBuilder: (context, index) {
               if (index == itemController.displayedItems.length) {

@@ -1,3 +1,4 @@
+import 'package:chinese_font_library/chinese_font_library.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -9,10 +10,17 @@ class RestartRequiredPage extends StatelessWidget {
     super.key,
     required this.succeed,
     required this.message,
-  }); // 更新构造函数
+  });
 
   @override
   Widget build(BuildContext context) {
+    final TextStyle titleLG =
+        Theme.of(
+          context,
+        ).textTheme.titleLarge!.useSystemChineseFont();
+    final TextStyle bodyLarge =
+        Theme.of(context).textTheme.bodyLarge!.useSystemChineseFont();
+
     return Scaffold(
       body: Center(
         child: Padding(
@@ -31,17 +39,14 @@ class RestartRequiredPage extends StatelessWidget {
               const SizedBox(height: 24),
               Text(
                 message, // 传递过来的消息
-                style: const TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                ),
+                style: titleLG,
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 16),
               // 重启提示
               Text(
                 'restart_hint'.tr,
-                style: TextStyle(fontSize: 16),
+                style: bodyLarge,
                 textAlign: TextAlign.center,
               ),
             ],

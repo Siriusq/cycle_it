@@ -1,7 +1,6 @@
+import 'package:chinese_font_library/chinese_font_library.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
-import '../../../utils/responsive_style.dart';
 
 class ManageTagDesktopHeader extends StatelessWidget {
   final VoidCallback onAddTag; // 用于触发添加标签对话框的回调
@@ -10,37 +9,32 @@ class ManageTagDesktopHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ResponsiveStyle style = ResponsiveStyle.to;
-    final TextStyle largeTitleTextStyle = style.titleTextEX;
-    final double spacingSM = style.spacingSM;
-    final double spacingMD = style.spacingMD;
-    final bool isMobileDevice = style.isMobileDevice;
-
-    // 移动端不显示
-    if (isMobileDevice) {
-      return const SizedBox.shrink();
-    }
+    final TextStyle titleLG =
+        Theme.of(
+          context,
+        ).textTheme.titleLarge!.useSystemChineseFont();
 
     // 桌面端模拟 AppBar 样式
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
         Padding(
-          padding: EdgeInsets.symmetric(
-            horizontal: spacingSM,
-            vertical: spacingMD,
+          padding: const EdgeInsets.symmetric(
+            horizontal: 8,
+            vertical: 12,
           ),
           child: Row(
             children: [
               IconButton(
-                icon: Icon(Icons.arrow_back),
+                icon: const Icon(Icons.arrow_back),
                 onPressed: () => Get.back(),
               ),
               Expanded(
                 child: Center(
                   child: Text(
                     'tag_management'.tr,
-                    style: largeTitleTextStyle,
+                    style: titleLG,
+                    overflow: TextOverflow.ellipsis,
                   ),
                 ),
               ),
@@ -51,7 +45,7 @@ class ManageTagDesktopHeader extends StatelessWidget {
             ],
           ),
         ),
-        Divider(height: 0),
+        const Divider(height: 0),
       ],
     );
   }

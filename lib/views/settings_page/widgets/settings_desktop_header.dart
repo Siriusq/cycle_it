@@ -1,52 +1,39 @@
+import 'package:chinese_font_library/chinese_font_library.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
-import '../../../utils/responsive_style.dart';
 
 class SettingsDesktopHeader extends StatelessWidget {
   const SettingsDesktopHeader({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final ResponsiveStyle style = ResponsiveStyle.to;
-    final TextStyle largeTitleTextStyle = style.titleTextEX;
-    final double spacingSM = style.spacingSM;
-    final double spacingMD = style.spacingMD;
-    final bool isMobileDevice = style.isMobileDevice;
-
-    // 移动端不显示
-    if (isMobileDevice) {
-      return const SizedBox.shrink();
-    }
+    final TextStyle titleLG =
+        Theme.of(
+          context,
+        ).textTheme.titleLarge!.useSystemChineseFont();
 
     // 桌面端模拟 AppBar 样式
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
         Padding(
-          padding: EdgeInsets.symmetric(
-            horizontal: spacingSM,
-            vertical: spacingMD,
-          ),
+          padding: EdgeInsets.symmetric(horizontal: 8, vertical: 12),
           child: Row(
             children: [
               IconButton(
-                icon: Icon(Icons.arrow_back),
+                icon: const Icon(Icons.arrow_back),
                 onPressed: () => Get.back(),
               ),
               Expanded(
                 child: Center(
-                  child: Text(
-                    'settings'.tr,
-                    style: largeTitleTextStyle,
-                  ),
+                  child: Text('settings'.tr, style: titleLG),
                 ),
               ),
-              SizedBox(width: 40), //补偿返回按钮宽度，保证标题居中
+              const SizedBox(width: 40), //补偿返回按钮宽度，保证标题居中
             ],
           ),
         ),
-        Divider(height: 0),
+        const Divider(height: 0),
       ],
     );
   }

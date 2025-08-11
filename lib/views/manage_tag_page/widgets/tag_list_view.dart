@@ -12,38 +12,27 @@ class TagListView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final TagController controller = Get.find<TagController>();
-    final ResponsiveStyle style = ResponsiveStyle.to;
 
-    final TextStyle bodyTextStyle = style.bodyText;
-    final double spacingMD = style.spacingMD;
-    final double spacingSM = style.spacingSM;
-    final bool isMobileDevice = style.isMobileDevice;
-    final double horizontalPadding =
-        isMobileDevice ? spacingSM : 0; // 移动端有横向padding
+    final TextStyle bodyMD = Theme.of(context).textTheme.bodyMedium!;
+    final double spacingMD = ResponsiveStyle.to.spacingMD;
+    final double spacingLG = ResponsiveStyle.to.spacingLG;
 
     return Obx(() {
       if (controller.allTags.isEmpty) {
-        return Center(
-          child: Text('add_tag_hint'.tr, style: bodyTextStyle),
-        );
+        return Center(child: Text('add_tag_hint'.tr, style: bodyMD));
       }
       return ListView.builder(
-        padding: EdgeInsets.fromLTRB(
-          horizontalPadding,
-          spacingSM,
-          horizontalPadding,
-          0,
+        padding: EdgeInsets.symmetric(
+          horizontal: spacingLG,
+          vertical: spacingMD,
         ),
         itemCount: controller.allTags.length + 1,
         itemBuilder: (context, index) {
           if (index == controller.allTags.length) {
             return Padding(
-              padding: EdgeInsets.symmetric(vertical: spacingMD),
+              padding: const EdgeInsets.symmetric(vertical: 8),
               child: Center(
-                child: Text(
-                  'reached_end_hint'.tr,
-                  style: bodyTextStyle,
-                ),
+                child: Text('reached_end_hint'.tr, style: bodyMD),
               ),
             );
           }

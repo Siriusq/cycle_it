@@ -1,3 +1,4 @@
+import 'package:chinese_font_library/chinese_font_library.dart';
 import 'package:cycle_it/controllers/item_controller.dart';
 import 'package:cycle_it/views/notification_handling/custom_delay_time_picker.dart';
 import 'package:flutter/material.dart';
@@ -5,7 +6,6 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
 import '../../services/notification_service.dart';
-import '../../utils/responsive_style.dart';
 
 class NotificationHandlingDialog extends StatelessWidget {
   final int itemId;
@@ -19,14 +19,16 @@ class NotificationHandlingDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ResponsiveStyle style = ResponsiveStyle.to;
-    final TextStyle titleTextStyleLG = style.titleTextLG;
+    final TextStyle titleLG =
+        Theme.of(
+          context,
+        ).textTheme.titleLarge!.useSystemChineseFont();
 
     return AlertDialog(
       title: Center(
         child: Text(
           'item_usage_reminder'.tr,
-          style: titleTextStyleLG.copyWith(fontSize: 18),
+          style: titleLG,
           overflow: TextOverflow.visible,
         ),
       ),
@@ -126,9 +128,9 @@ class NotificationHandlingDialog extends StatelessWidget {
       style: style,
       onPressed: onPressed,
       child: Row(
+        spacing: 8,
         children: [
           Icon(icon),
-          const SizedBox(width: 8),
           Expanded(
             child: Text(label, overflow: TextOverflow.ellipsis),
           ),

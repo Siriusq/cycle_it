@@ -1,8 +1,8 @@
+import 'package:chinese_font_library/chinese_font_library.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../controllers/add_edit_item_controller.dart';
-import '../../../utils/responsive_style.dart';
 import '../../shared_widgets/icon_label.dart';
 import 'item_tag_picker_dialog.dart';
 
@@ -13,18 +13,18 @@ class TagSection extends StatelessWidget {
   Widget build(BuildContext context) {
     final AddEditItemController controller =
         Get.find<AddEditItemController>();
-    final ResponsiveStyle style = ResponsiveStyle.to;
 
-    final TextStyle titleTextStyle = style.titleTextMD;
-    final double topSpacing =
-        style.isMobileDevice ? style.spacingMD : style.spacingXS;
+    final TextStyle titleMD =
+        Theme.of(
+          context,
+        ).textTheme.titleMedium!.useSystemChineseFont();
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('tags'.tr, style: titleTextStyle),
-        SizedBox(height: topSpacing),
+        Text('tags'.tr, style: titleMD),
+        const SizedBox(height: 8),
         SizedBox(
           width: double.infinity,
           child: Obx(() {
@@ -44,7 +44,7 @@ class TagSection extends StatelessWidget {
               SizedBox(
                 child: InkWell(
                   onTap: () {
-                    showItemTagPickerDialog();
+                    showItemTagPickerDialog(context);
                   },
                   child: IconLabel(
                     icon: Icons.bookmark_add_outlined,

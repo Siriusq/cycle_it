@@ -16,15 +16,16 @@ class SettingsOptionsLayout extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.center,
+        spacing: 24,
         children: [
           // 语言
           LanguageSwitchSection(),
-          const SizedBox(height: 24),
           // 主题
           ThemeSwitchSection(),
-          const SizedBox(height: 24),
           // 数据
           DatabaseManagementSection(),
+          // 关于
+          //AboutSection(),
         ],
       ),
     );

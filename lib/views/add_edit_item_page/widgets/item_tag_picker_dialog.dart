@@ -1,23 +1,21 @@
+import 'package:chinese_font_library/chinese_font_library.dart';
 import 'package:cycle_it/controllers/add_edit_item_controller.dart';
 import 'package:cycle_it/utils/responsive_style.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../../controllers/theme_controller.dart';
 import '../../manage_tag_page/widgets/add_edit_tag_dialog.dart';
 
-void showItemTagPickerDialog() {
-  final ThemeController themeController = Get.find<ThemeController>();
+void showItemTagPickerDialog(BuildContext context) {
   final AddEditItemController controller =
       Get.find<AddEditItemController>();
-  final ResponsiveStyle style = ResponsiveStyle.to;
-  final TextStyle titleTextStyleLG = style.titleTextLG;
-  final double spacingMD = style.spacingMD;
-  final TextStyle bodyTextStyle = style.bodyText;
+  final TextStyle titleLG =
+      Theme.of(context).textTheme.titleLarge!.useSystemChineseFont();
+  final TextStyle bodyMD = Theme.of(context).textTheme.bodyMedium!;
 
   Get.dialog(
     AlertDialog(
-      title: Text('select_tag'.tr, style: titleTextStyleLG),
+      title: Text('select_tag'.tr, style: titleLG),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16.0),
       ),
@@ -31,7 +29,7 @@ void showItemTagPickerDialog() {
         builder: (context) {
           return SizedBox(
             height: Get.height * 0.7, // 占据屏幕高度的 70%
-            width: style.dialogWidth, // 占据屏幕宽度的 90%
+            width: ResponsiveStyle.to.dialogWidth, // 占据屏幕宽度的 90%
             child: Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(8.0),
@@ -43,17 +41,14 @@ void showItemTagPickerDialog() {
                 if (noAvailableTags) {
                   // 当没有可用标签时，只显示“添加标签”按钮，并居中显示
                   return Column(
+                    spacing: 8,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Padding(
-                        padding: EdgeInsets.all(spacingMD),
-                        child: Text(
-                          'no_tag_hint'.tr,
-                          style: bodyTextStyle,
-                        ),
+                        padding: const EdgeInsets.all(8),
+                        child: Text('no_tag_hint'.tr, style: bodyMD),
                       ),
-                      SizedBox(height: spacingMD),
-                      _buildAddTagButton(style, controller),
+                      _buildAddTagButton(context),
                     ],
                   );
                 } else {
@@ -70,12 +65,7 @@ void showItemTagPickerDialog() {
                       itemBuilder: (context, index) {
                         if (index == 0) {
                           // 第一行，用于“添加标签”
-                          return _buildAddTagListTile(
-                            context,
-                            style,
-                            controller,
-                            themeController,
-                          );
+                          return _buildAddTagListTile(context);
                         } else {
                           // 实际的标签项
                           final tag =
@@ -99,16 +89,16 @@ void showItemTagPickerDialog() {
                                 width: 1,
                               ),
                               title: Row(
+                                spacing: 8,
                                 children: [
                                   Icon(
                                     Icons.bookmark,
                                     color: tag.color,
                                   ),
-                                  SizedBox(width: spacingMD),
                                   Expanded(
                                     child: Text(
                                       tag.name,
-                                      style: bodyTextStyle,
+                                      style: bodyMD,
                                       overflow: TextOverflow.ellipsis,
                                       maxLines: 1,
                                     ),
@@ -144,8 +134,8 @@ void showItemTagPickerDialog() {
             }
             Get.back();
           },
-          icon: Icon(Icons.check_circle_outline),
-          label: Text('confirm'.tr, style: bodyTextStyle),
+          icon: const Icon(Icons.check),
+          label: Text('confirm'.tr),
         ),
       ],
     ),
@@ -153,13 +143,9 @@ void showItemTagPickerDialog() {
 }
 
 // 添加标签的 ListTile
-Widget _buildAddTagListTile(
-  BuildContext context,
-  ResponsiveStyle style,
-  AddEditItemController controller,
-  ThemeController themeController,
-) {
-  final TextStyle bodyTextStyle = style.bodyText;
+Widget _buildAddTagListTile(BuildContext context) {
+  final TextStyle titleMD =
+      Theme.of(context).textTheme.titleMedium!.useSystemChineseFont();
 
   return ListTile(
     leading: Icon(
@@ -169,11 +155,14 @@ Widget _buildAddTagListTile(
     // 添加图标
     title: Text(
       'add_new_tag'.tr,
-      style: bodyTextStyle.copyWith(
-        fontWeight: FontWeight.bold, // 可以加粗
+      style: titleMD.copyWith(
+        fontWeight: FontWeight.w500, // 可以加粗
       ),
     ),
-    trailing: Icon(Icons.arrow_forward_outlined),
+    trailing: const Padding(
+      padding: EdgeInsets.only(right: 6.0),
+      child: Icon(Icons.arrow_forward_outlined),
+    ),
     //    小箭头
     onTap: () async {
       // 调用打开添加标签 Dialog 的方法
@@ -190,12 +179,8 @@ Widget _buildAddTagListTile(
 }
 
 // 添加标签的按钮（用于没有可用标签时的空状态）
-Widget _buildAddTagButton(
-  ResponsiveStyle style,
-  AddEditItemController controller,
-) {
-  final double spacingMD = style.spacingMD;
-  final TextStyle bodyTextStyle = style.bodyTextLG;
+Widget _buildAddTagButton(BuildContext context) {
+  final TextStyle bodyLG = Theme.of(context).textTheme.bodyLarge!;
 
   return ElevatedButton.icon(
     onPressed: () async {
@@ -205,14 +190,14 @@ Widget _buildAddTagButton(
         Get.snackbar(
           'success'.tr,
           '${result['message']}',
-          duration: Duration(seconds: 1),
+          duration: const Duration(seconds: 1),
         );
       }
     },
-    icon: Icon(Icons.bookmark_add_outlined),
-    label: Text('add_new_tag'.tr, style: bodyTextStyle),
+    icon: const Icon(Icons.bookmark_add_outlined),
+    label: Text('add_new_tag'.tr, style: bodyLG),
     style: ElevatedButton.styleFrom(
-      padding: EdgeInsets.all(spacingMD),
+      padding: const EdgeInsets.all(12),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10),
       ),

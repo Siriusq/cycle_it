@@ -1,8 +1,8 @@
+import 'package:chinese_font_library/chinese_font_library.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../controllers/add_edit_item_controller.dart';
-import '../../../utils/responsive_style.dart';
 import '../../shared_widgets/time_picker_helper.dart';
 
 class NotificationOptionsSection extends StatelessWidget {
@@ -12,11 +12,12 @@ class NotificationOptionsSection extends StatelessWidget {
   Widget build(BuildContext context) {
     final AddEditItemController controller =
         Get.find<AddEditItemController>();
-    final ResponsiveStyle style = ResponsiveStyle.to;
-    final TextStyle titleTextStyle = style.titleTextMD;
-    final TextStyle bodyTextLG = style.bodyTextLG;
-    final double topSpacing =
-        style.isMobileDevice ? style.spacingMD : style.spacingXS;
+    final TextStyle titleMD =
+        Theme.of(
+          context,
+        ).textTheme.titleMedium!.useSystemChineseFont();
+    final TextStyle bodyLG =
+        Theme.of(context).textTheme.bodyLarge!.useSystemChineseFont();
 
     return Obx(() {
       final isEnabled = controller.notifyBeforeNextUse.value;
@@ -28,8 +29,7 @@ class NotificationOptionsSection extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('notification'.tr, style: titleTextStyle),
-          SizedBox(height: topSpacing),
+          Text('notification'.tr, style: titleMD),
           // 1. 通知开关
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -37,7 +37,7 @@ class NotificationOptionsSection extends StatelessWidget {
               Expanded(
                 child: Text(
                   'enable_notify'.tr,
-                  style: bodyTextLG,
+                  style: bodyLG,
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,
                 ),
@@ -90,12 +90,12 @@ class NotificationOptionsSection extends StatelessWidget {
                         Expanded(
                           child: Text(
                             'notification_time_title'.tr,
-                            style: bodyTextLG,
+                            style: bodyLG,
                           ),
                         ),
                         AnimatedDefaultTextStyle(
                           duration: const Duration(milliseconds: 300),
-                          style: bodyTextLG.copyWith(
+                          style: bodyLG.copyWith(
                             color:
                                 Theme.of(context).colorScheme.primary,
                           ),

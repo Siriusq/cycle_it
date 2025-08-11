@@ -1,6 +1,6 @@
+import 'package:chinese_font_library/chinese_font_library.dart';
 import 'package:cycle_it/controllers/tag_controller.dart';
 import 'package:cycle_it/utils/constants.dart';
-import 'package:cycle_it/utils/responsive_style.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -79,15 +79,17 @@ class AddEditTagDialog extends StatelessWidget {
     final tagCtrl = Get.find<TagController>();
     final isEditing = tagToEdit != null;
 
-    final style = ResponsiveStyle.to;
-    final double spacingMD = style.spacingMD;
-    final TextStyle titleTextStyleLG = style.titleTextEX;
-    final TextStyle bodyTextLG = style.bodyTextLG;
+    final TextStyle titleLG =
+        Theme.of(
+          context,
+        ).textTheme.titleLarge!.useSystemChineseFont();
+    final TextStyle bodyLG =
+        Theme.of(context).textTheme.bodyLarge!.useSystemChineseFont();
 
     return AlertDialog(
       title: Text(
         isEditing ? 'edit_tag'.tr : 'add_new_tag'.tr,
-        style: titleTextStyleLG,
+        style: titleLG,
       ),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16.0),
@@ -102,15 +104,16 @@ class AddEditTagDialog extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          spacing: 12,
           children: [
-            const SizedBox(height: 6),
             // 需要调整的输入框
             Obx(() {
               return TextFormField(
                 controller: _tagNameCtrl,
                 decoration: InputDecoration(
                   labelText: 'tag_name'.tr,
-                  labelStyle: bodyTextLG,
+                  labelStyle: bodyLG,
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.all(
                       Radius.circular(10),
@@ -146,7 +149,6 @@ class AddEditTagDialog extends StatelessWidget {
               );
             }),
 
-            SizedBox(height: spacingMD),
             // 标签颜色选择
             Obx(() {
               return SafeArea(
@@ -159,10 +161,10 @@ class AddEditTagDialog extends StatelessWidget {
                     borderRadius: BorderRadius.circular(10),
                   ),
                   width: double.infinity,
-                  padding: EdgeInsets.all(spacingMD),
+                  padding: const EdgeInsets.all(12),
                   child: Wrap(
-                    spacing: spacingMD, // 水平间距
-                    runSpacing: spacingMD, // 如果换行，垂直间距
+                    spacing: 12, // 水平间距
+                    runSpacing: 12, // 如果换行，垂直间距
                     alignment: WrapAlignment.center,
                     children:
                         kColorPalette.map((color) {
@@ -201,17 +203,14 @@ class AddEditTagDialog extends StatelessWidget {
       actions: [
         TextButton.icon(
           onPressed: () => Get.back(),
-          icon: Icon(Icons.cancel),
-          label: Text('cancel'.tr, style: bodyTextLG),
+          icon: const Icon(Icons.cancel),
+          label: Text('cancel'.tr),
         ),
 
         TextButton.icon(
           onPressed: () => _submit(tagCtrl),
-          icon: Icon(Icons.check),
-          label: Text(
-            isEditing ? 'save'.tr : 'add'.tr,
-            style: bodyTextLG,
-          ),
+          icon: const Icon(Icons.check),
+          label: Text(isEditing ? 'save'.tr : 'add'.tr),
         ),
       ],
     );

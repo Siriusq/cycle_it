@@ -12,8 +12,8 @@ class ManageTagDesktopBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ResponsiveStyle style = ResponsiveStyle.to;
-    final double maxFormWidth = style.desktopFormMaxWidth;
+    final double maxFormWidth =
+        ResponsiveStyle.to.desktopFormMaxWidth;
 
     return Center(
       child: ConstrainedBox(
@@ -40,12 +40,7 @@ class ManageTagDesktopBody extends StatelessWidget {
               ),
 
               // 标签列表
-              const Expanded(
-                child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 16.0),
-                  child: TagListView(),
-                ),
-              ),
+              const Expanded(child: TagListView()),
             ],
           ),
         ),

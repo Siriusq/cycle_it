@@ -13,8 +13,7 @@ class AddEditItemPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ResponsiveStyle style = ResponsiveStyle.to;
-    final bool isMobileDevice = style.isMobileDevice;
+    final bool isMobileDevice = ResponsiveStyle.to.isMobileDevice;
 
     return LayoutBuilder(
       builder: (context, constraints) {
@@ -39,27 +38,22 @@ class AddEditItemPage extends StatelessWidget {
   }
 
   Widget _buildContentColumn() {
-    final ResponsiveStyle style = ResponsiveStyle.to;
-    final double spacingMD = style.spacingMD;
-
+    final double spacingLG = ResponsiveStyle.to.spacingLG;
     return SingleChildScrollView(
-      padding: EdgeInsets.symmetric(
-        horizontal: spacingMD,
-        vertical: spacingMD,
-      ),
+      padding: EdgeInsets.all(spacingLG),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // --- 1. 图标与颜色选择器 ---
           const EmojiColorSection(),
-          SizedBox(height: spacingMD * 2),
+          const SizedBox(height: 24),
           // --- 2. 名称和注释输入 ---
           const NameCommentSection(),
-          SizedBox(height: spacingMD),
+          const SizedBox(height: 12),
           // --- 3. 标签 ---
           const TagSection(),
-          SizedBox(height: spacingMD * 1.5),
+          const SizedBox(height: 16),
           // --- 4. 是否开启通知功能 ---
           const NotificationOptionsSection(),
         ],
