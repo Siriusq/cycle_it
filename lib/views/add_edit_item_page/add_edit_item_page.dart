@@ -1,3 +1,5 @@
+import 'package:cycle_it/utils/responsive_layout.dart';
+import 'package:cycle_it/utils/responsive_style.dart';
 import 'package:cycle_it/views/add_edit_item_page/widgets/add_edit_item_app_bar.dart';
 import 'package:cycle_it/views/add_edit_item_page/widgets/add_edit_item_desktop_layout.dart';
 import 'package:cycle_it/views/add_edit_item_page/widgets/emoji_color_section.dart';
@@ -6,33 +8,31 @@ import 'package:cycle_it/views/add_edit_item_page/widgets/notification_options_s
 import 'package:cycle_it/views/add_edit_item_page/widgets/tag_section.dart';
 import 'package:flutter/material.dart';
 
-import '../../../utils/responsive_style.dart';
-
 class AddEditItemPage extends StatelessWidget {
   const AddEditItemPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final bool isMobileDevice = ResponsiveStyle.to.isMobileDevice;
+    // 判断宽窄布局
+    final bool isNarrowLayout = ResponsiveLayout.isNarrowLayout(
+      context,
+    );
 
     return LayoutBuilder(
       builder: (context, constraints) {
-        return Scaffold(
-          appBar:
-              isMobileDevice
-                  ? AddEditItemAppBar()
-                  : null, // 桌面端不显示 AppBar
-
-          body: SafeArea(
-            child:
-                isMobileDevice
-                    ? _buildContentColumn()
-                    : AddEditItemDesktopLayout(
-                      // 桌面布局
-                      mainContent: _buildContentColumn(),
-                    ),
-          ),
-        );
+        return isNarrowLayout
+            ? Scaffold(
+              appBar: AddEditItemAppBar(),
+              body: SafeArea(child: _buildContentColumn()),
+            )
+            : Scaffold(
+              body: SafeArea(
+                child: AddEditItemDesktopLayout(
+                  // 桌面布局
+                  mainContent: _buildContentColumn(),
+                ),
+              ),
+            );
       },
     );
   }

@@ -15,11 +15,13 @@ class ResponsiveStyle extends GetxController {
   static ResponsiveStyle get to => Get.find<ResponsiveStyle>();
 
   // 平台判断
-  final bool isMobileDevice =
-      GetPlatform.isIOS || GetPlatform.isAndroid;
+  final bool isMobileDevice = GetPlatform.isMobile;
 
   // 最大表单宽度
   final double desktopFormMaxWidth = 700.0;
+
+  // 设置页面分栏断点
+  final double settingsPageBreakpoint = 400.0;
 
   // 响应式值计算，直接使用 Get.width 获取当前宽度，本身就是响应式的
   double _getValue({

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../../controllers/item_controller.dart';
-import '../../../../utils/responsive_style.dart';
 import '../item_card/item_card.dart';
 
 class ItemListStateView extends StatelessWidget {
@@ -11,10 +10,9 @@ class ItemListStateView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ItemController itemController = Get.find<ItemController>();
-    final ResponsiveStyle style = ResponsiveStyle.to;
 
     final TextStyle bodyMD = Theme.of(context).textTheme.bodyMedium!;
-    final double topSpacing = style.isMobileDevice ? 8 : 16;
+    final double topSpacing = GetPlatform.isMobile ? 8 : 16;
 
     return Obx(() {
       if (itemController.isListLoading.value) {

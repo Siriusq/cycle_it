@@ -31,6 +31,10 @@ class ResponsiveLayout extends StatelessWidget {
   static bool isTripleCol(BuildContext context) =>
       MediaQuery.sizeOf(context).width >= desktopBreakPoint;
 
+  static bool isNarrowLayout(BuildContext context) =>
+      GetPlatform.isMobile ||
+      MediaQuery.sizeOf(context).width < mobileBreakPoint;
+
   @override
   Widget build(BuildContext context) {
     final itemCtrl = Get.find<ItemController>();

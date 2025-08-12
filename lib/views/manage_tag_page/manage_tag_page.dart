@@ -1,44 +1,42 @@
+import 'package:cycle_it/models/tag_model.dart';
+import 'package:cycle_it/utils/responsive_layout.dart';
+import 'package:cycle_it/views/manage_tag_page/widgets/add_edit_tag_dialog.dart';
 import 'package:cycle_it/views/manage_tag_page/widgets/manage_tag_desktop_body.dart';
 import 'package:cycle_it/views/manage_tag_page/widgets/manage_tag_mobile_app_bar.dart';
 import 'package:cycle_it/views/manage_tag_page/widgets/tag_list_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../models/tag_model.dart';
-import '../../utils/responsive_style.dart';
-import 'widgets/add_edit_tag_dialog.dart';
-
 class ManageTagPage extends StatelessWidget {
   const ManageTagPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final bool isMobileDevice = ResponsiveStyle.to.isMobileDevice;
+    // 判断宽窄布局
+    final bool isNarrowLayout = ResponsiveLayout.isNarrowLayout(
+      context,
+    );
 
     return LayoutBuilder(
       builder: (context, constraints) {
-        return Scaffold(
-          // 在宽屏幕上不显示默认AppBar
-          appBar:
-              isMobileDevice
-                  ? ManageTagMobileAppBar(
+        return isNarrowLayout
+            ? Scaffold(
+              appBar: ManageTagMobileAppBar(
+                onAddTag: _showAddEditTagDialog,
+              ),
+              body: SizedBox(
+                child: SafeArea(child: const TagListView()),
+              ),
+            )
+            : Scaffold(
+              body: SizedBox(
+                child: SafeArea(
+                  child: ManageTagDesktopBody(
                     onAddTag: _showAddEditTagDialog,
-                  )
-                  : null,
-
-          body: SizedBox(
-            child: SafeArea(
-              child:
-                  isMobileDevice
-                      ? const TagListView()
-                      : ManageTagDesktopBody(
-                        onAddTag: _showAddEditTagDialog,
-                      ),
-            ),
-          ),
-
-          // 宽屏幕
-        );
+                  ),
+                ),
+              ),
+            );
       },
     );
   }
