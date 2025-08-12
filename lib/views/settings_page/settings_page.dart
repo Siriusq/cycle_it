@@ -19,11 +19,13 @@ class SettingsPage extends StatelessWidget {
         return isNarrowLayout
             ? Scaffold(
               appBar: SettingsAppBar(),
-              body: SingleChildScrollView(
-                child: Center(child: SettingsOptionsLayout()),
+              body: SafeArea(
+                child: SingleChildScrollView(
+                  child: Center(child: SettingsOptionsLayout()),
+                ),
               ),
             )
-            : Scaffold(body: SettingsDesktopBody());
+            : Scaffold(body: SafeArea(child: SettingsDesktopBody()));
       },
     );
   }
