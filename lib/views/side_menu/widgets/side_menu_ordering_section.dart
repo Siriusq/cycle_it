@@ -1,9 +1,8 @@
+import 'package:cycle_it/controllers/item_list_order_controller.dart';
+import 'package:cycle_it/utils/responsive_style.dart';
+import 'package:cycle_it/views/side_menu/widgets/order_by_option.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
-import '../../../controllers/item_list_order_controller.dart';
-import '../../../utils/responsive_style.dart';
-import 'order_by_option.dart';
 
 class SideMenuOrderingSection extends StatelessWidget {
   const SideMenuOrderingSection({super.key});

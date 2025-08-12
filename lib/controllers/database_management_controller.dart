@@ -1,13 +1,12 @@
 import 'dart:io';
 
+import 'package:cycle_it/controllers/item_controller.dart';
+import 'package:cycle_it/database/database.dart';
+import 'package:cycle_it/services/notification_service.dart';
+import 'package:cycle_it/views/settings_page/widgets/restart_required_page.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-import '../database/database.dart';
-import '../services/notification_service.dart';
-import '../views/settings_page/widgets/restart_required_page.dart';
-import 'item_controller.dart';
 
 class DatabaseManagementController extends GetxController {
   late MyDatabase _db;

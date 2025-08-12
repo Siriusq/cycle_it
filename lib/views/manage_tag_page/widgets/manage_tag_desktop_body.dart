@@ -1,9 +1,8 @@
+import 'package:cycle_it/utils/responsive_style.dart';
 import 'package:cycle_it/views/manage_tag_page/widgets/manage_tag_desktop_header.dart';
+import 'package:cycle_it/views/manage_tag_page/widgets/tag_list_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
-import '../../../utils/responsive_style.dart';
-import 'tag_list_view.dart';
 
 class ManageTagDesktopBody extends StatelessWidget {
   final VoidCallback onAddTag;

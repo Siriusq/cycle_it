@@ -1,10 +1,15 @@
 import 'package:cycle_it/bindings/add_edit_item_binding.dart';
 import 'package:cycle_it/bindings/home_binding.dart';
+import 'package:cycle_it/bindings/settings_binding.dart';
+import 'package:cycle_it/controllers/language_controller.dart';
+import 'package:cycle_it/controllers/theme_controller.dart';
 import 'package:cycle_it/services/item_service.dart';
 import 'package:cycle_it/services/notification_service.dart';
 import 'package:cycle_it/utils/custom_scroll_behavior.dart';
+import 'package:cycle_it/utils/i18n.dart';
 import 'package:cycle_it/views/add_edit_item_page/add_edit_item_page.dart';
 import 'package:cycle_it/views/details_page/details_page.dart';
+import 'package:cycle_it/views/home_page/home_page.dart';
 import 'package:cycle_it/views/manage_tag_page/manage_tag_page.dart';
 import 'package:cycle_it/views/settings_page/settings_page.dart';
 import 'package:flutter/foundation.dart';
@@ -15,12 +20,6 @@ import 'package:get/get.dart';
 import 'package:timezone/data/latest_all.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 import 'package:window_manager/window_manager.dart';
-
-import 'bindings/settings_binding.dart';
-import 'controllers/language_controller.dart';
-import 'controllers/theme_controller.dart';
-import 'utils/i18n.dart';
-import 'views/home_page/home_page.dart';
 
 Future<void> _configureLocalTimeZone() async {
   // 封装时区设置逻辑

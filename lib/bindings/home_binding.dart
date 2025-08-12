@@ -1,15 +1,14 @@
+import 'package:cycle_it/controllers/item_controller.dart';
 import 'package:cycle_it/controllers/item_list_order_controller.dart';
+import 'package:cycle_it/controllers/language_controller.dart';
 import 'package:cycle_it/controllers/responsive_controller.dart';
+import 'package:cycle_it/controllers/search_bar_controller.dart';
 import 'package:cycle_it/controllers/tag_controller.dart';
+import 'package:cycle_it/controllers/theme_controller.dart';
+import 'package:cycle_it/database/database.dart';
+import 'package:cycle_it/services/item_service.dart';
+import 'package:cycle_it/utils/responsive_style.dart';
 import 'package:get/get.dart';
-
-import '../controllers/item_controller.dart';
-import '../controllers/language_controller.dart';
-import '../controllers/search_bar_controller.dart';
-import '../controllers/theme_controller.dart';
-import '../database/database.dart';
-import '../services/item_service.dart';
-import '../utils/responsive_style.dart';
 
 class HomeBinding implements Bindings {
   @override

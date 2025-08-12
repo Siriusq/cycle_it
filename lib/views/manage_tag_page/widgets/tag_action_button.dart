@@ -1,10 +1,9 @@
+import 'package:cycle_it/controllers/tag_controller.dart';
+import 'package:cycle_it/models/tag_model.dart';
+import 'package:cycle_it/views/manage_tag_page/widgets/add_edit_tag_dialog.dart';
+import 'package:cycle_it/views/shared_widgets/delete_confirm_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
-import '../../../controllers/tag_controller.dart';
-import '../../../models/tag_model.dart';
-import '../../shared_widgets/delete_confirm_dialog.dart';
-import 'add_edit_tag_dialog.dart';
 
 class TagActionButton extends StatelessWidget {
   final TagModel tag;

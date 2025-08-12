@@ -1,8 +1,7 @@
+import 'package:cycle_it/utils/responsive_layout.dart';
+import 'package:cycle_it/views/home_page/widgets/list_of_items/item_list_state_view.dart';
+import 'package:cycle_it/views/home_page/widgets/list_of_items/list_of_items_app_bar.dart';
 import 'package:flutter/material.dart';
-
-import '../../../../utils/responsive_layout.dart';
-import 'item_list_state_view.dart';
-import 'list_of_items_app_bar.dart';
 
 class ListOfItems extends StatelessWidget {
   final GlobalKey<ScaffoldState> scaffoldKey;

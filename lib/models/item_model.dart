@@ -1,7 +1,6 @@
 import 'package:cycle_it/models/tag_model.dart';
+import 'package:cycle_it/models/usage_record_model.dart';
 import 'package:flutter/material.dart';
-
-import 'usage_record_model.dart';
 
 class ItemModel {
   final int? id;

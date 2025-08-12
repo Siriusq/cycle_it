@@ -1,10 +1,9 @@
 import 'package:chinese_font_library/chinese_font_library.dart';
 import 'package:cycle_it/controllers/tag_controller.dart';
+import 'package:cycle_it/models/tag_model.dart';
 import 'package:cycle_it/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
-import '../../../models/tag_model.dart';
 
 class AddEditTagDialog extends StatelessWidget {
   final TagModel? tagToEdit; // 用于编辑的标签，如果为null则表示添加

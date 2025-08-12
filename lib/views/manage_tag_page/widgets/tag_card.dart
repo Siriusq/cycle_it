@@ -1,7 +1,6 @@
+import 'package:cycle_it/models/tag_model.dart';
+import 'package:cycle_it/views/manage_tag_page/widgets/tag_action_button.dart';
 import 'package:flutter/material.dart';
-
-import '../../../models/tag_model.dart';
-import 'tag_action_button.dart';
 
 // 每一条标签及操作按钮
 class TagCard extends StatelessWidget {

@@ -1,9 +1,8 @@
+import 'package:cycle_it/controllers/item_controller.dart';
 import 'package:cycle_it/models/item_model.dart';
+import 'package:cycle_it/views/shared_widgets/icon_label.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
-import '../../../controllers/item_controller.dart';
-import '../../shared_widgets/icon_label.dart';
 
 class DetailsItemTags extends StatelessWidget {
   const DetailsItemTags({super.key});

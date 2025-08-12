@@ -1,9 +1,8 @@
+import 'package:cycle_it/controllers/add_edit_item_controller.dart';
+import 'package:cycle_it/views/add_edit_item_page/widgets/color_picker_dialog.dart';
+import 'package:cycle_it/views/add_edit_item_page/widgets/emoji_picker_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
-import '../../../controllers/add_edit_item_controller.dart';
-import 'color_picker_dialog.dart';
-import 'emoji_picker_dialog.dart';
 
 class EmojiColorSection extends StatelessWidget {
   const EmojiColorSection({super.key});

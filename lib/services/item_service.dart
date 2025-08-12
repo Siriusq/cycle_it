@@ -1,11 +1,10 @@
+import 'package:cycle_it/database/database.dart';
+import 'package:cycle_it/models/item_model.dart';
+import 'package:cycle_it/models/tag_model.dart';
+import 'package:cycle_it/models/usage_record_model.dart';
+import 'package:cycle_it/test/mock_data.dart';
 import 'package:drift/drift.dart';
 import 'package:flutter/foundation.dart';
-
-import '../database/database.dart';
-import '../models/item_model.dart';
-import '../models/tag_model.dart';
-import '../models/usage_record_model.dart';
-import '../test/mock_data.dart';
 
 class ItemService {
   final MyDatabase _db;

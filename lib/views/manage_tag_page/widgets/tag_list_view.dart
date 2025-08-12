@@ -1,9 +1,8 @@
+import 'package:cycle_it/controllers/tag_controller.dart';
+import 'package:cycle_it/utils/responsive_style.dart';
+import 'package:cycle_it/views/manage_tag_page/widgets/tag_card.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
-import '../../../controllers/tag_controller.dart';
-import '../../../utils/responsive_style.dart';
-import 'tag_card.dart';
 
 // 标签列表
 class TagListView extends StatelessWidget {

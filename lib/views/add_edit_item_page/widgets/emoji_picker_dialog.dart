@@ -1,10 +1,9 @@
+import 'package:cycle_it/controllers/add_edit_item_controller.dart';
+import 'package:cycle_it/utils/responsive_style.dart';
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:flutter/foundation.dart' hide Category;
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
-import '../../../controllers/add_edit_item_controller.dart';
-import '../../../utils/responsive_style.dart';
 
 void showEmojiPickerDialog() {
   final AddEditItemController controller =

@@ -1,8 +1,7 @@
 import 'package:chinese_font_library/chinese_font_library.dart';
+import 'package:cycle_it/controllers/add_edit_item_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
-import '../../../controllers/add_edit_item_controller.dart';
 
 class NameCommentSection extends StatelessWidget {
   const NameCommentSection({super.key});

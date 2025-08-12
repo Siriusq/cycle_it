@@ -12,10 +12,9 @@ import 'package:get/get.dart' hide Value;
 import 'package:intl/intl.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
-
-import '../models/item_model.dart';
-import '../models/tag_model.dart';
-import '../models/usage_record_model.dart';
+import 'package:cycle_it/models/item_model.dart';
+import 'package:cycle_it/models/tag_model.dart';
+import 'package:cycle_it/models/usage_record_model.dart';
 
 part 'database.g.dart'; // 由 Drift 自动生成
 

@@ -1,10 +1,9 @@
 import 'package:chinese_font_library/chinese_font_library.dart';
+import 'package:cycle_it/models/item_model.dart';
+import 'package:cycle_it/utils/responsive_layout.dart';
+import 'package:cycle_it/utils/responsive_style.dart';
+import 'package:cycle_it/views/home_page/widgets/item_card/item_card_action_button.dart';
 import 'package:flutter/material.dart';
-
-import '../../../../models/item_model.dart';
-import '../../../../utils/responsive_layout.dart';
-import '../../../../utils/responsive_style.dart';
-import 'item_card_action_button.dart';
 
 class ItemCardHeader extends StatelessWidget {
   final ItemModel item;

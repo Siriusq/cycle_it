@@ -1,9 +1,8 @@
+import 'package:cycle_it/utils/responsive_layout.dart';
+import 'package:cycle_it/utils/responsive_style.dart';
+import 'package:cycle_it/views/home_page/widgets/list_of_items/custom_search_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
-import '../../../../utils/responsive_layout.dart';
-import '../../../../utils/responsive_style.dart';
-import 'custom_search_bar.dart';
 
 class ListOfItemsAppBar extends StatelessWidget
     implements PreferredSizeWidget {

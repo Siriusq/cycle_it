@@ -1,9 +1,8 @@
+import 'package:cycle_it/utils/responsive_style.dart';
+import 'package:cycle_it/views/details_page/widgets/monthly_usage_bar_chart.dart';
+import 'package:cycle_it/views/details_page/widgets/usage_heatmap_calendar.dart';
 import 'package:cycle_it/views/details_page/widgets/usage_records_table.dart';
 import 'package:flutter/material.dart';
-
-import '../../../utils/responsive_style.dart';
-import 'monthly_usage_bar_chart.dart';
-import 'usage_heatmap_calendar.dart';
 
 class DetailsChartsGroup extends StatelessWidget {
   const DetailsChartsGroup({super.key});

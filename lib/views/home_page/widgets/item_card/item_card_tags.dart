@@ -1,7 +1,6 @@
+import 'package:cycle_it/models/item_model.dart';
+import 'package:cycle_it/views/shared_widgets/icon_label.dart';
 import 'package:flutter/material.dart';
-
-import '../../../../models/item_model.dart';
-import '../../../shared_widgets/icon_label.dart';
 
 class ItemCardTags extends StatelessWidget {
   final ItemModel item;

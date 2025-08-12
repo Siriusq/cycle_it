@@ -1,12 +1,11 @@
 import 'dart:async';
 
+import 'package:cycle_it/models/item_model.dart';
 import 'package:cycle_it/views/notification_handling/notification_handling_dialog.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 import 'package:timezone/timezone.dart' as tz;
-
-import '../models/item_model.dart';
 
 final StreamController<String?> selectNotificationStream =
     StreamController<String?>.broadcast();

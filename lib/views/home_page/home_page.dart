@@ -1,11 +1,10 @@
 import 'package:cycle_it/controllers/item_controller.dart';
 import 'package:cycle_it/utils/responsive_layout.dart';
+import 'package:cycle_it/views/details_page/details_page.dart';
+import 'package:cycle_it/views/home_page/widgets/list_of_items/list_of_items.dart';
+import 'package:cycle_it/views/side_menu/side_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
-import '../details_page/details_page.dart';
-import '../side_menu/side_menu.dart';
-import 'widgets/list_of_items/list_of_items.dart';
 
 // 在 initState 中触发初始数据加载
 class HomePage extends StatefulWidget {

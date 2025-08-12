@@ -1,8 +1,7 @@
+import 'package:cycle_it/controllers/item_controller.dart';
+import 'package:cycle_it/views/home_page/widgets/item_card/item_card.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
-import '../../../../controllers/item_controller.dart';
-import '../item_card/item_card.dart';
 
 class ItemListStateView extends StatelessWidget {
   const ItemListStateView({super.key});

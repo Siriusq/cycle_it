@@ -1,10 +1,9 @@
 import 'package:chinese_font_library/chinese_font_library.dart';
+import 'package:cycle_it/controllers/add_edit_item_controller.dart';
+import 'package:cycle_it/views/add_edit_item_page/widgets/item_tag_picker_dialog.dart';
+import 'package:cycle_it/views/shared_widgets/icon_label.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
-import '../../../controllers/add_edit_item_controller.dart';
-import '../../shared_widgets/icon_label.dart';
-import 'item_tag_picker_dialog.dart';
 
 class TagSection extends StatelessWidget {
   const TagSection({super.key});

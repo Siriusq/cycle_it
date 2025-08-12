@@ -1,7 +1,6 @@
+import 'package:cycle_it/utils/responsive_style.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
-import '../../../utils/responsive_style.dart';
 
 class SideMenuAppBar extends StatelessWidget
     implements PreferredSizeWidget {

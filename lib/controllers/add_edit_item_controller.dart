@@ -1,10 +1,9 @@
+import 'package:cycle_it/controllers/item_controller.dart';
+import 'package:cycle_it/controllers/tag_controller.dart';
+import 'package:cycle_it/models/item_model.dart';
+import 'package:cycle_it/models/tag_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
-import '../models/item_model.dart';
-import '../models/tag_model.dart';
-import 'item_controller.dart';
-import 'tag_controller.dart';
 
 class AddEditItemController extends GetxController {
   final ItemController _itemController = Get.find<ItemController>();

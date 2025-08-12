@@ -1,9 +1,8 @@
+import 'package:cycle_it/models/item_model.dart';
+import 'package:cycle_it/models/tag_model.dart';
+import 'package:cycle_it/services/item_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
-import '../models/item_model.dart';
-import '../models/tag_model.dart';
-import '../services/item_service.dart';
 
 class TagController extends GetxController {
   final ItemService _itemService = Get.find<ItemService>();

@@ -1,9 +1,8 @@
+import 'package:cycle_it/models/item_model.dart';
+import 'package:cycle_it/utils/responsive_layout.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-
-import '../../../../models/item_model.dart';
-import '../../../../utils/responsive_layout.dart';
 
 class ItemCardProgressBar extends StatelessWidget {
   final ItemModel item;

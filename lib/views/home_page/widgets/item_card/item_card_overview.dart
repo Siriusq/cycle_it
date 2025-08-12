@@ -1,10 +1,9 @@
+import 'package:cycle_it/models/item_model.dart';
 import 'package:cycle_it/utils/responsive_layout.dart';
+import 'package:cycle_it/views/home_page/widgets/item_card/item_usage_stat_item.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-
-import '../../../../models/item_model.dart';
-import 'item_usage_stat_item.dart';
 
 class ItemCardOverview extends StatelessWidget {
   final ItemModel item;

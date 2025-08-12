@@ -1,6 +1,5 @@
+import 'package:cycle_it/controllers/database_management_controller.dart';
 import 'package:get/get.dart';
-
-import '../controllers/database_management_controller.dart';
 
 class SettingsBinding implements Bindings {
   @override

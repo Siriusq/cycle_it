@@ -1,8 +1,7 @@
 import 'package:cycle_it/controllers/responsive_controller.dart';
+import 'package:cycle_it/controllers/item_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
-import '../controllers/item_controller.dart';
 
 class ResponsiveLayout extends StatelessWidget {
   final Widget mobile;

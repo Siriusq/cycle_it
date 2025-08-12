@@ -1,7 +1,6 @@
+import 'package:cycle_it/controllers/item_list_order_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
-import '../../../controllers/item_list_order_controller.dart';
 
 class OrderByOption extends StatelessWidget {
   OrderByOption({

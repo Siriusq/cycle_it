@@ -1,6 +1,5 @@
+import 'package:cycle_it/database/tables/item_table.dart';
 import 'package:drift/drift.dart';
-
-import 'item_table.dart';
 
 // 使用记录表
 @DataClassName('UsageRecordData')

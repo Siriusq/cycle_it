@@ -1,9 +1,8 @@
 import 'package:chinese_font_library/chinese_font_library.dart';
+import 'package:cycle_it/controllers/item_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:material_charts/material_charts.dart'; // 导入 material_charts
-
-import '../../../controllers/item_controller.dart';
 
 class MonthlyUsageBarChart extends StatelessWidget {
   const MonthlyUsageBarChart({super.key});
