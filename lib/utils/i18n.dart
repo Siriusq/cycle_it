@@ -12,7 +12,7 @@ class MultiLanguage extends Translations {
   @override
   Map<String, Map<String, String>> get keys => {
     'zh_CN': {
-      'cycle_it': '物循 · Cycle It',
+      'cycle_it': 'Cycle It',
       // 通用
       'cancel': '取消',
       'confirm': '确认',
@@ -436,7 +436,7 @@ class MultiLanguage extends Translations {
       'read_me': 'ReadMe',
     },
     'zh_TW': {
-      'cycle_it': '物循 · Cycle It',
+      'cycle_it': 'Cycle It',
       // 通用
       'cancel': '取消',
       'confirm': '確認',
