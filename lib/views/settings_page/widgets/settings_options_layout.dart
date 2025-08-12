@@ -1,9 +1,10 @@
+import 'package:cycle_it/utils/responsive_style.dart';
+import 'package:cycle_it/views/settings_page/widgets/about_section.dart';
+import 'package:cycle_it/views/settings_page/widgets/app_info.dart';
 import 'package:cycle_it/views/settings_page/widgets/database_management_section.dart';
 import 'package:cycle_it/views/settings_page/widgets/language_switch_section.dart';
 import 'package:cycle_it/views/settings_page/widgets/theme_switch_section.dart';
 import 'package:flutter/material.dart';
-
-import '../../../utils/responsive_style.dart';
 
 class SettingsOptionsLayout extends StatelessWidget {
   const SettingsOptionsLayout({super.key});
@@ -29,7 +30,9 @@ class SettingsOptionsLayout extends StatelessWidget {
           // 数据
           DatabaseManagementSection(),
           // 关于
-          //AboutSection(),
+          AboutSection(),
+          // 版权信息
+          AppInfo(),
         ],
       ),
     );

@@ -31,7 +31,7 @@ dependencies:
   flutter:
     sdk: flutter
 
-  # File and permission
+  # 文件与权限
   path: ^1.9.1
   path_provider: ^2.1.5
   file_picker: ^10.2.0
@@ -43,48 +43,52 @@ dependencies:
   # GetX
   get: ^4.7.2
 
-  # Drift DB
+  # Drift 数据库
   drift: ^2.28.0
   drift_flutter: ^0.2.5
 
-  # SVG
+  # SVG 图片
   flutter_svg: ^2.1.0
 
-  # Notification
+  # 通知管理
   flutter_local_notifications: ^19.4.0
   timezone: ^0.10.1
   flutter_timezone: ^4.1.1
 
-  # Adjust Window Size in Desktop
+  # 调整桌面窗口
   window_manager: ^0.5.1
 
-  # Easy to Use Table Widget
+  # 数据表格
   data_table_2: ^2.6.0
 
   intl:
 
-  # Color Picker
+  # 颜色选择
   flex_color_picker: ^3.7.1
 
-  # emoji Picker
+  # emoji 选择
   emoji_picker_flutter: ^4.3.0
 
-  # heatmap calender
+  # 热点日历图
   simple_heatmap_calendar: ^0.4.0
 
-  # material charts
+  # 柱状图
   material_charts: ^0.0.27
 
-  # setting storage
+  # 永久化数据
   shared_preferences: ^2.5.3
 
-  # theme json
+  # json 格式主题
   json_theme: ^9.0.1+2
 
-  # splash screen
+  # 启动画面
   flutter_native_splash: ^2.4.6
 
+  # 中文字体加粗
   chinese_font_library: ^1.2.0
+
+  # 在浏览器中打开URL
+  url_launcher: ^6.3.2
 
 dev_dependencies:
   flutter_test:

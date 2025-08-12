@@ -1,8 +1,8 @@
 import 'package:chinese_font_library/chinese_font_library.dart';
+import 'package:cycle_it/controllers/language_controller.dart';
+import 'package:cycle_it/utils/responsive_style.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
-import '../../../controllers/language_controller.dart';
 
 // 枚举语言选项
 enum LanguageOption {
@@ -17,8 +17,8 @@ class LanguageSwitchSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // 定义屏幕宽度断点，你可以根据需要修改这个值
-    const double breakpoint = 600.0;
+    final double breakpoint =
+        ResponsiveStyle.to.settingsPageBreakpoint;
 
     final LanguageController languageController = Get.find();
 
@@ -144,6 +144,10 @@ class LanguageSwitchSection extends StatelessWidget {
                 languageController,
               ),
           style: TextButton.styleFrom(
+            textStyle:
+                Theme.of(
+                  context,
+                ).textTheme.labelLarge!.useSystemChineseFont(),
             foregroundColor:
                 isSelected
                     ? Theme.of(context).colorScheme.onPrimary

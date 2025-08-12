@@ -1,19 +1,17 @@
 import 'package:chinese_font_library/chinese_font_library.dart';
-import 'package:cycle_it/controllers/database_management_controller.dart';
 import 'package:cycle_it/utils/responsive_style.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:url_launcher/url_launcher.dart';
 
-class DatabaseManagementSection extends StatelessWidget {
-  const DatabaseManagementSection({super.key});
+class AboutSection extends StatelessWidget {
+  const AboutSection({super.key});
 
   @override
   Widget build(BuildContext context) {
     // 定义屏幕宽度断点
     final double breakpoint =
         ResponsiveStyle.to.settingsPageBreakpoint;
-    final DatabaseManagementController controller =
-        Get.find<DatabaseManagementController>();
     final TextStyle titleLG =
         Theme.of(
           context,
@@ -34,10 +32,10 @@ class DatabaseManagementSection extends StatelessWidget {
         builder: (context, constraints) {
           if (constraints.maxWidth > breakpoint) {
             // 宽屏布局
-            return _buildWideLayout(context, controller, titleLG);
+            return _buildWideLayout(context, titleLG);
           } else {
             // 窄屏布局
-            return _buildNarrowLayout(context, controller, titleLG);
+            return _buildNarrowLayout(context, titleLG);
           }
         },
       ),
@@ -47,7 +45,6 @@ class DatabaseManagementSection extends StatelessWidget {
   // 宽屏布局
   Widget _buildWideLayout(
     BuildContext context,
-    DatabaseManagementController controller,
     TextStyle titleStyle,
   ) {
     return IntrinsicHeight(
@@ -57,7 +54,7 @@ class DatabaseManagementSection extends StatelessWidget {
           Expanded(
             child: Align(
               alignment: Alignment.centerLeft,
-              child: Text('database'.tr, style: titleStyle),
+              child: Text('about'.tr, style: titleStyle),
             ),
           ),
           const Padding(
@@ -68,7 +65,7 @@ class DatabaseManagementSection extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: _buildButtons(context, controller),
+              children: _buildButtons(context),
             ),
           ),
         ],
@@ -79,25 +76,21 @@ class DatabaseManagementSection extends StatelessWidget {
   // 窄屏布局
   Widget _buildNarrowLayout(
     BuildContext context,
-    DatabaseManagementController controller,
     TextStyle titleStyle,
   ) {
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        Center(child: Text('database'.tr, style: titleStyle)),
+        Center(child: Text('about'.tr, style: titleStyle)),
         const SizedBox(height: 16.0),
-        ..._buildButtons(context, controller),
+        ..._buildButtons(context),
       ],
     );
   }
 
   // 构建按钮列表
-  List<Widget> _buildButtons(
-    BuildContext context,
-    DatabaseManagementController controller,
-  ) {
+  List<Widget> _buildButtons(BuildContext context) {
     final buttonStyle = TextButton.styleFrom(
       textStyle:
           Theme.of(
@@ -116,31 +109,47 @@ class DatabaseManagementSection extends StatelessWidget {
     );
 
     return [
-      // 导入数据按钮
+      // 检查更新按钮
       SizedBox(
         width: double.infinity,
         child: TextButton.icon(
-          onPressed: () async {
-            await controller.importDatabase();
-          },
+          onPressed:
+              () => _launchInBrowser(
+                'https://github.com/Siriusq/cycle_it/releases',
+              ),
           style: buttonStyle,
-          icon: const Icon(Icons.download),
-          label: Text('data_import'.tr),
+          icon: const Icon(Icons.sync),
+          label: Text('check_update'.tr),
         ),
       ),
       const SizedBox(height: 8.0), // 按钮之间的间距
-      // 导出数据按钮
+      // 使用说明按钮
       SizedBox(
         width: double.infinity,
         child: TextButton.icon(
-          onPressed: () async {
-            await controller.exportDatabase();
-          },
+          onPressed:
+              () => _launchInBrowser(
+                'https://github.com/Siriusq/cycle_it',
+              ),
           style: buttonStyle,
-          icon: const Icon(Icons.upload),
-          label: Text('data_export'.tr),
+          icon: const Icon(Icons.menu_book),
+          label: Text('read_me'.tr),
         ),
       ),
     ];
+  }
+
+  Future<void> _launchInBrowser(String url) async {
+    final uri = Uri.parse(url);
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri);
+    } else {
+      Get.snackbar(
+        'error'.tr,
+        'cannot_open_url'.tr,
+        duration: const Duration(seconds: 5),
+      );
+      throw '无法打开 $url';
+    }
   }
 }
