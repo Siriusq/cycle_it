@@ -208,7 +208,7 @@ class MultiLanguage extends Translations {
       'restart_hint': '为确保所有更改完全生效，请手动关闭并重新启动应用程序',
       // 关于
       'about': '关于',
-      'info': '物循 v1.0 · © 2025 Siriusq · MIT 许可证',
+      'info': 'Cycle It v1.0 · 2025 © Siriusq · MIT 许可证',
       'check_update': '检查更新',
       'read_me': '使用说明',
     },
@@ -431,7 +431,7 @@ class MultiLanguage extends Translations {
           'To ensure all changes take full effect, please manually close and restart the application',
       // 关于
       'about': 'About',
-      'info': 'Cycle It v1.0 · © 2025 Siriusq · MIT License',
+      'info': 'Cycle It v1.0 · 2025 © Siriusq · MIT License',
       'check_update': 'Check Update',
       'read_me': 'ReadMe',
     },
@@ -632,7 +632,7 @@ class MultiLanguage extends Translations {
       'restart_hint': '為確保所有變更完全生效，請手動關閉並重新啟動應用程式',
       // 关于
       'about': '關於',
-      'info': '物循 v1.0 · © 2025 Siriusq · MIT 授權條款',
+      'info': 'Cycle It v1.0 · 2025 © Siriusq · MIT 授權條款',
       'check_update': '檢查更新',
       'read_me': '使用說明',
     },
