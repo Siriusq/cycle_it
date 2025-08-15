@@ -108,6 +108,9 @@ dev_dependencies:
   # app icon
   flutter_launcher_icons: ^0.14.4
 
+  # 打包 msix 格式 安装包
+  msix: ^3.16.12
+
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
@@ -204,3 +207,21 @@ flutter_launcher_icons:
   linux:
     generate: true
     image_path: "assets/images/app_icon_windows.png"
+
+msix_config:
+  display_name: "Cycle It"
+  publisher_display_name: "Siriusq"
+  certificate_path: "C:\\Users\\Sirius\\siriusq.pfx" # pfx 文件路径
+  certificate_password: "1234" # PFX 文件的导出密码，需要修改！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！
+  publisher: "CN=siriusq, C=CN" # pfx 文件信息
+  identity_name: "Top.Siriusq.CycleIt"
+  msix_version: "1.0.0.0"
+  logo_path: "assets/images/app_icon_windows.png"
+  file_extension: "sqlite, txt"
+  store: false
+  output_name: "cycle_it_v1"
+  capabilities: "fileSystem"
+  toast_activator:
+    clsid: "56d804df-4bf8-4a95-990a-8574d1f770dd"
+    arguments: "-ToastActivated"
+    display_name: "Cycle It"

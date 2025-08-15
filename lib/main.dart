@@ -5,6 +5,7 @@ import 'package:cycle_it/controllers/language_controller.dart';
 import 'package:cycle_it/controllers/theme_controller.dart';
 import 'package:cycle_it/services/item_service.dart';
 import 'package:cycle_it/services/notification_service.dart';
+import 'package:cycle_it/test/log.dart';
 import 'package:cycle_it/utils/custom_scroll_behavior.dart';
 import 'package:cycle_it/utils/i18n.dart';
 import 'package:cycle_it/views/add_edit_item_page/add_edit_item_page.dart';
@@ -42,6 +43,9 @@ void main() async {
   debugProfilePaintsEnabled = true; // 跟踪绘制操作
 
   WidgetsFlutterBinding.ensureInitialized();
+
+  // 初始化日志记录器
+  await Logger.init();
 
   // 调用时区设置方法
   await _configureLocalTimeZone();

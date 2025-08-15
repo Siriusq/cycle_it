@@ -25,17 +25,12 @@ class NotificationService extends GetxService {
     );
 
     // 2. Darwin (iOS, macOS) 初始化设置
-    //    这里的 onDidReceiveLocalNotification 仍然是为了兼容旧版 iOS，但主要逻辑已迁移
-    final DarwinInitializationSettings
-    initializationSettingsDarwin = DarwinInitializationSettings(
-      requestAlertPermission: true,
-      requestBadgePermission: true,
-      requestSoundPermission: true,
-      // 当应用在前台时收到通知的回调 (iOS < 10.0)
-      // onDidReceiveLocalNotification: (id, title, body, payload) {
-      //   // 可以选择显示一个对话框或不执行任何操作
-      // },
-    );
+    final DarwinInitializationSettings initializationSettingsDarwin =
+        DarwinInitializationSettings(
+          requestAlertPermission: true,
+          requestBadgePermission: true,
+          requestSoundPermission: true,
+        );
 
     // 3. Linux 初始化设置
     const LinuxInitializationSettings initializationSettingsLinux =
@@ -76,7 +71,11 @@ class NotificationService extends GetxService {
       _initialNotificationResponse =
           notificationAppLaunchDetails!.notificationResponse;
       if (kDebugMode) {
-        print('App launched by notification, payload stored.');
+        print('App由通知启动，已暂存负载');
+      }
+    } else {
+      if (kDebugMode) {
+        print("未由通知启动（didNotificationLaunchApp = false）");
       }
     }
 
@@ -87,15 +86,36 @@ class NotificationService extends GetxService {
   }
 
   // 在 UI 准备好后处理初始通知
-  void handleInitialNotification() {
+  void handleInitialNotification() async {
+    // 通用方法
     if (_initialNotificationResponse != null) {
-      if (kDebugMode) {
-        print('Handling initial notification now.');
-      }
-      // 将存储的 payload 添加到流中，后续逻辑与普通通知点击一致
       selectNotificationStream.add(
         _initialNotificationResponse!.payload,
       );
+      return;
+    }
+
+    // 解决 Windows 平台时序冲突导致 UI 不显示
+    if (GetPlatform.isWindows) {
+      // 重新获取通知细节
+      final notificationAppLaunchDetails =
+          await _plugin.getNotificationAppLaunchDetails();
+
+      if (notificationAppLaunchDetails?.didNotificationLaunchApp ??
+          false) {
+        final response =
+            notificationAppLaunchDetails!.notificationResponse;
+        // 延迟500ms
+        if (response?.payload != null) {
+          Future.delayed(const Duration(milliseconds: 500), () {
+            selectNotificationStream.add(response!.payload);
+          });
+        }
+      } else {
+        if (kDebugMode) {
+          print("没有可用的启动通知。");
+        }
+      }
     }
   }
 
