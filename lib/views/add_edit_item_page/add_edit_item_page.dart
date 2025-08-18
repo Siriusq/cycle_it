@@ -7,6 +7,7 @@ import 'package:cycle_it/views/add_edit_item_page/widgets/name_comment_section.d
 import 'package:cycle_it/views/add_edit_item_page/widgets/notification_options_section.dart';
 import 'package:cycle_it/views/add_edit_item_page/widgets/tag_section.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class AddEditItemPage extends StatelessWidget {
   const AddEditItemPage({super.key});
@@ -55,7 +56,8 @@ class AddEditItemPage extends StatelessWidget {
           const TagSection(),
           const SizedBox(height: 16),
           // --- 4. 是否开启通知功能 ---
-          const NotificationOptionsSection(),
+          if (!GetPlatform.isLinux)
+            const NotificationOptionsSection(),
         ],
       ),
     );

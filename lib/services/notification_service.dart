@@ -65,7 +65,9 @@ class NotificationService extends GetxService {
 
     // 7. 检查 APP 是否由通知拉起，如果是，则暂存该通知响应，而不是立即处理
     final NotificationAppLaunchDetails? notificationAppLaunchDetails =
-        await _plugin.getNotificationAppLaunchDetails();
+        GetPlatform.isLinux
+            ? null
+            : await _plugin.getNotificationAppLaunchDetails();
     if (notificationAppLaunchDetails?.didNotificationLaunchApp ??
         false) {
       _initialNotificationResponse =
@@ -180,7 +182,7 @@ class NotificationService extends GetxService {
 
   /// 根据物品状态更新通知（计划或取消）
   Future<void> updateNotificationForItem(ItemModel item) async {
-    if (item.id == null) return;
+    if (item.id == null || GetPlatform.isLinux) return;
 
     // 检查是否满足所有通知条件
     if (item.notifyBeforeNextUse &&
@@ -223,6 +225,11 @@ class NotificationService extends GetxService {
     String itemName,
     DateTime scheduledDateTime,
   ) async {
+    // Linux 不支持计划通知
+    if (GetPlatform.isLinux) {
+      return;
+    }
+
     // 如果计划时间已过，则取消并返回
     if (scheduledDateTime.isBefore(DateTime.now())) {
       await cancelNotification(itemId);
@@ -275,11 +282,19 @@ class NotificationService extends GetxService {
 
   /// 取消单个通知
   Future<void> cancelNotification(int itemId) async {
+    // Linux 不支持计划通知
+    if (GetPlatform.isLinux) {
+      return;
+    }
     await _plugin.cancel(itemId);
   }
 
   /// 取消所有通知
   Future<void> cancelAllNotifications() async {
+    // Linux 不支持计划通知
+    if (GetPlatform.isLinux) {
+      return;
+    }
     await _plugin.cancelAll();
   }
 
@@ -287,6 +302,11 @@ class NotificationService extends GetxService {
   Future<void> rescheduleAllNotifications(
     List<ItemModel> items,
   ) async {
+    // Linux 不支持计划通知
+    if (GetPlatform.isLinux) {
+      return;
+    }
+
     if (kDebugMode) {
       print(
         'NotificationService received ${items.length} items to reschedule.',
