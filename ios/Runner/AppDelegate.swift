@@ -4,7 +4,6 @@ import flutter_local_notifications
 
 @main
 @objc class AppDelegate: FlutterAppDelegate {
-
   override func application(
     _ application: UIApplication,
     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
