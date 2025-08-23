@@ -1,10 +1,4 @@
-<h1 align="center">Cycle It</h1>
-
-<h3 align="center">Track · Predict · Remind</h1>
-
-<p align="center">
-Keep your recurring tasks organized — never forget again.
-</p>
+![Preview](./README/device_preview.png)
 
 <p align="center">
     <a href="https://github.com/Siriusq/cycle_it/blob/master/README/README-CN.md"><img src="https://img.shields.io/badge/简体中文_README-4285F4?style=for-the-badge&logo=googletranslate&logoColor=ffffff"/></a>
@@ -14,9 +8,16 @@ Keep your recurring tasks organized — never forget again.
     <img alt="GitHub License" src="https://img.shields.io/github/license/Siriusq/cycle_it?style=for-the-badge&logo=git">
 </p>
 
-![Preview](./README/device_preview.png)
+<h2 align="center">Cycle It</h2>
 
-# 📖 Introduction
+<h3 align="center">Track · Predict · Remind</h1>
+
+<p align="center">
+Keep your recurring tasks organized — never forget again.
+</p>
+
+
+## 📖 Introduction
 In daily life, many items follow a usage cycle: electric toothbrushes need regular charging, water filters require periodic replacement, and batteries must be renewed from time to time.
 Unfortunately, most of these items are **not smart enough** — they don’t show usage status and won’t remind you when maintenance is due. As a result, you may often forget and end up facing awkward moments, like picking up your toothbrush only to find it out of power.
 
@@ -25,7 +26,7 @@ It records usage history, tracks recurring cycles, predicts the next due date, a
 
 
 
-# ✨ Features
+## ✨ Features
 * 📝 **Item Management**: Record item names, notes, and assign emoji icons for quick identification.
 * 🔄 **Cycle Tracking**: Display usage records in a table, with sorting by date or interval.
 * 📊 **Data Visualization**: Analyze usage patterns with stats like cycle count and duration; visualize with heatmap calendar and monthly bar chart.
@@ -41,14 +42,14 @@ It records usage history, tracks recurring cycles, predicts the next due date, a
 
 
 
-# 📦 Installation
-## Android
+## 📦 Installation
+### Android
 Download and install [cycle\_it\_v1.apk](https://github.com/Siriusq/cycle_it/releases/download/1.0/cycle_it_v1.apk).
 
-## iOS
+### iOS
 Not available on the App Store. Instead, download the IPA package [CycleIt.ipa](https://github.com/Siriusq/cycle_it/releases/download/1.0/CycleIt.ipa) and sideload it using [AltStore](https://altstore.io/). See [AltStore FAQ](https://faq.altstore.io/) for setup instructions.
 
-## Windows
+### Windows
 Download [cycle\_it\_v1.msix](https://github.com/Siriusq/cycle_it/releases/download/1.0/cycle_it_v1.msix).
 Due to MSIX restrictions, you must install my signing certificate first:
 1. Right-click the installer → `Properties` → `Digital Signatures` → `Details` → `View Certificate` → `Install Certificate`.
@@ -60,47 +61,47 @@ Due to MSIX restrictions, you must install my signing certificate first:
 
 (Detailed step-by-step guide with screenshots: coming soon on my blog QwQ)
 
-## macOS
+### macOS
 Download and install [Cycle.It.1.0.0.dmg](https://github.com/Siriusq/cycle_it/releases/download/1.0/Cycle.It.1.0.0.dmg).
 
-## Linux
+### Linux
 Currently supports only Debian-based distributions. Download and install [cycle\_it\_v1.deb](https://github.com/Siriusq/cycle_it/releases/download/1.0/cycle_it_v1.deb).
 
 
 
-# 🎬 User Guide
+## 🎬 User Guide
 
 <p align="left">
     <img width="600" src="./README/usage_manual.png" alt="User Guide">
 </p>
 
-## Add Item
+### Add Item
 Tap the **Add button** in the top-right corner of the item list. 1️⃣
 
-## Edit Item
+### Edit Item
 * Tap the **More Actions button** on the item card → **Edit**. 2️⃣
 * Or, tap the **Edit button** in the top-right corner of the item details page. 3️⃣
 
-## Manage Tags
+### Manage Tags
 Tap the **More Actions button** in the tag section of the sidebar. 4️⃣
 
 On mobile, open the sidebar via the **drawer button** in the top-left of the item list.
 
-## Settings
+### Settings
 Tap the **Settings button** in the top-right corner of the sidebar. 5️⃣
 
 On mobile, open the sidebar via the **drawer button**.
 
-## Add Cycle Record
+### Add Cycle Record
 * Tap the **More Actions button** on the item card → **Cycle It**. 2️⃣
 * Or, tap the **Add button** in the cycle record table on the item details page. 6️⃣
 
-## Manage Cycle Records
+### Manage Cycle Records
 In the cycle record table on the item details page, tap the **Actions button** at the end of the record row. 7️⃣
 
 
 
-# ⚠️ Known Issues
+## ⚠️ Known Issues
 * **Cycle prediction & reminders**: Requires at least two cycle records as a reference. For new items, you may manually add estimated past records to enable prediction.
 * **Splash Screen**: When opening the app via a notification, the splash screen may not display the app icon ([More info](https://github.com/jonbhanson/flutter_native_splash/issues/739)).
 * **Notification Permission**: On first launch, some platforms require granting notification permissions.

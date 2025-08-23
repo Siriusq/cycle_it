@@ -1,10 +1,4 @@
-<h1 align="center">Cycle It · 循物</h1>
-
-<h3 align="center">记录 · 预测 · 提醒</h1>
-
-<p align="center">
-让物品的循环使用更有条理，不再遗忘。
-</p>
+![预览](./device_preview.png)
 
 <p align="center">
     <a href="https://github.com/Siriusq/cycle_it"><img src="https://img.shields.io/badge/ENGLISH_README-4285F4?style=for-the-badge&logo=googletranslate&logoColor=ffffff"/></a>
@@ -14,16 +8,23 @@
     <img alt="GitHub License" src="https://img.shields.io/github/license/Siriusq/cycle_it?style=for-the-badge&logo=git">
 </p>
 
-![预览](./device_preview.png)
+<h2 align="center">Cycle It · 循物</h2>
 
-# 📖 简介
+<h3 align="center">记录 · 预测 · 提醒</h1>
+
+<p align="center">
+让物品的循环使用更有条理，不再遗忘。
+</p>
+
+
+## 📖 简介
 生活中有很多物品存在使用周期：电动牙刷需要定期充电、净水器滤芯需要定期维护、设备电池需要定期更换……这些物品往往不够智能，既没有余量显示，也不会主动提醒，结果就是常常忘记维护，导致使用时“罢工”。
 
 **CycleIt · 循物** 正是为了解决这一痛点而生的一款跨平台应用。它能记录物品的使用历史，追踪循环周期，并在下次使用日期到来时提醒你，避免遗忘与浪费。
 
 
 
-# ✨ 功能特性
+## ✨ 功能特性
 - 📝 **物品管理**：记录名称、备注，支持设置 emoji 图标快速识别。
 - 🔄 **循环追踪**：表格化展示物品使用记录，支持日期和间隔排序。
 - 📊 **数据可视化**：统计循环次数与周期，支持日历热点图、月度柱状图展示规律。
@@ -39,15 +40,15 @@
 
 
 
-# 📦 安装说明
-## Android
+## 📦 安装说明
+### Android
 下载并安装 [cycle\_it\_v1.apk](https://github.com/Siriusq/cycle_it/releases/download/1.0/cycle_it_v1.apk)。
 
-## iOS
+### iOS
 由于不打算上架 App Store，仅提供 IPA 包 [CycleIt.ipa](https://github.com/Siriusq/cycle_it/releases/download/1.0/CycleIt.ipa)。
 需配合 [AltStore](https://altstore.io/) 进行自签名侧载，详见 [AltStore 文档](https://faq.altstore.io/)。
 
-## Windows
+### Windows
 下载 [cycle\_it\_v1.msix](https://github.com/Siriusq/cycle_it/releases/download/1.0/cycle_it_v1.msix)。
 由于 MSIX 限制，需要先安装我的签名证书，步骤如下：
 1. 右键单击安装包，依次选择`属性`-`数字签名`-`详细信息`-`查看证书`-`安装证书`
@@ -59,50 +60,50 @@
 
 （更详细的步骤图文教程：我的博客，还没写完QwQ）
 
-## macOS
+### macOS
 下载并安装 [Cycle.It.1.0.0.dmg](https://github.com/Siriusq/cycle_it/releases/download/1.0/Cycle.It.1.0.0.dmg)。
 
-## Linux
+### Linux
 目前仅支持 Debian 系，下载并安装 [cycle\_it\_v1.deb](https://github.com/Siriusq/cycle_it/releases/download/1.0/cycle_it_v1.deb)。
 
 
 
-# 🎬 使用指南
+## 🎬 使用指南
 
 <p align="left">
     <img width="600" src="./usage_manual_cn.png" alt="使用指南">
 </p>
 
-## 添加物品
+### 添加物品
 在物品列表页右上角点击 **添加按钮**。1️⃣
 
-## 编辑物品
+### 编辑物品
 - 在物品卡片右上角点击 **更多操作按钮** → **编辑**。2️⃣
 - 或在物品详情页右上角点击 **编辑按钮**。3️⃣
 
-## 管理标签
+### 管理标签
 在侧边栏标签区域点击 **更多操作按钮**。4️⃣
 移动设备需先点击物品列表页左上角的 **抽屉按钮** 打开侧边栏。
 
-## 设置
+### 设置
 在侧边栏右上角点击 **设置按钮** 进入设置页面。5️⃣
 移动设备同样需先通过 **抽屉按钮** 打开侧边栏。
 
-## 添加循环记录
+### 添加循环记录
 - 在物品卡片右上角点击 **更多操作按钮** → **循环记录**。2️⃣
 - 或点击物品详情页循环表格右上角的 **添加按钮**。6️⃣
 
-## 管理循环记录
+### 管理循环记录
 在物品详情页的循环表格中，点击对应记录右侧的 **更多操作按钮**。7️⃣
 
 
 
-# ⚠️ 已知问题
+## ⚠️ 已知问题
 - **循环预测与提醒**：预测下次使用日期并发送通知，至少需要两条循环记录作为参考。若刚添加物品，可根据估算补录两条历史记录以启用此功能。
 - **启动显示问题**：通过点击通知启动应用时，启动页（Splash Screen）可能不会显示应用图标，详见[White Screen is showing instead of native splash while app opening from push notification](https://github.com/jonbhanson/flutter_native_splash/issues/739)。
 - **通知权限**：应用首次启动时，部分平台需要先授予通知权限，才能进入 APP。
 
-## 平台限制
+### 平台限制
 - **Windows**
 	- 由于 MSIX 的限制，需手动信任我的个人证书（因为不想买昂贵的官方证书）
 	- 仅提供 msix 包，因为exe 格式无法正确管理计划通知，详见 [Windows limitations](https://pub.dev/packages/flutter_local_notifications#windows-limitations)
@@ -120,7 +121,7 @@
 
 
 
-# 🗓️ Todo
+## 🗓️ Todo
 > 画大饼环节，请不要对本懒狗抱太大期待 🐶
 
 - 更智能的周期预测
@@ -128,7 +129,7 @@
 
 
 
-# 🙏 鸣谢
+## 🙏 鸣谢
 - Flutter
 - Android Studio
 - ChatGPT
