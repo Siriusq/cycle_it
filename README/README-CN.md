@@ -21,7 +21,7 @@
 
 **CycleIt · 循物** 正是为了解决这一痛点而生的一款跨平台应用。它能记录物品的使用历史，追踪循环周期，并在下次使用日期到来时提醒你，避免遗忘与浪费。
 
----
+
 
 # ✨ 功能特性
 - 📝 **物品管理**：记录名称、备注，支持设置 emoji 图标快速识别。
@@ -37,7 +37,7 @@
 - 🎨 **主题切换**：支持明暗模式，跟随系统自动切换。
 - 💾 **数据库管理**：支持数据导入导出，轻松迁移或备份。
 
----
+
 
 # 📦 安装说明
 ## Android
@@ -65,7 +65,7 @@
 ## Linux
 目前仅支持 Debian 系，下载并安装 [cycle\_it\_v1.deb](https://github.com/Siriusq/cycle_it/releases/download/1.0/cycle_it_v1.deb)。
 
----
+
 
 # 🎬 使用指南
 
@@ -95,11 +95,11 @@
 ## 管理循环记录
 在物品详情页的循环表格中，点击对应记录右侧的 **更多操作按钮**。7️⃣
 
----
+
 
 # ⚠️ 已知问题
 - **循环预测与提醒**：预测下次使用日期并发送通知，至少需要两条循环记录作为参考。若刚添加物品，可根据估算补录两条历史记录以启用此功能。
-- **启动显示问题**：通过点击通知启动应用时，启动页（Splash Screen）可能不会显示应用图标。
+- **启动显示问题**：通过点击通知启动应用时，启动页（Splash Screen）可能不会显示应用图标，详见[White Screen is showing instead of native splash while app opening from push notification](https://github.com/jonbhanson/flutter_native_splash/issues/739)。
 - **通知权限**：应用首次启动时，部分平台需要先授予通知权限，才能进入 APP。
 
 ## 平台限制
@@ -118,7 +118,7 @@
 	- 缺乏计划通知 API，无法提供到期提醒，详见 [Linux limitations](https://pub.dev/packages/flutter_local_notifications#linux-limitations)
 	- 仅提供 Debian 系安装包（因为我懒）
 
----
+
 
 # 🗓️ Todo
 > 画大饼环节，请不要对本懒狗抱太大期待 🐶
@@ -126,7 +126,7 @@
 - 更智能的周期预测
 - OneDrive/iCloud 云同步
 
----
+
 
 # 🙏 鸣谢
 - Flutter

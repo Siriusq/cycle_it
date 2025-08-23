@@ -23,7 +23,7 @@ Unfortunately, most of these items are **not smart enough** — they don’t sho
 **CycleIt · 循物** is a cross-platform app built to solve this problem.
 It records usage history, tracks recurring cycles, predicts the next due date, and sends reminders — helping you avoid both forgetfulness and waste.
 
----
+
 
 # ✨ Features
 * 📝 **Item Management**: Record item names, notes, and assign emoji icons for quick identification.
@@ -39,7 +39,7 @@ It records usage history, tracks recurring cycles, predicts the next due date, a
 * 🎨 **Theme Switching**: Light/Dark themes with system auto-switch.
 * 💾 **Database Management**: Import/export database for backup and device migration.
 
----
+
 
 # 📦 Installation
 ## Android
@@ -66,7 +66,7 @@ Download and install [Cycle.It.1.0.0.dmg](https://github.com/Siriusq/cycle_it/re
 ## Linux
 Currently supports only Debian-based distributions. Download and install [cycle\_it\_v1.deb](https://github.com/Siriusq/cycle_it/releases/download/1.0/cycle_it_v1.deb).
 
----
+
 
 # 🎬 User Guide
 
@@ -83,10 +83,12 @@ Tap the **Add button** in the top-right corner of the item list. 1️⃣
 
 ## Manage Tags
 Tap the **More Actions button** in the tag section of the sidebar. 4️⃣
+
 On mobile, open the sidebar via the **drawer button** in the top-left of the item list.
 
 ## Settings
 Tap the **Settings button** in the top-right corner of the sidebar. 5️⃣
+
 On mobile, open the sidebar via the **drawer button**.
 
 ## Add Cycle Record
@@ -96,11 +98,11 @@ On mobile, open the sidebar via the **drawer button**.
 ## Manage Cycle Records
 In the cycle record table on the item details page, tap the **Actions button** at the end of the record row. 7️⃣
 
----
+
 
 # ⚠️ Known Issues
 * **Cycle prediction & reminders**: Requires at least two cycle records as a reference. For new items, you may manually add estimated past records to enable prediction.
-* **Splash Screen**: When opening the app via a notification, the splash screen may not display the app icon.
+* **Splash Screen**: When opening the app via a notification, the splash screen may not display the app icon ([More info](https://github.com/jonbhanson/flutter_native_splash/issues/739)).
 * **Notification Permission**: On first launch, some platforms require granting notification permissions.
 
 ### Platform Limitations
@@ -119,7 +121,7 @@ In the cycle record table on the item details page, tap the **Actions button** a
   * No scheduled notification API, so reminders are unavailable ([details](https://pub.dev/packages/flutter_local_notifications#linux-limitations)).
   * Only Debian-based installer provided (because I’m lazy).
 
----
+
 
 ## 🗓️ Todo
 > Big promises ahead — please don’t expect too much from this lazy dev 🐶
@@ -127,7 +129,7 @@ In the cycle record table on the item details page, tap the **Actions button** a
 * Smarter cycle prediction.
 * Cross-platform sync via OneDrive/iCloud.
 
----
+
 
 ## 🙏 Credits
 * Flutter
