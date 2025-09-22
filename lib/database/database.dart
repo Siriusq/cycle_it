@@ -475,7 +475,7 @@ class MyDatabase extends _$MyDatabase {
   }
 
   // 导出数据库
-  Future<bool> exportDatabase() async {
+  Future<bool> exportDatabaseOrigin() async {
     try {
       final currentDbPath = await getDatabaseFilePath();
       final currentDbFile = File(currentDbPath);
@@ -509,6 +509,53 @@ class MyDatabase extends _$MyDatabase {
       Get.snackbar(
         'database_export_successfully'.tr,
         'database_export_to'.trParams({'filepath': exportPath}),
+      );
+      return true;
+    } catch (e) {
+      Get.snackbar('database_export_failed'.tr, '$e');
+      return false;
+    }
+  }
+
+  // 导出数据库
+  Future<bool> exportDatabase() async {
+    try {
+      final currentDbPath = await getDatabaseFilePath();
+      final currentDbFile = File(currentDbPath);
+
+      if (!await currentDbFile.exists()) {
+        Get.snackbar(
+          'database_export_failed'.tr,
+          'database_export_file_error'.tr,
+        );
+        return false;
+      }
+
+      // 获取数据库文件的数据
+      final bytes = await currentDbFile.readAsBytes();
+
+      // 构建默认文件名
+      final fileName =
+          'cycle_it_backup_${DateFormat('yyyy-MM-dd_HH-mm-ss').format(DateTime.now())}.sqlite';
+
+      // 使用 file_picker 的 saveFile 方法
+      final result = await FilePicker.platform.saveFile(
+        fileName: fileName,
+        bytes: bytes,
+      );
+
+      if (result == null) {
+        // 用户取消了选择
+        Get.snackbar(
+          'database_export_failed'.tr,
+          'database_export_canceled_error'.tr,
+        );
+        return false;
+      }
+
+      Get.snackbar(
+        'database_export_successfully'.tr,
+        'database_export_to'.trParams({'filepath': result}),
       );
       return true;
     } catch (e) {
