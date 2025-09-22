@@ -33,7 +33,7 @@
 - 🔍 **快速搜索**：通过名称或备注定位物品。
 - 🏷️ **标签管理**：支持多标签分类与筛选。
 - 📱 **响应式 UI**：根据屏幕尺寸自适应布局。
-- 🌐 **跨平台支持**：iOS、Android、Windows、macOS、Linux 全覆盖。
+- 🌐 **跨平台支持**：iOS、Android、Windows、macOS 全覆盖。
 - 🌍 **多语言切换**：简体中文、繁体中文、英文。
 - 🎨 **主题切换**：支持明暗模式，跟随系统自动切换。
 - 💾 **数据库管理**：支持数据导入导出，轻松迁移或备份。
@@ -42,14 +42,14 @@
 
 ## 📦 安装说明
 ### Android
-下载并安装 [cycle\_it\_v1.apk](https://github.com/Siriusq/cycle_it/releases/download/1.0/cycle_it_v1.apk)。
+下载并安装 [Cycle.It.1.0.1.apk](https://github.com/Siriusq/cycle_it/releases/download/1.0.1/Cycle.It.1.0.1.apk)。
 
 ### iOS
-由于不打算上架 App Store，仅提供 IPA 包 [CycleIt.ipa](https://github.com/Siriusq/cycle_it/releases/download/1.0/CycleIt.ipa)。
+由于不打算上架 App Store，仅提供 IPA 包 [CycleIt.ipa](https://github.com/Siriusq/cycle_it/releases/download/1.0.1/CycleIt.ipa)。
 需配合 [AltStore](https://altstore.io/) 进行自签名侧载，详见 [AltStore 文档](https://faq.altstore.io/)。
 
 ### Windows
-下载 [cycle\_it\_v1.msix](https://github.com/Siriusq/cycle_it/releases/download/1.0/cycle_it_v1.msix)。
+下载 [Cycle.It.1.0.1.msix](https://github.com/Siriusq/cycle_it/releases/download/1.0.1/Cycle.It.1.0.1.msix)。
 由于 MSIX 限制，需要先安装我的签名证书，步骤如下：
 1. 右键单击安装包，依次选择`属性`-`数字签名`-`详细信息`-`查看证书`-`安装证书`
 2. 在证书导入向导中，选择存储位置为`本地计算机`，点击`下一步`
@@ -58,12 +58,14 @@
 5. 点击下一步并完成证书导入
 6. 双击安装包进行安装即可
 
-（更详细的步骤图文教程：我的博客，还没写完QwQ）
+更详细的步骤图文教程：[我的博客](https://siriusq.top/flutter-build-installer.html#%E5%AE%89%E8%A3%85-2)
 
 ### macOS
-下载并安装 [Cycle.It.1.0.0.dmg](https://github.com/Siriusq/cycle_it/releases/download/1.0/Cycle.It.1.0.0.dmg)。
+下载并安装 [Cycle.It.1.0.1.dmg](https://github.com/Siriusq/cycle_it/releases/download/1.0.1/Cycle.It.1.0.1.dmg)。
 
 ### Linux
+**由于核心功能无法实现，Linux 版本将不再更新**
+
 目前仅支持 Debian 系，下载并安装 [cycle\_it\_v1.deb](https://github.com/Siriusq/cycle_it/releases/download/1.0/cycle_it_v1.deb)。
 
 

@@ -35,7 +35,7 @@ It records usage history, tracks recurring cycles, predicts the next due date, a
 * 🔍 **Quick Search**: Find items instantly by name or notes.
 * 🏷️ **Tag Management**: Assign multiple tags and filter items by tag.
 * 📱 **Responsive UI**: Adapts layout automatically to screen size.
-* 🌐 **Cross-Platform**: Runs on iOS, Android, Windows, macOS, and Linux.
+* 🌐 **Cross-Platform**: Runs on iOS, Android, Windows, and macOS.
 * 🌍 **Multi-Language**: Supports English, Simplified Chinese, and Traditional Chinese.
 * 🎨 **Theme Switching**: Light/Dark themes with system auto-switch.
 * 💾 **Database Management**: Import/export database for backup and device migration.
@@ -44,13 +44,13 @@ It records usage history, tracks recurring cycles, predicts the next due date, a
 
 ## 📦 Installation
 ### Android
-Download and install [cycle\_it\_v1.apk](https://github.com/Siriusq/cycle_it/releases/download/1.0/cycle_it_v1.apk).
+Download and install [Cycle.It.1.0.1.apk](https://github.com/Siriusq/cycle_it/releases/download/1.0.1/Cycle.It.1.0.1.apk).
 
 ### iOS
-Not available on the App Store. Instead, download the IPA package [CycleIt.ipa](https://github.com/Siriusq/cycle_it/releases/download/1.0/CycleIt.ipa) and sideload it using [AltStore](https://altstore.io/). See [AltStore FAQ](https://faq.altstore.io/) for setup instructions.
+Not available on the App Store. Instead, download the IPA package [CycleIt.ipa](https://github.com/Siriusq/cycle_it/releases/download/1.0.1/CycleIt.ipa) and sideload it using [AltStore](https://altstore.io/). See [AltStore FAQ](https://faq.altstore.io/) for setup instructions.
 
 ### Windows
-Download [cycle\_it\_v1.msix](https://github.com/Siriusq/cycle_it/releases/download/1.0/cycle_it_v1.msix).
+Download [Cycle.It.1.0.1.msix](https://github.com/Siriusq/cycle_it/releases/download/1.0.1/Cycle.It.1.0.1.msix).
 Due to MSIX restrictions, you must install my signing certificate first:
 1. Right-click the installer → `Properties` → `Digital Signatures` → `Details` → `View Certificate` → `Install Certificate`.
 2. In the Certificate Import Wizard, select `Local Machine` → Next.
@@ -59,12 +59,14 @@ Due to MSIX restrictions, you must install my signing certificate first:
 5. Complete the wizard.
 6. Double-click the MSIX package to install.
 
-(Detailed step-by-step guide with screenshots: coming soon on my blog QwQ)
+Detailed step-by-step guide with screenshots: [my blog](https://siriusq.top/en/flutter-build-installer.html#Install-2)
 
 ### macOS
-Download and install [Cycle.It.1.0.0.dmg](https://github.com/Siriusq/cycle_it/releases/download/1.0/Cycle.It.1.0.0.dmg).
+Download and install [Cycle.It.1.0.1.dmg](https://github.com/Siriusq/cycle_it/releases/download/1.0.1/Cycle.It.1.0.1.dmg).
 
 ### Linux
+**Due to system limitations, core functions cannot be implemented, so the Linux version will no longer be updated.**
+
 Currently supports only Debian-based distributions. Download and install [cycle\_it\_v1.deb](https://github.com/Siriusq/cycle_it/releases/download/1.0/cycle_it_v1.deb).
 
 

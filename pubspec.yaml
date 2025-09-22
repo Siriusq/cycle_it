@@ -2,7 +2,7 @@ name: cycle_it
 description: "An app that tracks the reuse cycle of items and can predict the next reuse time based on the cycle records and send notifications."
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
-publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+publish_to: "none" # Remove this line if you wish to publish to pub.dev
 
 # The following defines the version and build number for your application.
 # A version number is three numbers separated by dots, like 1.2.43
@@ -19,7 +19,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.0.1+2
 
 environment:
-  sdk: '>=3.7.2 <4.0.0'
+  sdk: ">=3.7.2 <4.0.0"
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -116,7 +116,6 @@ dev_dependencies:
 
 # The following section is specific to Flutter packages.
 flutter:
-
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.
@@ -215,7 +214,7 @@ msix_config:
   certificate_password: "1234" # PFX 文件的导出密码，需要修改！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！
   publisher: "CN=siriusq, C=CN" # pfx 文件信息
   identity_name: "Top.Siriusq.CycleIt"
-  msix_version: "1.0.0.0"
+  msix_version: "1.0.1.0"
   logo_path: "assets/images/app_icon_windows.png"
   file_extension: "sqlite, txt"
   store: false
