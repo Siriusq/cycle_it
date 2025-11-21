@@ -46,3 +46,6 @@ app.*.map.json
 
 # Drift generated files
 lib/**/*.g.dart
+
+# FVM Version Cache
+.fvm/
