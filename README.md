@@ -2,6 +2,7 @@
 
 <p align="center">
     <a href="https://github.com/Siriusq/cycle_it/blob/master/README/README-CN.md"><img src="https://img.shields.io/badge/简体中文_README-4285F4?style=for-the-badge&logo=googletranslate&logoColor=ffffff"/></a>
+    <a href="https://siriusq.top/cycleit-site/"><img src="https://img.shields.io/badge/GitHub%20Pages-%23222222?style=for-the-badge&logo=html5"/></a>
     <img alt="GitHub Release Date" src="https://img.shields.io/github/release-date/Siriusq/cycle_it?style=for-the-badge&logo=github">
     <img alt="GitHub top language" src="https://img.shields.io/github/languages/top/Siriusq/cycle_it?style=for-the-badge&logo=dart">    
     <img alt="Flutter" src="https://img.shields.io/badge/3.22-lightgrey.svg?style=for-the-badge&label=Flutter&labelColor=%23555555&color=%2302569B&logo=flutter">
@@ -74,7 +75,7 @@ Currently supports only Debian-based distributions. Download and install [cycle\
 ## 🎬 User Guide
 
 <p align="left">
-    <img width="600" src="./README/usage_manual.png" alt="User Guide">
+    <img width="600" src="./README/usage_manual_en.png" alt="User Guide">
 </p>
 
 ### Add Item
