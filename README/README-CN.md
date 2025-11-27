@@ -2,7 +2,7 @@
 
 <p align="center">
     <a href="https://github.com/Siriusq/cycle_it"><img src="https://img.shields.io/badge/ENGLISH_README-4285F4?style=for-the-badge&logo=googletranslate&logoColor=ffffff"/></a>
-	<a href="https://siriusq.top/cycleit-site/"><img src="https://img.shields.io/badge/GitHub%20Pages-%23222222?style=for-the-badge&logo=html5"/></a>
+	<a href="https://cycleit.siriusq.top/"><img src="https://img.shields.io/badge/GitHub%20Pages-%23222222?style=for-the-badge&logo=html5"/></a>
     <img alt="GitHub Release Date" src="https://img.shields.io/github/release-date/Siriusq/cycle_it?style=for-the-badge&logo=github">
     <img alt="GitHub top language" src="https://img.shields.io/github/languages/top/Siriusq/cycle_it?style=for-the-badge&logo=dart">    
     <img alt="Flutter" src="https://img.shields.io/badge/3.22-lightgrey.svg?style=for-the-badge&label=Flutter&labelColor=%23555555&color=%2302569B&logo=flutter">
