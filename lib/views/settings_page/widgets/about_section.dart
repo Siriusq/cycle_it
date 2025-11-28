@@ -136,6 +136,20 @@ class AboutSection extends StatelessWidget {
           label: Text('read_me'.tr),
         ),
       ),
+      const SizedBox(height: 8.0), // 按钮之间的间距
+      // 隐私政策按钮
+      SizedBox(
+        width: double.infinity,
+        child: TextButton.icon(
+          onPressed:
+              () => _launchInBrowser(
+                'https://cycleit.siriusq.top/privacy.html',
+              ),
+          style: buttonStyle,
+          icon: const Icon(Icons.privacy_tip_outlined),
+          label: Text('privacy_policy'.tr),
+        ),
+      ),
     ];
   }
 

@@ -16,7 +16,7 @@ publish_to: "none" # Remove this line if you wish to publish to pub.dev
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 # In Windows, build-name is used as the major, minor, and patch parts
 # of the product and file versions while build-number is used as the build suffix.
-version: 1.0.1+2
+version: 1.0.2+3
 
 environment:
   sdk: ">=3.7.2 <4.0.0"
@@ -210,16 +210,14 @@ flutter_launcher_icons:
 msix_config:
   display_name: "Cycle It"
   publisher_display_name: "Siriusq"
-  certificate_path: "C:\\Users\\Sirius\\siriusq.pfx" # pfx 文件路径
-  certificate_password: "1234" # PFX 文件的导出密码，需要修改！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！
-  publisher: "CN=siriusq, C=CN" # pfx 文件信息
-  identity_name: "Top.Siriusq.CycleIt"
-  msix_version: "1.0.1.0"
+  publisher: "CN=8004FAEB-7523-4D3E-B115-90238383C5D4"
+  identity_name: "Siriusq.CycleIt"
+  languages: "en, zh-Hans, zh-Hant"
+  msix_version: "1.0.2.0"
   logo_path: "assets/images/app_icon_windows.png"
   file_extension: "sqlite, txt"
-  store: false
-  output_name: "cycle_it_v1"
-  capabilities: "fileSystem"
+  store: true
+  output_name: "cycle_it"
   toast_activator:
     clsid: "56d804df-4bf8-4a95-990a-8574d1f770dd"
     arguments: "-ToastActivated"
