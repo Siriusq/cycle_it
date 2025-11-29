@@ -45,25 +45,20 @@ It records usage history, tracks recurring cycles, predicts the next due date, a
 
 ## 📦 Installation
 ### Android
-Download and install [Cycle.It.1.0.1.apk](https://github.com/Siriusq/cycle_it/releases/download/1.0.1/Cycle.It.1.0.1.apk).
+Download and install [Cycle.It.1.0.2.apk](https://github.com/Siriusq/cycle_it/releases/download/1.0.2/Cycle.It.1.0.2.apk).
 
 ### iOS
-Not available on the App Store. Instead, download the IPA package [CycleIt.ipa](https://github.com/Siriusq/cycle_it/releases/download/1.0.1/CycleIt.ipa) and sideload it using [AltStore](https://altstore.io/). See [AltStore FAQ](https://faq.altstore.io/) for setup instructions.
+Not available on the App Store. Instead, download the IPA package [Cycle.It.1.0.2](https://github.com/Siriusq/cycle_it/releases/download/1.0.2/Cycle.It.1.0.2.ipa) and sideload it using [AltStore](https://altstore.io/). See [AltStore FAQ](https://faq.altstore.io/) for setup instructions.
 
 ### Windows
-Download [Cycle.It.1.0.1.msix](https://github.com/Siriusq/cycle_it/releases/download/1.0.1/Cycle.It.1.0.1.msix).
-Due to MSIX restrictions, you must install my signing certificate first:
-1. Right-click the installer → `Properties` → `Digital Signatures` → `Details` → `View Certificate` → `Install Certificate`.
-2. In the Certificate Import Wizard, select `Local Machine` → Next.
-3. Choose `Place all certificates in the following store`.
-4. Browse and select `Trusted Root Certification Authorities`.
-5. Complete the wizard.
-6. Double-click the MSIX package to install.
+Available on the Microsoft Store, install directly from the store. 
 
-Detailed step-by-step guide with screenshots: [my blog](https://siriusq.top/en/flutter-build-installer.html#Install-2)
+<a href="https://apps.microsoft.com/detail/9p591jqspgcw?referrer=appbadge&mode=direct">
+	<img src="https://get.microsoft.com/images/en-us%20dark.svg" width="200"/>
+</a>
 
 ### macOS
-Download and install [Cycle.It.1.0.1.dmg](https://github.com/Siriusq/cycle_it/releases/download/1.0.1/Cycle.It.1.0.1.dmg).
+Download and install [Cycle.It.1.0.2.dmg](https://github.com/Siriusq/cycle_it/releases/download/1.0.2/Cycle.It.1.0.2.dmg).
 
 ### Linux
 **Due to system limitations, core functions cannot be implemented, so the Linux version will no longer be updated.**
@@ -111,7 +106,6 @@ In the cycle record table on the item details page, tap the **Actions button** a
 
 ### Platform Limitations
 * **Windows**
-  * Requires manual trust of my personal certificate (because I didn’t buy an expensive one).
   * Only MSIX package provided — EXE cannot properly handle scheduled notifications ([details](https://pub.dev/packages/flutter_local_notifications#windows-limitations)).
 * **Android**
   * Import/export database may not work on Android < 13 (tested on Android 15).

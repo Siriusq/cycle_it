@@ -43,26 +43,21 @@
 
 ## 📦 安装说明
 ### Android
-下载并安装 [Cycle.It.1.0.1.apk](https://github.com/Siriusq/cycle_it/releases/download/1.0.1/Cycle.It.1.0.1.apk)。
+下载并安装 [Cycle.It.1.0.2.apk](https://github.com/Siriusq/cycle_it/releases/download/1.0.2/Cycle.It.1.0.2.apk)。
 
 ### iOS
-由于不打算上架 App Store，仅提供 IPA 包 [CycleIt.ipa](https://github.com/Siriusq/cycle_it/releases/download/1.0.1/CycleIt.ipa)。
+由于不打算上架 App Store，仅提供 IPA 包 [Cycle.It.1.0.2](https://github.com/Siriusq/cycle_it/releases/download/1.0.2/Cycle.It.1.0.2.ipa)。
 需配合 [AltStore](https://altstore.io/) 进行自签名侧载，详见 [AltStore 文档](https://faq.altstore.io/)。
 
 ### Windows
-下载 [Cycle.It.1.0.1.msix](https://github.com/Siriusq/cycle_it/releases/download/1.0.1/Cycle.It.1.0.1.msix)。
-由于 MSIX 限制，需要先安装我的签名证书，步骤如下：
-1. 右键单击安装包，依次选择`属性`-`数字签名`-`详细信息`-`查看证书`-`安装证书`
-2. 在证书导入向导中，选择存储位置为`本地计算机`，点击`下一步`
-3. 选择`将所有的证书都放入下列存储`
-4. 点击`浏览`，选择`受信任的根证书颁发机构`
-5. 点击下一步并完成证书导入
-6. 双击安装包进行安装即可
+已上架微软商店，通过商店直接安装。 
 
-更详细的步骤图文教程：[我的博客](https://siriusq.top/flutter-build-installer.html#%E5%AE%89%E8%A3%85-2)
+<a href="https://apps.microsoft.com/detail/9p591jqspgcw?referrer=appbadge&mode=direct">
+	<img src="https://get.microsoft.com/images/zh-cn%20dark.svg" width="200"/>
+</a>
 
 ### macOS
-下载并安装 [Cycle.It.1.0.1.dmg](https://github.com/Siriusq/cycle_it/releases/download/1.0.1/Cycle.It.1.0.1.dmg)。
+下载并安装 [Cycle.It.1.0.2.dmg](https://github.com/Siriusq/cycle_it/releases/download/1.0.2/Cycle.It.1.0.2.dmg)。
 
 ### Linux
 **由于核心功能无法实现，Linux 版本将不再更新**
@@ -108,8 +103,7 @@
 
 ### 平台限制
 - **Windows**
-	- 由于 MSIX 的限制，需手动信任我的个人证书（因为不想买昂贵的官方证书）
-	- 仅提供 msix 包，因为exe 格式无法正确管理计划通知，详见 [Windows limitations](https://pub.dev/packages/flutter_local_notifications#windows-limitations)
+	- 仅提供 msix 包，因为 exe 格式无法正确管理计划通知，详见 [Windows limitations](https://pub.dev/packages/flutter_local_notifications#windows-limitations)
 - **Android**
 	-  Android 13（API 级别 33）以下可能无法导入/导出数据库，测试环境为 Android 15（API 级别 35）。
 	-  通知功能需要允许应用后台运行，详见 [Scheduled Android notifications](https://pub.dev/packages/flutter_local_notifications#scheduled-android-notifications)。关于不同品牌的安卓手机如何开启应用后台运行，详见 [Don’t kill my app! \| Hey Android vendors, don’t kill my app!](https://dontkillmyapp.com/)
