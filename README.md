@@ -103,6 +103,7 @@ In the cycle record table on the item details page, tap the **Actions button** a
 * **Cycle prediction & reminders**: Requires at least two cycle records as a reference. For new items, you may manually add estimated past records to enable prediction.
 * **Splash Screen**: When opening the app via a notification, the splash screen may not display the app icon ([More info](https://github.com/jonbhanson/flutter_native_splash/issues/739)).
 * **Notification Permission**: On first launch, some platforms require granting notification permissions.
+* **Expired reminders**: On some platforms, if the device is powered off at the scheduled reminder time, the reminder will not trigger after the device is turned on again.
 
 ### Platform Limitations
 * **Windows**

@@ -100,6 +100,7 @@
 - **循环预测与提醒**：预测下次使用日期并发送通知，至少需要两条循环记录作为参考。若刚添加物品，可根据估算补录两条历史记录以启用此功能。
 - **启动显示问题**：通过点击通知启动应用时，启动页（Splash Screen）可能不会显示应用图标，详见[White Screen is showing instead of native splash while app opening from push notification](https://github.com/jonbhanson/flutter_native_splash/issues/739)。
 - **通知权限**：应用首次启动时，部分平台需要先授予通知权限，才能进入 APP。
+- **过期提醒**：在部分平台上，如果提醒时间到达时，设备处于关机状态，再次启动后，过期的提醒不会重新触发。
 
 ### 平台限制
 - **Windows**
