@@ -19,10 +19,8 @@ class NotificationService extends GetxService {
 
   Future<NotificationService> init() async {
     // 1. Android 初始化设置
-    const AndroidInitializationSettings
-    initializationSettingsAndroid = AndroidInitializationSettings(
-      '@mipmap/ic_launcher',
-    );
+    const AndroidInitializationSettings initializationSettingsAndroid =
+        AndroidInitializationSettings('@mipmap/ic_launcher');
 
     // 2. Darwin (iOS, macOS) 初始化设置
     final DarwinInitializationSettings initializationSettingsDarwin =
@@ -37,14 +35,14 @@ class NotificationService extends GetxService {
         LinuxInitializationSettings(defaultActionName: 'Open');
 
     // 4. Windows 初始化设置
-    final WindowsInitializationSettings
-    initializationSettingsWindows = WindowsInitializationSettings(
-      appName: 'Cycle It',
-      appUserModelId: 'Top.Siriusq.CycleIt',
-      // Search online for GUID generators to make your own
-      guid: '56d804df-4bf8-4a95-990a-8574d1f770dd',
-      iconPath: 'assets/images/app_icon_windows.png',
-    );
+    final WindowsInitializationSettings initializationSettingsWindows =
+        WindowsInitializationSettings(
+          appName: 'Cycle It',
+          appUserModelId: 'Top.Siriusq.CycleIt',
+          // Search online for GUID generators to make your own
+          guid: '56d804df-4bf8-4a95-990a-8574d1f770dd',
+          iconPath: 'assets/images/app_icon_windows.png',
+        );
 
     // 5. 组合成总的初始化设置
     final InitializationSettings initializationSettings =
@@ -58,18 +56,16 @@ class NotificationService extends GetxService {
 
     // 6. 初始化插件
     await _plugin.initialize(
-      initializationSettings,
-      onDidReceiveNotificationResponse:
-          onDidReceiveNotificationResponse,
+      settings: initializationSettings,
+      onDidReceiveNotificationResponse: onDidReceiveNotificationResponse,
     );
 
     // 7. 检查 APP 是否由通知拉起，如果是，则暂存该通知响应，而不是立即处理
     final NotificationAppLaunchDetails? notificationAppLaunchDetails =
         GetPlatform.isLinux
-            ? null
-            : await _plugin.getNotificationAppLaunchDetails();
-    if (notificationAppLaunchDetails?.didNotificationLaunchApp ??
-        false) {
+        ? null
+        : await _plugin.getNotificationAppLaunchDetails();
+    if (notificationAppLaunchDetails?.didNotificationLaunchApp ?? false) {
       _initialNotificationResponse =
           notificationAppLaunchDetails!.notificationResponse;
       if (kDebugMode) {
@@ -91,22 +87,18 @@ class NotificationService extends GetxService {
   void handleInitialNotification() async {
     // 通用方法
     if (_initialNotificationResponse != null) {
-      selectNotificationStream.add(
-        _initialNotificationResponse!.payload,
-      );
+      selectNotificationStream.add(_initialNotificationResponse!.payload);
       return;
     }
 
     // 解决 Windows 平台时序冲突导致 UI 不显示
     if (GetPlatform.isWindows) {
       // 重新获取通知细节
-      final notificationAppLaunchDetails =
-          await _plugin.getNotificationAppLaunchDetails();
+      final notificationAppLaunchDetails = await _plugin
+          .getNotificationAppLaunchDetails();
 
-      if (notificationAppLaunchDetails?.didNotificationLaunchApp ??
-          false) {
-        final response =
-            notificationAppLaunchDetails!.notificationResponse;
+      if (notificationAppLaunchDetails?.didNotificationLaunchApp ?? false) {
+        final response = notificationAppLaunchDetails!.notificationResponse;
         // 延迟500ms
         if (response?.payload != null) {
           Future.delayed(const Duration(milliseconds: 500), () {
@@ -126,9 +118,7 @@ class NotificationService extends GetxService {
     selectNotificationStream.stream.listen((String? payload) {
       if (payload != null) {
         final int divideIdx = payload.indexOf(' ');
-        final int? itemId = int.tryParse(
-          payload.substring(0, divideIdx),
-        );
+        final int? itemId = int.tryParse(payload.substring(0, divideIdx));
         final String itemName = payload.substring(divideIdx + 1);
 
         if (itemId != null) {
@@ -136,10 +126,7 @@ class NotificationService extends GetxService {
             print('App launched by notification with $itemId');
           }
           Get.dialog(
-            NotificationHandlingDialog(
-              itemId: itemId,
-              itemName: itemName,
-            ),
+            NotificationHandlingDialog(itemId: itemId, itemName: itemName),
           );
         }
       }
@@ -162,15 +149,13 @@ class NotificationService extends GetxService {
           ?.requestPermissions(alert: true, badge: true, sound: true);
     } else if (GetPlatform.isAndroid) {
       // 为 Android (API 33+) 请求权限
-      final AndroidFlutterLocalNotificationsPlugin?
-      androidImplementation =
+      final AndroidFlutterLocalNotificationsPlugin? androidImplementation =
           _plugin
               .resolvePlatformSpecificImplementation<
                 AndroidFlutterLocalNotificationsPlugin
               >();
-      final bool? granted =
-          await androidImplementation
-              ?.requestNotificationsPermission();
+      final bool? granted = await androidImplementation
+          ?.requestNotificationsPermission();
       if (granted == false) {
         Get.snackbar(
           'permission_denied'.tr,
@@ -199,11 +184,7 @@ class NotificationService extends GetxService {
         scheduledTime.minute,
       );
       // 计划通知
-      await _scheduleNotification(
-        item.id!,
-        item.name,
-        scheduledDateTime,
-      );
+      await _scheduleNotification(item.id!, item.name, scheduledDateTime);
     } else {
       // 任何一个条件不满足，都取消已有的通知
       await cancelNotification(item.id!);
@@ -246,16 +227,15 @@ class NotificationService extends GetxService {
     );
 
     await _plugin.zonedSchedule(
-      itemId,
-      'item_usage_reminder'.tr,
-      'item_usage_reminder_body'.trParams({'itemName': itemName}),
-      tzScheduledDate,
-      const NotificationDetails(
+      id: itemId,
+      title: 'item_usage_reminder'.tr,
+      body: 'item_usage_reminder_body'.trParams({'itemName': itemName}),
+      scheduledDate: tzScheduledDate,
+      notificationDetails: const NotificationDetails(
         android: AndroidNotificationDetails(
           'cycle_it_reminders_channel',
-          'Item Reminders', // Channel Name
-          channelDescription:
-              'Reminders for item usage cycles.', // Channel Description
+          'Item Reminders',
+          channelDescription: 'Reminders for item usage cycles.',
           importance: Importance.max,
           priority: Priority.high,
         ),
@@ -286,7 +266,7 @@ class NotificationService extends GetxService {
     if (GetPlatform.isLinux) {
       return;
     }
-    await _plugin.cancel(itemId);
+    await _plugin.cancel(id: itemId);
   }
 
   /// 取消所有通知
@@ -299,9 +279,7 @@ class NotificationService extends GetxService {
   }
 
   /// 重新计划所有物品的通知
-  Future<void> rescheduleAllNotifications(
-    List<ItemModel> items,
-  ) async {
+  Future<void> rescheduleAllNotifications(List<ItemModel> items) async {
     // Linux 不支持计划通知
     if (GetPlatform.isLinux) {
       return;
@@ -321,9 +299,7 @@ class NotificationService extends GetxService {
 
 /// 顶层函数或静态方法，用于处理后台通知响应
 @pragma('vm:entry-point')
-void onDidReceiveBackgroundNotificationResponse(
-  NotificationResponse response,
-) {
+void onDidReceiveBackgroundNotificationResponse(NotificationResponse response) {
   // 在这里处理后台逻辑
   if (kDebugMode) {
     print('Background notification payload: ${response.payload}');
@@ -331,9 +307,7 @@ void onDidReceiveBackgroundNotificationResponse(
 }
 
 /// 处理前台和后台的通知点击事件
-void onDidReceiveNotificationResponse(
-  NotificationResponse response,
-) async {
+void onDidReceiveNotificationResponse(NotificationResponse response) async {
   if (response.payload != null) {
     selectNotificationStream.add(response.payload);
   }

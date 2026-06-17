@@ -13,15 +13,13 @@ class UsageHeatmapCalendar extends StatelessWidget {
   Widget build(BuildContext context) {
     final ItemController itemController = Get.find<ItemController>();
     final ResponsiveStyle style = ResponsiveStyle.to;
-    final TextStyle titleMD =
-        Theme.of(
-          context,
-        ).textTheme.titleMedium!.useSystemChineseFont();
+    final TextStyle titleMD = Theme.of(
+      context,
+    ).textTheme.titleMedium!.useSystemChineseFont();
     final TextStyle bodyMD = Theme.of(context).textTheme.bodyMedium!;
     final double heatmapCellSize = style.heatmapCellSize;
     final double heatmapTipCellSize = style.heatmapTipCellSize;
-    final double heatmapCellSpaceBetween =
-        style.heatmapCellSpaceBetween;
+    final double heatmapCellSpaceBetween = style.heatmapCellSpaceBetween;
     // 估算日历组件的最小高度，以确保加载指示器等也占据相似的空间
     final double heatmapHeight = style.heatmapHeight;
 
@@ -29,24 +27,19 @@ class UsageHeatmapCalendar extends StatelessWidget {
         Get.find<LanguageController>();
 
     return Obx(() {
-      final bool isLoading =
-          itemController.isLoadingHeatmapData.value;
+      final bool isLoading = itemController.isLoadingHeatmapData.value;
       final String error = itemController.heatMapError.value;
-      final Map<DateTime, int> heatMapData =
-          itemController.heatMapData;
+      final Map<DateTime, int> heatMapData = itemController.heatMapData;
 
       return LayoutBuilder(
         builder: (context, constraints) {
-          final Color primaryColor =
-              Theme.of(context).colorScheme.primary;
+          final Color primaryColor = Theme.of(context).colorScheme.primary;
 
           // 根据不同的状态，决定 AnimatedSwitcher 要显示哪个子组件
           Widget contentToAnimate;
           if (isLoading) {
             contentToAnimate = const Center(
-              key: ValueKey(
-                'loading',
-              ), // 为 AnimatedSwitcher 提供唯一的 Key
+              key: ValueKey('loading'), // 为 AnimatedSwitcher 提供唯一的 Key
               child: Padding(
                 padding: EdgeInsets.all(20.0),
                 child: CircularProgressIndicator(),
@@ -73,18 +66,14 @@ class UsageHeatmapCalendar extends StatelessWidget {
                 padding: const EdgeInsets.all(20.0),
                 child: Text(
                   'no_usage_records'.tr,
-                  style: bodyMD.copyWith(
-                    color: Theme.of(context).hintColor,
-                  ),
+                  style: bodyMD.copyWith(color: Theme.of(context).hintColor),
                   textAlign: TextAlign.center,
                 ),
               ),
             );
           } else {
             contentToAnimate = Center(
-              key: ValueKey(
-                'heatmap',
-              ), // 为 AnimatedSwitcher 提供唯一的 Key
+              key: ValueKey('heatmap'), // 为 AnimatedSwitcher 提供唯一的 Key
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8.0),
                 child: HeatmapCalendar<num>(
@@ -102,9 +91,7 @@ class UsageHeatmapCalendar extends StatelessWidget {
                   colorTipCellSize: Size.square(heatmapTipCellSize),
                   cellSpaceBetween: heatmapCellSpaceBetween,
                   style: HeatmapCalendarStyle.defaults(
-                    cellRadius: const BorderRadius.all(
-                      Radius.circular(4.0),
-                    ),
+                    cellRadius: const BorderRadius.all(Radius.circular(4.0)),
                     weekLabelValueFontSize: bodyMD.fontSize!,
                     weekLabelColor: Theme.of(context).hintColor,
                     monthLabelFontSize: bodyMD.fontSize!,
@@ -112,28 +99,18 @@ class UsageHeatmapCalendar extends StatelessWidget {
                   ),
                   colorTipLeftHelper: Text(
                     'less'.tr,
-                    style: bodyMD.copyWith(
-                      color: Theme.of(context).hintColor,
-                    ),
+                    style: bodyMD.copyWith(color: Theme.of(context).hintColor),
                   ),
                   colorTipRightHelper: Text(
                     'more'.tr,
-                    style: bodyMD.copyWith(
-                      color: Theme.of(context).hintColor,
-                    ),
+                    style: bodyMD.copyWith(color: Theme.of(context).hintColor),
                   ),
-                  layoutParameters:
-                      const HeatmapLayoutParameters.defaults(
-                        monthLabelPosition:
-                            CalendarMonthLabelPosition.top,
-                        weekLabelPosition:
-                            CalendarWeekLabelPosition.right,
-                        colorTipPosition:
-                            CalendarColorTipPosition.bottom,
-                      ),
-                  locale:
-                      languageController.currentLocale ??
-                      Get.deviceLocale,
+                  layoutParameters: const HeatmapLayoutParameters.defaults(
+                    monthLabelPosition: CalendarMonthLabelPosition.top,
+                    weekLabelPosition: CalendarWeekLabelPosition.right,
+                    colorTipPosition: CalendarColorTipPosition.bottom,
+                  ),
+                  locale: languageController.currentLocale ?? Get.deviceLocale,
                 ),
               ),
             );
@@ -142,8 +119,7 @@ class UsageHeatmapCalendar extends StatelessWidget {
           return Container(
             padding: const EdgeInsets.symmetric(vertical: 8),
             decoration: BoxDecoration(
-              color:
-                  Theme.of(context).colorScheme.surfaceContainerLow,
+              color: Theme.of(context).colorScheme.surfaceContainerLow,
               borderRadius: BorderRadius.circular(15),
               border: Border.all(
                 width: 1.5,
@@ -176,25 +152,21 @@ class UsageHeatmapCalendar extends StatelessWidget {
                 // 淡入淡出和大小动画
                 AnimatedSwitcher(
                   duration: const Duration(milliseconds: 300),
-                  transitionBuilder: (
-                    Widget child,
-                    Animation<double> animation,
-                  ) {
-                    return FadeTransition(
-                      opacity: animation,
-                      child: SizeTransition(
-                        sizeFactor: animation,
-                        axisAlignment: -1.0, // 确保动画从顶部开始
-                        child: child,
-                      ),
-                    );
-                  },
+                  transitionBuilder:
+                      (Widget child, Animation<double> animation) {
+                        return FadeTransition(
+                          opacity: animation,
+                          child: SizeTransition(
+                            sizeFactor: animation,
+                            alignment: Alignment.topCenter, // 确保动画从顶部开始
+                            child: child,
+                          ),
+                        );
+                      },
                   // 使用 ConstrainedBox 确保 AnimatedSwitcher 的子组件有一个最小高度
                   // 这样在内容切换时，整体高度不会剧烈跳动
                   child: ConstrainedBox(
-                    constraints: BoxConstraints(
-                      minHeight: heatmapHeight,
-                    ),
+                    constraints: BoxConstraints(minHeight: heatmapHeight),
                     child: contentToAnimate,
                   ),
                 ),

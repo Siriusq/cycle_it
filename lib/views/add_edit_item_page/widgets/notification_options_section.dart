@@ -9,14 +9,13 @@ class NotificationOptionsSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final AddEditItemController controller =
-        Get.find<AddEditItemController>();
-    final TextStyle titleMD =
-        Theme.of(
-          context,
-        ).textTheme.titleMedium!.useSystemChineseFont();
-    final TextStyle bodyLG =
-        Theme.of(context).textTheme.bodyLarge!.useSystemChineseFont();
+    final AddEditItemController controller = Get.find<AddEditItemController>();
+    final TextStyle titleMD = Theme.of(
+      context,
+    ).textTheme.titleMedium!.useSystemChineseFont();
+    final TextStyle bodyLG = Theme.of(
+      context,
+    ).textTheme.bodyLarge!.useSystemChineseFont();
 
     return Obx(() {
       final isEnabled = controller.notifyBeforeNextUse.value;
@@ -46,14 +45,14 @@ class NotificationOptionsSection extends StatelessWidget {
                 onChanged: (newValue) {
                   controller.notifyBeforeNextUse.value = newValue;
                   // 如果开启通知但时间未设置，则设置一个默认时间
-                  if (newValue &&
-                      controller.notificationTime.value == null) {
-                    controller
-                        .notificationTime
-                        .value = const TimeOfDay(hour: 9, minute: 0);
+                  if (newValue && controller.notificationTime.value == null) {
+                    controller.notificationTime.value = const TimeOfDay(
+                      hour: 9,
+                      minute: 0,
+                    );
                   }
                 },
-                activeColor: Theme.of(context).colorScheme.primary,
+                activeThumbColor: Theme.of(context).colorScheme.primary,
               ),
             ],
           ),
@@ -95,8 +94,7 @@ class NotificationOptionsSection extends StatelessWidget {
                         AnimatedDefaultTextStyle(
                           duration: const Duration(milliseconds: 300),
                           style: bodyLG.copyWith(
-                            color:
-                                Theme.of(context).colorScheme.primary,
+                            color: Theme.of(context).colorScheme.primary,
                           ),
                           child: Text(displayText),
                         ),

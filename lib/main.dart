@@ -27,7 +27,8 @@ Future<void> _configureLocalTimeZone() async {
   tz.initializeTimeZones();
   String timeZoneName;
   try {
-    timeZoneName = await FlutterTimezone.getLocalTimezone();
+    final timezoneInfo = await FlutterTimezone.getLocalTimezone();
+    timeZoneName = timezoneInfo.identifier;
   } catch (e) {
     if (kDebugMode) {
       print('Could not get local timezone: $e. Falling back to UTC.');
@@ -50,9 +51,7 @@ void main() async {
   // 调用时区设置方法
   await _configureLocalTimeZone();
 
-  if (GetPlatform.isWindows ||
-      GetPlatform.isLinux ||
-      GetPlatform.isMacOS) {
+  if (GetPlatform.isWindows || GetPlatform.isLinux || GetPlatform.isMacOS) {
     await windowManager.ensureInitialized();
 
     WindowOptions windowOptions = WindowOptions(

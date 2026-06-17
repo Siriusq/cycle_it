@@ -29,11 +29,7 @@ TagData tagModelToData(TagModel model) {
 
 // 将 TagData 转换为 TagModel
 TagModel tagDataToModel(TagData data) {
-  return TagModel(
-    id: data.id,
-    name: data.name,
-    color: Color(data.colorValue),
-  );
+  return TagModel(id: data.id, name: data.name, color: Color(data.colorValue));
 }
 
 // 将 ItemModel 转换为 ItemData
@@ -64,13 +60,12 @@ ItemModel itemDataToModel(ItemData data) {
     iconColor: Color(data.iconColorValue),
     notifyBeforeNextUse: data.notifyBeforeNextUse,
     notificationTime:
-        (data.notificationHour != null &&
-                data.notificationMinute != null)
-            ? TimeOfDay(
-              hour: data.notificationHour!,
-              minute: data.notificationMinute!,
-            )
-            : null,
+        (data.notificationHour != null && data.notificationMinute != null)
+        ? TimeOfDay(
+            hour: data.notificationHour!,
+            minute: data.notificationMinute!,
+          )
+        : null,
     firstUsedDate: data.firstUsed,
     usageCount: data.usageCount,
     lastUsedDate: data.lastUsedDate,
@@ -97,19 +92,16 @@ ItemsCompanion itemModelToCompanion(ItemModel item) {
     emoji: Value(item.emoji),
     // 将颜色值存储为int
     iconColorValue: Value(item.iconColor.toARGB32()),
-    firstUsed:
-        item.firstUsedDate != null
-            ? Value(item.firstUsedDate!)
-            : const Value.absent(),
+    firstUsed: item.firstUsedDate != null
+        ? Value(item.firstUsedDate!)
+        : const Value.absent(),
     notifyBeforeNextUse: Value(item.notifyBeforeNextUse),
-    notificationHour:
-        item.notificationTime != null
-            ? Value(item.notificationTime!.hour)
-            : const Value(null),
-    notificationMinute:
-        item.notificationTime != null
-            ? Value(item.notificationTime!.minute)
-            : const Value(null),
+    notificationHour: item.notificationTime != null
+        ? Value(item.notificationTime!.hour)
+        : const Value(null),
+    notificationMinute: item.notificationTime != null
+        ? Value(item.notificationTime!.minute)
+        : const Value(null),
   );
 }
 
@@ -142,10 +134,9 @@ class MyDatabase extends _$MyDatabase {
     // selectOnly 用于只选择聚合结果或其他自定义列
     final query = selectOnly(tags)..addColumns([countExpression]);
     // 执行查询，映射结果，然后获取单个结果（即计数）
-    final result =
-        await query
-            .map((row) => row.read(countExpression))
-            .getSingle();
+    final result = await query
+        .map((row) => row.read(countExpression))
+        .getSingle();
     return result ?? 0;
   }
 
@@ -153,10 +144,9 @@ class MyDatabase extends _$MyDatabase {
   Future<int> getItemCount() async {
     final countExpression = countAll(); // 使用全局的 countAll 聚合函数，不带参数
     final query = selectOnly(items)..addColumns([countExpression]);
-    final result =
-        await query
-            .map((row) => row.read(countExpression))
-            .getSingle();
+    final result = await query
+        .map((row) => row.read(countExpression))
+        .getSingle();
     return result ?? 0;
   }
 
@@ -175,9 +165,9 @@ class MyDatabase extends _$MyDatabase {
 
   // 根据名称查询标签
   Future<TagModel?> getTagByName(String name) async {
-    final result =
-        await (select(tags)
-          ..where((t) => t.name.equals(name))).getSingleOrNull();
+    final result = await (select(
+      tags,
+    )..where((t) => t.name.equals(name))).getSingleOrNull();
     return result != null ? tagDataToModel(result) : null;
   }
 
@@ -190,8 +180,7 @@ class MyDatabase extends _$MyDatabase {
   Future<void> deleteTag(int id) async {
     await transaction(() async {
       // 1. 首先，删除 item_tags 表中所有引用此标签的记录
-      await (delete(itemTags)
-        ..where((tbl) => tbl.tagId.equals(id))).go();
+      await (delete(itemTags)..where((tbl) => tbl.tagId.equals(id))).go();
 
       // 2. 然后，再删除 tags 表中的标签本身
       await (delete(tags)..where((tbl) => tbl.id.equals(id))).go();
@@ -223,13 +212,12 @@ class MyDatabase extends _$MyDatabase {
     }
 
     // 3. 组装模型，几乎没有计算
-    final lightweightItems =
-        allItemsData.map((itemData) {
-          return itemDataToModel(itemData).copyWith(
-            tags: tagsByItemId[itemData.id] ?? [],
-            usageRecords: [], // 首页列表不需要完整的记录
-          );
-        }).toList();
+    final lightweightItems = allItemsData.map((itemData) {
+      return itemDataToModel(itemData).copyWith(
+        tags: tagsByItemId[itemData.id] ?? [],
+        usageRecords: [], // 首页列表不需要完整的记录
+      );
+    }).toList();
 
     return lightweightItems;
   }
@@ -251,25 +239,20 @@ class MyDatabase extends _$MyDatabase {
     }
 
     // 更新 item-tag 关系
-    await (delete(itemTags)
-      ..where((it) => it.itemId.equals(itemId))).go();
+    await (delete(itemTags)..where((it) => it.itemId.equals(itemId))).go();
     if (item.tags.isNotEmpty) {
       await batch((batch) {
         for (final tag in item.tags) {
           batch.insert(
             itemTags,
-            ItemTagsCompanion(
-              itemId: Value(itemId),
-              tagId: Value(tag.id),
-            ),
+            ItemTagsCompanion(itemId: Value(itemId), tagId: Value(tag.id)),
           );
         }
       });
     }
 
     // 更新使用记录，删除旧的，插入新的
-    await (delete(usageRecords)
-      ..where((ur) => ur.itemId.equals(itemId))).go();
+    await (delete(usageRecords)..where((ur) => ur.itemId.equals(itemId))).go();
     if (item.usageRecords.isNotEmpty) {
       await batch((batch) {
         for (final record in item.usageRecords) {
@@ -280,10 +263,9 @@ class MyDatabase extends _$MyDatabase {
               // 使用itemId作为外键
               itemId: Value(itemId),
               usedAt: Value(record.usedAt),
-              intervalSinceLastUse:
-                  record.intervalSinceLastUse != null
-                      ? Value(record.intervalSinceLastUse!)
-                      : const Value.absent(),
+              intervalSinceLastUse: record.intervalSinceLastUse != null
+                  ? Value(record.intervalSinceLastUse!)
+                  : const Value.absent(),
             ),
           );
         }
@@ -297,12 +279,10 @@ class MyDatabase extends _$MyDatabase {
   Future<void> deleteItem(int id) async {
     await transaction(() async {
       // 1. 删除所有与该 item 关联的使用记录
-      await (delete(usageRecords)
-        ..where((tbl) => tbl.itemId.equals(id))).go();
+      await (delete(usageRecords)..where((tbl) => tbl.itemId.equals(id))).go();
 
       // 2. 删除所有与该 item 关联的标签关系
-      await (delete(itemTags)
-        ..where((tbl) => tbl.itemId.equals(id))).go();
+      await (delete(itemTags)..where((tbl) => tbl.itemId.equals(id))).go();
 
       // 3. 最后删除 item 本身
       await (delete(items)..where((tbl) => tbl.id.equals(id))).go();
@@ -315,8 +295,9 @@ class MyDatabase extends _$MyDatabase {
   Future<List<UsageRecordData>> getUsageRecordsByItemId({
     required int itemId,
   }) async {
-    return await (select(usageRecords)
-      ..where((tbl) => tbl.itemId.equals(itemId))).get();
+    return await (select(
+      usageRecords,
+    )..where((tbl) => tbl.itemId.equals(itemId))).get();
   }
 
   // 插入或更新 UsageRecord
@@ -331,8 +312,7 @@ class MyDatabase extends _$MyDatabase {
 
   // 删除 UsageRecord
   Future<int> deleteUsageRecordData(int recordId) {
-    return (delete(usageRecords)
-      ..where((tbl) => tbl.id.equals(recordId))).go();
+    return (delete(usageRecords)..where((tbl) => tbl.id.equals(recordId))).go();
   }
 
   // -------------------- 核心统计更新逻辑 --------------------
@@ -357,26 +337,20 @@ class MyDatabase extends _$MyDatabase {
       lastUsed = records.last.usedAt;
       if (records.length > 1) {
         // 使用 Drift 的聚合函数来计算平均值，更高效
-        final avgQuery =
-            selectOnly(usageRecords)
-              ..addColumns([usageRecords.intervalSinceLastUse.avg()])
-              ..where(usageRecords.itemId.equals(itemId));
+        final avgQuery = selectOnly(usageRecords)
+          ..addColumns([usageRecords.intervalSinceLastUse.avg()])
+          ..where(usageRecords.itemId.equals(itemId));
 
         avgInterval =
             await avgQuery
-                .map(
-                  (row) => row.read(
-                    usageRecords.intervalSinceLastUse.avg(),
-                  ),
-                )
+                .map((row) => row.read(usageRecords.intervalSinceLastUse.avg()))
                 .getSingle() ??
             0.0;
       }
     }
 
     // 3. 将计算出的统计数据更新回 Items 表
-    await (update(items)
-      ..where((tbl) => tbl.id.equals(itemId))).write(
+    await (update(items)..where((tbl) => tbl.id.equals(itemId))).write(
       ItemsCompanion(
         usageCount: Value(usageCount),
         firstUsed: Value(firstUsed),
@@ -398,16 +372,13 @@ class MyDatabase extends _$MyDatabase {
       for (int i = 0; i < allRecordsData.length; i++) {
         int? interval;
         if (i > 0) {
-          interval =
-              allRecordsData[i].usedAt
-                  .difference(allRecordsData[i - 1].usedAt)
-                  .inDays;
+          interval = allRecordsData[i].usedAt
+              .difference(allRecordsData[i - 1].usedAt)
+              .inDays;
         }
         batch.update(
           usageRecords,
-          UsageRecordsCompanion(
-            intervalSinceLastUse: Value(interval),
-          ),
+          UsageRecordsCompanion(intervalSinceLastUse: Value(interval)),
           where: (tbl) => tbl.id.equals(allRecordsData[i].id),
         );
       }
@@ -415,15 +386,12 @@ class MyDatabase extends _$MyDatabase {
   }
 
   // 添加使用记录并重新计算间隔 (事务处理)
-  Future<void> addUsageRecordAndRecalculate(
-    int itemId,
-    DateTime usedAt,
-  ) async {
+  Future<void> addUsageRecordAndRecalculate(int itemId, DateTime usedAt) async {
     await transaction(() async {
       // 插入新记录
-      await into(usageRecords).insert(
-        UsageRecordsCompanion.insert(itemId: itemId, usedAt: usedAt),
-      );
+      await into(
+        usageRecords,
+      ).insert(UsageRecordsCompanion.insert(itemId: itemId, usedAt: usedAt));
 
       // 重新计算并保存所有记录的间隔
       await recalculateAndSaveUsageRecords(itemId);
@@ -441,9 +409,8 @@ class MyDatabase extends _$MyDatabase {
   ) async {
     await transaction(() async {
       // 更新指定记录的 usedAt
-      await (update(usageRecords)..where(
-        (tbl) => tbl.id.equals(recordId),
-      )).write(UsageRecordsCompanion(usedAt: Value(newUsedAt)));
+      await (update(usageRecords)..where((tbl) => tbl.id.equals(recordId)))
+          .write(UsageRecordsCompanion(usedAt: Value(newUsedAt)));
 
       await recalculateAndSaveUsageRecords(itemId);
 
@@ -453,10 +420,7 @@ class MyDatabase extends _$MyDatabase {
   }
 
   // 删除使用记录并重新计算间隔 (事务处理)
-  Future<void> deleteUsageRecordAndRecalculate(
-    int recordId,
-    int itemId,
-  ) async {
+  Future<void> deleteUsageRecordAndRecalculate(int recordId, int itemId) async {
     await transaction(() async {
       await deleteUsageRecordData(recordId); // 调用已有的数据库层删除方法
 
@@ -489,8 +453,7 @@ class MyDatabase extends _$MyDatabase {
       }
 
       // 使用 file_picker 选择保存目录
-      String? selectedDirectory =
-          await FilePicker.platform.getDirectoryPath();
+      final String? selectedDirectory = await FilePicker.getDirectoryPath();
 
       if (selectedDirectory == null) {
         // 用户取消了选择
@@ -539,7 +502,7 @@ class MyDatabase extends _$MyDatabase {
           'cycle_it_backup_${DateFormat('yyyy-MM-dd_HH-mm-ss').format(DateTime.now())}.sqlite';
 
       // 使用 file_picker 的 saveFile 方法
-      final result = await FilePicker.platform.saveFile(
+      final result = await FilePicker.saveFile(
         fileName: fileName,
         bytes: bytes,
       );

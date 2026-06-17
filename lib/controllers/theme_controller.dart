@@ -5,7 +5,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:get/get.dart';
-import 'package:json_theme/json_theme.dart';
+import 'package:json_theme_plus/json_theme_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 // 定义主题模式枚举
@@ -20,8 +20,7 @@ class ThemeController extends GetxController {
   // 当前应用的主题数据
   final Rx<ThemeData> _currentThemeData = ThemeData.light().obs;
 
-  ThemeModeOption get currentThemeModeOption =>
-      _currentThemeModeOption.value;
+  ThemeModeOption get currentThemeModeOption => _currentThemeModeOption.value;
 
   ThemeData get currentThemeData => _currentThemeData.value;
 
@@ -59,16 +58,12 @@ class ThemeController extends GetxController {
 
   // 从 SharedPreferences 加载主题设置
   Future<void> _loadThemeFromPrefs() async {
-    final String? themeOptionString = _prefs.getString(
-      'themeModeOption',
-    );
+    final String? themeOptionString = _prefs.getString('themeModeOption');
     if (themeOptionString != null) {
-      final ThemeModeOption savedOption = ThemeModeOption.values
-          .firstWhere(
-            (e) =>
-                e.toString() == 'ThemeModeOption.$themeOptionString',
-            orElse: () => ThemeModeOption.system,
-          );
+      final ThemeModeOption savedOption = ThemeModeOption.values.firstWhere(
+        (e) => e.toString() == 'ThemeModeOption.$themeOptionString',
+        orElse: () => ThemeModeOption.system,
+      );
       await setTheme(savedOption); // 应用保存的主题
     } else {
       await setTheme(ThemeModeOption.system); // 如果没有保存，则应用系统主题
@@ -87,26 +82,18 @@ class ThemeController extends GetxController {
     ThemeData newThemeData;
 
     if (option == ThemeModeOption.light) {
-      newThemeData = await _loadJsonTheme(
-        'assets/themes/light_theme.json',
-      );
+      newThemeData = await _loadJsonTheme('assets/themes/light_theme.json');
     } else if (option == ThemeModeOption.dark) {
-      newThemeData = await _loadJsonTheme(
-        'assets/themes/dark_theme.json',
-      );
+      newThemeData = await _loadJsonTheme('assets/themes/dark_theme.json');
     } else {
       // 主题跟随系统时，尝试在尽可能早的阶段获取系统亮度
       final Brightness initialSystemBrightness =
           PlatformDispatcher.instance.platformBrightness;
 
       if (initialSystemBrightness == Brightness.dark) {
-        newThemeData = await _loadJsonTheme(
-          'assets/themes/dark_theme.json',
-        );
+        newThemeData = await _loadJsonTheme('assets/themes/dark_theme.json');
       } else {
-        newThemeData = await _loadJsonTheme(
-          'assets/themes/light_theme.json',
-        );
+        newThemeData = await _loadJsonTheme('assets/themes/light_theme.json');
       }
     }
 
@@ -116,15 +103,9 @@ class ThemeController extends GetxController {
   // 从 JSON 文件加载 ThemeData
   Future<ThemeData> _loadJsonTheme(String path) async {
     try {
-      final String themeJsonString = await rootBundle.loadString(
-        path,
-      );
-      final Map<String, dynamic> themeJson = json.decode(
-        themeJsonString,
-      );
-      final ThemeData? theme = ThemeDecoder.decodeThemeData(
-        themeJson,
-      );
+      final String themeJsonString = await rootBundle.loadString(path);
+      final Map<String, dynamic> themeJson = json.decode(themeJsonString);
+      final ThemeData? theme = ThemeDecoder().decodeThemeData(themeJson);
       return theme ?? ThemeData.light(); // 如果解码失败，返回默认亮色主题
     } catch (e) {
       return ThemeData.light(); // 发生错误时返回默认亮色主题
