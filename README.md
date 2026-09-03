@@ -45,12 +45,13 @@ It records usage history, tracks recurring cycles, predicts the next due date, a
 
 ## 📦 Installation
 ### Android
-Download and install [Cycle.It.1.0.2.apk](https://github.com/Siriusq/cycle_it/releases/download/1.0.2/Cycle.It.1.0.2.apk).
+Download and install [Cycle.It.1.0.3.apk](https://github.com/Siriusq/cycle_it/releases/download/1.0.3/Cycle.It.1.0.3.apk).
 
 ### iOS
-Not available on the App Store. Instead, download the IPA package [Cycle.It.1.0.2](https://github.com/Siriusq/cycle_it/releases/download/1.0.2/Cycle.It.1.0.2.ipa) and sideload it using [AltStore](https://altstore.io/). See [AltStore FAQ](https://faq.altstore.io/) for setup instructions.
+Not available on the App Store. Instead, download the IPA package [Cycle.It.1.0.3](https://github.com/Siriusq/cycle_it/releases/download/1.0.3/Cycle.It.1.0.3.ipa) and sideload it using [AltStore](https://altstore.io/). See [AltStore FAQ](https://faq.altstore.io/) for setup instructions.
 
 ### Windows
+**Due to RAMageddon, I can't afford a new PC. Currently, I only have a MacBook, which doesn't allow me to test on the Windows platform, so support for Windows will be discontinued after version 1.0.2.**
 Available on the Microsoft Store, install directly from the store. 
 
 <a href="https://apps.microsoft.com/detail/9p591jqspgcw?referrer=appbadge&mode=direct">
@@ -58,7 +59,7 @@ Available on the Microsoft Store, install directly from the store.
 </a>
 
 ### macOS
-Download and install [Cycle.It.1.0.2.dmg](https://github.com/Siriusq/cycle_it/releases/download/1.0.2/Cycle.It.1.0.2.dmg).
+Download and install [Cycle.It.1.0.3.dmg](https://github.com/Siriusq/cycle_it/releases/download/1.0.3/Cycle.It.1.0.3.dmg).
 
 ### Linux
 **Due to system limitations, core functions cannot be implemented, so the Linux version will no longer be updated.**

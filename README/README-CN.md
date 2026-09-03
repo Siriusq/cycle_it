@@ -43,13 +43,14 @@
 
 ## 📦 安装说明
 ### Android
-下载并安装 [Cycle.It.1.0.2.apk](https://github.com/Siriusq/cycle_it/releases/download/1.0.2/Cycle.It.1.0.2.apk)。
+下载并安装 [Cycle.It.1.0.3.apk](https://github.com/Siriusq/cycle_it/releases/download/1.0.3/Cycle.It.1.0.3.apk)。
 
 ### iOS
-由于不打算上架 App Store，仅提供 IPA 包 [Cycle.It.1.0.2](https://github.com/Siriusq/cycle_it/releases/download/1.0.2/Cycle.It.1.0.2.ipa)。
+由于不打算上架 App Store，仅提供 IPA 包 [Cycle.It.1.0.3](https://github.com/Siriusq/cycle_it/releases/download/1.0.3/Cycle.It.1.0.3.ipa)。
 需配合 [AltStore](https://altstore.io/) 进行自签名侧载，详见 [AltStore 文档](https://faq.altstore.io/)。
 
 ### Windows
+**由于内存价格上涨过于疯狂，我买不起新的 PC，目前仅有一台 MacBook，无法进行 Windows 平台测试，所以 Windows 平台在 1.0.2 后将不再提供支持。**
 已上架微软商店，通过商店直接安装。 
 
 <a href="https://apps.microsoft.com/detail/9p591jqspgcw?referrer=appbadge&mode=direct">
@@ -57,7 +58,7 @@
 </a>
 
 ### macOS
-下载并安装 [Cycle.It.1.0.2.dmg](https://github.com/Siriusq/cycle_it/releases/download/1.0.2/Cycle.It.1.0.2.dmg)。
+下载并安装 [Cycle.It.1.0.3.dmg](https://github.com/Siriusq/cycle_it/releases/download/1.0.3/Cycle.It.1.0.3.dmg)。
 
 ### Linux
 **由于核心功能无法实现，Linux 版本将不再更新**
