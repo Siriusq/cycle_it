@@ -27,9 +27,7 @@ Future<ItemModel?> _fetchItemDetailsInIsolate(
   _ItemDetailsPayload payload,
 ) async {
   // 在执行任何操作前，使用 Token 初始化平台通信
-  BackgroundIsolateBinaryMessenger.ensureInitialized(
-    payload.rootIsolateToken,
-  );
+  BackgroundIsolateBinaryMessenger.ensureInitialized(payload.rootIsolateToken);
 
   final db = MyDatabase();
   final service = ItemService(db);
@@ -69,22 +67,21 @@ class ItemController extends GetxController {
 
   // 表格状态管理
   // 使用 Rx<UsageRecordDataSource?> 来允许它在初始化之前为 null
-  Rx<UsageRecordDataSource?> usageRecordDataSource =
-      Rx<UsageRecordDataSource?>(null);
+  Rx<UsageRecordDataSource?> usageRecordDataSource = Rx<UsageRecordDataSource?>(
+    null,
+  );
 
   // 管理使用记录表格的排序状态
   final RxString usageRecordsSortColumn = 'usedAt'.obs; // 默认按使用日期排序
   final RxBool usageRecordsSortAscending = true.obs; // 默认升序
 
   // 热力图相关状态和方法
-  final RxMap<DateTime, int> heatMapData =
-      <DateTime, int>{}.obs; // 热力图数据
+  final RxMap<DateTime, int> heatMapData = <DateTime, int>{}.obs; // 热力图数据
   final RxBool isLoadingHeatmapData = false.obs; // 热力图数据加载状态
   final RxString heatMapError = ''.obs; // 热力图数据加载错误信息
 
   // 月度使用图表相关状态
-  final RxList<BarChartData> monthlyBarChartData =
-      <BarChartData>[].obs;
+  final RxList<BarChartData> monthlyBarChartData = <BarChartData>[].obs;
   final RxBool isLoadingMonthlyChartData = false.obs;
   final RxString monthlyChartError = ''.obs;
   final RxDouble monthlyUsageSum = 0.0.obs; // 用于判断是否有数据
@@ -94,22 +91,13 @@ class ItemController extends GetxController {
     super.onInit();
 
     // 监听排序和筛选变化，更新 displayedItems
-    ever(
-      _orderController.selectedOrderOption,
-      (_) => _updateDisplayedItems(),
-    );
-    ever(
-      _orderController.isAscending,
-      (_) => _updateDisplayedItems(),
-    );
+    ever(_orderController.selectedOrderOption, (_) => _updateDisplayedItems());
+    ever(_orderController.isAscending, (_) => _updateDisplayedItems());
     ever(_tagController.selectedTags, (_) => _updateDisplayedItems());
     // 监听 allItems 变化
     ever(allItems, (_) => _updateDisplayedItems());
     // 监听搜索查询的变化
-    ever(
-      _searchBarController.searchQuery,
-      (_) => _updateDisplayedItems(),
-    );
+    ever(_searchBarController.searchQuery, (_) => _updateDisplayedItems());
     // 当标签被添加、编辑或删除时，重新加载所有物品以更新其关联的标签信息
     ever(_tagController.allTags, (_) => _refreshData());
     // 当详情数据加载完成后，触发图表和表格数据的处理
@@ -143,8 +131,7 @@ class ItemController extends GetxController {
   ) async {
     final prefs = await SharedPreferences.getInstance();
     final bool needsReschedule =
-        prefs.getBool('reschedule_notifications_after_import') ??
-        false;
+        prefs.getBool('reschedule_notifications_after_import') ?? false;
 
     if (needsReschedule) {
       if (kDebugMode) {
@@ -156,15 +143,10 @@ class ItemController extends GetxController {
       await _notificationService.rescheduleAllNotifications(items);
 
       // 完成后重置标志位
-      await prefs.setBool(
-        'reschedule_notifications_after_import',
-        false,
-      );
+      await prefs.setBool('reschedule_notifications_after_import', false);
 
       if (kDebugMode) {
-        print(
-          'Notification reschedule complete. Flag has been reset.',
-        );
+        print('Notification reschedule complete. Flag has been reset.');
       }
     }
   }
@@ -186,16 +168,14 @@ class ItemController extends GetxController {
     itemsToFilter = _tagController.filterItems(itemsToFilter);
 
     // 2. 搜索筛选
-    final String query =
-        _searchBarController.searchQuery.value.toLowerCase();
+    final String query = _searchBarController.searchQuery.value.toLowerCase();
     if (query.isNotEmpty) {
-      itemsToFilter =
-          itemsToFilter.where((item) {
-            // 可以根据物品的名称、描述或任何其他字段进行搜索
-            return item.name.toLowerCase().contains(query) ||
-                (item.usageComment != null &&
-                    item.usageComment!.toLowerCase().contains(query));
-          }).toList();
+      itemsToFilter = itemsToFilter.where((item) {
+        // 可以根据物品的名称、描述或任何其他字段进行搜索
+        return item.name.toLowerCase().contains(query) ||
+            (item.usageComment != null &&
+                item.usageComment!.toLowerCase().contains(query));
+      }).toList();
     }
 
     // 3. 排序
@@ -203,9 +183,7 @@ class ItemController extends GetxController {
       int compareResult = 0;
       switch (_orderController.selectedOrderOption.value) {
         case OrderType.name:
-          compareResult = a.name.toLowerCase().compareTo(
-            b.name.toLowerCase(),
-          );
+          compareResult = a.name.toLowerCase().compareTo(b.name.toLowerCase());
           break;
         case OrderType.lastUsed:
           // 如果没有使用记录，排在后面
@@ -216,17 +194,22 @@ class ItemController extends GetxController {
           } else if (b.usageCount == 0) {
             compareResult = -1;
           } else {
-            compareResult = a.lastUsedDate!.compareTo(
-              b.lastUsedDate!,
-            );
+            compareResult = a.lastUsedDate!.compareTo(b.lastUsedDate!);
           }
           break;
         case OrderType.frequency:
           // 使用频率高的排前面
-          compareResult = a.usageFrequency.compareTo(
-            b.usageFrequency,
-          );
+          compareResult = a.usageFrequency.compareTo(b.usageFrequency);
           break;
+        case OrderType.nextExpectedUse:
+          //即将到期的排前面
+          if (a.nextExpectedUse == null) {
+            compareResult = 1;
+          } else if (b.nextExpectedUse == null) {
+            compareResult = -1;
+          } else {
+            compareResult = a.nextExpectedUse!.compareTo(b.nextExpectedUse!);
+          }
       }
       return _orderController.isAscending.value
           ? compareResult
@@ -330,9 +313,7 @@ class ItemController extends GetxController {
       }
       Get.snackbar(
         'error'.tr,
-        'failed_to_load_item_details'.trParams({
-          'error': e.toString(),
-        }),
+        'failed_to_load_item_details'.trParams({'error': e.toString()}),
       );
     } finally {
       if (isDetailsLoading.value) {
@@ -388,8 +369,7 @@ class ItemController extends GetxController {
   void onUsageRecordsSort(String columnName) {
     // 如果点击的是当前排序列，则切换排序方向
     if (usageRecordsSortColumn.value == columnName) {
-      usageRecordsSortAscending.value =
-          !usageRecordsSortAscending.value;
+      usageRecordsSortAscending.value = !usageRecordsSortAscending.value;
     } else {
       // 如果点击的是新的列，则将排序列更新为新列，并默认升序
       usageRecordsSortColumn.value = columnName;
@@ -447,9 +427,7 @@ class ItemController extends GetxController {
   }
 
   // 加载并处理热力图数据
-  Future<void> _loadHeatmapDataInIsolate(
-    List<UsageRecordModel> records,
-  ) async {
+  Future<void> _loadHeatmapDataInIsolate(List<UsageRecordModel> records) async {
     isLoadingHeatmapData.value = true;
     heatMapData.clear();
 
@@ -485,11 +463,7 @@ class ItemController extends GetxController {
         record.usedAt.month,
         record.usedAt.day,
       );
-      tempHeatMapData.update(
-        day,
-        (value) => value + 1,
-        ifAbsent: () => 1,
-      );
+      tempHeatMapData.update(day, (value) => value + 1, ifAbsent: () => 1);
     }
     return tempHeatMapData;
   }
@@ -513,15 +487,11 @@ class ItemController extends GetxController {
         records,
       );
 
-      final List<BarChartData> processedData =
-          (result['data'] as List)
-              .map(
-                (item) => BarChartData(
-                  value: item['value'],
-                  label: item['label'],
-                ),
-              )
-              .toList();
+      final List<BarChartData> processedData = (result['data'] as List)
+          .map(
+            (item) => BarChartData(value: item['value'], label: item['label']),
+          )
+          .toList();
       final double sum = result['sum'];
 
       monthlyBarChartData.assignAll(processedData);
@@ -561,10 +531,7 @@ class ItemController extends GetxController {
 
     final List<Map<String, dynamic>> barChartData = [];
     for (int i = 1; i <= 12; i++) {
-      barChartData.add({
-        'value': monthlyUsage[i],
-        'label': monthLabels[i],
-      });
+      barChartData.add({'value': monthlyUsage[i], 'label': monthLabels[i]});
     }
 
     return {'data': barChartData, 'sum': usageSum};

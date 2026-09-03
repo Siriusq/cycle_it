@@ -33,6 +33,7 @@ class MultiLanguage extends Translations {
       'order_by_names': '物品名称',
       'order_by_recent_used_time': '最后记录时间',
       'order_by_frequency': '循环频率',
+      'order_by_nextExpectedUse': '预计循环时间',
       // 标签
       'tags': '标签',
 
@@ -235,6 +236,7 @@ class MultiLanguage extends Translations {
       'order_by_names': 'Names',
       'order_by_recent_used_time': 'Last Recorded Time',
       'order_by_frequency': 'Cycle Frequency',
+      'order_by_nextExpectedUse': 'EST. Next Time',
       // 标签
       'tags': 'Tags',
 
@@ -242,16 +244,14 @@ class MultiLanguage extends Translations {
       // 菜单栏
       'search': 'Search',
       // 列表
-      'please_add_an_item':
-          'Your inventory is empty, please add items',
+      'please_add_an_item': 'Your inventory is empty, please add items',
       'no_matched_item': 'No matching items found',
       // 物品卡片
       'cycle': 'Cycle It',
       'usage_record_added_hint':
           'Successfully added cycle record @record to @item',
       'usage_cycle_brief': 'Cycle Interval: @freq days/time',
-      'usage_cycle_brief_data_not_enough':
-          'Cycle Interval: data not enough',
+      'usage_cycle_brief_data_not_enough': 'Cycle Interval: data not enough',
       'usage_cycle_brief_data': '@freq days/time',
       'last_used_at_brief': 'Last Recorded Date: @date',
       'last_used_at_brief_data_not_enough':
@@ -289,8 +289,7 @@ class MultiLanguage extends Translations {
       'days_ago': 'days ago',
       // 柱状图
       'monthly_usage_count': 'Monthly Cycle Count',
-      'no_usage_record_in_the_past_year':
-          'No cycle record in the past year',
+      'no_usage_record_in_the_past_year': 'No cycle record in the past year',
       'Jan': 'Jan',
       'Feb': 'Feb',
       'Mar': 'Mar',
@@ -308,8 +307,7 @@ class MultiLanguage extends Translations {
       'less': 'Less',
       'more': 'More',
       // 加载报错
-      'failed_to_load_item_details':
-          'Failed to load item details: @error',
+      'failed_to_load_item_details': 'Failed to load item details: @error',
 
       // 物品管理页
       'item_name': 'Item Name',
@@ -408,8 +406,7 @@ class MultiLanguage extends Translations {
       'data_clear': 'Clear',
       // 导出
       'database_export_successfully': 'Database Export Successful',
-      'database_export_to':
-          'Database successfully exported to @filepath',
+      'database_export_to': 'Database successfully exported to @filepath',
       'database_export_failed': 'Database Export Failed',
       'database_export_permission_error':
           'Permission error: Storage permission not granted, unable to export database',
@@ -459,6 +456,7 @@ class MultiLanguage extends Translations {
       'order_by_names': '物品名稱',
       'order_by_recent_used_time': '最後記錄時間',
       'order_by_frequency': '循環頻率',
+      'order_by_nextExpectedUse': '預計循環時間',
       // 標籤
       'tags': '標籤',
 

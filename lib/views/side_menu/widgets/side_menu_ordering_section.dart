@@ -10,8 +10,7 @@ class SideMenuOrderingSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final double spacingLG = ResponsiveStyle.to.spacingLG;
-    final TextStyle titleMD =
-        Theme.of(context).textTheme.titleMedium!;
+    final TextStyle titleMD = Theme.of(context).textTheme.titleMedium!;
 
     return Padding(
       padding: EdgeInsets.all(spacingLG),
@@ -33,13 +32,18 @@ class SideMenuOrderingSection extends StatelessWidget {
           ),
           OrderByOption(
             orderType: OrderType.lastUsed,
-            icon: Icons.event,
+            icon: Icons.history,
             title: 'order_by_recent_used_time'.tr,
           ),
           OrderByOption(
             orderType: OrderType.frequency,
             icon: Icons.equalizer,
             title: 'order_by_frequency'.tr,
+          ),
+          OrderByOption(
+            orderType: OrderType.nextExpectedUse,
+            icon: Icons.update,
+            title: 'order_by_nextExpectedUse'.tr,
           ),
         ],
       ),

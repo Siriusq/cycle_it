@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
 
-enum OrderType { name, lastUsed, frequency }
+enum OrderType { name, lastUsed, frequency, nextExpectedUse }
 
 class ItemListOrderController extends GetxController {
   var selectedOrderOption = OrderType.name.obs;
