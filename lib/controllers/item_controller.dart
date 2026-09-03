@@ -13,6 +13,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:material_charts/material_charts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:string_util_xx/StringUtilxx.dart';
 
 // 负载中增加 RootIsolateToken
 class _ItemDetailsPayload {
@@ -183,7 +184,7 @@ class ItemController extends GetxController {
       int compareResult = 0;
       switch (_orderController.selectedOrderOption.value) {
         case OrderType.name:
-          compareResult = a.name.toLowerCase().compareTo(b.name.toLowerCase());
+          //compareResult = StringUtilxx_c.compareExtend(a.name, b.name);
           break;
         case OrderType.lastUsed:
           // 如果没有使用记录，排在后面
@@ -210,6 +211,10 @@ class ItemController extends GetxController {
           } else {
             compareResult = a.nextExpectedUse!.compareTo(b.nextExpectedUse!);
           }
+      }
+      // 如果比较结果相同，则再次按照名称的首字母顺序排序
+      if (compareResult == 0) {
+        compareResult = StringUtilxx_c.compareExtend(a.name, b.name);
       }
       return _orderController.isAscending.value
           ? compareResult
